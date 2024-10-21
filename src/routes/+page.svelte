@@ -1,2 +1,15 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import TaskView from '$lib/components/TaskView.svelte';
+	import FileInput from '$lib/components/FileInput.svelte';
+	import { type Task } from '$lib/components/taskFile.svelte';
+	let task: Task | null = $state(null);
+
+	function updateTask(updatedTask: Task) {
+		task = updatedTask;
+	}
+</script>
+
+<FileInput {updateTask} />
+{#if task}
+	<TaskView {task} />
+{/if}
