@@ -6,61 +6,29 @@
 	let pdfUrl: string | null = $state(null);
 
 	onMount(() => {
-        const blob = new Blob([task.doc.content], { type: 'application/pdf' });
-        pdfUrl = URL.createObjectURL(blob);
+		const blob = new Blob([task.doc.content], { type: 'application/pdf' });
+		pdfUrl = URL.createObjectURL(blob);
 	});
 </script>
 
-<div class="container">
-	<div class="pdf-viewer">
+<div class="container flex h-screen">
+	<div class="pdf-viewer flex-1 border-r border-gray-300 overflow-auto">
 		{#if pdfUrl}
-			<iframe src={pdfUrl} title="PDF Viewer"> </iframe>
+			<iframe src={pdfUrl} title="PDF Viewer" class="w-full h-full"></iframe>
 		{:else}
 			<p>Loading PDF...</p>
 		{/if}
 	</div>
 
-	<div class="inputs-outputs">
-		<h2>Input Files</h2>
+	<div class="inputs-outputs flex-1 p-5 overflow-auto">
+		<h2 class="text-xl font-semibold mb-4">Input Files</h2>
 		{#each task.inOut.tasks as [input, output]}
-			<div class="file-section">
-				<h3>Input: {input.filepath}</h3>
-				<pre>{input.content}</pre>
-				<h3>Output: {output.filepath}</h3>
-				<pre>{output.content}</pre>
+			<div class="file-section mb-5">
+				<h3 class="font-medium text-lg">Input: {input.filepath}</h3>
+				<pre class="bg-gray-100 p-2 rounded">{input.content}</pre>
+				<h3 class="font-medium text-lg mt-4">Output: {output.filepath}</h3>
+				<pre class="bg-gray-100 p-2 rounded">{output.content}</pre>
 			</div>
 		{/each}
 	</div>
 </div>
-
-<style>
-	.container {
-		display: flex;
-		height: 100vh;
-	}
-
-	.pdf-viewer {
-		flex: 1;
-		border-right: 1px solid #ccc;
-		overflow: auto;
-	}
-
-	.inputs-outputs {
-		flex: 1;
-		padding: 20px;
-		overflow: auto;
-	}
-
-	iframe {
-		width: 100%;
-		height: 100%;
-	}
-
-	.file-section {
-		margin-bottom: 20px;
-	}
-
-	h2 {
-		margin-bottom: 10px;
-	}
-</style>
