@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { loadTask } from './taskFile.svelte';
+	import { loadTask } from './tasks/taskFile.svelte';
 
 	let { updateTask }: { updateTask: (task: any) => void } = $props();
 
-	// to będzie do zaorania jeszcze, check svelte-sooner
 	let errorMessage = $state('');
 	let successMessage = $state('');
 	async function handleFileUpload(e: Event) {

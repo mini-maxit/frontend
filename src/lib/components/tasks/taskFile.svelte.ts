@@ -1,34 +1,11 @@
 import JSZip from 'jszip';
+import type { TaskIn, TaskOut, Task } from '.';
 
 let mainFolderPath = $state('');
 const inFolderPath = $derived(mainFolderPath + 'in');
 const outFolderPath = $derived(mainFolderPath + 'out');
 const docFolderPath = $derived(mainFolderPath + 'doc');
 const requiredFolders = ['doc', 'in', 'out', 'prog'];
-
-interface TaskDoc {
-	pdfFile: string;
-	content: Blob;
-}
-
-interface TaskIn {
-	filepath: string;
-	content: string;
-}
-
-interface TaskOut {
-	filepath: string;
-	content: string;
-}
-
-interface TaskInOut {
-	tasks: Array<[TaskIn, TaskOut]>;
-}
-
-export interface Task {
-	doc: TaskDoc;
-	inOut: TaskInOut;
-}
 
 function isValidInFile(root: string, filename: string): boolean {
 	return /^\/in\d+\.txt$/.test(filename.replace(root, ''));
@@ -39,7 +16,6 @@ function isValidOutFile(root: string, filename: string): boolean {
 }
 
 function verifyFolderStructure(loadedZip: JSZip) {
-	// JS Moment - split on 'elections/' returns a list of ['elections', '']
 	const folders = Object.keys(loadedZip.files).filter((file) => file.split('/').length === 2);
 
 	if (folders.length !== 1) {
@@ -93,7 +69,6 @@ async function generateTask(loadedZip: JSZip): Promise<Task> {
 	const docFile = doc.name;
 	const docContent = await doc.async('blob');
 
-	// don't as why, but this is the only way to get the files in the folder
 	let inFiles = loadedZip.folder(inFolderPath)!.filter((_, __) => {
 		return true;
 	});
@@ -113,6 +88,7 @@ async function generateTask(loadedZip: JSZip): Promise<Task> {
 	}
 
 	return {
+		mainFolderPath,
 		doc: { pdfFile: docFile, content: docContent },
 		inOut: { tasks: TaskInOut }
 	};

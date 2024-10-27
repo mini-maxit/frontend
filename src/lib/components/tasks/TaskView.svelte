@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { type Task } from './taskFile.svelte';
+	import { type Task } from '.';
 	let { task }: { task: Task } = $props();
 
 	let pdfUrl: string | null = $state(null);
 
 	onMount(() => {
-		const blob = new Blob([task.doc.content], { type: 'application/pdf' });
-		pdfUrl = URL.createObjectURL(blob);
+		pdfUrl = URL.createObjectURL(task.doc.content);
 	});
 </script>
 
