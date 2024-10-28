@@ -33,6 +33,8 @@
 	"task_link": "Link do zadania",
 	"task_link_text": "Zobacz zadanie",
 
+	"task_form_invalid_type": "Proszę wyślij plik ZIP",
+	"task_form_invalid_encoding": "Nieprawidłowy format pliku. Akceptowany jest tylko format ZIP",
 	"task_form_task_name_label": "Dodaj nowe zadanie",
 	"task_form_task_file_label": "Plik zadania",
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",

@@ -1,14 +1,14 @@
 import { z } from 'zod';
 import JSZip from 'jszip';
+import * as m from '$lib/paraglide/messages.js';
 
 export const uploadTaskSchema = z.object({
 	taskName: z.string().min(3).max(50),
 	taskFile: z
-		.instanceof(File, { message: 'Wybierz Plik' })
-		.refine(
-			(file) => file.type === 'application/zip' || file.type === 'application/x-zip-compressed',
-			'Nieprawidłowy format pliku. Akceptowany jest tylko format ZIP'
-		)
+		.instanceof(File, { message: m.task_form_invalid_type() })
+		.refine((file) => {
+			return file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
+		}, m.task_form_invalid_encoding())
 		.superRefine(async (file, ctx) => {
 			try {
 				await verifyFolderStructure(await file.arrayBuffer());
