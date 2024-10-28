@@ -19,6 +19,7 @@ export const session = pgTable('session', {
 
 export const task = pgTable('task', {
 	id: text('id').primaryKey(),
+	name: text('name').notNull(),
 	createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
 	createdById: text('created_by_id')
@@ -57,6 +58,7 @@ export async function insertTask(
 	db: PostgresJsDatabase<Record<string, never>>,
 	userId: string,
 	taskData: {
+		name: string;
 		mainFolderPath: string;
 		doc: { pdfFile: string; content: Blob };
 		inOut: {
@@ -70,6 +72,7 @@ export async function insertTask(
 
 	await db.insert(task).values({
 		id: taskId,
+		name: taskData.name,
 		createdById: userId,
 		mainFolderPath: taskData.mainFolderPath,
 		documentPath: taskData.doc.pdfFile,

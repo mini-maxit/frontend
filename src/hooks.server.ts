@@ -33,16 +33,16 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 };
 
 const protectDashboard: Handle = async ({ event, resolve }) => {
-    const path = event.url.pathname;
-    const isProtectedPath = path.startsWith('/dashboard/') && path !== '/dashboard/login';
-    
-    if (isProtectedPath) {
-        if (!event.locals.user) {
-            throw redirect(303, '/dashboard/login');
-        }
-    }
+	const path = event.url.pathname;
+	const isProtectedPath = path.startsWith('/dashboard/') && path !== '/dashboard/login';
 
-    return resolve(event);
+	if (isProtectedPath) {
+		if (!event.locals.user) {
+			throw redirect(303, i18n.resolveRoute('/dashboard/login'));
+		}
+	}
+
+	return resolve(event);
 };
 
 export const handle: Handle = sequence(handleParaglide, handleAuth, protectDashboard);

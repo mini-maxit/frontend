@@ -1,13 +1,11 @@
 <script lang="ts">
-	import type { Task } from "$lib/components/tasks";
-    import TaskUpload from "$lib/components/tasks/TaskUpload.svelte";
-	import type { LayoutServerData } from "../$types";
+	import TasksViewAll from '$lib/components/tasks/TasksViewAll.svelte';
+	import { type TaskListItem } from '.';
+	import type { PageServerData } from './$types';
 
-    let { data }: { data: LayoutServerData } = $props();
-    let task: Task | null = $state(null);
+	let { data }: { data: PageServerData } = $props();
 
+	const tasks: TaskListItem[] = data.tasks;
 </script>
 
-<TaskUpload userId={data.user.id} onTaskUploaded={() => {
-    task 
-}} />
+<TasksViewAll {tasks} />

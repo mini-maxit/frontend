@@ -1,4 +1,40 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"dashboard": "Dashboard"
+	"dashboard_header_button": "Dashboard",
+
+	"landing_page_hero_title": "Welcome to the MiNI Testerka!",
+	"landing_page_hero_text_1": "We’re glad to have you here. If you’re interested in becoming a tester, please",
+	"landing_page_hero_text_link": "register here",
+	"landing_page_hero_text_2": "and we’ll to get started.",
+
+	"hi": "Hi",
+	"your_user_id": "Your user id",
+	"view_tasks": "View tasks",
+	"add_task": "Add new task",
+
+	"username": "Username",
+	"password": "Password",
+
+	"login": "Login",
+	"register": "Register",
+	"logout": "Logout",
+
+	"loading": "Loading",
+	"files": "Files",
+	"summary": "Summary",
+
+	"file_pair": "File pair",
+	"total_file_pairs": "Total file pairs",
+
+	"tasks_table_title": "A list of all available Tasks.",
+
+	"task_id": "Task ID",
+	"task_name": "Task name",
+	"task_link": "Task link",
+	"task_link_text": "View Task",
+
+	"task_form_task_name_label": "Add a new Task",
+	"task_form_task_file_label": "Task file",
+	"task_form_task_file_description": "Please upload a file with the task description.",
+	"task_form_submit": "Submit"
 }

@@ -7,11 +7,11 @@ import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
+import { i18n } from '$lib/i18n';
 
 export const load: PageServerLoad = async (event) => {
-	console.log(event.locals.user);
 	if (event.locals.user) {
-		return redirect(302, '/dashboard');
+		return redirect(302, i18n.resolveRoute('/dashboard'));
 	}
 	return {};
 };
@@ -55,7 +55,7 @@ export const actions: Actions = {
 			secure: !dev
 		});
 
-		return redirect(302, '/dashboard');
+		return redirect(302, i18n.resolveRoute('/dashboard'));
 	},
 	register: async (event) => {
 		const formData = await event.request.formData();
@@ -92,7 +92,7 @@ export const actions: Actions = {
 		} catch (e) {
 			return fail(500, { message: 'An error has occurred' });
 		}
-		return redirect(302, '/dashboard');
+		return redirect(302, i18n.resolveRoute('/dashboard'));
 	}
 };
 
