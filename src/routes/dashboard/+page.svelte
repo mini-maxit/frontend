@@ -14,7 +14,9 @@
 			{m.your_user_id()} <span class="font-medium text-gray-800">{data.user.id}</span>.
 		</p>
 		<form method="post" action="?/logout" use:enhance>
-			<Button class="w-full bg-red-600 rounded-lg hover:bg-red-700">{m.logout()}</Button>
+			<Button class="w-full bg-red-600 rounded-lg hover:bg-red-700" type="submit"
+				>{m.logout()}</Button
+			>
 		</form>
 		<Button class="w-full mt-4 bg-blue-600 rounded-lg hover:bg-blue-700" href="/dashboard/tasks">
 			{m.view_tasks()}
