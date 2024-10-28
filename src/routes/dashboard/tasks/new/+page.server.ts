@@ -23,17 +23,19 @@ export const actions: Actions = {
 			});
 		}
 
+		let taskId = null;
+
 		try {
 			const task = await parseFormToTask(form);
 
-			const taskId = await insertTask(db, event.locals.user!.id, task);
-
-			throw redirect(303, i18n.resolveRoute(`/dashboard/tasks/${taskId}`));
+			taskId = await insertTask(db, event.locals.user!.id, task);
 		} catch (error) {
 			return fail(500, {
 				form,
 				error: 'Failed to create task'
 			});
 		}
+
+		redirect(303, i18n.resolveRoute(`/dashboard/tasks/${taskId}`));
 	}
 };

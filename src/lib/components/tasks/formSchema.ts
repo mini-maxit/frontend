@@ -83,8 +83,10 @@ function verifyTaskInOut(loadedZip: JSZip, mainFolderPath: string) {
 	}
 
 	for (let i = 0; i < inFiles.length; i++) {
-		const inFileName = inFiles[i].name;
-		const outFileName = outFiles.find((file) => file.name === inFileName.replaceAll('in', 'out'));
+		const inFileName = inFiles[i].name.replace(mainFolderPath, '');
+		const outFileName = outFiles.find(
+			(file) => file.name.replace(mainFolderPath, '') === inFileName.replaceAll('in', 'out')
+		);
 		if (!outFileName) {
 			throw new Error(`Missing output file for input file ${inFileName}`);
 		}

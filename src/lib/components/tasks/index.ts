@@ -65,9 +65,9 @@ export async function parseFormToTask(
 
 	for (let i = 0; i < inFiles.length; i++) {
 		const inFileName = inFiles[i].name;
-		const outFileName = inFileName.replaceAll('in', 'out');
+		const outFileName = inFileName.replace(mainFolderPath, '').replaceAll('in', 'out');
 		const inFile = loadedZip.file(inFileName)!;
-		const outFile = loadedZip.file(outFileName)!;
+		const outFile = loadedZip.file(mainFolderPath + outFileName)!;
 		const inContent = await inFile.async('text');
 		const outContent = await outFile.async('text');
 		const taskIn: TaskIn = { filepath: inFileName, content: inContent };
