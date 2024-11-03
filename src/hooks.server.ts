@@ -34,7 +34,8 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 const protectDashboard: Handle = async ({ event, resolve }) => {
 	const path = event.url.pathname;
-	const isProtectedPath = path.startsWith('/dashboard/') && path !== i18n.resolveRoute('/dashboard/login');
+	const isProtectedPath =
+		path.startsWith('/dashboard/') && path !== i18n.resolveRoute('/dashboard/login');
 
 	if (isProtectedPath) {
 		if (!event.locals.user) {

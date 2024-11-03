@@ -3,7 +3,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	interface TaskListItem {
-		id: string;
+		id: number;
 		name: string;
 	}
 

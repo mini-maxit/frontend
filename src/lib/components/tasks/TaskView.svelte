@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { type Task } from '.';
 	import { Input } from '$lib/components/ui/input';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { slide } from 'svelte/transition';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { TaskDisplayData } from '.';
 
-	let { task }: { task: Task } = $props();
+	let { task }: { task: TaskDisplayData } = $props();
 
 	let pdfUrl: string | null = $state(null);
 
@@ -35,7 +35,8 @@
 					<Tabs.Trigger value="summary">{m.summary()}</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content value="files" class="items-center flex-1">
-					<Accordion.Root type="multiple" class="w-full h-full">
+					Possible info about the files
+					<!-- <Accordion.Root type="multiple" class="w-full h-full">
 						{#each task.inOut.tasks as [input, output], index}
 							<Accordion.Item value={`item-${index}`}>
 								<Accordion.Trigger>
@@ -60,13 +61,14 @@
 								</Accordion.Content>
 							</Accordion.Item>
 						{/each}
-					</Accordion.Root>
+					</Accordion.Root> -->
 				</Tabs.Content>
 				<Tabs.Content value="summary">
-					<div class="space-y-4">
+					Possible summary of the task
+					<!-- <div class="space-y-4">
 						<h2 class="text-xl font-semibold">{m.summary()}</h2>
 						<p>{m.total_file_pairs()}: {task.inOut.tasks.length}</p>
-					</div>
+					</div> -->
 				</Tabs.Content>
 			</Tabs.Root>
 		</div>

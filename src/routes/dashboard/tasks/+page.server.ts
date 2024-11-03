@@ -1,19 +1,18 @@
 import { db } from '$lib/server/db';
-import { task } from '$lib/server/db/schema';
+import { tasks } from '$lib/server/db/schema';
 import type { PageServerLoad } from './$types';
 import type { TaskListItem } from '.';
 
 export const load: PageServerLoad = async () => {
-	const tasks = await db
+	const all_tasks = await db
 		.select({
-			id: task.id,
-			name: task.name,
-			mainFolderPath: task.mainFolderPath
+			id: tasks.id,
+			name: tasks.name
 		})
-		.from(task)
-		.orderBy(task.createdAt ?? task.id);
+		.from(tasks)
+		.orderBy(tasks.createdAt ?? tasks.id);
 
 	return {
-		tasks: tasks as TaskListItem[]
+		tasks: all_tasks as TaskListItem[]
 	};
 };
