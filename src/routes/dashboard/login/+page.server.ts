@@ -8,42 +8,52 @@ import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 import { i18n } from '$lib/i18n';
+import { superValidate } from 'sveltekit-superforms';
+import { registerSchema } from '$lib/components/auth/schemas';
+import { loginSchema } from '$lib/components/auth/schemas';
+import { zod } from 'sveltekit-superforms/adapters';
 
-export const load: PageServerLoad = async (event) => {
-	if (event.locals.user) {
-		return redirect(302, i18n.resolveRoute('/dashboard'));
-	}
-	return {};
+export const load: PageServerLoad = async () => {
+	return {
+		registerForm: await superValidate(zod(registerSchema)),
+		loginForm: await superValidate(zod(loginSchema))
+	};
 };
 
 export const actions: Actions = {
 	login: async (event) => {
-		const formData = await event.request.formData();
-		const username = formData.get('username');
-		const password = formData.get('password');
-
-		if (!validateUsername(username)) {
-			return fail(400, { message: 'Invalid username' });
-		}
-		if (!validatePassword(password)) {
-			return fail(400, { message: 'Invalid password' });
+		const form = await superValidate(event, zod(loginSchema));
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
 		}
 
-		const results = await db.select().from(table.user).where(eq(table.user.username, username));
+		const results = await db
+			.select()
+			.from(table.users)
+			.where(eq(table.users.email, form.data.email));
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
-			return fail(400, { message: 'Incorrect username or password' });
+			return fail(400, {
+				form,
+				message: 'Incorrect username or password'
+			});
 		}
 
-		const validPassword = await verify(existingUser.passwordHash, password, {
+		const validPassword = await verify(existingUser.passwordHash, form.data.password, {
 			memoryCost: 19456,
 			timeCost: 2,
 			outputLen: 32,
 			parallelism: 1
 		});
+
 		if (!validPassword) {
-			return fail(400, { message: 'Incorrect username or password' });
+			return fail(400, {
+				form,
+				message: 'Incorrect username or password'
+			});
 		}
 
 		const session = await auth.createSession(existingUser.id);
@@ -58,19 +68,14 @@ export const actions: Actions = {
 		return redirect(302, i18n.resolveRoute('/dashboard'));
 	},
 	register: async (event) => {
-		const formData = await event.request.formData();
-		const username = formData.get('username');
-		const password = formData.get('password');
-
-		if (!validateUsername(username)) {
-			return fail(400, { message: 'Invalid username' });
-		}
-		if (!validatePassword(password)) {
-			return fail(400, { message: 'Invalid password' });
+		const form = await superValidate(event, zod(registerSchema));
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
 		}
 
-		const userId = generateUserId();
-		const passwordHash = await hash(password, {
+		const passwordHash = await hash(form.data.password, {
 			// recommended minimum parameters
 			memoryCost: 19456,
 			timeCost: 2,
@@ -79,9 +84,18 @@ export const actions: Actions = {
 		});
 
 		try {
-			await db.insert(table.user).values({ id: userId, username, passwordHash });
-
-			const session = await auth.createSession(userId);
+			const _user = await db
+				.insert(table.users)
+				.values({
+					email: form.data.email,
+					name: form.data.email,
+					surname: form.data.surname,
+					username: form.data.username,
+					passwordHash
+				})
+				.returning();
+			const user = _user.at(0)!;
+			const session = await auth.createSession(user.id);
 			event.cookies.set(auth.sessionCookieName, session.id, {
 				path: '/',
 				sameSite: 'lax',
@@ -95,22 +109,3 @@ export const actions: Actions = {
 		return redirect(302, i18n.resolveRoute('/dashboard'));
 	}
 };
-
-const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
-
-function generateUserId(length = 21): string {
-	return generateRandomString({ read: (bytes) => crypto.getRandomValues(bytes) }, alphabet, length);
-}
-
-function validateUsername(username: unknown): username is string {
-	return (
-		typeof username === 'string' &&
-		username.length >= 3 &&
-		username.length <= 31 &&
-		/^[a-z0-9_-]+$/.test(username)
-	);
-}
-
-function validatePassword(password: unknown): password is string {
-	return typeof password === 'string' && password.length >= 6 && password.length <= 255;
-}
