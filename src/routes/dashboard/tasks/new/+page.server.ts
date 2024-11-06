@@ -1,9 +1,12 @@
 import type { PageServerLoad } from './$types.js';
-import { fail, superValidate } from 'sveltekit-superforms';
+import { fail, message, superValidate } from 'sveltekit-superforms';
 import { uploadTaskSchema } from '$lib/components/tasks/formSchema.js';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect, type Actions } from '@sveltejs/kit';
 import { i18n } from '$lib/i18n.js';
+import { FILESTORAGE_URL } from '$env/static/private';
+import { db } from '$lib/server/db/index.js';
+import { tasks } from '$lib/server/db/schema.js';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -20,10 +23,29 @@ export const actions: Actions = {
 			});
 		}
 
-		let taskId = null;
+		const { id, name, archive } = form.data;
 
 		try {
-			// todo: fire to filestorage to insert the task zip file
+			const formData = new FormData();
+			formData.append('taskID', id.toString());
+			formData.append('overwrite', 'false');
+			formData.append('archive', archive);
+
+			const response = await fetch(`${FILESTORAGE_URL}/createTask`, {
+				method: 'POST',
+				body: formData,
+			});
+
+			if (!response.ok) {
+				return message(form, "Failed to create task", { status: response.status as 400 | 401 | 500 | 503 });
+			}
+
+			await db.insert(tasks).values({
+				id,
+				name,
+				createdById: event.locals.user!.id
+			});
+			
 		} catch (error) {
 			return fail(500, {
 				form,
@@ -31,6 +53,6 @@ export const actions: Actions = {
 			});
 		}
 
-		redirect(303, i18n.resolveRoute(`/dashboard/tasks/${taskId}`));
+		redirect(303, i18n.resolveRoute(`/dashboard/tasks/${id}`));
 	}
 };

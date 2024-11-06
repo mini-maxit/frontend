@@ -13,22 +13,31 @@
 		validators: zodClient(uploadTaskSchema)
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, message, enhance } = form;
 
-	const file = fileProxy(form, 'taskFile');
+	const file = fileProxy(form, 'archive');
 </script>
 
 <form enctype="multipart/form-data" method="POST" use:enhance>
-	<Form.Field {form} name="taskName">
+	<Form.Field {form} name="name">
 		<Form.Control>
 			{#snippet children({ props })}
 				<Form.Label>{m.task_form_task_name_label()}</Form.Label>
-				<Input {...props} bind:value={$formData.taskName} />
+				<Input {...props} bind:value={$formData.name} />
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Field {form} name="taskFile">
+	<Form.Field {form} name="id">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>{m.task_form_task_name_label()}</Form.Label>
+				<Input type="number" {...props} bind:value={$formData.id} />
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="archive">
 		<Form.Control>
 			{#snippet children({ props })}
 				<Label for="taskFile">{m.task_form_task_file_label()}</Label>
@@ -45,4 +54,7 @@
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Button class="mt-4">{m.task_form_submit()}</Form.Button>
+	{#if $message}
+		<div class="mt-4 text-red-500">{$message}</div>
+	{/if}
 </form>

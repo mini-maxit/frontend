@@ -3,8 +3,9 @@ import JSZip from 'jszip';
 import * as m from '$lib/paraglide/messages.js';
 
 export const uploadTaskSchema = z.object({
-	taskName: z.string().min(3).max(50),
-	taskFile: z
+	id: z.number().int().positive(),
+	name: z.string().min(3).max(50),
+	archive: z
 		.instanceof(File, { message: m.task_form_invalid_type() })
 		.refine((file) => {
 			return file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
@@ -22,9 +23,9 @@ export const uploadTaskSchema = z.object({
 		})
 });
 
-const requiredFolders = ['doc', 'in', 'out', 'prog'];
-const inFileRegex = /^\/in\d+\.txt$/;
-const outFileRegex = /^\/out\d+\.txt$/;
+const requiredFolders = ['input', 'output'];
+const inFileRegex = /^\/\d+.in$/;
+const outFileRegex = /^\/\d+.out$/;
 
 function isValidInFile(root: string, filename: string): boolean {
 	return inFileRegex.test(filename.replace(root, ''));
@@ -38,7 +39,7 @@ async function verifyFolderStructure(file: ArrayBuffer) {
 	const zip = new JSZip();
 	const loadedZip = await zip.loadAsync(file);
 
-	const folders = Object.keys(loadedZip.files).filter((file) => file.split('/').length === 2);
+	const folders = Object.keys(loadedZip.files).filter((file) => file.split('/').length === 2).filter((f) => f.endsWith('/'));
 
 	if (folders.length !== 1) {
 		throw new Error('The package should contain exactly one main folder.');
@@ -57,10 +58,8 @@ async function verifyFolderStructure(file: ArrayBuffer) {
 		throw new Error(`Missing folders: ${[...nonExistingRequiredFolders].join(', ')}`);
 	}
 
-	const docFolderPath = mainFolderPath + 'doc';
-
 	if (
-		loadedZip.folder(docFolderPath)!.filter((_, file) => file.name.endsWith('.pdf')).length !== 1
+		loadedZip.folder(mainFolderPath)!.filter((_, file) => file.name.endsWith('.pdf')).length !== 1
 	) {
 		throw new Error('Documentation should contain exactly one PDF file');
 	}

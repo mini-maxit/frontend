@@ -1,7 +1,6 @@
 import { db } from '$lib/server/db';
 import { tasks } from '$lib/server/db/schema';
 import type { PageServerLoad } from './$types';
-import type { TaskListItem } from '.';
 
 export const load: PageServerLoad = async () => {
 	const all_tasks = await db
@@ -13,6 +12,6 @@ export const load: PageServerLoad = async () => {
 		.orderBy(tasks.createdAt ?? tasks.id);
 
 	return {
-		tasks: all_tasks as TaskListItem[]
+		tasks: all_tasks
 	};
 };
