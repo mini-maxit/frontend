@@ -1,0 +1,60 @@
+<script lang="ts">
+	import * as Form from '$lib/components/ui/form';
+	import Label from '$lib/components/ui/label/label.svelte';
+	import { Input } from '$lib/components/ui/input';
+	import { createTaskSchema, type CreateTaskSchema } from './formSchema';
+	import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import * as m from '$lib/paraglide/messages.js';
+
+	let { data }: { data: SuperValidated<Infer<CreateTaskSchema>> } = $props();
+
+	const form = superForm(data, {
+		validators: zodClient(createTaskSchema)
+	});
+
+	const { form: formData, message, enhance } = form;
+
+	const file = fileProxy(form, 'archive');
+</script>
+
+<form enctype="multipart/form-data" method="POST" use:enhance>
+	<Form.Field {form} name="name">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>{m.task_form_task_name_label()}</Form.Label>
+				<Input {...props} bind:value={$formData.name} />
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="id">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>{m.task_form_task_name_label()}</Form.Label>
+				<Input type="number" {...props} bind:value={$formData.id} />
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="archive">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Label for="archive">{m.task_form_task_file_label()}</Label>
+				<input
+					{...props}
+					id="archive"
+					type="file"
+					class={'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'}
+					bind:files={$file}
+				/>
+			{/snippet}
+		</Form.Control>
+		<Form.Description>{m.task_form_task_file_description()}</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Button class="mt-4">{m.task_form_submit()}</Form.Button>
+	{#if $message}
+		<div class="mt-4 text-red-500">{$message}</div>
+	{/if}
+</form>
