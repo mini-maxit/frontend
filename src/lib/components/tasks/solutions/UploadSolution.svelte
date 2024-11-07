@@ -6,6 +6,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+	import Input from '$lib/components/ui/input/input.svelte';
 
 	let {
 		data
@@ -20,9 +21,9 @@
 		validators: zodClient(uploadTaskSolutionSchema)
 	});
 
-	const { form: formData, errors, message, enhance } = form;
-	$formData.id = data.task_id;
+	const { form: formData, message, errors, enhance } = form;
 	const file = fileProxy(form, 'file');
+	$formData.id = data.task_id;
 
 	let fileContentPromise = $derived($errors.file ? null : $file[0]?.text());
 </script>
@@ -44,6 +45,14 @@
 		<Form.Description>{m.task_form_task_file_description()}</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
+	<Form.Field {form} hidden name="id">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Input {...props} type="number" id="id" bind:value={$formData.id} />
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
 	<Form.Button class="mt-4">{m.task_form_submit()}</Form.Button>
 	{#if $message}
 		<div class="mt-4 text-red-500">{$message}</div>
@@ -55,7 +64,7 @@
 {:then content}
 	{#if content}
 		<div class="mt-4">
-			<ScrollArea class="h-[400px] ">
+			<ScrollArea class="h-[400px]">
 				<pre class="bg-gray-100 p-4 rounded-lg">{content}</pre>
 			</ScrollArea>
 		</div>

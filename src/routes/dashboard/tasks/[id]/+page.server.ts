@@ -56,7 +56,6 @@ export const actions: Actions = {
 				form
 			});
 		}
-		console.log(form);
 		// todo: implement solution upload
 	}
 };

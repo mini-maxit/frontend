@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const uploadTaskSolutionSchema = z.object({
+	id: z.number().int().positive(),
 	file: z
 		.instanceof(File)
 		.refine((file) => {
@@ -11,8 +12,7 @@ export const uploadTaskSolutionSchema = z.object({
 			return (
 				file.type === 'text/plain' || file.type === 'text/x-c++src' || file.type === 'text/x-python'
 			);
-		}, 'File must be a text file'),
-	id: z.number().int().positive()
+		}, 'File must be a text file')
 });
 
 export type UploadTaskSolutionSchema = typeof uploadTaskSolutionSchema;
