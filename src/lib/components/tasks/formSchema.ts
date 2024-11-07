@@ -2,7 +2,7 @@ import { z } from 'zod';
 import JSZip from 'jszip';
 import * as m from '$lib/paraglide/messages.js';
 
-export const uploadTaskSchema = z.object({
+export const createTaskSchema = z.object({
 	id: z.number().int().positive(),
 	name: z.string().min(3).max(50),
 	archive: z
@@ -39,7 +39,9 @@ async function verifyFolderStructure(file: ArrayBuffer) {
 	const zip = new JSZip();
 	const loadedZip = await zip.loadAsync(file);
 
-	const folders = Object.keys(loadedZip.files).filter((file) => file.split('/').length === 2).filter((f) => f.endsWith('/'));
+	const folders = Object.keys(loadedZip.files)
+		.filter((file) => file.split('/').length === 2)
+		.filter((f) => f.endsWith('/'));
 
 	if (folders.length !== 1) {
 		throw new Error('The package should contain exactly one main folder.');
@@ -92,4 +94,4 @@ function verifyTaskInOut(loadedZip: JSZip, mainFolderPath: string) {
 	}
 }
 
-export type UploadTaskSchema = typeof uploadTaskSchema;
+export type CreateTaskSchema = typeof createTaskSchema;

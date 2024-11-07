@@ -2,15 +2,15 @@
 	import * as Form from '$lib/components/ui/form';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { Input } from '$lib/components/ui/input';
-	import { uploadTaskSchema, type UploadTaskSchema } from './formSchema';
+	import { createTaskSchema, type CreateTaskSchema } from './formSchema';
 	import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';
 
-	let { data }: { data: SuperValidated<Infer<UploadTaskSchema>> } = $props();
+	let { data }: { data: SuperValidated<Infer<CreateTaskSchema>> } = $props();
 
 	const form = superForm(data, {
-		validators: zodClient(uploadTaskSchema)
+		validators: zodClient(createTaskSchema)
 	});
 
 	const { form: formData, message, enhance } = form;
@@ -40,10 +40,10 @@
 	<Form.Field {form} name="archive">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Label for="taskFile">{m.task_form_task_file_label()}</Label>
+				<Label for="archive">{m.task_form_task_file_label()}</Label>
 				<input
 					{...props}
-					id="taskFile"
+					id="archive"
 					type="file"
 					class={'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'}
 					bind:files={$file}

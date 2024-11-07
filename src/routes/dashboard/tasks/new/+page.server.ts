@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types.js';
 import { fail, message, superValidate } from 'sveltekit-superforms';
-import { uploadTaskSchema } from '$lib/components/tasks/formSchema.js';
+import { createTaskSchema } from '$lib/components/tasks/formSchema.js';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect, type Actions } from '@sveltejs/kit';
 import { i18n } from '$lib/i18n.js';
@@ -10,13 +10,13 @@ import { tasks } from '$lib/server/db/schema.js';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(zod(uploadTaskSchema))
+		form: await superValidate(zod(createTaskSchema))
 	};
 };
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(uploadTaskSchema));
+		const form = await superValidate(event, zod(createTaskSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
@@ -33,11 +33,13 @@ export const actions: Actions = {
 
 			const response = await fetch(`${FILESTORAGE_URL}/createTask`, {
 				method: 'POST',
-				body: formData,
+				body: formData
 			});
 
 			if (!response.ok) {
-				return message(form, "Failed to create task", { status: response.status as 400 | 401 | 500 | 503 });
+				return message(form, 'Failed to create task', {
+					status: response.status as 400 | 401 | 500 | 503
+				});
 			}
 
 			await db.insert(tasks).values({
@@ -45,7 +47,6 @@ export const actions: Actions = {
 				name,
 				createdById: event.locals.user!.id
 			});
-			
 		} catch (error) {
 			return fail(500, {
 				form,

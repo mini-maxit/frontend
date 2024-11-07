@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageServerData } from './$types.js';
-	import TaskForm from '$lib/components/tasks/TaskForm.svelte';
+	import TaskForm from '$lib/components/tasks/TaskCreateForm.svelte';
 	let { data }: { data: PageServerData } = $props();
 </script>
 

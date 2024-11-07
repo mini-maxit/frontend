@@ -3,7 +3,6 @@
 	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
-
 </script>
 
-<TaskView task={data.task} />
+<TaskView {data} />
