@@ -11,13 +11,13 @@ import {
 	primaryKey
 } from 'drizzle-orm/pg-core';
 
-export const userSolutionStatusEnum = pgEnum('user_solution_status', [
+export const submissionStatusEnum = pgEnum('user_solution_status', [
 	'submitted',
 	'queued',
 	'executed'
 ]);
 export const languageTypeEnum = pgEnum('language_type', ['CPP', 'C', 'Python']);
-export const userSolutionResultStatusEnum = pgEnum('user_solution_result_status', [
+export const submissionResultStatusEnum = pgEnum('user_solution_result_status', [
 	'succes',
 	'failed',
 	'InternalError'
@@ -63,7 +63,7 @@ export const submissions = pgTable('submissions', {
 	userId: integer('user_id').references(() => users.id),
 	order: integer('order').notNull(),
 	languageId: integer('language_id').references(() => languageConfig.id),
-	status: userSolutionStatusEnum('status').notNull(),
+	status: submissionStatusEnum('status').notNull(),
 	submittedAt: timestamp('submitted_at', { withTimezone: true }).defaultNow(),
 	checkedAt: timestamp('checked_at', { withTimezone: true })
 });
@@ -78,15 +78,15 @@ export const inputOutput = pgTable('input_output', {
 
 export const submissionResults = pgTable('submission_results', {
 	id: serial('id').primaryKey(),
-	userSolutionId: integer('user_solution_id').references(() => submissions.id),
-	statusCode: userSolutionResultStatusEnum('status_code').notNull(),
+	submissionId: integer('user_solution_id').references(() => submissions.id),
+	statusCode: submissionResultStatusEnum('status_code').notNull(),
 	message: varchar('message', { length: 255 }),
 	createdAt: timestamp('created_at', { withTimezone: true }).defaultNow()
 });
 
 export const testResults = pgTable('test_results', {
 	id: serial('id').primaryKey(),
-	userSolutionResultId: integer('user_solution_result_id').references(() => submissionResults.id),
+	submissionResultId: integer('user_solution_result_id').references(() => submissionResults.id),
 	inputOutputId: integer('input_output_id').references(() => inputOutput.id),
 	passed: boolean('passed').notNull(),
 	errorMessage: varchar('error_message')
@@ -132,7 +132,7 @@ export const taskUser = pgTable(
 
 export const queueMessages = pgTable('queue_messages', {
 	id: text('id').primaryKey(),
-	userSolutionId: integer('user_solution_id').references(() => submissions.id),
+	submissionId: integer('user_solution_id').references(() => submissions.id),
 	queuedAt: timestamp('queued_at', { withTimezone: true }).defaultNow()
 });
 
