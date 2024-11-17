@@ -33,7 +33,7 @@ export const users = pgTable('users', {
 	passwordHash: text('password_hash').notNull()
 });
 
-export const session = pgTable('session', {
+export const session = pgTable('sessions', {
 	id: text('id').primaryKey(),
 	userId: integer('user_id')
 		.notNull()
