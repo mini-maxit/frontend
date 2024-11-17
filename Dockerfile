@@ -13,6 +13,7 @@ COPY package.json pnpm-lock.yaml svelte.config.js vite.config.ts tsconfig.json .
 RUN pnpm install --frozen-lockfile
 
 COPY . .
+RUN mv .env.example .env
 
 RUN pnpm run build
 
