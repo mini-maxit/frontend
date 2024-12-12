@@ -1,11 +1,16 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 import type * as Icons from 'unplugin-icons/types/svelte';
+
 declare global {
 	namespace App {
 		interface Locals {
-			user: import('$lib/server/auth').SessionValidationResult['user'];
-			session: import('$lib/server/auth').SessionValidationResult['session'];
+			userId: number | null;
+			session: {
+				id: string;
+				userId: string;
+				expiresAt: Date;
+			} | null;
 		}
 	}
 }
