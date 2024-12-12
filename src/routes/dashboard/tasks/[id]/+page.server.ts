@@ -35,7 +35,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	return {
 		task: {
 			name: task.data.title,
-			id: task.data.title,
+			id: task.data.id,
 			description: await taskDescriptionResponse.arrayBuffer()
 		},
 		uploadSolutionForm: await superValidate(zod(uploadTaskSolutionSchema))
