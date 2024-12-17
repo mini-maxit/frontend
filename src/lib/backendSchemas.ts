@@ -6,9 +6,10 @@ export interface AuthSessionResponse {
 }
 
 export interface AuthUserResponse {
+	ok: boolean;
 	data: {
-		id: string;
 		user_id: number;
+		id: string;
 		expires_at: Date;
 	};
 }

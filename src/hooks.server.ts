@@ -26,6 +26,10 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		return resolve(event);
 	}
 
+	const responseJson = await response.json();
+	event.locals.userId = responseJson.data.user_id;
+	event.locals.session = responseJson.data;
+
 	return resolve(event);
 };
 

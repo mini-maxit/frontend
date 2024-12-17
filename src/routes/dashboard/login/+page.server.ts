@@ -50,8 +50,6 @@ export const actions: Actions = {
 			secure: !dev
 		});
 
-		event.locals.userId = responseJson.data.user_id;
-
 		return redirect(302, i18n.resolveRoute('/dashboard'));
 	},
 	register: async (event) => {
@@ -85,8 +83,6 @@ export const actions: Actions = {
 			expires: new Date(responseJson.data.expires_at),
 			secure: !dev
 		});
-
-		event.locals.userId = responseJson.data.user_id;
 
 		return redirect(302, i18n.resolveRoute('/dashboard'));
 	}

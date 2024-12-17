@@ -31,6 +31,7 @@
 	"task_form_invalid_type": "Please upload file (.zip)",
 	"task_form_invalid_encoding": "Incorrect file format. Only ZIP format is accepted",
 	"task_form_task_name_label": "Add a new Task",
+	"task_form_task_id_label": "Task ID",
 	"task_form_task_file_label": "Task file",
 	"task_form_task_file_description": "Please upload a file with the task description.",
 	"task_form_submit": "Submit"

@@ -9,5 +9,5 @@ export const load: LayoutServerLoad = async (event) => {
 	} else if (event.locals.userId && event.url.pathname === dashboardLogin) {
 		return redirect(302, '/dashboard');
 	}
-	return { user: event.locals.userId };
+	return { userId: event.locals.userId! };
 };

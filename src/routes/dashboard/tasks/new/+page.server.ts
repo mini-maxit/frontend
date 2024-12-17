@@ -4,12 +4,13 @@ import { createTaskSchema } from '$lib/components/tasks/formSchema.js';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect, type Actions } from '@sveltejs/kit';
 import { i18n } from '$lib/i18n.js';
-import { FILESTORAGE_URL } from '$env/static/private';
 import { env } from '$env/dynamic/private';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ parent }) => {
+	const { userId } = await parent();
 	return {
-		form: await superValidate(zod(createTaskSchema))
+		form: await superValidate(zod(createTaskSchema)),
+		userId
 	};
 };
 
@@ -22,22 +23,26 @@ export const actions: Actions = {
 			});
 		}
 
-		const { id, name, archive } = form.data;
+		const { userId, name, archive } = form.data;
 
 		try {
 			const formData = new FormData();
-			formData.append('taskID', id.toString());
-			formData.append('name', name);
+			formData.append('userId', userId.toString());
+			formData.append('taskName', name);
 			formData.append('overwrite', 'false');
 			formData.append('archive', archive);
 
-			const response = await fetch(`${env.BACKEND_URL}/api/v1/tasks/upload`, {
+			console.log('formData', formData);
+
+			const response = await fetch(`${env.BACKEND_URL}/api/v1/task`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				},
 				body: formData
 			});
+
+			console.log('response', await response.json());
 
 			if (!response.ok) {
 				return fail(500, {
@@ -52,6 +57,6 @@ export const actions: Actions = {
 			});
 		}
 
-		redirect(303, i18n.resolveRoute(`/dashboard/tasks/${id}`));
+		redirect(303, i18n.resolveRoute(`/dashboard/tasks/${userId}`));
 	}
 };
