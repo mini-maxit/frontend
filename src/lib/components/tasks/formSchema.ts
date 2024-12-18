@@ -3,7 +3,7 @@ import JSZip from 'jszip';
 import * as m from '$lib/paraglide/messages.js';
 
 export const createTaskSchema = z.object({
-	id: z.number().int().positive(),
+	userId: z.number().int().positive(),
 	name: z.string().min(3).max(50),
 	archive: z
 		.instanceof(File, { message: m.task_form_invalid_type() })
