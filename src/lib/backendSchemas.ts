@@ -23,3 +23,13 @@ export interface GetTaskResponse {
 		create_by: number;
 	};
 }
+
+export interface GetAllTasksResponse {
+	ok: boolean;
+	data: {
+		id: number;
+		title: string;
+		created_by: number;
+		created_at: string;
+	}[];
+}

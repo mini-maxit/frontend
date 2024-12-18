@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(400, 'Invalid task id');
 	}
 
-	const taskDataResponse = await fetch(`${BACKEND_URL}/tasks/${idInt}`);
+	const taskDataResponse = await fetch(`${BACKEND_URL}/api/v1/task/${idInt}`);
 
 	if (!taskDataResponse.ok) {
 		throw error(500, 'Failed to fetch task data');
@@ -25,7 +25,8 @@ export const load: PageServerLoad = async ({ params }) => {
 	const task: GetTaskResponse = await taskDataResponse.json();
 
 	const taskDescriptionResponse = await fetch(
-		`${FILESTORAGE_URL}/getTaskDescription?taskID=${idInt}`
+		`${FILESTORAGE_URL}/getTaskDescription?` +
+			new URLSearchParams({ taskID: idInt.toString() }).toString()
 	);
 
 	if (!taskDescriptionResponse.ok) {

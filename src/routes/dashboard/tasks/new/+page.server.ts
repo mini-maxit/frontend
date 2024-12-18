@@ -31,18 +31,10 @@ export const actions: Actions = {
 			formData.append('taskName', name);
 			formData.append('overwrite', 'false');
 			formData.append('archive', archive);
-
-			console.log('formData', formData);
-
 			const response = await fetch(`${env.BACKEND_URL}/api/v1/task`, {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				},
 				body: formData
 			});
-
-			console.log('response', await response.json());
 
 			if (!response.ok) {
 				return fail(500, {

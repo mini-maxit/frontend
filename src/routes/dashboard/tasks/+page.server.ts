@@ -1,15 +1,19 @@
 import type { PageServerLoad } from './$types';
+import { env } from '$env/dynamic/private';
+import { type GetAllTasksResponse } from '$lib/backendSchemas';
 
 export const load: PageServerLoad = async () => {
-	// const all_tasks = await db
-	// 	.select({
-	// 		id: tasks.id,
-	// 		name: tasks.name
-	// 	})
-	// 	.from(tasks)
-	// 	.orderBy(tasks.createdAt ?? tasks.id);
+	const response = await fetch(`${env.BACKEND_URL}/api/v1/task`);
+
+	if (!response.ok) {
+		return {
+			tasks: []
+		};
+	}
+
+	const { data }: GetAllTasksResponse = await response.json();
 
 	return {
-		tasks: []
+		tasks: data
 	};
 };
