@@ -1,12 +1,10 @@
-import { db } from '$lib/server/db';
 import { error, type Actions } from '@sveltejs/kit';
-import { eq, and } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
-import { tasks } from '$lib/server/db/schema';
-import { FILESTORAGE_URL } from '$env/static/private';
+import { BACKEND_URL, FILESTORAGE_URL } from '$env/static/private';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { uploadTaskSolutionSchema } from '$lib/components/tasks/solutions/formSchema';
+import type { GetTaskResponse } from '$lib/backendSchemas';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
@@ -18,31 +16,28 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(400, 'Invalid task id');
 	}
 
-	const dbTasks = await db
-		.select({
-			id: tasks.id,
-			name: tasks.name
-		})
-		.from(tasks)
-		.where(and(eq(tasks.id, idInt)));
+	const taskDataResponse = await fetch(`${BACKEND_URL}/api/v1/task/${idInt}`);
 
-	if (dbTasks.length === 0) {
-		throw error(404, 'Task not found');
+	if (!taskDataResponse.ok) {
+		throw error(500, 'Failed to fetch task data');
 	}
 
-	const task = dbTasks[0];
+	const task: GetTaskResponse = await taskDataResponse.json();
 
-	const response = await fetch(`${FILESTORAGE_URL}/getTaskDescription?taskID=${idInt}`);
+	const taskDescriptionResponse = await fetch(
+		`${FILESTORAGE_URL}/getTaskDescription?` +
+			new URLSearchParams({ taskID: idInt.toString() }).toString()
+	);
 
-	if (!response.ok) {
+	if (!taskDescriptionResponse.ok) {
 		throw error(500, 'Failed to fetch task description');
 	}
 
 	return {
 		task: {
-			name: task.name,
-			id: task.id,
-			description: await response.arrayBuffer()
+			name: task.data.title,
+			id: task.data.id,
+			description: await taskDescriptionResponse.arrayBuffer()
 		},
 		uploadSolutionForm: await superValidate(zod(uploadTaskSolutionSchema))
 	};

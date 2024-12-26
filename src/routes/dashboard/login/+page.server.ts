@@ -1,17 +1,14 @@
-import { hash, verify } from '@node-rs/argon2';
-import { generateRandomString } from '@oslojs/crypto/random';
 import { fail, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
 import { dev } from '$app/environment';
-import * as auth from '$lib/server/auth';
-import { db } from '$lib/server/db';
-import * as table from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 import { i18n } from '$lib/i18n';
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import { registerSchema } from '$lib/components/auth/schemas';
 import { loginSchema } from '$lib/components/auth/schemas';
 import { zod } from 'sveltekit-superforms/adapters';
+import { env } from '$env/dynamic/private';
+import { sessionCookieName } from '$lib';
+import type { AuthUserResponse } from '$lib/backendSchemas';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -29,39 +26,27 @@ export const actions: Actions = {
 			});
 		}
 
-		const results = await db
-			.select()
-			.from(table.users)
-			.where(eq(table.users.email, form.data.email));
-
-		const existingUser = results.at(0);
-		if (!existingUser) {
-			return fail(400, {
-				form,
-				message: 'Incorrect username or password'
-			});
-		}
-
-		const validPassword = await verify(existingUser.passwordHash, form.data.password, {
-			memoryCost: 19456,
-			timeCost: 2,
-			outputLen: 32,
-			parallelism: 1
+		const response = await fetch(`${env.BACKEND_URL}/api/v1/auth/login`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(form.data)
 		});
 
-		if (!validPassword) {
-			return fail(400, {
-				form,
-				message: 'Incorrect username or password'
-			});
+		//todo: handle errors more explicitly
+
+		if (!response.ok) {
+			return fail(response.status, { message: 'Invalid credentials' });
 		}
 
-		const session = await auth.createSession(existingUser.id);
-		event.cookies.set(auth.sessionCookieName, session.id, {
+		const responseJson: AuthUserResponse = await response.json();
+
+		event.cookies.set(sessionCookieName, responseJson.data.id, {
 			path: '/',
 			sameSite: 'lax',
 			httpOnly: true,
-			expires: session.expiresAt,
+			expires: new Date(responseJson.data.expires_at),
 			secure: !dev
 		});
 
@@ -75,37 +60,30 @@ export const actions: Actions = {
 			});
 		}
 
-		const passwordHash = await hash(form.data.password, {
-			// recommended minimum parameters
-			memoryCost: 19456,
-			timeCost: 2,
-			outputLen: 32,
-			parallelism: 1
+		const response = await fetch(`${env.BACKEND_URL}/api/v1/auth/register`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(form.data)
 		});
 
-		try {
-			const _user = await db
-				.insert(table.users)
-				.values({
-					email: form.data.email,
-					name: form.data.email,
-					surname: form.data.surname,
-					username: form.data.username,
-					passwordHash
-				})
-				.returning();
-			const user = _user.at(0)!;
-			const session = await auth.createSession(user.id);
-			event.cookies.set(auth.sessionCookieName, session.id, {
-				path: '/',
-				sameSite: 'lax',
-				httpOnly: true,
-				expires: session.expiresAt,
-				secure: !dev
-			});
-		} catch (e) {
-			return fail(500, { message: 'An error has occurred' });
+		// todo: handle errors more explicitly
+
+		if (!response.ok) {
+			return message(form, { message: 'An error has occurred' });
 		}
+
+		const responseJson: AuthUserResponse = await response.json();
+
+		event.cookies.set(sessionCookieName, responseJson.data.id, {
+			path: '/',
+			sameSite: 'lax',
+			httpOnly: true,
+			expires: new Date(responseJson.data.expires_at),
+			secure: !dev
+		});
+
 		return redirect(302, i18n.resolveRoute('/dashboard'));
 	}
 };

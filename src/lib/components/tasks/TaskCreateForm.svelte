@@ -7,13 +7,16 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';
 
-	let { data }: { data: SuperValidated<Infer<CreateTaskSchema>> } = $props();
+	let { data, userId }: { data: SuperValidated<Infer<CreateTaskSchema>>; userId: number } =
+		$props();
 
 	const form = superForm(data, {
 		validators: zodClient(createTaskSchema)
 	});
 
 	const { form: formData, message, enhance } = form;
+
+	$formData.userId = userId;
 
 	const file = fileProxy(form, 'archive');
 </script>
@@ -28,11 +31,10 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Field {form} name="id">
+	<Form.Field {form} name="userId" hidden>
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>{m.task_form_task_name_label()}</Form.Label>
-				<Input type="number" {...props} bind:value={$formData.id} />
+				\ <Input type="number" {...props} bind:value={$formData.userId} />
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
