@@ -4,7 +4,9 @@
 
 	interface TaskListItem {
 		id: number;
-		name: string;
+		title: string;
+		created_at: string;
+		created_by: number;
 	}
 
 	let { tasks }: { tasks: TaskListItem[] } = $props();
@@ -23,7 +25,7 @@
 		{#each tasks as task}
 			<Table.Row>
 				<Table.Cell>{task.id}</Table.Cell>
-				<Table.Cell>{task.name}</Table.Cell>
+				<Table.Cell>{task.title}</Table.Cell>
 				<Table.Cell>
 					<a href={`/dashboard/tasks/${task.id}`} class="hover:underline">{m.task_link_text()}</a>
 				</Table.Cell>
