@@ -6,11 +6,7 @@ declare global {
 	namespace App {
 		interface Locals {
 			userId: number | null;
-			session: {
-				id: string;
-				userId: string;
-				expiresAt: Date;
-			} | null;
+			sessionId: string | null;
 		}
 	}
 }
