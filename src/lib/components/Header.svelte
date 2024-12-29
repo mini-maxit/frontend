@@ -5,7 +5,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 </script>
 
-<header class="sticky top-0 flex items-center justify-center p-4 bg-white shadow-md">
+<header class="z-50 sticky top-0 flex items-center justify-center p-4 bg-white shadow-md">
 	<Logo />
 	<div class="flex items-center justify-center absolute right-2">
 		<ChangeLanguage />

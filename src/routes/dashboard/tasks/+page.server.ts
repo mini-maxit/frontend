@@ -2,8 +2,18 @@ import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
 import { type GetAllTasksResponse } from '$lib/backendSchemas';
 
-export const load: PageServerLoad = async () => {
-	const response = await fetch(`${env.BACKEND_URL}/api/v1/task`);
+export const load: PageServerLoad = async ({ locals }) => {
+	const response = await fetch(
+		`${env.BACKEND_URL}/api/v1/task/?` +
+			new URLSearchParams({
+				limit: '20'
+			}),
+		{
+			headers: {
+				session: `${locals.sessionId}`
+			}
+		}
+	);
 
 	if (!response.ok) {
 		return {

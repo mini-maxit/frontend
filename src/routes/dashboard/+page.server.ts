@@ -6,16 +6,17 @@ import { sessionCookieName } from '$lib';
 
 export const actions: Actions = {
 	logout: async (event) => {
-		if (!event.locals.session) {
+		if (!event.locals.sessionId) {
 			return fail(401);
 		}
 		const response = await fetch(`${env.BACKEND_URL}/api/v1/session/invalidate`, {
 			headers: {
-				session: `${event.locals.session.id}`
+				session: `${event.locals.sessionId}`
 			}
 		});
 
 		if (!response.ok) {
+			// todo: how to handle this?
 			console.log('Failed to invalidate session');
 		}
 
