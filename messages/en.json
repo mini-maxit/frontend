@@ -10,6 +10,7 @@
 	"hi": "Hi",
 	"your_user_id": "Your user id",
 	"view_tasks": "View tasks",
+	"view_users": "View all users",
 	"add_task": "Add new task",
 
 	"username": "Username",
@@ -21,8 +22,15 @@
 
 	"loading": "Loading",
 
-	"tasks_table_title": "A list of all available Tasks.",
+	"users_table_title": "A list of all registered Users.",
+	"user_id": "User ID",
+	"user_username": "Username",
+	"user_email": "Email",
+	"user_link": "Profile link",
+	"user_link_text": "See profile",
+	"user_fullname": "Full name",
 
+	"tasks_table_title": "A list of all available Tasks.",
 	"task_id": "Task ID",
 	"task_name": "Task name",
 	"task_link": "Task link",

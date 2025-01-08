@@ -40,3 +40,15 @@ export interface GetAllTasksResponse {
 		created_at: string;
 	}[];
 }
+
+export interface GetAllUsersResponse {
+	ok: boolean;
+	data: {
+		id: number;
+		name: string;
+		surname: string;
+		email: string;
+		username: string;
+		role: string;
+	}[];
+}

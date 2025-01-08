@@ -21,6 +21,9 @@
 		<Button class="w-full mt-4 bg-blue-600 rounded-lg hover:bg-blue-700" href="/dashboard/tasks">
 			{m.view_tasks()}
 		</Button>
+		<Button class="w-full mt-4 bg-blue-600 rounded-lg hover:bg-blue-700" href="/dashboard/users">
+			{m.view_users()}
+		</Button>
 		<Button
 			class="w-full mt-4 bg-green-600 rounded-lg hover:bg-green-700"
 			href="/dashboard/tasks/new"

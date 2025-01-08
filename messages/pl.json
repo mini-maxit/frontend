@@ -10,6 +10,7 @@
 	"hi": "Cześć",
 	"your_user_id": "Twój identyfikator użytkownika",
 	"view_tasks": "Zobacz zadania",
+	"view_users": "Zobacz wszystkich użytkowników",
 	"add_task": "Dodaj nowe zadanie",
 
 	"username": "Nazwa użytkownika",
@@ -21,8 +22,15 @@
 
 	"loading": "Ładowanie",
 
-	"tasks_table_title": "Lista wszystkich dostępnych zadań.",
+	"users_table_title": "Lista wszystkich zarejestrowanych użytkowników.",
+	"user_id": "ID użytkownika",
+	"user_username": "Nazwa użytkownika",
+	"user_email": "Email",
+	"user_link": "Link do profilu",
+	"user_link_text": "Zobacz profil",
+	"user_fullname": "Imię i nazwisko",
 
+	"tasks_table_title": "Lista wszystkich dostępnych zadań.",
 	"task_id": "ID zadania",
 	"task_name": "Nazwa zadania",
 	"task_link": "Link do zadania",

@@ -7,16 +7,16 @@ import { uploadTaskSolutionSchema } from '$lib/components/tasks/solutions/formSc
 import type { GetTaskResponse } from '$lib/backendSchemas';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-	const { id } = params;
-	let idInt: number;
+	const { taskId } = params;
+	let taskIdInt: number;
 
 	try {
-		idInt = parseInt(id);
+		taskIdInt = parseInt(taskId);
 	} catch (e) {
 		throw error(400, 'Invalid task id');
 	}
 
-	const taskDataResponse = await fetch(`${env.BACKEND_URL}/api/v1/task/${idInt}`, {
+	const taskDataResponse = await fetch(`${env.BACKEND_URL}/api/v1/task/${taskIdInt}`, {
 		headers: {
 			session: `${locals.sessionId}`
 		}
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 	const taskDescriptionResponse = await fetch(
 		`${env.FILESTORAGE_URL}/getTaskDescription?` +
-			new URLSearchParams({ taskID: idInt.toString() }).toString()
+			new URLSearchParams({ taskID: taskIdInt.toString() }).toString()
 	);
 
 	if (!taskDescriptionResponse.ok) {
@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		task: {
 			name: task.data.title,
 			id: task.data.id,
-			description: await taskDescriptionResponse.arrayBuffer()
+			description: taskDescriptionResponse.arrayBuffer()
 		},
 		uploadSolutionForm: await superValidate(zod(uploadTaskSolutionSchema))
 	};

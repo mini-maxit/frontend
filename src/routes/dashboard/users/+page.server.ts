@@ -1,10 +1,10 @@
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
-import { type GetAllTasksResponse } from '$lib/backendSchemas';
+import { type GetAllUsersResponse } from '$lib/backendSchemas';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const response = await fetch(
-		`${env.BACKEND_URL}/api/v1/task/?` +
+		`${env.BACKEND_URL}/api/v1/user/?` +
 			new URLSearchParams({
 				limit: '20'
 			}),
@@ -19,13 +19,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	if (!response.ok) {
 		return {
-			tasks: []
+			users: []
 		};
 	}
 
-	const { data }: GetAllTasksResponse = await response.json();
+	const { data }: GetAllUsersResponse = await response.json();
 
 	return {
-		tasks: data
+		users: data
 	};
 };
