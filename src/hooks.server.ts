@@ -9,7 +9,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(sessionCookieName);
 	if (!sessionId) {
 		event.locals.userId = null;
-		event.locals.session = null;
+		event.locals.sessionId = null;
 		return resolve(event);
 	}
 
@@ -21,14 +21,14 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 	if (!response.ok) {
 		event.locals.userId = null;
-		event.locals.session = null;
+		event.locals.sessionId = null;
 		event.cookies.delete(sessionCookieName, { path: '/' });
 		return resolve(event);
 	}
 
 	const responseJson = await response.json();
 	event.locals.userId = responseJson.data.user_id;
-	event.locals.session = responseJson.data;
+	event.locals.sessionId = sessionId;
 
 	return resolve(event);
 };
@@ -40,7 +40,7 @@ const protectDashboard: Handle = async ({ event, resolve }) => {
 
 	if (isProtectedPath) {
 		if (!event.locals.userId) {
-			throw redirect(303, i18n.resolveRoute('/dashboard/login'));
+			return redirect(303, i18n.resolveRoute('/dashboard/login'));
 		}
 	}
 

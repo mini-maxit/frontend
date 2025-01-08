@@ -9,8 +9,15 @@ export interface AuthUserResponse {
 	ok: boolean;
 	data: {
 		user_id: number;
-		id: string;
+		session: string;
 		expires_at: Date;
+	};
+}
+
+export interface UploadTaskResponse {
+	ok: boolean;
+	data: {
+		taskId: number;
 	};
 }
 

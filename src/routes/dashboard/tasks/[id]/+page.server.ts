@@ -1,12 +1,12 @@
 import { error, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { BACKEND_URL, FILESTORAGE_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { uploadTaskSolutionSchema } from '$lib/components/tasks/solutions/formSchema';
 import type { GetTaskResponse } from '$lib/backendSchemas';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
 	const { id } = params;
 	let idInt: number;
 
@@ -16,7 +16,11 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(400, 'Invalid task id');
 	}
 
-	const taskDataResponse = await fetch(`${BACKEND_URL}/api/v1/task/${idInt}`);
+	const taskDataResponse = await fetch(`${env.BACKEND_URL}/api/v1/task/${idInt}`, {
+		headers: {
+			session: `${locals.sessionId}`
+		}
+	});
 
 	if (!taskDataResponse.ok) {
 		throw error(500, 'Failed to fetch task data');
@@ -25,7 +29,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const task: GetTaskResponse = await taskDataResponse.json();
 
 	const taskDescriptionResponse = await fetch(
-		`${FILESTORAGE_URL}/getTaskDescription?` +
+		`${env.FILESTORAGE_URL}/getTaskDescription?` +
 			new URLSearchParams({ taskID: idInt.toString() }).toString()
 	);
 

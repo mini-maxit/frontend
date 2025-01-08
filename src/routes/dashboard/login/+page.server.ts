@@ -42,7 +42,7 @@ export const actions: Actions = {
 
 		const responseJson: AuthUserResponse = await response.json();
 
-		event.cookies.set(sessionCookieName, responseJson.data.id, {
+		event.cookies.set(sessionCookieName, responseJson.data.session, {
 			path: '/',
 			sameSite: 'lax',
 			httpOnly: true,
@@ -76,7 +76,7 @@ export const actions: Actions = {
 
 		const responseJson: AuthUserResponse = await response.json();
 
-		event.cookies.set(sessionCookieName, responseJson.data.id, {
+		event.cookies.set(sessionCookieName, responseJson.data.session, {
 			path: '/',
 			sameSite: 'lax',
 			httpOnly: true,
