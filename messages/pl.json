@@ -1,27 +1,21 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"dashboard_header_button": "Panel",
-
 	"landing_page_hero_title": "Witamy w MiNI Testerka!",
 	"landing_page_hero_text_1": "Cieszymy się, że jesteś tutaj. Jeśli jesteś zainteresowany/a zostaniem testerem, prosimy",
 	"landing_page_hero_text_link": "zarejestruj się tutaj",
 	"landing_page_hero_text_2": ", abyśmy mogli rozpocząć.",
-
 	"hi": "Cześć",
 	"your_user_id": "Twój identyfikator użytkownika",
 	"view_tasks": "Zobacz zadania",
 	"view_users": "Zobacz wszystkich użytkowników",
 	"add_task": "Dodaj nowe zadanie",
-
 	"username": "Nazwa użytkownika",
 	"password": "Hasło",
-
 	"login": "Zaloguj się",
 	"register": "Zarejestruj się",
 	"logout": "Wyloguj się",
-
 	"loading": "Ładowanie",
-
 	"users_table_title": "Lista wszystkich zarejestrowanych użytkowników.",
 	"user_id": "ID użytkownika",
 	"user_username": "Nazwa użytkownika",
@@ -29,18 +23,17 @@
 	"user_link": "Link do profilu",
 	"user_link_text": "Zobacz profil",
 	"user_fullname": "Imię i nazwisko",
-
 	"tasks_table_title": "Lista wszystkich dostępnych zadań.",
 	"task_id": "ID zadania",
 	"task_name": "Nazwa zadania",
 	"task_link": "Link do zadania",
 	"task_link_text": "Zobacz zadanie",
-
 	"task_form_invalid_type": "Proszę wyślij plik ZIP",
 	"task_form_invalid_encoding": "Nieprawidłowy format pliku. Akceptowany jest tylko format ZIP",
 	"task_form_task_name_label": "Dodaj nowe zadanie",
 	"task_form_task_id_label": "Task ID",
 	"task_form_task_file_label": "Plik zadania",
+	"task_form_task_language_label": "Język zadania",
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",
 	"task_form_submit": "Wyślij"
 }

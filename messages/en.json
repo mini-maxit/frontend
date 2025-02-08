@@ -1,27 +1,21 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"dashboard_header_button": "Dashboard",
-
 	"landing_page_hero_title": "Welcome to the MiNI Testerka!",
 	"landing_page_hero_text_1": "We’re glad to have you here. If you’re interested in becoming a tester, please",
 	"landing_page_hero_text_link": "register here",
 	"landing_page_hero_text_2": "and we’ll to get started.",
-
 	"hi": "Hi",
 	"your_user_id": "Your user id",
 	"view_tasks": "View tasks",
 	"view_users": "View all users",
 	"add_task": "Add new task",
-
 	"username": "Username",
 	"password": "Password",
-
 	"login": "Login",
 	"register": "Register",
 	"logout": "Logout",
-
 	"loading": "Loading",
-
 	"users_table_title": "A list of all registered Users.",
 	"user_id": "User ID",
 	"user_username": "Username",
@@ -29,18 +23,17 @@
 	"user_link": "Profile link",
 	"user_link_text": "See profile",
 	"user_fullname": "Full name",
-
 	"tasks_table_title": "A list of all available Tasks.",
 	"task_id": "Task ID",
 	"task_name": "Task name",
 	"task_link": "Task link",
 	"task_link_text": "View Task",
-
 	"task_form_invalid_type": "Please upload file (.zip)",
 	"task_form_invalid_encoding": "Incorrect file format. Only ZIP format is accepted",
 	"task_form_task_name_label": "Add a new Task",
 	"task_form_task_id_label": "Task ID",
 	"task_form_task_file_label": "Task file",
+	"task_form_task_language_label": "Language of the solution",
 	"task_form_task_file_description": "Please upload a file with the task description.",
 	"task_form_submit": "Submit"
 }

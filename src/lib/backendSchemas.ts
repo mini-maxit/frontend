@@ -17,7 +17,7 @@ export interface AuthUserResponse {
 export interface UploadTaskResponse {
 	ok: boolean;
 	data: {
-		taskId: number;
+		id: number;
 	};
 }
 

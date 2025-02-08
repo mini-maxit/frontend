@@ -14,12 +14,14 @@
 				description: Promise<ArrayBuffer>;
 			};
 			uploadSolutionForm: SuperValidated<Infer<UploadTaskSolutionSchema>>;
+			availableLanguages: { id: number; language: string; version: string }[];
 		};
 	} = $props();
 
 	const uploadSolutionData = {
 		form: data.uploadSolutionForm,
-		task_id: data.task.id
+		task_id: data.task.id,
+		availableLanguages: data.availableLanguages
 	};
 </script>
 

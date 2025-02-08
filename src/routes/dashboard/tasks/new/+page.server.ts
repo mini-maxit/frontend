@@ -2,7 +2,7 @@ import type { PageServerLoad } from './$types.js';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { createTaskSchema } from '$lib/components/tasks/formSchema.js';
 import { zod } from 'sveltekit-superforms/adapters';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { i18n } from '$lib/i18n.js';
 import { env } from '$env/dynamic/private';
 import type { UploadTaskResponse } from '$lib/backendSchemas.js';
@@ -48,8 +48,11 @@ export const actions: Actions = {
 
 			const responseJson: UploadTaskResponse = await response.json();
 
-			return redirect(303, i18n.resolveRoute(`/dashboard/tasks/${responseJson.data.taskId}`));
+			return redirect(303, i18n.resolveRoute(`/dashboard/tasks/${responseJson.data.id}`));
 		} catch (error) {
+			if (isRedirect(error)) {
+				throw error;
+			}
 			return fail(500, {
 				form,
 				error: 'Failed to create task'

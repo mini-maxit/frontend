@@ -12,7 +12,8 @@ export const uploadTaskSolutionSchema = z.object({
 			return (
 				file.type === 'text/plain' || file.type === 'text/x-c++src' || file.type === 'text/x-python'
 			);
-		}, 'File must be a text file')
+		}, 'File must be a text file'),
+	languageID: z.number().int().positive()
 });
 
 export type UploadTaskSolutionSchema = typeof uploadTaskSolutionSchema;

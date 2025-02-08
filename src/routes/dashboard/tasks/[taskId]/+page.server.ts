@@ -37,13 +37,24 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		throw error(500, 'Failed to fetch task description');
 	}
 
+	const availavleLanguagesResponse = await fetch(`${env.BACKEND_URL}/api/v1/submission/languages`, {
+		headers: {
+			session: `${locals.sessionId}`
+		}
+	});
+
+	if (!availavleLanguagesResponse.ok) {
+		throw error(500, 'Failed to fetch available languages');
+	}
+
 	return {
 		task: {
 			name: task.data.title,
 			id: task.data.id,
 			description: taskDescriptionResponse.arrayBuffer()
 		},
-		uploadSolutionForm: await superValidate(zod(uploadTaskSolutionSchema))
+		uploadSolutionForm: await superValidate(zod(uploadTaskSolutionSchema)),
+		availableLanguages: (await availavleLanguagesResponse.json()).data
 	};
 };
 
@@ -55,6 +66,42 @@ export const actions: Actions = {
 				form
 			});
 		}
-		// todo: implement solution upload
+
+		const { id, file, languageID } = form.data;
+
+		try {
+			const formData = new FormData();
+			formData.append('taskID', id.toString());
+			formData.append('solution', file);
+			// #TODO add language selection to form
+			formData.append('languageID', languageID.toString());
+
+			const response = await fetch(`${env.BACKEND_URL}/api/v1/submission/submit`, {
+				method: 'POST',
+				body: formData,
+				headers: {
+					session: `${event.locals.sessionId}`
+				}
+			});
+
+			if (!response.ok) {
+				return fail(500, {
+					form,
+					error: 'Failed to submit solution' + response.statusText
+				});
+			}
+
+			return {
+				status: 200,
+				body: {
+					success: true
+				}
+			};
+		} catch (error) {
+			return fail(500, {
+				form,
+				error: 'Failed to submit solution' + error
+			});
+		}
 	}
 };

@@ -14,6 +14,7 @@
 		data: {
 			form: SuperValidated<Infer<UploadTaskSolutionSchema>>;
 			task_id: number;
+			availableLanguages: { id: number; language: string; version: string }[];
 		};
 	} = $props();
 
@@ -43,6 +44,25 @@
 			{/snippet}
 		</Form.Control>
 		<Form.Description>{m.task_form_task_file_description()}</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="languageID">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Label for="languageID">{m.task_form_task_language_label()}</Label>
+				<select
+					{...props}
+					id="languageID"
+					class={'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'}
+					bind:value={$formData.languageID}
+				>
+					<option value=""></option>
+					{#each data.availableLanguages as { id, language, version }}
+						<option value={id}>{language} {version}</option>
+					{/each}
+				</select>
+			{/snippet}
+		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} hidden name="id">
