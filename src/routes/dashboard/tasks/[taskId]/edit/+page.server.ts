@@ -5,6 +5,7 @@ import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { uploadTaskSolutionSchema } from '$lib/components/tasks/solutions/formSchema';
 import type { GetTaskResponse } from '$lib/backendSchemas';
+import { editTaskSchema } from '$lib/components/tasks/formSchema';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { taskId } = params;
@@ -53,57 +54,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 			id: task.data.id,
 			description: taskDescriptionResponse.arrayBuffer()
 		},
-		uploadSolutionForm: await superValidate(zod(uploadTaskSolutionSchema)),
+		editTaskForm: await superValidate(zod(editTaskSchema)),
 		availableLanguages: (await availavleLanguagesResponse.json()).data
 	};
-};
-
-export const actions: Actions = {
-	default: async (event) => {
-		console.log(event);
-		const form = await superValidate(event, zod(uploadTaskSolutionSchema));
-		if (!form.valid) {
-			console.log('Form is invalid', form.errors);
-			return fail(400, {
-				form
-			});
-		}
-
-		const { id, file, language } = form.data;
-
-		try {
-			const formData = new FormData();
-			formData.append('taskID', id.toString());
-			formData.append('solution', file);
-			// #TODO add language selection to form
-			formData.append('languageID', language.id.toString());
-
-			const response = await fetch(`${env.BACKEND_URL}/api/v1/submission/submit`, {
-				method: 'POST',
-				body: formData,
-				headers: {
-					session: `${event.locals.sessionId}`
-				}
-			});
-
-			if (!response.ok) {
-				return fail(500, {
-					form,
-					error: 'Failed to submit solution' + response.statusText
-				});
-			}
-
-			return {
-				status: 200,
-				body: {
-					success: true
-				}
-			};
-		} catch (error) {
-			return fail(500, {
-				form,
-				error: 'Failed to submit solution' + error
-			});
-		}
-	}
 };

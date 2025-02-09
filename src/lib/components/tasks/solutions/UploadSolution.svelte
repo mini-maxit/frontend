@@ -7,6 +7,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import type { LanguageConfig } from '$lib/backendSchemas';
+	import { availableLanguageTags } from '$lib/paraglide/runtime';
 
 	let {
 		data
@@ -14,12 +16,13 @@
 		data: {
 			form: SuperValidated<Infer<UploadTaskSolutionSchema>>;
 			task_id: number;
-			availableLanguages: { id: number; language: string; version: string }[];
+			availableLanguages: LanguageConfig[];
 		};
 	} = $props();
 
 	const form = superForm(data.form, {
-		validators: zodClient(uploadTaskSolutionSchema)
+		validators: zodClient(uploadTaskSolutionSchema),
+		dataType: 'json'
 	});
 
 	const { form: formData, message, errors, enhance } = form;
@@ -46,7 +49,7 @@
 		<Form.Description>{m.task_form_task_file_description()}</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Field {form} name="languageID">
+	<Form.Field {form} name="language">
 		<Form.Control>
 			{#snippet children({ props })}
 				<Label for="languageID">{m.task_form_task_language_label()}</Label>
@@ -54,11 +57,10 @@
 					{...props}
 					id="languageID"
 					class={'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'}
-					bind:value={$formData.languageID}
+					bind:value={$formData.language}
 				>
-					<option value=""></option>
-					{#each data.availableLanguages as { id, language, version }}
-						<option value={id}>{language} {version}</option>
+					{#each data.availableLanguages as lang}
+						<option value={lang}>{lang.language} {lang.version}</option>
 					{/each}
 				</select>
 			{/snippet}

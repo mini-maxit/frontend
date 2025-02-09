@@ -2,9 +2,9 @@
 	import UploadTaskSolution from '$lib/components/tasks/solutions/UploadSolution.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	import { type UploadTaskSolutionSchema } from './solutions/formSchema';
 	import type { LanguageConfig } from '$lib/backendSchemas';
-	import Button from '../ui/button/button.svelte';
+	import { editTaskSchema, type EditTaskSchema } from '$lib/components/tasks/formSchema';
+	import EditTaskView from '$lib/components/tasks/EditTaskView.svelte';
 
 	let {
 		data
@@ -15,36 +15,30 @@
 				id: number;
 				description: Promise<ArrayBuffer>;
 			};
-			uploadSolutionForm: SuperValidated<Infer<UploadTaskSolutionSchema>>;
+			editTaskForm: SuperValidated<Infer<EditTaskSchema>>;
 			availableLanguages: LanguageConfig[];
 		};
 	} = $props();
 
-	const uploadSolutionData = {
-		form: data.uploadSolutionForm,
-		task_id: data.task.id,
+	const editTaskData = {
+		form: data.editTaskForm,
+		task: data.task,
 		availableLanguages: data.availableLanguages
 	};
 </script>
 
-<div class="container mb-12 flex flex-col flex-1">
-	<div class="flex justify-between items-center p-4 items-center">
-		<h1 class="text-2xl font-bold my-4">{data.task.name}</h1>
-		<Button href="/dashboard/tasks/{data.task.id}/edit" class="mb-4">Edit</Button>
-	</div>
-
-	<div class="flex-1 flex overflow-hidden">
-		<div class="w-1/2 p-4 border rounded-sm border-gray-800 overflow-hidden">
+<div class="container mb-12 flex flex-col flex-1 items-center">
+	<div class="flex-1 flex flex-col items-center overflow-hidden">
+		<div class="w-full p-4 overflow-hidden">
+			<EditTaskView data={editTaskData} />
+		</div>
+		<div class="w-full h-[794px] p-4 border rounded-sm border-gray-800">
 			{#await data.task.description}
 				<p class="p-4">{m.loading()}</p>
 			{:then arrayBuffer}
 				{@const pdfUrl = URL.createObjectURL(new Blob([arrayBuffer], { type: 'application/pdf' }))}
 				<iframe src={pdfUrl} title="PDF Viewer" class="w-full h-full"></iframe>
 			{/await}
-		</div>
-
-		<div class="w-1/2 p-4 overflow-hidden">
-			<UploadTaskSolution data={uploadSolutionData} />
 		</div>
 	</div>
 </div>

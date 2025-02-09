@@ -52,3 +52,10 @@ export interface GetAllUsersResponse {
 		role: string;
 	}[];
 }
+
+export interface LanguageConfig {
+	id: number;
+	language: string;
+	version: string;
+	file_extension: string;
+}
