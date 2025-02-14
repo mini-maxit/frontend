@@ -3,12 +3,13 @@ import { redirect, type Handle } from '@sveltejs/kit';
 import { i18n } from '$lib/i18n';
 import { sessionCookieName } from '$lib';
 import { env } from '$env/dynamic/private';
+import type { AuthSessionResponse } from '$lib/backendSchemas';
 const handleParaglide: Handle = i18n.handle();
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(sessionCookieName);
 	if (!sessionId) {
-		event.locals.userId = null;
+		event.locals.user = null;
 		event.locals.sessionId = null;
 		return resolve(event);
 	}
@@ -20,14 +21,14 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	});
 
 	if (!response.ok) {
-		event.locals.userId = null;
+		event.locals.user = null;
 		event.locals.sessionId = null;
 		event.cookies.delete(sessionCookieName, { path: '/' });
 		return resolve(event);
 	}
 
-	const responseJson = await response.json();
-	event.locals.userId = responseJson.data.user_id;
+	const responseJson: AuthSessionResponse = await response.json();
+	event.locals.user = responseJson.data.user;
 	event.locals.sessionId = sessionId;
 
 	return resolve(event);
@@ -39,7 +40,7 @@ const protectDashboard: Handle = async ({ event, resolve }) => {
 		path.startsWith('/dashboard/') && path !== i18n.resolveRoute('/dashboard/login');
 
 	if (isProtectedPath) {
-		if (!event.locals.userId) {
+		if (!event.locals.user) {
 			return redirect(303, i18n.resolveRoute('/dashboard/login'));
 		}
 	}

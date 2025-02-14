@@ -10,7 +10,11 @@ import { env } from '$env/dynamic/private';
 import { sessionCookieName } from '$lib';
 import type { AuthUserResponse } from '$lib/backendSchemas';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user && locals.sessionId) {
+		return redirect(302, i18n.resolveRoute('/dashboard'));
+	}
+
 	return {
 		registerForm: await superValidate(zod(registerSchema)),
 		loginForm: await superValidate(zod(loginSchema))

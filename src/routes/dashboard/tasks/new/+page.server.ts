@@ -7,11 +7,13 @@ import { i18n } from '$lib/i18n.js';
 import { env } from '$env/dynamic/private';
 import type { UploadTaskResponse } from '$lib/backendSchemas.js';
 
-export const load: PageServerLoad = async ({ parent }) => {
-	const { userId } = await parent();
+export const load: PageServerLoad = async ({ locals }) => {
+	if (!locals.user) {
+		return redirect(303, i18n.resolveRoute('/dashboard/login'));
+	}
 	return {
 		form: await superValidate(zod(createTaskSchema)),
-		userId
+		userId: locals.user.id
 	};
 };
 

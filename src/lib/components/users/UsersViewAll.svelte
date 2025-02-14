@@ -1,17 +1,9 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { GetAllUsersResponse } from '$lib/backendSchemas';
+	import type { UserData } from '$lib/backendSchemas';
 
-	interface UserListItem {
-		id: number;
-		username: string;
-		email: string;
-		name: string;
-		surname: string;
-	}
-
-	let { users }: { users: UserListItem[] } = $props();
+	let { users }: { users: UserData[] } = $props();
 </script>
 
 <Table.Root>
