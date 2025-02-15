@@ -53,19 +53,32 @@ const fetchUserAndSubmissionData = async (
 			return { userData: eventUserData, submissionData: submissionData.data };
 		}
 
-		const [userDataResponse, submissionDataResponse] = await Promise.all([
-			userDataRequest,
-			submissionDataRequest
-		]);
+		let userData: GetUserResponse | null = null;
+		let submissionData: GetSubmissionResponse | null = null;
 
-		if (!userDataResponse.ok || !submissionDataResponse.ok) {
-			throw new Error('Failed to fetch user or submission data');
+		if (eventUserData.role === 'admin') {
+			const [userDataResponse, submissionDataResponse] = await Promise.all([
+				userDataRequest,
+				submissionDataRequest
+			]);
+
+			if (!userDataResponse.ok || !submissionDataResponse.ok) {
+				throw new Error('Failed to fetch user or submission data');
+			}
+
+			userData = await userDataResponse.json();
+			submissionData = await submissionDataResponse.json();
+		} else {
+			const userDataResponse = await userDataRequest;
+
+			if (!userDataResponse.ok) {
+				throw new Error('Failed to fetch user data');
+			}
+
+			userData = await userDataResponse.json();
 		}
 
-		const userData: GetUserResponse = await userDataResponse.json();
-		const submissionData: GetSubmissionResponse = await submissionDataResponse.json();
-
-		return { userData: userData.data, submissionData: submissionData.data };
+		return { userData: userData!.data, submissionData: submissionData?.data || [] };
 	} catch (error) {
 		console.error('Error fetching data:', error);
 		throw error;

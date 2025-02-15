@@ -42,5 +42,6 @@
 	"task_form_task_id_label": "Task ID",
 	"task_form_task_file_label": "Plik zadania",
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",
+	"task_form_task_language_label": "Język zadania",
 	"task_form_submit": "Wyślij"
 }

@@ -8,6 +8,7 @@ const handleParaglide: Handle = i18n.handle();
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const sessionId = event.cookies.get(sessionCookieName);
+	console.log(sessionId);
 	if (!sessionId) {
 		event.locals.user = null;
 		event.locals.sessionId = null;

@@ -7,6 +7,13 @@ export interface UserData {
 	role: 'admin' | 'student' | 'teacher';
 }
 
+export interface LanguageConfig {
+	id: number;
+	language: string;
+	version: string;
+	file_extension: string;
+}
+
 interface TaskData {
 	id: number;
 	title: string;
@@ -39,6 +46,10 @@ interface ApiResponse {
 	data: any;
 }
 
+export interface GetAvailableLanguagesResponse extends ApiResponse {
+	data: LanguageConfig[];
+}
+
 export interface AuthSessionResponse extends ApiResponse {
 	data: {
 		valid: boolean;
@@ -49,6 +60,7 @@ export interface AuthSessionResponse extends ApiResponse {
 export interface AuthUserResponse extends ApiResponse {
 	data: {
 		user_id: number;
+		user_role: 'admin' | 'student' | 'teacher';
 		session: string;
 		expires_at: Date;
 	};
@@ -56,7 +68,7 @@ export interface AuthUserResponse extends ApiResponse {
 
 export interface UploadTaskResponse extends ApiResponse {
 	data: {
-		taskId: number;
+		id: number;
 	};
 }
 

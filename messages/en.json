@@ -42,5 +42,6 @@
 	"task_form_task_id_label": "Task ID",
 	"task_form_task_file_label": "Task file",
 	"task_form_task_file_description": "Please upload a file with the task description.",
+	"task_form_task_language_label": "Language of the solution",
 	"task_form_submit": "Submit"
 }

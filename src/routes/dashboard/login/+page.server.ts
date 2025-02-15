@@ -41,10 +41,16 @@ export const actions: Actions = {
 		//todo: handle errors more explicitly
 
 		if (!response.ok) {
-			return fail(response.status, { message: 'Invalid credentials' });
+			form.data.email = '';
+			form.data.password = '';
+			return message(form, 'Invalid credentials', {
+				status: 401
+			});
 		}
 
 		const responseJson: AuthUserResponse = await response.json();
+
+		console.log(responseJson.data.session);
 
 		event.cookies.set(sessionCookieName, responseJson.data.session, {
 			path: '/',

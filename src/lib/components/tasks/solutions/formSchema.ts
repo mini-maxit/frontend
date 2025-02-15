@@ -1,18 +1,24 @@
 import { z } from 'zod';
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
 export const uploadTaskSolutionSchema = z.object({
 	id: z.number().int().positive(),
 	file: z
 		.instanceof(File)
-		.refine((file) => {
-			const extension = file.name.toLowerCase().split('.').pop();
-			return extension === 'cpp' || extension === 'py';
-		}, 'File must have .cpp or .py extension')
-		.refine((file) => {
-			return (
-				file.type === 'text/plain' || file.type === 'text/x-c++src' || file.type === 'text/x-python'
-			);
-		}, 'File must be a text file')
+		.refine((file) => file.size <= MAX_FILE_SIZE, {
+			message: 'Plik jest za duży! Maksymalny rozmiar pliku to 10MB.'
+		})
+		.superRefine(async (file, ctx) => {
+			const text = await file.text();
+			if (!/^[\x00-\x7F]*$/.test(text.slice(0, 100))) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Plik nie wygląda na tekstowy!'
+				});
+			}
+		}),
+	languageId: z.number().int().positive()
 });
 
 export type UploadTaskSolutionSchema = typeof uploadTaskSolutionSchema;

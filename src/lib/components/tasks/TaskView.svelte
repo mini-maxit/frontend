@@ -3,6 +3,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import { type UploadTaskSolutionSchema } from './solutions/formSchema';
+	import type { LanguageConfig } from '$lib/backendSchemas';
+	import Button from '$lib/components/ui/button/button.svelte';
 
 	let {
 		data
@@ -14,18 +16,22 @@
 				description: Promise<ArrayBuffer>;
 			};
 			uploadSolutionForm: SuperValidated<Infer<UploadTaskSolutionSchema>>;
+			availableLanguages: LanguageConfig[];
 		};
 	} = $props();
 
 	const uploadSolutionData = {
 		form: data.uploadSolutionForm,
-		task_id: data.task.id
+		task_id: data.task.id,
+		availableLanguages: data.availableLanguages
 	};
 </script>
 
 <div class="container mb-12 flex flex-col flex-1">
-	<h1 class="text-2xl font-bold my-4">{data.task.name}</h1>
-
+	<div class="flex justify-between p-4 items-center">
+		<h1 class="text-2xl font-bold my-4">{data.task.name}</h1>
+		<Button href="/dashboard/tasks/{data.task.id}/edit" class="mb-4">Edit</Button>
+	</div>
 	<div class="flex-1 flex overflow-hidden">
 		<div class="w-1/2 p-4 border rounded-sm border-gray-800 overflow-hidden">
 			{#await data.task.description}

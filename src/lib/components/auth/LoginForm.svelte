@@ -11,7 +11,7 @@
 		validators: zodClient(loginSchema)
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, message } = form;
 </script>
 
 <form action="?/login" method="POST" use:enhance>
@@ -33,5 +33,8 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
+	{#if $message}
+		<p class="text-destructive my-2 text-sm font-medium">{$message}</p>
+	{/if}
 	<Form.Button type="submit">Zaloguj się</Form.Button>
 </form>
