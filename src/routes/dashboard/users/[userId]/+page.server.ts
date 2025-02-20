@@ -42,7 +42,11 @@ export const actions: Actions = {
 				form
 			});
 		}
-		if (!event.locals.user || !event.locals.sessionId || event.locals.user.id !== form.data.userId) {
+		if (
+			!event.locals.user ||
+			!event.locals.sessionId ||
+			event.locals.user.id !== form.data.userId
+		) {
 			return fail(401, {
 				error: 'Unauthorized'
 			});
@@ -64,11 +68,11 @@ export const actions: Actions = {
 		}
 
 		const response = await fetch(userUrl, {
-		 	method: 'PUT',
-		 	body: formData,
-		 	headers: {
-		 		session: `${event.locals.sessionId}`
-		 	}
+			method: 'PUT',
+			body: formData,
+			headers: {
+				session: `${event.locals.sessionId}`
+			}
 		});
 
 		if (!response.ok) {

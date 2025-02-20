@@ -17,11 +17,7 @@ RUN pnpm install --frozen-lockfile
 COPY svelte.config.js vite.config.ts tsconfig.json ./
 
 # Copy source files
-COPY project.inlang ./project.inlang
-COPY messages ./messages
-COPY src ./src
-COPY static ./static
-COPY .env.example .env
+COPY . .
 
 RUN pnpm run build
 

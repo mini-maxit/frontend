@@ -1,5 +1,3 @@
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
-
-}
+export const load: PageServerLoad = async ({ params, locals }) => {};

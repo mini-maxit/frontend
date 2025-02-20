@@ -17,10 +17,10 @@
 
 	const form = superForm(editUserForm, {
 		validators: zodClient(editUserSchema),
-        resetForm: false,
-        onResult: ({ result: { type } }) => {
-            open = type !== 'success';
-        }
+		resetForm: false,
+		onResult: ({ result: { type } }) => {
+			open = type !== 'success';
+		}
 	});
 
 	const { form: formData, enhance, message } = form;
