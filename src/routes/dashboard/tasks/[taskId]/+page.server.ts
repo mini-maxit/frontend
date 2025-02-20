@@ -1,4 +1,4 @@
-import { error, type Actions } from '@sveltejs/kit';
+import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
 import { fail, superValidate } from 'sveltekit-superforms';
@@ -27,10 +27,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	const task: GetTaskResponse = await taskDataResponse.json();
-	console.log(
-		`${env.FILESTORAGE_URL}/getTaskDescription?` +
-			new URLSearchParams({ taskID: taskIdInt.toString() }).toString()
-	);
 
 	const taskDescriptionResponse = await fetch(
 		`${env.FILESTORAGE_URL}/getTaskDescription?` +
@@ -40,8 +36,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!taskDescriptionResponse.ok) {
 		throw error(500, 'Failed to fetch task description');
 	}
-
-	console.log('task', taskDescriptionResponse);
 
 	const availableLanguagesResponse = await fetch(`${env.BACKEND_URL}/api/v1/submission/languages`, {
 		headers: {
@@ -68,6 +62,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 export const actions: Actions = {
 	default: async (event) => {
+		if (!event.locals.user || !event.locals.sessionId) {
+			return fail(401, {
+				error: 'Unauthorized'
+			});
+		}
 		const form = await superValidate(event, zod(uploadTaskSolutionSchema));
 		if (!form.valid) {
 			return fail(400, {
@@ -99,12 +98,7 @@ export const actions: Actions = {
 				});
 			}
 
-			return {
-				status: 200,
-				body: {
-					success: true
-				}
-			};
+			return redirect(303, `/dashboard/tasks/${id}`);
 		} catch (error) {
 			return fail(500, {
 				form,

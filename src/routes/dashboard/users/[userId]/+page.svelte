@@ -6,8 +6,10 @@
 
 	const { user } = data;
 	const { submissions } = data;
+	const { localUser } = data;
+	const { editUserForm } = data;
 </script>
 
 <div class="p-10 pb-16">
-	<UserView {user} {submissions} />
+	<UserView {user} {submissions} {localUser} {editUserForm} />
 </div>

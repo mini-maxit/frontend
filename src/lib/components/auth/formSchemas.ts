@@ -1,23 +1,21 @@
 import { z } from 'zod';
 
-const passwordValidation = new RegExp(
-	/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-);
+import { passwordValidationRegex } from '$lib';
 
 export const registerSchema = z
 	.object({
 		email: z.string().email('Invalid email address'),
-		username: z.string().min(1, 'Username is required'),
-		name: z.string().min(1, 'Name is required'),
-		surname: z.string().min(1, 'Surname is required'),
+		username: z.string().nonempty('Username is required'),
+		name: z.string().nonempty('Name is required'),
+		surname: z.string().nonempty('Surname is required'),
 		password: z
 			.string()
 			.min(6)
 			.regex(
-				passwordValidation,
+				passwordValidationRegex,
 				'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
 			),
-		confirmPassword: z.string().min(1, 'Password confirmation is required')
+		confirmPassword: z.string().nonempty('Password confirmation is required')
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: 'Passwords do not match',

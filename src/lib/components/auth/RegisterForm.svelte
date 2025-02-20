@@ -2,8 +2,9 @@
 	import * as Form from '$lib/components/ui/form';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
-	import { registerSchema, type RegisterSchema } from './schemas';
+	import { registerSchema, type RegisterSchema } from './formSchemas';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import * as m from '$lib/paraglide/messages.js';
 
 	let { data }: { data: SuperValidated<Infer<RegisterSchema>> } = $props();
 
@@ -27,7 +28,7 @@
 	<Form.Field {form} name="username">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Nazwa Użytkownika</Form.Label>
+				<Form.Label>{m.username()}</Form.Label>
 				<Input {...props} bind:value={$formData.username} />
 			{/snippet}
 		</Form.Control>
@@ -36,7 +37,7 @@
 	<Form.Field {form} name="name">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Imię</Form.Label>
+				<Form.Label>{m.user_first_name()}</Form.Label>
 				<Input {...props} bind:value={$formData.name} />
 			{/snippet}
 		</Form.Control>
@@ -45,7 +46,7 @@
 	<Form.Field {form} name="surname">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Nazwisko</Form.Label>
+				<Form.Label>{m.user_last_name()}</Form.Label>
 				<Input {...props} bind:value={$formData.surname} />
 			{/snippet}
 		</Form.Control>
@@ -54,7 +55,7 @@
 	<Form.Field {form} name="password">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Hasło</Form.Label>
+				<Form.Label>{m.password_input_label()}</Form.Label>
 				<Input {...props} type="password" bind:value={$formData.password} />
 			{/snippet}
 		</Form.Control>
@@ -63,7 +64,7 @@
 	<Form.Field {form} name="confirmPassword">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Potwierdź hasło</Form.Label>
+				<Form.Label>{m.password_confirm_input_label()}</Form.Label>
 				<Input {...props} type="password" bind:value={$formData.confirmPassword} />
 			{/snippet}
 		</Form.Control>
@@ -72,5 +73,5 @@
 	{#if $message}
 		<p class="text-destructive my-2 text-sm font-medium">{$message}</p>
 	{/if}
-	<Form.Button type="submit">Zarejestruj się</Form.Button>
+	<Form.Button type="submit">{m.register()}</Form.Button>
 </form>

@@ -19,16 +19,22 @@
 	"login": "Login",
 	"register": "Register",
 	"logout": "Logout",
+	"confirm": "Confirm",
+	"cancel": "Cancel",
 
 	"loading": "Loading",
 
 	"users_table_title": "A list of all registered Users.",
 	"user_id": "User ID",
+	"user_first_name": "First name",
+	"user_last_name": "Last name",
 	"user_username": "Username",
 	"user_email": "Email",
 	"user_link": "Profile link",
 	"user_link_text": "See profile",
 	"user_fullname": "Full name",
+	"password_input_label": "Password",
+	"password_confirm_input_label": "Confirm password",
 
 	"tasks_table_title": "A list of all available Tasks.",
 	"task_id": "Task ID",
@@ -43,5 +49,18 @@
 	"task_form_task_file_label": "Task file",
 	"task_form_task_file_description": "Please upload a file with the task description.",
 	"task_form_task_language_label": "Language of the solution",
-	"task_form_submit": "Submit"
+	"task_form_submit": "Submit",
+
+	"user_submissions_table_title": "A list of all submissions made by the user.",
+	"user_submissions_task_link_label": "Task link",
+	"user_submissions_programming_language_label": "Programming language",
+	"user_submissions_submitted_at_label": "Submitted at",
+	"user_submissions_status_label": "Status",
+
+	"edit_profile_title": "Edit profile",
+	"edit_profile_description": "Are you sure you want to edit profile?",
+	"edit_profile_password_label": "New Password",
+	"edit_profile_password_confirm_label": "Confirm new password",
+	"edit_profile_submit_description": "Are you sure you want to save changes?",
+	"edit_profile_submit": "Save changes"
 }

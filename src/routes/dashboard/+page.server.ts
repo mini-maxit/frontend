@@ -10,6 +10,7 @@ export const actions: Actions = {
 			return fail(401);
 		}
 		const response = await fetch(`${env.BACKEND_URL}/api/v1/session/invalidate`, {
+			method: 'POST',
 			headers: {
 				session: `${event.locals.sessionId}`
 			}

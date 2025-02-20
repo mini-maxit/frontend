@@ -4,10 +4,7 @@ import { type GetAllUsersResponse } from '$lib/backendSchemas';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const response = await fetch(
-		`${env.BACKEND_URL}/api/v1/user/?` +
-			new URLSearchParams({
-				limit: '20'
-			}),
+		`${env.BACKEND_URL}/api/v1/user/`,
 		{
 			headers: {
 				session: `${locals.sessionId}`

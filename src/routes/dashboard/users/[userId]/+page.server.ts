@@ -1,7 +1,10 @@
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
-import { error } from '@sveltejs/kit';
+import { error, type Actions } from '@sveltejs/kit';
 import type { GetSubmissionResponse, GetUserResponse, UserData } from '$lib/backendSchemas';
+import { editUserSchema } from '$lib/components/users/formSchemas';
+import { fail, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!locals.user || !locals.sessionId) {
@@ -23,9 +26,61 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	);
 
 	return {
+		editUserForm: await superValidate(zod(editUserSchema)),
+		localUser: locals.user,
 		user: userData,
 		submissions: submissionData
 	};
+};
+
+export const actions: Actions = {
+	editProfile: async (event) => {
+		//TODO: FIX THIS
+		const form = await superValidate(event, zod(editUserSchema));
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
+		}
+		if (!event.locals.user || !event.locals.sessionId || event.locals.user.id !== form.data.userId) {
+			return fail(401, {
+				error: 'Unauthorized'
+			});
+		}
+		const userUrl = `${env.BACKEND_URL}/api/v1/user/${form.data.userId}`;
+
+		const formData = new FormData();
+		formData.append('name', form.data.name);
+		formData.append('surname', form.data.surname);
+		formData.append('username', form.data.username);
+		if (form.data.currentPassword) {
+			formData.append('currentPassword', form.data.currentPassword);
+		}
+		if (form.data.newPassword) {
+			formData.append('newPassword', form.data.newPassword);
+		}
+		if (form.data.confirmPassword) {
+			formData.append('confirmPassword', form.data.confirmPassword);
+		}
+
+		const response = await fetch(userUrl, {
+		 	method: 'PUT',
+		 	body: formData,
+		 	headers: {
+		 		session: `${event.locals.sessionId}`
+		 	}
+		});
+
+		if (!response.ok) {
+			console.log(response);
+			return fail(500, {
+				form,
+				error: 'Failed to update user'
+			});
+		}
+
+		// #TODO handle errors
+	}
 };
 
 const fetchUserAndSubmissionData = async (

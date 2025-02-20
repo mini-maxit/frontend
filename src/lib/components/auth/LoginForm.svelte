@@ -2,7 +2,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
-	import { loginSchema, type LoginSchema } from './schemas';
+	import { loginSchema, type LoginSchema } from './formSchemas';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	let { data }: { data: SuperValidated<Infer<LoginSchema>> } = $props();

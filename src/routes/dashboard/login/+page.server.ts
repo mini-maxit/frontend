@@ -3,8 +3,8 @@ import { dev } from '$app/environment';
 import type { Actions, PageServerLoad } from './$types';
 import { i18n } from '$lib/i18n';
 import { message, superValidate } from 'sveltekit-superforms';
-import { registerSchema } from '$lib/components/auth/schemas';
-import { loginSchema } from '$lib/components/auth/schemas';
+import { registerSchema } from '$lib/components/auth/formSchemas';
+import { loginSchema } from '$lib/components/auth/formSchemas';
 import { zod } from 'sveltekit-superforms/adapters';
 import { env } from '$env/dynamic/private';
 import { sessionCookieName } from '$lib';
@@ -49,8 +49,6 @@ export const actions: Actions = {
 		}
 
 		const responseJson: AuthUserResponse = await response.json();
-
-		console.log(responseJson.data.session);
 
 		event.cookies.set(sessionCookieName, responseJson.data.session, {
 			path: '/',

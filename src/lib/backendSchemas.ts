@@ -14,7 +14,7 @@ export interface LanguageConfig {
 	file_extension: string;
 }
 
-interface TaskData {
+export interface TaskData {
 	id: number;
 	title: string;
 	description_url: string;

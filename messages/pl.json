@@ -19,16 +19,22 @@
 	"login": "Zaloguj się",
 	"register": "Zarejestruj się",
 	"logout": "Wyloguj się",
+	"confirm": "Potwierdź",
+	"cancel": "Anuluj",
 
 	"loading": "Ładowanie",
 
 	"users_table_title": "Lista wszystkich zarejestrowanych użytkowników.",
 	"user_id": "ID użytkownika",
+	"user_first_name": "Imię",
+	"user_last_name": "Nazwisko",
 	"user_username": "Nazwa użytkownika",
 	"user_email": "Email",
 	"user_link": "Link do profilu",
 	"user_link_text": "Zobacz profil",
 	"user_fullname": "Imię i nazwisko",
+	"password_input_label": "Hasło",
+	"password_confirm_input_label": "Potwierdź hasło",
 
 	"tasks_table_title": "Lista wszystkich dostępnych zadań.",
 	"task_id": "ID zadania",
@@ -43,5 +49,18 @@
 	"task_form_task_file_label": "Plik zadania",
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",
 	"task_form_task_language_label": "Język zadania",
-	"task_form_submit": "Wyślij"
+	"task_form_submit": "Wyślij",
+
+	"user_submissions_table_title": "Lista wszystkich zgłoszeń użytkownika.",
+	"user_submissions_task_link_label": "Link do zadania",
+	"user_submissions_programming_language_label": "Język programowania",
+	"user_submissions_submitted_at_label": "Zgłoszono",
+	"user_submissions_status_label": "Status",
+
+	"edit_profile_title": "Edytuj profil",
+	"edit_profile_description": "Czy na pewno chcesz edytować profil?",
+	"edit_profile_password_label": "Nowe Hasło",
+	"edit_profile_password_confirm_label": "Potwierdź nowe hasło",
+	"edit_profile_submit_description": "Jesteś pewien, że chcesz zapisać zmiany?",
+	"edit_profile_submit": "Zapisz zmiany"
 }
