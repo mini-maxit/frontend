@@ -32,6 +32,7 @@ export const actions: Actions = {
 		}
 
 		const { userId, name, archive } = form.data;
+		let taskId: number;
 
 		try {
 			const formData = new FormData();
@@ -54,13 +55,13 @@ export const actions: Actions = {
 			}
 
 			const responseJson: UploadTaskResponse = await response.json();
-
-			return redirect(303, i18n.resolveRoute(`/dashboard/tasks/${responseJson.data.id}`));
+			taskId = responseJson.data.id;
 		} catch (error) {
 			return fail(500, {
 				form,
 				error: 'Failed to create task'
 			});
 		}
+		return redirect(303, i18n.resolveRoute(`/dashboard/tasks/${taskId}`));
 	}
 };

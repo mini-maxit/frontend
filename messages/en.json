@@ -13,8 +13,10 @@
 	"view_users": "View all users",
 	"add_task": "Add new task",
 
+	"profile_information": "Profile information",
 	"username": "Username",
 	"password": "Password",
+	"role": "Role",
 
 	"login": "Login",
 	"register": "Register",
@@ -51,11 +53,15 @@
 	"task_form_task_language_label": "Language of the solution",
 	"task_form_submit": "Submit",
 
-	"user_submissions_table_title": "A list of all submissions made by the user.",
-	"user_submissions_task_link_label": "Task link",
-	"user_submissions_programming_language_label": "Programming language",
-	"user_submissions_submitted_at_label": "Submitted at",
-	"user_submissions_status_label": "Status",
+	"submissions_table_title": "A list of all submissions made by the user.",
+	"submissions_task_link_label": "Task link",
+	"submissions_task_submission_result_label": "Submission result",
+	"submissions_task_submission_result_description": "See Results",
+	"submissions_programming_language_label": "Programming language",
+	"submissions_submitted_at_label": "Submitted at",
+	"submissions_status_label": "Status",
+	"submissions_passed_label": "Passed",
+	"submissions_user_link_label": "User link",
 
 	"edit_profile_title": "Edit profile",
 	"edit_profile_description": "Are you sure you want to edit profile?",

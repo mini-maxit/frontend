@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
+	import * as m from '$lib/paraglide/messages.js';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { loginSchema, type LoginSchema } from './formSchemas';
@@ -27,7 +28,7 @@
 	<Form.Field {form} name="password">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Hasło</Form.Label>
+				<Form.Label>{m.password()}</Form.Label>
 				<Input {...props} type="password" bind:value={$formData.password} />
 			{/snippet}
 		</Form.Control>
@@ -36,5 +37,5 @@
 	{#if $message}
 		<p class="text-destructive my-2 text-sm font-medium">{$message}</p>
 	{/if}
-	<Form.Button type="submit">Zaloguj się</Form.Button>
+	<Form.Button type="submit">{m.login()}</Form.Button>
 </form>

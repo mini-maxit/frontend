@@ -35,10 +35,27 @@ export interface SubmissionData {
 	status: 'received' | 'sent for evaluation' | 'evaluated' | 'lost';
 	status_message: string;
 	submitted_at: string;
-	checked_at: string | null;
+	checked_at: string;
 	language: LanguageData;
 	task: TaskData;
 	user: UserData;
+	result: SubmissionResultData | null;
+}
+
+interface TestResultData {
+	id: number;
+	submission_result_id: number;
+	input_output_id: number;
+	passed: boolean;
+}
+
+export interface SubmissionResultData {
+	id: number;
+	submission_id: number;
+	code: string;
+	message: string;
+	created_at: string;
+	test_results: TestResultData[];
 }
 
 interface ApiResponse {
@@ -88,6 +105,6 @@ export interface GetUserResponse extends ApiResponse {
 	data: UserData;
 }
 
-export interface GetSubmissionResponse extends ApiResponse {
+export interface GetAllSubmissionsResponse extends ApiResponse {
 	data: SubmissionData[];
 }

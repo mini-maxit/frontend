@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
 import { error, type Actions } from '@sveltejs/kit';
-import type { GetSubmissionResponse, GetUserResponse, UserData } from '$lib/backendSchemas';
+import type { GetAllSubmissionsResponse, GetUserResponse, UserData } from '$lib/backendSchemas';
 import { editUserSchema } from '$lib/components/users/formSchemas';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -76,7 +76,6 @@ export const actions: Actions = {
 		});
 
 		if (!response.ok) {
-			console.log(response);
 			return fail(500, {
 				form,
 				error: 'Failed to update user'
@@ -108,12 +107,12 @@ const fetchUserAndSubmissionData = async (
 			if (!submissionDataResponse.ok) {
 				throw new Error('Failed to fetch submission data');
 			}
-			const submissionData: GetSubmissionResponse = await submissionDataResponse.json();
+			const submissionData: GetAllSubmissionsResponse = await submissionDataResponse.json();
 			return { userData: eventUserData, submissionData: submissionData.data };
 		}
 
 		let userData: GetUserResponse | null = null;
-		let submissionData: GetSubmissionResponse | null = null;
+		let submissionData: GetAllSubmissionsResponse | null = null;
 
 		if (eventUserData.role === 'admin') {
 			const [userDataResponse, submissionDataResponse] = await Promise.all([

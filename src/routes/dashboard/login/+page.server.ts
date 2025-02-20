@@ -58,7 +58,7 @@ export const actions: Actions = {
 			secure: !dev
 		});
 
-		return redirect(302, i18n.resolveRoute('/dashboard'));
+		return redirect(303, i18n.resolveRoute('/dashboard'));
 	},
 	register: async (event) => {
 		const form = await superValidate(event, zod(registerSchema));
@@ -92,6 +92,6 @@ export const actions: Actions = {
 			secure: !dev
 		});
 
-		return redirect(302, i18n.resolveRoute('/dashboard'));
+		return redirect(303, i18n.resolveRoute('/dashboard'));
 	}
 };

@@ -13,8 +13,10 @@
 	"view_users": "Zobacz wszystkich użytkowników",
 	"add_task": "Dodaj nowe zadanie",
 
+	"profile_information": "Informacje o profilu",
 	"username": "Nazwa użytkownika",
 	"password": "Hasło",
+	"role": "Rola",
 
 	"login": "Zaloguj się",
 	"register": "Zarejestruj się",
@@ -51,11 +53,15 @@
 	"task_form_task_language_label": "Język zadania",
 	"task_form_submit": "Wyślij",
 
-	"user_submissions_table_title": "Lista wszystkich zgłoszeń użytkownika.",
-	"user_submissions_task_link_label": "Link do zadania",
-	"user_submissions_programming_language_label": "Język programowania",
-	"user_submissions_submitted_at_label": "Zgłoszono",
-	"user_submissions_status_label": "Status",
+	"submissions_table_title": "Lista wszystkich zgłoszeń użytkownika.",
+	"submissions_task_link_label": "Link do zadania",
+	"submissions_task_submission_result_label": "Wynik zgłoszenia",
+	"submissions_task_submission_result_description": "Zobacz wyniki",
+	"submissions_programming_language_label": "Język programowania",
+	"submissions_submitted_at_label": "Zgłoszono",
+	"submissions_status_label": "Status",
+	"submissions_passed_label": "Zaliczone",
+	"submissions_user_link_label": "Link do użytkownika",
 
 	"edit_profile_title": "Edytuj profil",
 	"edit_profile_description": "Czy na pewno chcesz edytować profil?",

@@ -30,6 +30,7 @@
 <div class="container mb-12 flex flex-col flex-1">
 	<div class="flex justify-between p-4 items-center">
 		<h1 class="text-2xl font-bold my-4">{data.task.name}</h1>
+		<!--todo-->
 		<Button href="/dashboard/tasks/{data.task.id}/edit" class="mb-4">Edit</Button>
 	</div>
 	<div class="flex-1 flex overflow-hidden">

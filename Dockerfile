@@ -10,13 +10,8 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
-# Install ALL dependencies (including dev dependencies) for building
 RUN pnpm install --frozen-lockfile
 
-# Copy config files
-COPY svelte.config.js vite.config.ts tsconfig.json ./
-
-# Copy source files
 COPY . .
 
 RUN pnpm run build
