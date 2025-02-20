@@ -1,19 +1,25 @@
 FROM node:22-alpine3.19 AS deps
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --prod --frozen-lockfile
 
 FROM node:22-alpine3.19 AS builder
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
-COPY package.json pnpm-lock.yaml svelte.config.js vite.config.ts tsconfig.json ./
+RUN npm install -g pnpm
+COPY package.json pnpm-lock.yaml ./
+# Install ALL dependencies (including dev dependencies) for building
 RUN pnpm install --frozen-lockfile
 
-COPY . .
-RUN mv .env.example .env
+# Copy config files
+COPY svelte.config.js vite.config.ts tsconfig.json ./
+
+# Copy source files
+COPY src ./src
+COPY static ./static
+COPY .env.example .env
 
 RUN pnpm run build
 
