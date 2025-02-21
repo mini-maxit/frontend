@@ -68,5 +68,17 @@
 	"edit_profile_password_label": "Nowe Hasło",
 	"edit_profile_password_confirm_label": "Potwierdź nowe hasło",
 	"edit_profile_submit_description": "Jesteś pewien, że chcesz zapisać zmiany?",
-	"edit_profile_submit": "Zapisz zmiany"
+	"edit_profile_submit": "Zapisz zmiany",
+
+	"form_schema_invalid_email_error_message": "Nieprawidłowy adres e-mail",
+	"form_schema_username_required_error_message": "Nazwa użytkownika jest wymagana",
+	"form_schema_name_required_error_message": "Imię jest wymagane",
+	"form_schema_surname_required_error_message": "Nazwisko jest wymagane",
+	"form_schema_password_required_error_message": "Hasło jest wymagane",
+	"form_schema_password_min_length_error_message": "Hasło musi mieć co najmniej 6 znaków",
+	"form_schema_password_regex_error_message": "Hasło musi zawierać co najmniej jedną wielką literę, jedną małą literę, jedną cyfrę i jeden znak specjalny",
+	"form_schema_password_confirmation_required_error_message": "Potwierdzenie hasła jest wymagane",
+	"form_schema_password_mismatch_error_message": "Hasła nie są identyczne",
+	"form_schema_file_too_large_error_message": "Plik jest za duży! Maksymalny rozmiar pliku to 10MB.",
+	"form_schema_file_not_text_error_message": "Plik nie wygląda na tekstowy!"
 }

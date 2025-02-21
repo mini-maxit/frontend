@@ -1,10 +1,16 @@
+enum UserRole {
+	Admin = 'admin',
+	Student = 'student',
+	Teacher = 'teacher'
+}
+
 export interface UserData {
 	id: number;
 	name: string;
 	surname: string;
 	email: string;
 	username: string;
-	role: 'admin' | 'student' | 'teacher';
+	role: UserRole;
 }
 
 export interface LanguageConfig {
@@ -26,13 +32,20 @@ interface LanguageData {
 	version: string;
 }
 
+enum SubmissionStatus {
+	Received = 'received',
+	SentForEvaluation = 'sent for evaluation',
+	Evaluated = 'evaluated',
+	Lost = 'lost'
+}
+
 export interface SubmissionData {
 	id: number;
 	task_id: number;
 	user_id: number;
 	order: number;
 	language_id: number;
-	status: 'received' | 'sent for evaluation' | 'evaluated' | 'lost';
+	status: SubmissionStatus;
 	status_message: string;
 	submitted_at: string;
 	checked_at: string;
@@ -77,7 +90,7 @@ export interface AuthSessionResponse extends ApiResponse {
 export interface AuthUserResponse extends ApiResponse {
 	data: {
 		user_id: number;
-		user_role: 'admin' | 'student' | 'teacher';
+		user_role: UserRole;
 		session: string;
 		expires_at: Date;
 	};
