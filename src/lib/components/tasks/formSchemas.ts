@@ -3,7 +3,6 @@ import JSZip from 'jszip';
 import * as m from '$lib/paraglide/messages.js';
 
 export const createTaskSchema = z.object({
-	userId: z.number().int().positive(),
 	title: z.string().min(3).max(50),
 	archive: z
 		.instanceof(File, { message: m.task_form_invalid_type() })
@@ -25,14 +24,19 @@ export const createTaskSchema = z.object({
 
 export const editTaskSchema = z.object({
 	id: z.number().int().positive(),
-	userId: z.number().int().positive(),
 	title: z.string().min(3).max(50),
 	archive: z
 		.instanceof(File, { message: m.task_form_invalid_type() })
+		.nullable()
 		.refine((file) => {
-			return file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
+			return (
+				!file || file.type === 'application/zip' || file.type === 'application/x-zip-compressed'
+			);
 		}, m.task_form_invalid_encoding())
 		.superRefine(async (file, ctx) => {
+			if (!file) {
+				return true;
+			}
 			try {
 				await verifyFolderStructure(await file.arrayBuffer());
 			} catch (e: unknown) {

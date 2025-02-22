@@ -2,12 +2,11 @@
 	import Button from './ui/button/button.svelte';
 	import ChangeLanguage from './ChangeLanguage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import maxitLogo from '/MaxitLogo.svg';
 </script>
 
 <header class="z-50 sticky top-0 flex items-center justify-center bg-white shadow-md">
 	<a href="/">
-		<img src={maxitLogo} alt="Maxit Logo" class="h-16 w-16" />
+		<img src="/MaxitLogo.svg" alt="Maxit Logo" class="h-16 w-16" />
 	</a>
 	<div class="flex items-center justify-center absolute right-2">
 		<ChangeLanguage />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { UserData } from '$lib/backendSchemas';
+	import { UserRole, type UserData } from '$lib/backendSchemas';
 	import * as AlertDialog from '$components/ui/alert-dialog/index.js';
 	import { buttonVariants } from '$components/ui/button/index.js';
 	import * as m from '$lib/paraglide/messages.js';
@@ -14,6 +14,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import Input from '../ui/input/input.svelte';
 	import Separator from '../ui/separator/separator.svelte';
+	import * as Select from '$lib/components/ui/select/index.js';
 
 	let {
 		user,
@@ -29,14 +30,20 @@
 		validators: zodClient(editUserSchema),
 		resetForm: false,
 		onResult: ({ result: { type } }) => {
-			open = type !== 'success';
+			if (type === 'success') {
+				open = false;
+				location.reload();
+			}
 		}
 	});
 
 	const passwordForm = superForm(editPasswordForm, {
 		validators: zodClient(editPasswordSchema),
 		onResult: ({ result: { type } }) => {
-			open = type !== 'success';
+			if (type === 'success') {
+				open = false;
+				location.reload();
+			}
 		}
 	});
 
@@ -54,6 +61,8 @@
 	$userFormData.surname = user.surname;
 	$userFormData.role = user.role;
 
+	$passwordFormData.userId = user.id;
+
 	let open = $state(false);
 </script>
 
@@ -64,7 +73,7 @@
 	<AlertDialog.Content>
 		<AlertDialog.Header>
 			<AlertDialog.Title>{m.edit_profile_title()}</AlertDialog.Title>
-			<AlertDialog.Description>
+			<AlertDialog.Description class="flex space-x-4">
 				<form action="?/editUser" method="POST" use:userFormEnhance>
 					<Form.Field form={userForm} name="userId" hidden>
 						<Form.Control>
@@ -113,8 +122,22 @@
 					<Form.Field form={userForm} name="role">
 						<Form.Control>
 							{#snippet children({ props })}
-								<Form.Label>{m.user_last_name()}</Form.Label>
-								<Input disabled {...props} bind:value={$userFormData.role} />
+								<Form.Label>{m.role()}</Form.Label>
+								<Select.Root
+									type="single"
+									bind:value={$userFormData.role}
+									name={props.name}
+									disabled
+								>
+									<Select.Trigger {...props}>
+										{$userFormData.role}
+									</Select.Trigger>
+									<Select.Content>
+										<Select.Item value={UserRole.Admin} label={UserRole.Admin} />
+										<Select.Item value={UserRole.Teacher} label={UserRole.Teacher} />
+										<Select.Item value={UserRole.Student} label={UserRole.Student} />
+									</Select.Content>
+								</Select.Root>
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
@@ -125,17 +148,25 @@
 					<Separator class="my-4" />
 					<div class="flex-row w-full">
 						<div class="my-4">
-							{m.edit_profile_submit_description()}
+							{m.edit_profile_submit_general_information_description()}
 						</div>
 						<Form.Button type="submit">{m.edit_profile_submit()}</Form.Button>
 					</div>
 				</form>
-
+				<Separator orientation="vertical" />
 				<form action="?/editPassword" method="POST" use:passwordFormEnhance>
+					<Form.Field form={passwordForm} name="userId" hidden>
+						<Form.Control>
+							{#snippet children({ props })}
+								<Input {...props} type="number" bind:value={$passwordFormData.userId} />
+							{/snippet}
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
 					<Form.Field form={passwordForm} name="currentPassword">
 						<Form.Control>
 							{#snippet children({ props })}
-								<Form.Label>{m.edit_profile_password_label()}</Form.Label>
+								<Form.Label>{m.edit_profile_old_password_label()}</Form.Label>
 								<Input {...props} type="password" bind:value={$passwordFormData.currentPassword} />
 							{/snippet}
 						</Form.Control>
@@ -159,6 +190,16 @@
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
+					{#if $passwordFormMessage}
+						<p class="text-destructive my-2 text-sm font-medium">{$passwordFormMessage}</p>
+					{/if}
+					<Separator class="my-4" />
+					<div class="flex-row w-full">
+						<div class="my-4">
+							{m.edit_profile_password_change_description()}
+						</div>
+						<Form.Button type="submit">{m.edit_profile_submit()}</Form.Button>
+					</div>
 				</form>
 			</AlertDialog.Description>
 		</AlertDialog.Header>

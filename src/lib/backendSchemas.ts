@@ -55,6 +55,14 @@ export interface SubmissionData {
 	result: SubmissionResultData | null;
 }
 
+export interface GroupData {
+	id: number;
+	name: string;
+	created_by: number;
+	created_at: string;
+	updated_at: string;
+}
+
 interface TestResultData {
 	id: number;
 	submission_result_id: number;
@@ -120,4 +128,8 @@ export interface GetUserResponse extends ApiResponse {
 
 export interface GetAllSubmissionsResponse extends ApiResponse {
 	data: SubmissionData[];
+}
+
+export interface GetAllGroupsResponse extends ApiResponse {
+	data: GroupData[];
 }

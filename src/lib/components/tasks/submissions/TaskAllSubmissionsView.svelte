@@ -9,7 +9,6 @@
 	} from '$lib';
 
 	let { submissions }: { submissions: SubmissionData[] } = $props();
-	console.log(submissions);
 </script>
 
 <Table.Root>

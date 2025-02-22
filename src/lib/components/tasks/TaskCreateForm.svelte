@@ -16,8 +16,6 @@
 
 	const { form: formData, message, enhance } = form;
 
-	$formData.userId = userId;
-
 	const file = fileProxy(form, 'archive');
 </script>
 
@@ -30,14 +28,6 @@
 			{#snippet children({ props })}
 				<Form.Label>{m.task_form_title_input_label()}</Form.Label>
 				<Input {...props} bind:value={$formData.title} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
-	<Form.Field {form} name="userId" hidden>
-		<Form.Control>
-			{#snippet children({ props })}
-				\ <Input type="number" {...props} bind:value={$formData.userId} />
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />

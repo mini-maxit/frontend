@@ -25,15 +25,18 @@
 		validators: zodClient(editTaskSchema),
 		resetForm: false,
 		onResult: ({ result: { type } }) => {
-			open = type !== 'success';
+			if (type === 'success') {
+				open = false;
+				location.reload();
+			}
 		}
 	});
 
 	const { form: formData, message, enhance } = form;
 
-	$formData.userId = localUser.id;
 	$formData.id = taskData.id;
 	$formData.title = taskData.title;
+	$formData.archive = null;
 
 	const file = fileProxy(form, 'archive');
 
@@ -53,14 +56,6 @@
 						<Form.Control>
 							{#snippet children({ props })}
 								<Input type="number" {...props} bind:value={$formData.id} />
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					<Form.Field {form} name="userId" hidden>
-						<Form.Control>
-							{#snippet children({ props })}
-								<Input type="number" {...props} bind:value={$formData.userId} />
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
@@ -96,7 +91,7 @@
 					<Separator class="my-4" />
 					<div class="flex-row w-full">
 						<div class="my-4">
-							{m.edit_profile_submit_description()}
+							{m.edit_profile_password_change_description()}
 						</div>
 						<Form.Button type="submit">{m.edit_profile_submit()}</Form.Button>
 					</div>

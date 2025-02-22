@@ -133,17 +133,15 @@ export const actions: Actions = {
 			});
 		}
 
-		console.log(form.data);
-
-		const { id, userId, title, archive } = form.data;
+		const { id, title, archive } = form.data;
 
 		try {
 			const formData = new FormData();
 			formData.append('id', id.toString());
-			formData.append('userId', userId.toString());
 			formData.append('title', title);
-			formData.append('overwrite', 'true');
-			formData.append('archive', archive);
+			if (archive) {
+				formData.append('archive', archive);
+			}
 
 			const response = await fetch(`${env.BACKEND_URL}/api/v1/task/${id}`, {
 				method: 'PATCH',

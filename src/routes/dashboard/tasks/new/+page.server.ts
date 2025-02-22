@@ -31,14 +31,12 @@ export const actions: Actions = {
 			});
 		}
 
-		const { userId, title, archive } = form.data;
+		const { title, archive } = form.data;
 		let taskId: number;
 
 		try {
 			const formData = new FormData();
-			formData.append('userId', userId.toString());
 			formData.append('title', title);
-			formData.append('overwrite', 'false');
 			formData.append('archive', archive);
 			const response = await fetch(`${env.BACKEND_URL}/api/v1/task/`, {
 				method: 'POST',
@@ -47,8 +45,6 @@ export const actions: Actions = {
 					session: `${event.locals.sessionId}`
 				}
 			});
-
-			console.log(await response.json());
 
 			if (!response.ok) {
 				return fail(500, {

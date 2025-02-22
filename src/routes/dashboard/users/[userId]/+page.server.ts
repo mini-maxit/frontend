@@ -58,16 +58,19 @@ export const actions: Actions = {
 		}
 		const userUrl = `${env.BACKEND_URL}/api/v1/user/${form.data.userId}`;
 
-		const formData = new FormData();
-		formData.append('name', form.data.name);
-		formData.append('surname', form.data.surname);
-		formData.append('username', form.data.username);
-		formData.append('email', form.data.email);
-		formData.append('role', form.data.role.toString());
+		const jsonData = JSON.stringify({
+			name: form.data.name,
+			surname: form.data.surname,
+			username: form.data.username,
+			email: form.data.email,
+			role: form.data.role.toString()
+		});
+
 		const response = await fetch(userUrl, {
-			method: 'PUT',
-			body: formData,
+			method: 'PATCH',
+			body: jsonData,
 			headers: {
+				'Content-Type': 'application/json',
 				session: `${event.locals.sessionId}`
 			}
 		});
@@ -88,25 +91,19 @@ export const actions: Actions = {
 				form
 			});
 		}
-		if (
-			!event.locals.user ||
-			!event.locals.sessionId ||
-			event.locals.user.id !== form.data.userId
-		) {
-			return fail(401, {
-				error: 'Unauthorized'
-			});
-		}
 		const changePasswordUrl = `${env.BACKEND_URL}/api/v1/user/${form.data.userId}/password`;
 
-		const formData = new FormData();
-		formData.append('new_password', form.data.newPassword);
-		formData.append('old_password', form.data.currentPassword);
-		formData.append('confirm_password', form.data.confirmPassword);
+		const jsonData = JSON.stringify({
+			old_password: form.data.currentPassword,
+			new_password: form.data.newPassword,
+			new_password_confirm: form.data.confirmPassword
+		});
+
 		const response = await fetch(changePasswordUrl, {
 			method: 'PATCH',
-			body: formData,
+			body: jsonData,
 			headers: {
+				'Content-Type': 'application/json',
 				session: `${event.locals.sessionId}`
 			}
 		});
