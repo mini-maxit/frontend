@@ -89,6 +89,7 @@
 	"edit_task_title": "Edit task",
 	"edit_task_description": "Are you sure you want to edit task?",
 	"edit_task_title_label": "Task title",
+	"edit_task_submit_description": "Are you sure you want to save changes?",
 
 	"form_schema_invalid_email_error_message": "Invalid email address",
 	"form_schema_username_required_error_message": "Username is required",

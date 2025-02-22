@@ -89,6 +89,7 @@
 	"edit_task_title": "Edytuj zadanie",
 	"edit_task_description": "Czy na pewno chcesz edytować zadanie?",
 	"edit_task_title_label": "Tytuł zadania",
+	"edit_task_submit_description": "Czy na pewno chcesz zapisać zmiany?",
 
 	"form_schema_invalid_email_error_message": "Nieprawidłowy adres e-mail",
 	"form_schema_username_required_error_message": "Nazwa użytkownika jest wymagana",

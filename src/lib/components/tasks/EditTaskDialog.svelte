@@ -91,7 +91,7 @@
 					<Separator class="my-4" />
 					<div class="flex-row w-full">
 						<div class="my-4">
-							{m.edit_profile_password_change_description()}
+							{m.edit_task_submit_description()}
 						</div>
 						<Form.Button type="submit">{m.edit_profile_submit()}</Form.Button>
 					</div>
