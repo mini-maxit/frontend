@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Table from '$lib/components/ui/table';
+	import * as Table from '$components/ui/table';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { UserData } from '$lib/backendSchemas';
 

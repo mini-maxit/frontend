@@ -1,4 +1,4 @@
-enum UserRole {
+export enum UserRole {
 	Admin = 'admin',
 	Student = 'student',
 	Teacher = 'teacher'
@@ -24,7 +24,7 @@ export interface TaskData {
 	id: number;
 	title: string;
 	description_url: string;
-	create_by: number;
+	created_by: number;
 }
 
 interface LanguageData {
@@ -32,7 +32,7 @@ interface LanguageData {
 	version: string;
 }
 
-enum SubmissionStatus {
+export enum SubmissionStatus {
 	Received = 'received',
 	SentForEvaluation = 'sent for evaluation',
 	Evaluated = 'evaluated',

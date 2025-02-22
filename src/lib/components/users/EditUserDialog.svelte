@@ -1,21 +1,31 @@
 <script lang="ts">
 	import type { UserData } from '$lib/backendSchemas';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import * as AlertDialog from '$components/ui/alert-dialog/index.js';
+	import { buttonVariants } from '$components/ui/button/index.js';
 	import * as m from '$lib/paraglide/messages.js';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { editUserSchema, type EditUserSchema } from './formSchemas';
-	import * as Form from '$lib/components/ui/form';
+	import {
+		editUserSchema,
+		type EditUserSchema,
+		editPasswordSchema,
+		type EditPasswordSchema
+	} from './formSchemas';
+	import * as Form from '$components/ui/form';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import Input from '../ui/input/input.svelte';
 	import Separator from '../ui/separator/separator.svelte';
 
 	let {
 		user,
+		editPasswordForm,
 		editUserForm
-	}: { user: UserData; editUserForm: SuperValidated<Infer<EditUserSchema>> } = $props();
+	}: {
+		user: UserData;
+		editPasswordForm: SuperValidated<Infer<EditPasswordSchema>>;
+		editUserForm: SuperValidated<Infer<EditUserSchema>>;
+	} = $props();
 
-	const form = superForm(editUserForm, {
+	const userForm = superForm(editUserForm, {
 		validators: zodClient(editUserSchema),
 		resetForm: false,
 		onResult: ({ result: { type } }) => {
@@ -23,12 +33,26 @@
 		}
 	});
 
-	const { form: formData, enhance, message } = form;
+	const passwordForm = superForm(editPasswordForm, {
+		validators: zodClient(editPasswordSchema),
+		onResult: ({ result: { type } }) => {
+			open = type !== 'success';
+		}
+	});
 
-	$formData.userId = user.id;
-	$formData.username = user.username;
-	$formData.name = user.name;
-	$formData.surname = user.surname;
+	const { form: userFormData, enhance: userFormEnhance, message: userFormMessage } = userForm;
+	const {
+		form: passwordFormData,
+		enhance: passwordFormEnhance,
+		message: passwordFormMessage
+	} = passwordForm;
+
+	$userFormData.userId = user.id;
+	$userFormData.username = user.username;
+	$userFormData.email = user.email;
+	$userFormData.name = user.name;
+	$userFormData.surname = user.surname;
+	$userFormData.role = user.role;
 
 	let open = $state(false);
 </script>
@@ -41,71 +65,62 @@
 		<AlertDialog.Header>
 			<AlertDialog.Title>{m.edit_profile_title()}</AlertDialog.Title>
 			<AlertDialog.Description>
-				<form action="?/editProfile" method="POST" use:enhance>
-					<Form.Field {form} name="userId" hidden>
+				<form action="?/editUser" method="POST" use:userFormEnhance>
+					<Form.Field form={userForm} name="userId" hidden>
 						<Form.Control>
 							{#snippet children({ props })}
-								<Input type="number" {...props} bind:value={$formData.userId} />
+								<Input type="number" {...props} bind:value={$userFormData.userId} />
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
-					<Form.Field {form} name="username">
+					<Form.Field form={userForm} name="username">
 						<Form.Control>
 							{#snippet children({ props })}
 								<Form.Label>{m.username()}</Form.Label>
-								<Input {...props} bind:value={$formData.username} />
+								<Input {...props} bind:value={$userFormData.username} />
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
-					<Form.Field {form} name="name">
+					<Form.Field form={userForm} name="email">
+						<Form.Control>
+							{#snippet children({ props })}
+								<Form.Label>{m.user_email()}</Form.Label>
+								<Input {...props} bind:value={$userFormData.email} />
+							{/snippet}
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+					<Form.Field form={userForm} name="name">
 						<Form.Control>
 							{#snippet children({ props })}
 								<Form.Label>{m.user_first_name()}</Form.Label>
-								<Input {...props} bind:value={$formData.name} />
+								<Input {...props} bind:value={$userFormData.name} />
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
-					<Form.Field {form} name="surname">
+					<Form.Field form={userForm} name="surname">
 						<Form.Control>
 							{#snippet children({ props })}
 								<Form.Label>{m.user_last_name()}</Form.Label>
-								<Input {...props} bind:value={$formData.surname} />
+								<Input {...props} bind:value={$userFormData.surname} />
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
-					<Form.Field {form} name="currentPassword">
+					<Form.Field form={userForm} name="role">
 						<Form.Control>
 							{#snippet children({ props })}
-								<Form.Label>{m.edit_profile_password_label()}</Form.Label>
-								<Input {...props} type="password" bind:value={$formData.currentPassword} />
+								<Form.Label>{m.user_last_name()}</Form.Label>
+								<Input disabled {...props} bind:value={$userFormData.role} />
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
-					<Form.Field {form} name="newPassword">
-						<Form.Control>
-							{#snippet children({ props })}
-								<Form.Label>{m.edit_profile_password_label()}</Form.Label>
-								<Input {...props} type="password" bind:value={$formData.newPassword} />
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					<Form.Field {form} name="confirmPassword">
-						<Form.Control>
-							{#snippet children({ props })}
-								<Form.Label>{m.edit_profile_password_confirm_label()}</Form.Label>
-								<Input {...props} type="password" bind:value={$formData.confirmPassword} />
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					{#if $message}
-						<p class="text-destructive my-2 text-sm font-medium">{$message}</p>
+					{#if $userFormMessage}
+						<p class="text-destructive my-2 text-sm font-medium">{$userFormMessage}</p>
 					{/if}
 					<Separator class="my-4" />
 					<div class="flex-row w-full">
@@ -114,6 +129,36 @@
 						</div>
 						<Form.Button type="submit">{m.edit_profile_submit()}</Form.Button>
 					</div>
+				</form>
+
+				<form action="?/editPassword" method="POST" use:passwordFormEnhance>
+					<Form.Field form={passwordForm} name="currentPassword">
+						<Form.Control>
+							{#snippet children({ props })}
+								<Form.Label>{m.edit_profile_password_label()}</Form.Label>
+								<Input {...props} type="password" bind:value={$passwordFormData.currentPassword} />
+							{/snippet}
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+					<Form.Field form={passwordForm} name="newPassword">
+						<Form.Control>
+							{#snippet children({ props })}
+								<Form.Label>{m.edit_profile_password_label()}</Form.Label>
+								<Input {...props} type="password" bind:value={$passwordFormData.newPassword} />
+							{/snippet}
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
+					<Form.Field form={passwordForm} name="confirmPassword">
+						<Form.Control>
+							{#snippet children({ props })}
+								<Form.Label>{m.edit_profile_password_confirm_label()}</Form.Label>
+								<Input {...props} type="password" bind:value={$passwordFormData.confirmPassword} />
+							{/snippet}
+						</Form.Control>
+						<Form.FieldErrors />
+					</Form.Field>
 				</form>
 			</AlertDialog.Description>
 		</AlertDialog.Header>

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Button from '$lib/components/ui/button/button.svelte';
+	import Button from '$components/ui/button/button.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { LayoutServerData } from './$types';
+	import type { PageServerData } from './$types';
 
-	let { data }: { data: LayoutServerData } = $props();
+	let { data }: { data: PageServerData } = $props();
 </script>
 
 <div class="flex flex-1 items-center justify-center bg-gray-100">

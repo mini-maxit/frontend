@@ -44,6 +44,8 @@
 	"task_link": "Task link",
 	"task_link_text": "View Task",
 
+	"task_form_title": "Add a new Task",
+	"task_form_title_input_label": "Task title",
 	"task_form_invalid_type": "Please upload file (.zip)",
 	"task_form_invalid_encoding": "Incorrect file format. Only ZIP format is accepted",
 	"task_form_task_name_label": "Add a new Task",
@@ -69,6 +71,10 @@
 	"edit_profile_password_confirm_label": "Confirm new password",
 	"edit_profile_submit_description": "Are you sure you want to save changes?",
 	"edit_profile_submit": "Save changes",
+
+	"edit_task_title": "Edit task",
+	"edit_task_description": "Are you sure you want to edit task?",
+	"edit_task_title_label": "Task title",
 
 	"form_schema_invalid_email_error_message": "Invalid email address",
 	"form_schema_username_required_error_message": "Username is required",

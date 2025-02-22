@@ -1,6 +1,6 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import Input from '$lib/components/ui/input/input.svelte';
+	import * as Form from '$components/ui/form';
+	import Input from '$components/ui/input/input.svelte';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { registerSchema, type RegisterSchema } from './formSchemas';
 	import { zodClient } from 'sveltekit-superforms/adapters';

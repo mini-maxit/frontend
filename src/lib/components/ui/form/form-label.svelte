@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { WithoutChild } from 'bits-ui';
 	import * as FormPrimitive from 'formsnap';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { cn } from '$lib/components/utils.js';
+	import { Label } from '$components/ui/label/index.js';
+	import { cn } from '$components/utils.js';
 
 	let {
 		ref = $bindable(null),

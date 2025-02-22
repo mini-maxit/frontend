@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { SubmissionData } from '$lib/backendSchemas';
-	import * as Table from '$lib/components/ui/table';
+	import * as Table from '$components/ui/table';
 	import * as m from '$lib/paraglide/messages.js';
 	import {
 		get_submission_passed_color,

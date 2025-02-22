@@ -1,12 +1,12 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import Label from '$lib/components/ui/label/label.svelte';
+	import * as Form from '$components/ui/form';
+	import Label from '$components/ui/label/label.svelte';
 	import { uploadTaskSolutionSchema, type UploadTaskSolutionSchema } from './formSchema';
 	import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';
-	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-	import Input from '$lib/components/ui/input/input.svelte';
+	import { ScrollArea } from '$components/ui/scroll-area/index.js';
+	import Input from '$components/ui/input/input.svelte';
 	import type { LanguageConfig } from '$lib/backendSchemas';
 
 	let {
@@ -20,8 +20,7 @@
 	} = $props();
 
 	const form = superForm(data.form, {
-		validators: zodClient(uploadTaskSolutionSchema),
-		dataType: 'json'
+		validators: zodClient(uploadTaskSolutionSchema)
 	});
 
 	const { form: formData, message, errors, enhance } = form;
@@ -31,7 +30,7 @@
 	let fileContentPromise = $derived($errors.file ? null : $file[0]?.text());
 </script>
 
-<form enctype="multipart/form-data" method="POST" use:enhance>
+<form enctype="multipart/form-data" action="?/uploadSolution" method="POST" use:enhance>
 	<Form.Field {form} name="file">
 		<Form.Control>
 			{#snippet children({ props })}

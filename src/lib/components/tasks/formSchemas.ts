@@ -4,7 +4,29 @@ import * as m from '$lib/paraglide/messages.js';
 
 export const createTaskSchema = z.object({
 	userId: z.number().int().positive(),
-	name: z.string().min(3).max(50),
+	title: z.string().min(3).max(50),
+	archive: z
+		.instanceof(File, { message: m.task_form_invalid_type() })
+		.refine((file) => {
+			return file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
+		}, m.task_form_invalid_encoding())
+		.superRefine(async (file, ctx) => {
+			try {
+				await verifyFolderStructure(await file.arrayBuffer());
+			} catch (e: unknown) {
+				if (e instanceof Error) {
+					ctx.addIssue({ code: z.ZodIssueCode.custom, message: e.message });
+				}
+				return false;
+			}
+			return true;
+		})
+});
+
+export const editTaskSchema = z.object({
+	id: z.number().int().positive(),
+	userId: z.number().int().positive(),
+	title: z.string().min(3).max(50),
 	archive: z
 		.instanceof(File, { message: m.task_form_invalid_type() })
 		.refine((file) => {
@@ -93,28 +115,6 @@ function verifyTaskInOut(loadedZip: JSZip, mainFolderPath: string) {
 		}
 	}
 }
-
-export const editTaskSchema = z.object({
-	id: z.number().int().positive(),
-	name: z.string().min(3).max(50),
-	archive: z
-		.instanceof(File, { message: m.task_form_invalid_type() })
-		.refine((file) => {
-			return file.type === 'application/zip' || file.type === 'application/x-zip-compressed';
-		}, m.task_form_invalid_encoding())
-		.superRefine(async (file, ctx) => {
-			try {
-				await verifyFolderStructure(await file.arrayBuffer());
-			} catch (e: unknown) {
-				if (e instanceof Error) {
-					ctx.addIssue({ code: z.ZodIssueCode.custom, message: e.message });
-				}
-				return false;
-			}
-			return true;
-		}),
-	languages: z.array(z.number().int().positive())
-});
 
 export type CreateTaskSchema = typeof createTaskSchema;
 export type EditTaskSchema = typeof editTaskSchema;

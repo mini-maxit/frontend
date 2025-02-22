@@ -44,6 +44,8 @@
 	"task_link": "Link do zadania",
 	"task_link_text": "Zobacz zadanie",
 
+	"task_form_title": "Dodaj nowe zadanie",
+	"task_form_title_input_label": "Tytuł zadania",
 	"task_form_invalid_type": "Proszę wyślij plik ZIP",
 	"task_form_invalid_encoding": "Nieprawidłowy format pliku. Akceptowany jest tylko format ZIP",
 	"task_form_task_name_label": "Dodaj nowe zadanie",
@@ -69,6 +71,10 @@
 	"edit_profile_password_confirm_label": "Potwierdź nowe hasło",
 	"edit_profile_submit_description": "Jesteś pewien, że chcesz zapisać zmiany?",
 	"edit_profile_submit": "Zapisz zmiany",
+
+	"edit_task_title": "Edytuj zadanie",
+	"edit_task_description": "Czy na pewno chcesz edytować zadanie?",
+	"edit_task_title_label": "Tytuł zadania",
 
 	"form_schema_invalid_email_error_message": "Nieprawidłowy adres e-mail",
 	"form_schema_username_required_error_message": "Nazwa użytkownika jest wymagana",

@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types.js';
 import { fail, superValidate } from 'sveltekit-superforms';
-import { createTaskSchema } from '$lib/components/tasks/formSchemas.js';
+import { createTaskSchema } from '$components/tasks/formSchemas.js';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect, type Actions } from '@sveltejs/kit';
 import { i18n } from '$lib/i18n.js';
@@ -31,13 +31,13 @@ export const actions: Actions = {
 			});
 		}
 
-		const { userId, name, archive } = form.data;
+		const { userId, title, archive } = form.data;
 		let taskId: number;
 
 		try {
 			const formData = new FormData();
 			formData.append('userId', userId.toString());
-			formData.append('taskName', name);
+			formData.append('title', title);
 			formData.append('overwrite', 'false');
 			formData.append('archive', archive);
 			const response = await fetch(`${env.BACKEND_URL}/api/v1/task/`, {
@@ -47,6 +47,9 @@ export const actions: Actions = {
 					session: `${event.locals.sessionId}`
 				}
 			});
+
+			console.log(await response.json());
+
 			if (!response.ok) {
 				return fail(500, {
 					form,
