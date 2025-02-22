@@ -2,7 +2,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { Input } from '$lib/components/ui/input';
-	import { createTaskSchema, type CreateTaskSchema } from './formSchema';
+	import { createTaskSchema, type CreateTaskSchema } from './formSchemas';
 	import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';

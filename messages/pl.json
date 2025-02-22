@@ -13,22 +13,30 @@
 	"view_users": "Zobacz wszystkich użytkowników",
 	"add_task": "Dodaj nowe zadanie",
 
+	"profile_information": "Informacje o profilu",
 	"username": "Nazwa użytkownika",
 	"password": "Hasło",
+	"role": "Rola",
 
 	"login": "Zaloguj się",
 	"register": "Zarejestruj się",
 	"logout": "Wyloguj się",
+	"confirm": "Potwierdź",
+	"cancel": "Anuluj",
 
 	"loading": "Ładowanie",
 
 	"users_table_title": "Lista wszystkich zarejestrowanych użytkowników.",
 	"user_id": "ID użytkownika",
+	"user_first_name": "Imię",
+	"user_last_name": "Nazwisko",
 	"user_username": "Nazwa użytkownika",
 	"user_email": "Email",
 	"user_link": "Link do profilu",
 	"user_link_text": "Zobacz profil",
 	"user_fullname": "Imię i nazwisko",
+	"password_input_label": "Hasło",
+	"password_confirm_input_label": "Potwierdź hasło",
 
 	"tasks_table_title": "Lista wszystkich dostępnych zadań.",
 	"task_id": "ID zadania",
@@ -42,5 +50,35 @@
 	"task_form_task_id_label": "Task ID",
 	"task_form_task_file_label": "Plik zadania",
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",
-	"task_form_submit": "Wyślij"
+	"task_form_task_language_label": "Język zadania",
+	"task_form_submit": "Wyślij",
+
+	"submissions_table_title": "Lista wszystkich zgłoszeń użytkownika.",
+	"submissions_task_link_label": "Link do zadania",
+	"submissions_task_submission_result_label": "Wynik zgłoszenia",
+	"submissions_task_submission_result_description": "Zobacz wyniki",
+	"submissions_programming_language_label": "Język programowania",
+	"submissions_submitted_at_label": "Zgłoszono",
+	"submissions_status_label": "Status",
+	"submissions_passed_label": "Zaliczone",
+	"submissions_user_link_label": "Link do użytkownika",
+
+	"edit_profile_title": "Edytuj profil",
+	"edit_profile_description": "Czy na pewno chcesz edytować profil?",
+	"edit_profile_password_label": "Nowe Hasło",
+	"edit_profile_password_confirm_label": "Potwierdź nowe hasło",
+	"edit_profile_submit_description": "Jesteś pewien, że chcesz zapisać zmiany?",
+	"edit_profile_submit": "Zapisz zmiany",
+
+	"form_schema_invalid_email_error_message": "Nieprawidłowy adres e-mail",
+	"form_schema_username_required_error_message": "Nazwa użytkownika jest wymagana",
+	"form_schema_name_required_error_message": "Imię jest wymagane",
+	"form_schema_surname_required_error_message": "Nazwisko jest wymagane",
+	"form_schema_password_required_error_message": "Hasło jest wymagane",
+	"form_schema_password_min_length_error_message": "Hasło musi mieć co najmniej 6 znaków",
+	"form_schema_password_regex_error_message": "Hasło musi zawierać co najmniej jedną wielką literę, jedną małą literę, jedną cyfrę i jeden znak specjalny",
+	"form_schema_password_confirmation_required_error_message": "Potwierdzenie hasła jest wymagane",
+	"form_schema_password_mismatch_error_message": "Hasła nie są identyczne",
+	"form_schema_file_too_large_error_message": "Plik jest za duży! Maksymalny rozmiar pliku to 10MB.",
+	"form_schema_file_not_text_error_message": "Plik nie wygląda na tekstowy!"
 }

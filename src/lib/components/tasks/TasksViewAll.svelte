@@ -1,15 +1,9 @@
 <script lang="ts">
+	import type { TaskData } from '$lib/backendSchemas';
 	import * as Table from '$lib/components/ui/table';
 	import * as m from '$lib/paraglide/messages.js';
 
-	interface TaskListItem {
-		id: number;
-		title: string;
-		created_at: string;
-		created_by: number;
-	}
-
-	let { tasks }: { tasks: TaskListItem[] } = $props();
+	let { tasks }: { tasks: TaskData[] } = $props();
 </script>
 
 <Table.Root>
