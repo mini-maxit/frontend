@@ -18,7 +18,8 @@ export const editPasswordSchema = z
 		currentPassword: z.string().nonempty(m.form_schema_password_required_error_message()),
 		newPassword: z
 			.string()
-			.min(6)
+			.min(8)
+			.max(50)
 			.regex(passwordValidationRegex, m.form_schema_password_regex_error_message()),
 		confirmPassword: z.string().nonempty(m.form_schema_password_required_error_message())
 	})

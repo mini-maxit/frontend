@@ -56,6 +56,9 @@
 	"task_form_task_file_description": "Please upload a file with the task description.",
 	"task_form_task_language_label": "Language of the solution",
 	"task_form_submit": "Submit",
+	"task_assign_groups_form_title": "Assign groups to the task",
+	"task_assign_group_select_title": "Available groups",
+	"task_assign_groups_submit": "Assign groups",
 
 	"submissions_table_title": "A list of all submissions made by the user.",
 	"submissions_task_link_label": "Task link",

@@ -4,8 +4,13 @@ import { env } from '$env/dynamic/private';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { uploadTaskSolutionSchema } from '$components/tasks/solutions/formSchema';
-import type { GetAvailableLanguagesResponse, GetTaskResponse, TaskData } from '$lib/backendSchemas';
-import { editTaskSchema } from '$components/tasks/formSchemas';
+import type {
+	GetAllGroupsResponse,
+	GetAvailableLanguagesResponse,
+	GetTaskResponse,
+	TaskData
+} from '$lib/backendSchemas';
+import { assignTaskToGroupsSchema, editTaskSchema } from '$components/tasks/formSchemas';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	if (!locals.user || !locals.sessionId) {
@@ -47,11 +52,18 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		}
 	});
 
+	const userGroupsResponse = await fetch(`${env.BACKEND_URL}/api/v1/group/`, {
+		headers: {
+			session: `${locals.sessionId}`
+		}
+	});
+
 	if (!availableLanguagesResponse.ok) {
 		throw error(500, 'Failed to fetch available languages');
 	}
 
 	const availableLanguages: GetAvailableLanguagesResponse = await availableLanguagesResponse.json();
+	const userGroups: GetAllGroupsResponse = await userGroupsResponse.json();
 
 	const taskData: Omit<TaskData, 'description_url'> & {
 		description_file: Promise<ArrayBuffer>;
@@ -67,7 +79,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		localUser: locals.user,
 		uploadSolutionForm: await superValidate(zod(uploadTaskSolutionSchema)),
 		editTaskForm: await superValidate(zod(editTaskSchema)),
-		availableLanguages: availableLanguages.data
+		assingTaskToGroupsForm: await superValidate(zod(assignTaskToGroupsSchema)),
+		availableLanguages: availableLanguages.data,
+		userGroups: userGroups.data
 	};
 };
 
@@ -108,14 +122,13 @@ export const actions: Actions = {
 					error: 'Failed to submit solution' + response.statusText
 				});
 			}
-
-			return redirect(303, `/dashboard/tasks/${id}`);
 		} catch (error) {
 			return fail(500, {
 				form,
 				error: 'Failed to submit solution' + error
 			});
 		}
+		return redirect(303, `/dashboard/tasks/${id}`);
 	},
 
 	editTask: async (event) => {
@@ -151,7 +164,7 @@ export const actions: Actions = {
 				}
 			});
 
-			console.log(await response.json());
+			// todo: handle errors
 
 			if (!response.ok) {
 				return fail(500, {
@@ -163,6 +176,56 @@ export const actions: Actions = {
 			return fail(500, {
 				form,
 				error: 'Failed to update task'
+			});
+		}
+	},
+
+	assignGroups: async (event) => {
+		if (!event.locals.user || !event.locals.sessionId) {
+			return fail(401, {
+				error: 'Unauthorized'
+			});
+		}
+
+		const form = await superValidate(event, zod(assignTaskToGroupsSchema));
+
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
+		}
+
+		const { taskId, groupIds } = form.data;
+
+		try {
+			const jsonData = JSON.stringify({
+				groupIds: groupIds.map((id) => parseInt(id))
+			});
+
+			console.log(jsonData);
+
+			const response = await fetch(`${env.BACKEND_URL}/api/v1/task/${taskId}/assign/groups`, {
+				method: 'POST',
+				body: jsonData,
+				headers: {
+					session: `${event.locals.sessionId}`
+				}
+			});
+
+			console.log(await response.json());
+
+			// todo: handle errors
+
+			if (!response.ok) {
+				return fail(500, {
+					form,
+					error: 'Failed to assign task to groups'
+				});
+			}
+		} catch (error) {
+			return fail(500, {
+				form,
+				error: 'Failed to assign task to groups'
 			});
 		}
 	}

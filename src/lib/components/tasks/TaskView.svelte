@@ -3,15 +3,23 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import { type UploadTaskSolutionSchema } from './solutions/formSchema';
-	import { UserRole, type LanguageConfig, type TaskData, type UserData } from '$lib/backendSchemas';
+	import {
+		UserRole,
+		type GroupData,
+		type LanguageConfig,
+		type TaskData,
+		type UserData
+	} from '$lib/backendSchemas';
 	import EditTaskDialog from './EditTaskDialog.svelte';
-	import type { EditTaskSchema } from './formSchemas';
+	import type { AssingTaskToGroupsSchema, EditTaskSchema } from './formSchemas';
 
 	let {
 		localUser,
 		task,
 		uploadSolutionForm,
 		editTaskForm,
+		assingTaskToGroupsForm,
+		userGroups,
 		availableLanguages
 	}: {
 		localUser: UserData;
@@ -19,7 +27,9 @@
 			description_file: Promise<ArrayBuffer>;
 		};
 		editTaskForm: SuperValidated<Infer<EditTaskSchema>>;
+		assingTaskToGroupsForm: SuperValidated<Infer<AssingTaskToGroupsSchema>>;
 		uploadSolutionForm: SuperValidated<Infer<UploadTaskSolutionSchema>>;
+		userGroups: GroupData[];
 		availableLanguages: LanguageConfig[];
 	} = $props();
 
@@ -28,13 +38,20 @@
 		task_id: task.id,
 		availableLanguages: availableLanguages
 	};
+
+	function isAllowedToEdit() {
+		return (
+			(localUser.role === UserRole.Teacher && task.created_by === localUser.id) ||
+			localUser.role === UserRole.Admin
+		);
+	}
 </script>
 
 <div class="container mb-12 flex flex-col flex-1">
 	<div class="flex justify-between p-4 items-center">
 		<h1 class="text-2xl font-bold my-4">{task.title}</h1>
-		{#if localUser.role !== UserRole.Student}
-			<EditTaskDialog taskData={task} {editTaskForm} {localUser} />
+		{#if isAllowedToEdit()}
+			<EditTaskDialog taskData={task} {editTaskForm} {assingTaskToGroupsForm} {userGroups} />
 		{/if}
 	</div>
 	<div class="flex-1 flex overflow-hidden">

@@ -49,6 +49,18 @@ export const editTaskSchema = z.object({
 		})
 });
 
+export const assignTaskToGroupsSchema = z.object({
+	taskId: z.number().int().positive(),
+	groupIds: z
+		.array(z.string())
+		.refine(
+			(groupIds) => groupIds.every((id) => !isNaN(Number(id)) && Number.isInteger(Number(id))),
+			{
+				message: 'All groupIds must be string representations of integers'
+			}
+		)
+});
+
 const requiredFolders = ['input', 'output'];
 const inFileRegex = /^\/\d+.in$/;
 const outFileRegex = /^\/\d+.out$/;
@@ -122,3 +134,4 @@ function verifyTaskInOut(loadedZip: JSZip, mainFolderPath: string) {
 
 export type CreateTaskSchema = typeof createTaskSchema;
 export type EditTaskSchema = typeof editTaskSchema;
+export type AssingTaskToGroupsSchema = typeof assignTaskToGroupsSchema;

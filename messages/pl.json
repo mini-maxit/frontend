@@ -56,6 +56,9 @@
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",
 	"task_form_task_language_label": "Język zadania",
 	"task_form_submit": "Wyślij",
+	"task_assign_groups_form_title": "Przypisz grupy do zadania",
+	"task_assign_group_select_title": "Dostępne grupy",
+	"task_assign_groups_submit": "Przypisz",
 
 	"submissions_table_title": "Lista wszystkich zgłoszeń użytkownika.",
 	"submissions_task_link_label": "Link do zadania",

@@ -4,7 +4,23 @@
 
 	let { data }: { data: PageServerData } = $props();
 
-	const { task, localUser, uploadSolutionForm, editTaskForm, availableLanguages } = data;
+	const {
+		task,
+		localUser,
+		uploadSolutionForm,
+		editTaskForm,
+		assingTaskToGroupsForm,
+		availableLanguages,
+		userGroups
+	} = data;
 </script>
 
-<TaskView {task} {localUser} {uploadSolutionForm} {editTaskForm} {availableLanguages} />
+<TaskView
+	{task}
+	{localUser}
+	{uploadSolutionForm}
+	{editTaskForm}
+	{availableLanguages}
+	{assingTaskToGroupsForm}
+	{userGroups}
+/>
