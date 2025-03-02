@@ -3,8 +3,7 @@ import JSZip from 'jszip';
 import * as m from '$lib/paraglide/messages.js';
 
 export const createTaskSchema = z.object({
-	userId: z.number().int().positive(),
-	name: z.string().min(3).max(50),
+	title: z.string().min(3).max(50),
 	archive: z
 		.instanceof(File, { message: m.task_form_invalid_type() })
 		.refine((file) => {
@@ -21,6 +20,45 @@ export const createTaskSchema = z.object({
 			}
 			return true;
 		})
+});
+
+export const editTaskSchema = z.object({
+	id: z.number().int().positive(),
+	title: z.string().min(3).max(50),
+	archive: z
+		.instanceof(File, { message: m.task_form_invalid_type() })
+		.nullable()
+		.refine((file) => {
+			return (
+				!file || file.type === 'application/zip' || file.type === 'application/x-zip-compressed'
+			);
+		}, m.task_form_invalid_encoding())
+		.superRefine(async (file, ctx) => {
+			if (!file) {
+				return true;
+			}
+			try {
+				await verifyFolderStructure(await file.arrayBuffer());
+			} catch (e: unknown) {
+				if (e instanceof Error) {
+					ctx.addIssue({ code: z.ZodIssueCode.custom, message: e.message });
+				}
+				return false;
+			}
+			return true;
+		})
+});
+
+export const assignTaskToGroupsSchema = z.object({
+	taskId: z.number().int().positive(),
+	groupIds: z
+		.array(z.string())
+		.refine(
+			(groupIds) => groupIds.every((id) => !isNaN(Number(id)) && Number.isInteger(Number(id))),
+			{
+				message: 'All groupIds must be string representations of integers'
+			}
+		)
 });
 
 const requiredFolders = ['input', 'output'];
@@ -95,3 +133,5 @@ function verifyTaskInOut(loadedZip: JSZip, mainFolderPath: string) {
 }
 
 export type CreateTaskSchema = typeof createTaskSchema;
+export type EditTaskSchema = typeof editTaskSchema;
+export type AssingTaskToGroupsSchema = typeof assignTaskToGroupsSchema;

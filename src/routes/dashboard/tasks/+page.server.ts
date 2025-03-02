@@ -15,6 +15,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}
 	);
 
+	// todo: handle this better
+
 	if (!response.ok) {
 		return {
 			tasks: []

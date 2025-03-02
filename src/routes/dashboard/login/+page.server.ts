@@ -3,14 +3,18 @@ import { dev } from '$app/environment';
 import type { Actions, PageServerLoad } from './$types';
 import { i18n } from '$lib/i18n';
 import { message, superValidate } from 'sveltekit-superforms';
-import { registerSchema } from '$lib/components/auth/schemas';
-import { loginSchema } from '$lib/components/auth/schemas';
+import { registerSchema } from '$components/auth/formSchemas';
+import { loginSchema } from '$components/auth/formSchemas';
 import { zod } from 'sveltekit-superforms/adapters';
 import { env } from '$env/dynamic/private';
 import { sessionCookieName } from '$lib';
 import type { AuthUserResponse } from '$lib/backendSchemas';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user && locals.sessionId) {
+		return redirect(302, i18n.resolveRoute('/dashboard'));
+	}
+
 	return {
 		registerForm: await superValidate(zod(registerSchema)),
 		loginForm: await superValidate(zod(loginSchema))
@@ -37,7 +41,11 @@ export const actions: Actions = {
 		//todo: handle errors more explicitly
 
 		if (!response.ok) {
-			return fail(response.status, { message: 'Invalid credentials' });
+			form.data.email = '';
+			form.data.password = '';
+			return message(form, 'Invalid credentials', {
+				status: 401
+			});
 		}
 
 		const responseJson: AuthUserResponse = await response.json();
@@ -50,7 +58,7 @@ export const actions: Actions = {
 			secure: !dev
 		});
 
-		return redirect(302, i18n.resolveRoute('/dashboard'));
+		return redirect(303, i18n.resolveRoute('/dashboard'));
 	},
 	register: async (event) => {
 		const form = await superValidate(event, zod(registerSchema));
@@ -84,6 +92,6 @@ export const actions: Actions = {
 			secure: !dev
 		});
 
-		return redirect(302, i18n.resolveRoute('/dashboard'));
+		return redirect(303, i18n.resolveRoute('/dashboard'));
 	}
 };

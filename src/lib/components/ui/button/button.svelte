@@ -38,7 +38,7 @@
 </script>
 
 <script lang="ts">
-	import { cn } from '$lib/components/utils.js';
+	import { cn } from '$components/utils.js';
 
 	let {
 		class: className,
@@ -53,13 +53,13 @@
 </script>
 
 {#if href}
-	<a bind:this={ref} class={cn(buttonVariants({ variant, size, className }))} {href} {...restProps}>
+	<a bind:this={ref} class={cn(buttonVariants({ variant, size }), className)} {href} {...restProps}>
 		{@render children?.()}
 	</a>
 {:else}
 	<button
 		bind:this={ref}
-		class={cn(buttonVariants({ variant, size, className }))}
+		class={cn(buttonVariants({ variant, size }), className)}
 		{type}
 		{...restProps}
 	>

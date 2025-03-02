@@ -1,8 +1,8 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import Label from '$lib/components/ui/label/label.svelte';
-	import { Input } from '$lib/components/ui/input';
-	import { createTaskSchema, type CreateTaskSchema } from './formSchema';
+	import * as Form from '$components/ui/form';
+	import Label from '$components/ui/label/label.svelte';
+	import { Input } from '$components/ui/input';
+	import { createTaskSchema, type CreateTaskSchema } from './formSchemas';
 	import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';
@@ -16,25 +16,18 @@
 
 	const { form: formData, message, enhance } = form;
 
-	$formData.userId = userId;
-
 	const file = fileProxy(form, 'archive');
 </script>
 
 <form enctype="multipart/form-data" method="POST" use:enhance>
-	<Form.Field {form} name="name">
+	<h2 class="font-semibold mb-2">
+		{m.task_form_title()}
+	</h2>
+	<Form.Field {form} name="title">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>{m.task_form_task_name_label()}</Form.Label>
-				<Input {...props} bind:value={$formData.name} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
-	<Form.Field {form} name="userId" hidden>
-		<Form.Control>
-			{#snippet children({ props })}
-				\ <Input type="number" {...props} bind:value={$formData.userId} />
+				<Form.Label>{m.task_form_title_input_label()}</Form.Label>
+				<Input {...props} bind:value={$formData.title} />
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />

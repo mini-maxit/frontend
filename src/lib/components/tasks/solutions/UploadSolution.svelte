@@ -1,12 +1,13 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import Label from '$lib/components/ui/label/label.svelte';
+	import * as Form from '$components/ui/form';
+	import Label from '$components/ui/label/label.svelte';
 	import { uploadTaskSolutionSchema, type UploadTaskSolutionSchema } from './formSchema';
 	import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';
-	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-	import Input from '$lib/components/ui/input/input.svelte';
+	import { ScrollArea } from '$components/ui/scroll-area/index.js';
+	import Input from '$components/ui/input/input.svelte';
+	import type { LanguageConfig } from '$lib/backendSchemas';
 
 	let {
 		data
@@ -14,6 +15,7 @@
 		data: {
 			form: SuperValidated<Infer<UploadTaskSolutionSchema>>;
 			task_id: number;
+			availableLanguages: LanguageConfig[];
 		};
 	} = $props();
 
@@ -28,7 +30,7 @@
 	let fileContentPromise = $derived($errors.file ? null : $file[0]?.text());
 </script>
 
-<form enctype="multipart/form-data" method="POST" use:enhance>
+<form enctype="multipart/form-data" action="?/uploadSolution" method="POST" use:enhance>
 	<Form.Field {form} name="file">
 		<Form.Control>
 			{#snippet children({ props })}
@@ -43,6 +45,24 @@
 			{/snippet}
 		</Form.Control>
 		<Form.Description>{m.task_form_task_file_description()}</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="languageId">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Label for="languageID">{m.task_form_task_language_label()}</Label>
+				<select
+					{...props}
+					id="languageID"
+					class={'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'}
+					bind:value={$formData.languageId}
+				>
+					{#each data.availableLanguages as lang}
+						<option value={lang.id}>{lang.language} {lang.version}</option>
+					{/each}
+				</select>
+			{/snippet}
+		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} hidden name="id">

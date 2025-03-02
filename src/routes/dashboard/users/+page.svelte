@@ -1,8 +1,9 @@
 <script lang="ts">
-	import TaskView from '$lib/components/tasks/TaskView.svelte';
+	import UsersViewAll from '$components/users/UsersViewAll.svelte';
+
 	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
 </script>
 
-<TaskView {data} />
+<UsersViewAll users={data.users} />
