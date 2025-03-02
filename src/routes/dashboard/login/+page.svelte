@@ -2,8 +2,8 @@
 	import { enhance } from '$app/forms';
 	import type { PageServerData } from './$types';
 	import * as m from '$lib/paraglide/messages.js'; // Import messages
-	import RegisterForm from '$lib/components/auth/RegisterForm.svelte';
-	import LoginForm from '$lib/components/auth/LoginForm.svelte';
+	import RegisterForm from '$components/auth/RegisterForm.svelte';
+	import LoginForm from '$components/auth/LoginForm.svelte';
 
 	let { data }: { data: PageServerData } = $props();
 </script>

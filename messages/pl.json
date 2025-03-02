@@ -11,7 +11,9 @@
 	"your_user_id": "Twój identyfikator użytkownika",
 	"view_tasks": "Zobacz zadania",
 	"view_users": "Zobacz wszystkich użytkowników",
-	"add_task": "Dodaj nowe zadanie",
+	"view_groups": "Zobacz wszystkie grupy",
+	"create_task": "Dodaj nowe zadanie",
+	"create_group": "Dodaj nową grupę",
 
 	"profile_information": "Informacje o profilu",
 	"username": "Nazwa użytkownika",
@@ -44,6 +46,8 @@
 	"task_link": "Link do zadania",
 	"task_link_text": "Zobacz zadanie",
 
+	"task_form_title": "Dodaj nowe zadanie",
+	"task_form_title_input_label": "Tytuł zadania",
 	"task_form_invalid_type": "Proszę wyślij plik ZIP",
 	"task_form_invalid_encoding": "Nieprawidłowy format pliku. Akceptowany jest tylko format ZIP",
 	"task_form_task_name_label": "Dodaj nowe zadanie",
@@ -52,6 +56,9 @@
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",
 	"task_form_task_language_label": "Język zadania",
 	"task_form_submit": "Wyślij",
+	"task_assign_groups_form_title": "Przypisz grupy do zadania",
+	"task_assign_group_select_title": "Dostępne grupy",
+	"task_assign_groups_submit": "Przypisz",
 
 	"submissions_table_title": "Lista wszystkich zgłoszeń użytkownika.",
 	"submissions_task_link_label": "Link do zadania",
@@ -63,12 +70,29 @@
 	"submissions_passed_label": "Zaliczone",
 	"submissions_user_link_label": "Link do użytkownika",
 
+	"group_form_title": "Dodaj nową grupę",
+	"group_form_name_label": "Nazwa grupy",
+	"group_form_submit": "Dodaj grupę",
+
+	"groups_table_title": "Lista wszystkich grup.",
+	"groups_table_group_id": "ID grupy",
+	"groups_table_group_name": "Nazwa grupy",
+	"groups_table_group_link": "Link do grupy",
+	"groups_table_group_link_text": "Zobacz grupę",
+
 	"edit_profile_title": "Edytuj profil",
 	"edit_profile_description": "Czy na pewno chcesz edytować profil?",
 	"edit_profile_password_label": "Nowe Hasło",
+	"edit_profile_old_password_label": "Stare Hasło",
 	"edit_profile_password_confirm_label": "Potwierdź nowe hasło",
-	"edit_profile_submit_description": "Jesteś pewien, że chcesz zapisać zmiany?",
+	"edit_profile_submit_general_information_description": "Are you sure you want to save changes?",
+	"edit_profile_password_change_description": "Are you sure you want to change your password?",
 	"edit_profile_submit": "Zapisz zmiany",
+
+	"edit_task_title": "Edytuj zadanie",
+	"edit_task_description": "Czy na pewno chcesz edytować zadanie?",
+	"edit_task_title_label": "Tytuł zadania",
+	"edit_task_submit_description": "Czy na pewno chcesz zapisać zmiany?",
 
 	"form_schema_invalid_email_error_message": "Nieprawidłowy adres e-mail",
 	"form_schema_username_required_error_message": "Nazwa użytkownika jest wymagana",
@@ -80,5 +104,6 @@
 	"form_schema_password_confirmation_required_error_message": "Potwierdzenie hasła jest wymagane",
 	"form_schema_password_mismatch_error_message": "Hasła nie są identyczne",
 	"form_schema_file_too_large_error_message": "Plik jest za duży! Maksymalny rozmiar pliku to 10MB.",
-	"form_schema_file_not_text_error_message": "Plik nie wygląda na tekstowy!"
+	"form_schema_file_not_text_error_message": "Plik nie wygląda na tekstowy!",
+	"form_schema_group_name_required_error_message": "Nazwa grupy jest wymagana"
 }

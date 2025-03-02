@@ -1,12 +1,12 @@
 <script lang="ts">
-	import * as Card from '$lib/components/ui/card/index.js';
-	import type { SubmissionData, SubmissionResultData, UserData } from '$lib/backendSchemas';
-	import * as Table from '$lib/components/ui/table';
+	import * as Card from '$components/ui/card/index.js';
+	import type { SubmissionData, UserData } from '$lib/backendSchemas';
+	import * as Table from '$components/ui/table';
 	import Separator from '../ui/separator/separator.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import EditUserDialog from './EditUserDialog.svelte';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	import type { EditUserSchema } from './formSchemas';
+	import type { EditPasswordSchema, EditUserSchema } from './formSchemas';
 	import {
 		get_submission_passed_color,
 		get_submission_passed_text,
@@ -17,12 +17,14 @@
 		user,
 		submissions,
 		localUser,
-		editUserForm
+		editUserForm,
+		editPasswordForm
 	}: {
 		user: UserData;
 		submissions: SubmissionData[];
 		localUser: UserData;
 		editUserForm: SuperValidated<Infer<EditUserSchema>>;
+		editPasswordForm: SuperValidated<Infer<EditPasswordSchema>>;
 	} = $props();
 </script>
 
@@ -44,7 +46,7 @@
 			</div>
 		</div>
 		{#if localUser.id == user.id}
-			<EditUserDialog {user} {editUserForm} />
+			<EditUserDialog {user} {editUserForm} {editPasswordForm} />
 		{/if}
 	</Card.Header>
 	<Separator />

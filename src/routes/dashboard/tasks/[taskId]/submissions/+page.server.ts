@@ -25,5 +25,5 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	const submissionData: GetAllSubmissionsResponse = await submissionDataResponse.json();
-	return { submissionData: submissionData.data };
+	return { submissions: submissionData.data };
 };

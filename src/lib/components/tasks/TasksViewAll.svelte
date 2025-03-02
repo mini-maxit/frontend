@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { TaskData } from '$lib/backendSchemas';
-	import * as Table from '$lib/components/ui/table';
+	import * as Table from '$components/ui/table';
 	import * as m from '$lib/paraglide/messages.js';
 
 	let { tasks }: { tasks: TaskData[] } = $props();

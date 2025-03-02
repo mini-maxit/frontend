@@ -1,4 +1,4 @@
-enum UserRole {
+export enum UserRole {
 	Admin = 'admin',
 	Student = 'student',
 	Teacher = 'teacher'
@@ -24,7 +24,7 @@ export interface TaskData {
 	id: number;
 	title: string;
 	description_url: string;
-	create_by: number;
+	created_by: number;
 }
 
 interface LanguageData {
@@ -32,7 +32,7 @@ interface LanguageData {
 	version: string;
 }
 
-enum SubmissionStatus {
+export enum SubmissionStatus {
 	Received = 'received',
 	SentForEvaluation = 'sent for evaluation',
 	Evaluated = 'evaluated',
@@ -53,6 +53,14 @@ export interface SubmissionData {
 	task: TaskData;
 	user: UserData;
 	result: SubmissionResultData | null;
+}
+
+export interface GroupData {
+	id: number;
+	name: string;
+	created_by: number;
+	created_at: string;
+	updated_at: string;
 }
 
 interface TestResultData {
@@ -120,4 +128,8 @@ export interface GetUserResponse extends ApiResponse {
 
 export interface GetAllSubmissionsResponse extends ApiResponse {
 	data: SubmissionData[];
+}
+
+export interface GetAllGroupsResponse extends ApiResponse {
+	data: GroupData[];
 }

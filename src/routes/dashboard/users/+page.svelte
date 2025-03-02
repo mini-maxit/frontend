@@ -1,5 +1,5 @@
 <script lang="ts">
-	import UsersViewAll from '$lib/components/users/UsersViewAll.svelte';
+	import UsersViewAll from '$components/users/UsersViewAll.svelte';
 
 	import type { PageServerData } from './$types';
 

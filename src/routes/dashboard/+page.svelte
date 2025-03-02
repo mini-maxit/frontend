@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Button from '$lib/components/ui/button/button.svelte';
+	import Button from '$components/ui/button/button.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { LayoutServerData } from './$types';
+	import type { PageServerData } from './$types';
+	import CreateGroupDialog from '$components/groups/CreateGroupDialog.svelte';
 
-	let { data }: { data: LayoutServerData } = $props();
+	let { data }: { data: PageServerData } = $props();
+
+	const { localUser, createGroupForm } = data;
 </script>
 
 <div class="flex flex-1 items-center justify-center bg-gray-100">
@@ -18,17 +21,23 @@
 				>{m.logout()}</Button
 			>
 		</form>
-		<Button class="w-full mt-4 bg-blue-600 rounded-lg hover:bg-blue-700" href="/dashboard/tasks">
-			{m.view_tasks()}
-		</Button>
 		<Button class="w-full mt-4 bg-blue-600 rounded-lg hover:bg-blue-700" href="/dashboard/users">
 			{m.view_users()}
 		</Button>
-		<Button
-			class="w-full mt-4 bg-green-600 rounded-lg hover:bg-green-700"
-			href="/dashboard/tasks/new"
-		>
-			{m.add_task()}
+		<Button class="w-full mt-4 bg-blue-600 rounded-lg hover:bg-blue-700" href="/dashboard/groups">
+			{m.view_groups()}
 		</Button>
+		<Button class="w-full mt-4 bg-blue-600 rounded-lg hover:bg-blue-700" href="/dashboard/tasks">
+			{m.view_tasks()}
+		</Button>
+		{#if localUser.role !== 'student'}
+			<Button
+				class="w-full mt-4 bg-green-600 rounded-lg hover:bg-green-700"
+				href="/dashboard/tasks/new"
+			>
+				{m.create_task()}
+			</Button>
+			<CreateGroupDialog {createGroupForm} />
+		{/if}
 	</div>
 </div>

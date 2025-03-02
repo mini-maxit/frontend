@@ -1,8 +1,8 @@
 <script lang="ts">
-	import TaskAllSubmissionsView from '$lib/components/tasks/submissions/TaskAllSubmissionsView.svelte';
+	import TaskAllSubmissionsView from '$components/tasks/submissions/TaskAllSubmissionsView.svelte';
 	import type { PageServerData } from './$types';
 
-	let { data }: PageServerData = $props();
+	let { data }: { data: PageServerData } = $props();
 </script>
 
-<TaskAllSubmissionsView submissions={data.submissionData} />
+<TaskAllSubmissionsView submissions={data.submissions} />
