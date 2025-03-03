@@ -76,7 +76,7 @@ export interface SubmissionResultData {
 	code: string;
 	message: string;
 	created_at: string;
-	test_results: TestResultData[];
+	test_results: TestResultData[] | null;
 }
 
 interface ApiResponse {
