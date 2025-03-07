@@ -9,6 +9,10 @@ declare global {
 			user: UserData | null;
 			sessionId: string | null;
 		}
+		interface Error {
+			code?: string;
+			message: string;
+		}
 	}
 }
 

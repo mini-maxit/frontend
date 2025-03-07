@@ -1,16 +1,14 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { i18n } from '$lib/i18n';
-import { sessionCookieName } from '$lib';
+import { SESSION_COOKIE_NAME } from '$lib/server/utils';
 import { env } from '$env/dynamic/private';
 import type { AuthSessionResponse } from '$lib/backendSchemas';
 const handleParaglide: Handle = i18n.handle();
 
 const handleAuth: Handle = async ({ event, resolve }) => {
-	const sessionId = event.cookies.get(sessionCookieName);
+	const sessionId = event.cookies.get(SESSION_COOKIE_NAME);
 	if (!sessionId) {
-		event.locals.user = null;
-		event.locals.sessionId = null;
 		return resolve(event);
 	}
 
@@ -21,9 +19,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	});
 
 	if (!response.ok) {
-		event.locals.user = null;
-		event.locals.sessionId = null;
-		event.cookies.delete(sessionCookieName, { path: '/' });
+		event.cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
 		return resolve(event);
 	}
 
@@ -36,12 +32,10 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
 const protectDashboard: Handle = async ({ event, resolve }) => {
 	const path = event.url.pathname;
-	const isProtectedPath =
-		path.startsWith('/dashboard/') && path !== i18n.resolveRoute('/dashboard/login');
 
-	if (isProtectedPath) {
-		if (!event.locals.user) {
-			return redirect(303, i18n.resolveRoute('/dashboard/login'));
+	if (path.startsWith(i18n.resolveRoute('/dashboard'))) {
+		if (!event.locals.user || !event.locals.sessionId) {
+			redirect(303, i18n.resolveRoute('/auth'));
 		}
 	}
 
