@@ -19,7 +19,7 @@
 	const file = fileProxy(form, 'archive');
 </script>
 
-<form enctype="multipart/form-data" method="POST" use:enhance>
+<form action="?/createTask" enctype="multipart/form-data" method="POST" use:enhance>
 	<h2 class="font-semibold mb-2">
 		{m.task_form_title()}
 	</h2>

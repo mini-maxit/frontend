@@ -105,5 +105,12 @@
 	"form_schema_password_mismatch_error_message": "Passwords do not match",
 	"form_schema_file_too_large_error_message": "The file is too large! The maximum file size is 10MB.",
 	"form_schema_file_not_text_error_message": "The file does not appear to be a text file!",
-	"form_schema_group_name_required_error_message": "Group name is required"
+	"form_schema_group_name_required_error_message": "Group name is required",
+
+	"error_unexpected_backend_response_error_message": "A VERY unexpected error occurred. If you see this message, please contact the administrator.",
+	"error_unexpected_error_message": "An unexpected error occurred. Please try again later.",
+	"error_unexpected_request_error_message": "An unexpected error occurend when sending the request. Please try again later.",
+	"error_invalid_task_id_error_message": "Invalid task ID",
+	"error_invalid_group_id_error_message": "Invalid group ID",
+	"error_invalid_user_id_error_message": "Invalid user ID"
 }

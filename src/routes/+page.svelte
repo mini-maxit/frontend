@@ -7,7 +7,7 @@
 		<h1 class="text-2xl font-semibold text-gray-700 mb-4">{m.landing_page_hero_title()}</h1>
 		<p class="text-gray-600 mb-6">
 			{m.landing_page_hero_text_1()}
-			<a href="/dashboard/login" class="text-blue-600 font-medium hover:underline"
+			<a href="/auth" class="text-blue-600 font-medium hover:underline"
 				>{m.landing_page_hero_text_link()}</a
 			>
 			{m.landing_page_hero_text_2()}
