@@ -7,14 +7,20 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import Input from '$components/ui/input/input.svelte';
 	import Label from '$components/ui/label/label.svelte';
+	import { toast } from 'svelte-sonner';
 
 	let { createGroupForm }: { createGroupForm: SuperValidated<Infer<CreateGroupSchema>> } = $props();
 
 	const form = superForm(createGroupForm, {
 		validators: zodClient(createGroupSchema),
 		resetForm: false,
-		onResult: ({ result: { type } }) => {
-			open = type !== 'success';
+		onResult: ({ result }) => {
+			if (result.type === 'success') {
+				toast.success(m.toaster_group_create_success_message());
+				open = false;
+			} else if (result.status === 500) {
+				toast.error(m.error_unexpected_request_error_message());
+			}
 		}
 	});
 

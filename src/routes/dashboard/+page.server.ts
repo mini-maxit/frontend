@@ -1,50 +1,45 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { i18n } from '$lib/i18n';
 import { env } from '$env/dynamic/private';
-import { sessionCookieName } from '$lib';
+import { PARSE_ERROR, SESSION_COOKIE_NAME, parse_error_response } from '$lib/server/utils';
 import type { PageServerLoad } from './$types';
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate, type ErrorStatus } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createGroupSchema } from '$components/groups/formschema';
+import type { ApiErrorResponse } from '$lib/backendSchemas';
+import { fail } from 'sveltekit-superforms';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.user || !locals.sessionId) {
-		return redirect(302, i18n.resolveRoute('/dashboard/login'));
-	}
-
 	return {
-		localUser: locals.user,
+		localUser: locals.user!,
 		createGroupForm: await superValidate(zod(createGroupSchema))
 	};
 };
 
 export const actions: Actions = {
-	logout: async (event) => {
-		if (!event.locals.sessionId) {
-			return fail(401);
-		}
+	logout: async ({ locals, cookies, fetch }) => {
 		const response = await fetch(`${env.BACKEND_URL}/api/v1/session/invalidate`, {
 			method: 'POST',
 			headers: {
-				session: `${event.locals.sessionId}`
+				session: `${locals.sessionId}`
 			}
 		});
 
+		cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
+
 		if (!response.ok) {
-			// todo: how to handle this?
-			console.log('Failed to invalidate session');
+			const errorResponse: ApiErrorResponse = await parse_error_response(response);
+			error(response.status, {
+				code: errorResponse.data.code,
+				message: errorResponse.data.message
+			});
 		}
 
-		event.cookies.delete(sessionCookieName, { path: '/' });
-
-		return redirect(302, i18n.resolveRoute('/dashboard/login'));
+		redirect(302, i18n.resolveRoute('/auth'));
 	},
 
-	createGroup: async (event) => {
-		if (!event.locals.user || !event.locals.sessionId) {
-			return fail(401);
-		}
+	createGroup: async (event, { fetch } = event) => {
 		const form = await superValidate(event, zod(createGroupSchema));
 		if (!form.valid) {
 			return {
@@ -52,23 +47,35 @@ export const actions: Actions = {
 			};
 		}
 
-		const response = await fetch(`${env.BACKEND_URL}/api/v1/group/`, {
-			method: 'POST',
-			headers: {
-				session: `${event.locals.sessionId}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				name: form.data.name
-			})
-		});
+		try {
+			const response = await fetch(`${env.BACKEND_URL}/api/v1/group/`, {
+				method: 'POST',
+				headers: {
+					session: `${event.locals.sessionId}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					name: form.data.name
+				})
+			});
 
-		if (!response.ok) {
+			if (!response.ok) {
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== PARSE_ERROR) {
+					return message(form, errorResponse.data.message, {
+						status: response.status as ErrorStatus
+					});
+				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
+				});
+			}
+			return message(form, '');
+		} catch (e) {
 			return fail(500, {
-				form,
-				error: 'Failed to update user'
+				form
 			});
 		}
-		return redirect(303, i18n.resolveRoute('/dashboard/groups'));
 	}
 };

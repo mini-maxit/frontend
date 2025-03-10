@@ -1,8 +1,9 @@
-import { error, redirect, type Actions } from '@sveltejs/kit';
+import { error, isRedirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import * as m from '$lib/paraglide/messages.js';
 import { uploadTaskSolutionSchema } from '$components/tasks/solutions/formSchema';
 import type {
 	GetAllGroupsResponse,
@@ -11,18 +12,21 @@ import type {
 	TaskData
 } from '$lib/backendSchemas';
 import { assignTaskToGroupsSchema, editTaskSchema } from '$components/tasks/formSchemas';
+import type { ApiErrorResponse } from '$lib/backendSchemas';
+import { PARSE_ERROR, parse_error_response } from '$lib/server/utils';
+import { message } from 'sveltekit-superforms';
+import type { ErrorStatus } from 'sveltekit-superforms';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-	if (!locals.user || !locals.sessionId) {
-		return redirect(303, '/dashboard/login');
-	}
 	const { taskId } = params;
 	let taskIdInt: number;
 
 	try {
 		taskIdInt = parseInt(taskId);
 	} catch (e) {
-		throw error(400, 'Invalid task id');
+		error(400, {
+			message: m.error_invalid_task_id_error_message()
+		});
 	}
 
 	const taskDataResponse = await fetch(`${env.BACKEND_URL}/api/v1/task/${taskIdInt}`, {
@@ -32,7 +36,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	});
 
 	if (!taskDataResponse.ok) {
-		throw error(500, 'Failed to fetch task data');
+		const errorResponse: ApiErrorResponse = await parse_error_response(taskDataResponse);
+		error(taskDataResponse.status, {
+			code: errorResponse.data.code,
+			message: errorResponse.data.message
+		});
 	}
 
 	const task: GetTaskResponse = await taskDataResponse.json();
@@ -43,7 +51,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	);
 
 	if (!taskDescriptionResponse.ok) {
-		throw error(500, 'Failed to fetch task description');
+		const errorResponse: ApiErrorResponse = await parse_error_response(taskDescriptionResponse);
+		error(taskDescriptionResponse.status, {
+			code: errorResponse.data.code,
+			message: errorResponse.data.message
+		});
 	}
 
 	const availableLanguagesResponse = await fetch(`${env.BACKEND_URL}/api/v1/submission/languages`, {
@@ -59,7 +71,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	});
 
 	if (!availableLanguagesResponse.ok) {
-		throw error(500, 'Failed to fetch available languages');
+		error(500, { message: 'Failed to fetch available languages' });
 	}
 
 	const availableLanguages: GetAvailableLanguagesResponse = await availableLanguagesResponse.json();
@@ -76,7 +88,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 	return {
 		task: taskData,
-		localUser: locals.user,
+		localUser: locals.user!,
 		uploadSolutionForm: await superValidate(zod(uploadTaskSolutionSchema)),
 		editTaskForm: await superValidate(zod(editTaskSchema)),
 		assingTaskToGroupsForm: await superValidate(zod(assignTaskToGroupsSchema)),
@@ -87,11 +99,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 export const actions: Actions = {
 	uploadSolution: async (event) => {
-		if (!event.locals.user || !event.locals.sessionId) {
-			return fail(401, {
-				error: 'Unauthorized'
-			});
-		}
 		const form = await superValidate(event, zod(uploadTaskSolutionSchema));
 		if (!form.valid) {
 			return fail(400, {
@@ -117,27 +124,28 @@ export const actions: Actions = {
 			});
 
 			if (!response.ok) {
-				return fail(500, {
-					form,
-					error: 'Failed to submit solution' + response.statusText
+				console.log(response);
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== PARSE_ERROR) {
+					return message(form, errorResponse.data.message, {
+						status: response.status as ErrorStatus
+					});
+				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
 				});
 			}
-		} catch (error) {
+			return message(form, '');
+		} catch (e) {
+			if (isRedirect(e)) throw e;
 			return fail(500, {
-				form,
-				error: 'Failed to submit solution' + error
+				form
 			});
 		}
-		return redirect(303, `/dashboard/tasks/${id}`);
 	},
 
 	editTask: async (event) => {
-		if (!event.locals.user || !event.locals.sessionId) {
-			return fail(401, {
-				error: 'Unauthorized'
-			});
-		}
-
 		const form = await superValidate(event, zod(editTaskSchema));
 
 		if (!form.valid) {
@@ -164,29 +172,26 @@ export const actions: Actions = {
 				}
 			});
 
-			// todo: handle errors
-
 			if (!response.ok) {
-				return fail(500, {
-					form,
-					error: 'Failed to update task'
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== 'PARSE_ERROR') {
+					return message(form, errorResponse.data.message, {
+						status: response.status as ErrorStatus
+					});
+				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
 				});
 			}
-		} catch (error) {
+		} catch (e) {
 			return fail(500, {
-				form,
-				error: 'Failed to update task'
+				form
 			});
 		}
 	},
 
 	assignGroups: async (event) => {
-		if (!event.locals.user || !event.locals.sessionId) {
-			return fail(401, {
-				error: 'Unauthorized'
-			});
-		}
-
 		const form = await superValidate(event, zod(assignTaskToGroupsSchema));
 
 		if (!form.valid) {
@@ -202,8 +207,6 @@ export const actions: Actions = {
 				groupIds: groupIds.map((id) => parseInt(id))
 			});
 
-			console.log(jsonData);
-
 			const response = await fetch(`${env.BACKEND_URL}/api/v1/task/${taskId}/assign/groups`, {
 				method: 'POST',
 				body: jsonData,
@@ -212,17 +215,15 @@ export const actions: Actions = {
 				}
 			});
 
-			console.log(await response.json());
-
-			// todo: handle errors
-
 			if (!response.ok) {
-				return fail(500, {
-					form,
-					error: 'Failed to assign task to groups'
-				});
+				const errorReponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorReponse.data.code !== 'PARSE_ERROR') {
+					return message(form, errorReponse.data.message, {
+						status: response.status as ErrorStatus
+					});
+				}
 			}
-		} catch (error) {
+		} catch (e) {
 			return fail(500, {
 				form,
 				error: 'Failed to assign task to groups'

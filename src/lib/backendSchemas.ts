@@ -84,6 +84,13 @@ interface ApiResponse {
 	data: any;
 }
 
+export interface ApiErrorResponse extends ApiResponse {
+	data: {
+		code: string;
+		message: string;
+	};
+}
+
 export interface GetAvailableLanguagesResponse extends ApiResponse {
 	data: LanguageConfig[];
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Card from '$components/ui/card/index.js';
-	import type { SubmissionData, UserData } from '$lib/backendSchemas';
+	import { UserRole, type SubmissionData, type UserData } from '$lib/backendSchemas';
 	import * as Table from '$components/ui/table';
 	import Separator from '../ui/separator/separator.svelte';
 	import * as m from '$lib/paraglide/messages.js';
@@ -14,7 +14,7 @@
 	} from '$lib';
 
 	let {
-		user,
+		user: userData,
 		submissions,
 		localUser,
 		editUserForm,
@@ -26,6 +26,8 @@
 		editUserForm: SuperValidated<Infer<EditUserSchema>>;
 		editPasswordForm: SuperValidated<Infer<EditPasswordSchema>>;
 	} = $props();
+
+	let user = $state(userData);
 </script>
 
 <Card.Root>
@@ -45,8 +47,8 @@
 				<p>{m.user_last_name()}: {user.surname}</p>
 			</div>
 		</div>
-		{#if localUser.id == user.id}
-			<EditUserDialog {user} {editUserForm} {editPasswordForm} />
+		{#if localUser.id == user.id || localUser.role === UserRole.Admin}
+			<EditUserDialog bind:user {localUser} {editUserForm} {editPasswordForm} />
 		{/if}
 	</Card.Header>
 	<Separator />
