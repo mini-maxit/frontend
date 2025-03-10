@@ -8,6 +8,7 @@
 	import { ScrollArea } from '$components/ui/scroll-area/index.js';
 	import Input from '$components/ui/input/input.svelte';
 	import type { LanguageConfig } from '$lib/backendSchemas';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		data
@@ -20,7 +21,14 @@
 	} = $props();
 
 	const form = superForm(data.form, {
-		validators: zodClient(uploadTaskSolutionSchema)
+		validators: zodClient(uploadTaskSolutionSchema),
+		onUpdate({ result }) {
+			if (result.type === 'success') {
+				toast.success(m.task_form_submit_success());
+			} else if (result.type === 'failure') {
+				toast.error(m.error_unexpected_request_error_message());
+			}
+		}
 	});
 
 	const { form: formData, message, errors, enhance } = form;

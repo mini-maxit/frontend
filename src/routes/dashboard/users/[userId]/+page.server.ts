@@ -13,7 +13,6 @@ import { editPasswordSchema, editUserSchema } from '$components/users/formSchema
 import { fail, message, superValidate, type ErrorStatus } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { PARSE_ERROR, parse_error_response } from '$lib/server/utils';
-import { toast } from 'svelte-sonner';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { userId } = params;
@@ -34,7 +33,17 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	);
 
 	return {
-		editUserForm: await superValidate(zod(editUserSchema)),
+		editUserForm: await superValidate(
+			{
+				userId: userIdInt,
+				name: localUser.name,
+				email: localUser.email,
+				username: localUser.username,
+				surname: localUser.surname,
+				role: localUser.role
+			},
+			zod(editUserSchema)
+		),
 		editPasswordForm: await superValidate(zod(editPasswordSchema)),
 		localUser: localUser,
 		user: userData,
@@ -50,9 +59,9 @@ export const actions: Actions = {
 				form
 			});
 		}
-		if (event.locals.user!.id !== form.data.userId) {
-			return fail(401, {
-				error: 'Unauthorized'
+		if (event.locals.user!.id !== form.data.userId && event.locals.user!.role !== UserRole.Admin) {
+			return message(form, 'Unauthorized', {
+				status: 401
 			});
 		}
 		const userUrl = `${env.BACKEND_URL}/api/v1/user/${form.data.userId}`;
@@ -87,8 +96,8 @@ export const actions: Actions = {
 					message: errorResponse.data.message
 				});
 			}
+			return { form };
 		} catch (e) {
-			toast.error(m.error_unexpected_request_error_message());
 			return fail(500, {
 				form
 			});
@@ -102,6 +111,13 @@ export const actions: Actions = {
 				form
 			});
 		}
+
+		if (event.locals.user!.id !== form.data.userId) {
+			return message(form, 'Unauthorized', {
+				status: 401
+			});
+		}
+
 		const changePasswordUrl = `${env.BACKEND_URL}/api/v1/user/${form.data.userId}/password`;
 
 		const jsonData = JSON.stringify({
@@ -132,8 +148,8 @@ export const actions: Actions = {
 					message: errorResponse.data.message
 				});
 			}
+			return { form };
 		} catch (e) {
-			toast.error(m.error_unexpected_request_error_message());
 			return fail(500, {
 				form
 			});

@@ -112,5 +112,16 @@
 	"error_unexpected_request_error_message": "An unexpected error occurend when sending the request. Please try again later.",
 	"error_invalid_task_id_error_message": "Invalid task ID",
 	"error_invalid_group_id_error_message": "Invalid group ID",
-	"error_invalid_user_id_error_message": "Invalid user ID"
+	"error_invalid_user_id_error_message": "Invalid user ID",
+
+	"toaster_edit_user_success_message": "User has been successfully edited",
+	"toaster_edit_password_success_message": "Password has been successfully changed",
+	"toaster_edit_task_success_message": "Task has been successfully edited",
+	"toaster_assign_to_task_success_message": "Groups have been successfully assigned to the task",
+	"toaster_login_success_message": "You have been successfully logged in",
+	"toaster_register_success_message": "You have been successfully registered",
+	"toaster_group_create_success_message": "Group has been successfully created",
+	"toaster_task_edit_success_message": "Task has been successfully edited",
+	"toaster_task_create_success_message": "Task has been successfully created",
+	"task_form_submit_success": "Task has been successfully submitted"
 }

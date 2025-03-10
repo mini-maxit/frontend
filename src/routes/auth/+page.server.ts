@@ -6,11 +6,9 @@ import { message, superValidate, type ErrorStatus } from 'sveltekit-superforms';
 import { registerSchema } from '$components/auth/formSchemas';
 import { loginSchema } from '$components/auth/formSchemas';
 import { zod } from 'sveltekit-superforms/adapters';
-import * as m from '$lib/paraglide/messages.js';
 import { env } from '$env/dynamic/private';
 import { PARSE_ERROR, SESSION_COOKIE_NAME, parse_error_response } from '$lib/server/utils';
 import type { ApiErrorResponse, AuthUserResponse } from '$lib/backendSchemas';
-import { toast } from 'svelte-sonner';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user && locals.sessionId) {
@@ -61,10 +59,8 @@ export const actions: Actions = {
 				expires: new Date(responseJson.data.expires_at),
 				secure: !dev
 			});
-			redirect(303, i18n.resolveRoute('/dashboard'));
 		} catch (e) {
 			if (isRedirect(e)) throw e;
-			toast.error(m.error_unexpected_request_error_message());
 			return fail(500, {
 				form
 			});
@@ -106,11 +102,9 @@ export const actions: Actions = {
 				secure: !dev
 			});
 		} catch (e) {
-			toast.error(m.error_unexpected_request_error_message());
 			return fail(500, {
 				form
 			});
 		}
-		redirect(303, i18n.resolveRoute('/dashboard'));
 	}
 };

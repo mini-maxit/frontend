@@ -11,9 +11,7 @@ import { parse_error_response } from '$lib/server/utils.js';
 import { PARSE_ERROR } from '$lib/server/utils.js';
 import { message } from 'sveltekit-superforms';
 import type { ErrorStatus } from 'sveltekit-superforms';
-import * as m from '$lib/paraglide/messages.js';
 import { error } from '@sveltejs/kit';
-import { toast } from 'svelte-sonner';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	return {
@@ -63,7 +61,6 @@ export const actions: Actions = {
 			redirect(303, i18n.resolveRoute(`/dashboard/tasks/${responseJson.data.id}`));
 		} catch (e) {
 			if (isRedirect(e)) throw e;
-			toast.error(m.error_unexpected_request_error_message());
 			return fail(500, {
 				form
 			});

@@ -5,11 +5,21 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { loginSchema, type LoginSchema } from './formSchemas';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: SuperValidated<Infer<LoginSchema>> } = $props();
 
 	const form = superForm(data, {
-		validators: zodClient(loginSchema)
+		validators: zodClient(loginSchema),
+		onResult({ result }) {
+			if (result.type === 'success') {
+				toast.success(m.toaster_login_success_message());
+				goto('/dashboard');
+			} else if (result.status == 500) {
+				toast.error(m.error_unexpected_request_error_message());
+			}
+		}
 	});
 
 	const { form: formData, enhance, message } = form;

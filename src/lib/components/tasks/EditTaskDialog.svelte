@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { GroupData, TaskData, UserData } from '$lib/backendSchemas';
+	import type { GroupData, TaskData } from '$lib/backendSchemas';
 	import * as AlertDialog from '$components/ui/alert-dialog/index.js';
 	import { buttonVariants } from '$components/ui/button/index.js';
 	import * as m from '$lib/paraglide/messages.js';
@@ -16,6 +16,7 @@
 	import Separator from '../ui/separator/separator.svelte';
 	import Label from '../ui/label/label.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		taskData,
@@ -32,10 +33,12 @@
 	const editForm = superForm(editTaskForm, {
 		validators: zodClient(editTaskSchema),
 		resetForm: false,
-		onResult: ({ result: { type } }) => {
-			if (type === 'success') {
+		onResult: ({ result }) => {
+			if (result.type === 'success') {
+				toast.success(m.toaster_task_edit_success_message());
 				open = false;
-				location.reload();
+			} else if (result.status === 500) {
+				toast.error(m.error_unexpected_request_error_message());
 			}
 		}
 	});
@@ -43,10 +46,12 @@
 	const assignToGroupsForm = superForm(assingTaskToGroupsForm, {
 		validators: zodClient(assignTaskToGroupsSchema),
 		resetForm: false,
-		onResult: ({ result: { type } }) => {
-			if (type === 'success') {
+		onUpdate: ({ result }) => {
+			if (result.type === 'success') {
+				toast.success(m.toaster_task_edit_success_message());
 				open = false;
-				location.reload();
+			} else if (result.status === 500) {
+				toast.error(m.error_unexpected_request_error_message());
 			}
 		}
 	});

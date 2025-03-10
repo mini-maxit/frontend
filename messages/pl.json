@@ -112,5 +112,16 @@
 	"error_unexpected_request_error_message": "Wystąpił nieoczekiwany błąd podczas wysyłania żądania do serwera. Spróbuj ponownie później.",
 	"error_invalid_task_id_error_message": "Nieprawidłowe ID zadania",
 	"error_invalid_group_id_error_message": "Nieprawidłowe ID grupy",
-	"error_invalid_user_id_error_message": "Nieprawidłowe ID użytkownika"
+	"error_invalid_user_id_error_message": "Nieprawidłowe ID użytkownika",
+
+	"toaster_edit_user_success_message": "Użytkownik został pomyślnie edytowany",
+	"toaster_edit_password_success_message": "Hasło zostało pomyślnie zmienione",
+	"toaster_edit_task_success_message": "Zadanie zostało pomyślnie edytowane",
+	"toaster_assign_to_task_success_message": "Grupy zostały pomyślnie przypisane do zadania",
+	"toaster_login_success_message": "Pomyślnie zalogowano",
+	"toaster_register_success_message": "Zarejestrowano pomyślnie",
+	"toaster_group_create_success_message": "Grupa została pomyślnie utworzona",
+	"toaster_task_edit_success_message": "Zadanie zostało pomyślnie edytowane",
+	"toaster_task_create_success_message": "Zadanie zostało pomyślnie utworzone",
+	"task_form_submit_success": "Zadanie zostało pomyślnie przesłane"
 }

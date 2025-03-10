@@ -5,11 +5,21 @@
 	import { registerSchema, type RegisterSchema } from './formSchemas';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';
+	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	let { data }: { data: SuperValidated<Infer<RegisterSchema>> } = $props();
 
 	const form = superForm(data, {
-		validators: zodClient(registerSchema)
+		validators: zodClient(registerSchema),
+		onResult({ result }) {
+			if (result.type === 'success') {
+				toast.success(m.toaster_register_success_message());
+				goto('/dashboard');
+			} else if (result.status == 500) {
+				toast.error(m.error_unexpected_request_error_message());
+			}
+		}
 	});
 
 	const { form: formData, enhance, message } = form;

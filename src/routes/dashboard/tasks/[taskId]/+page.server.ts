@@ -1,4 +1,4 @@
-import { error, isRedirect, redirect, type Actions } from '@sveltejs/kit';
+import { error, isRedirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
 import { fail, superValidate } from 'sveltekit-superforms';
@@ -16,7 +16,6 @@ import type { ApiErrorResponse } from '$lib/backendSchemas';
 import { PARSE_ERROR, parse_error_response } from '$lib/server/utils';
 import { message } from 'sveltekit-superforms';
 import type { ErrorStatus } from 'sveltekit-superforms';
-import { toast } from 'svelte-sonner';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { taskId } = params;
@@ -121,17 +120,21 @@ export const actions: Actions = {
 			});
 
 			if (!response.ok) {
-				const errorReponse: ApiErrorResponse = await parse_error_response(response);
-				if (errorReponse.data.code !== PARSE_ERROR) {
-					return message(form, errorReponse.data.message, {
+				console.log(response);
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== PARSE_ERROR) {
+					return message(form, errorResponse.data.message, {
 						status: response.status as ErrorStatus
 					});
 				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
+				});
 			}
-			redirect(303, `/dashboard/tasks/${id}`);
+			return message(form, '');
 		} catch (e) {
 			if (isRedirect(e)) throw e;
-			toast.error(m.error_unexpected_request_error_message());
 			return fail(500, {
 				form
 			});
@@ -166,15 +169,18 @@ export const actions: Actions = {
 			});
 
 			if (!response.ok) {
-				const errorReponse: ApiErrorResponse = await parse_error_response(response);
-				if (errorReponse.data.code !== 'PARSE_ERROR') {
-					return message(form, errorReponse.data.message, {
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== 'PARSE_ERROR') {
+					return message(form, errorResponse.data.message, {
 						status: response.status as ErrorStatus
 					});
 				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
+				});
 			}
 		} catch (e) {
-			toast.error(m.error_unexpected_request_error_message());
 			return fail(500, {
 				form
 			});
@@ -214,7 +220,6 @@ export const actions: Actions = {
 				}
 			}
 		} catch (e) {
-			toast.error(m.error_unexpected_request_error_message());
 			return fail(500, {
 				form,
 				error: 'Failed to assign task to groups'
