@@ -87,7 +87,7 @@ async function verifyFolderStructure(file: ArrayBuffer) {
 
 	const mainFolderPath = folders[0];
 
-	let nonExistingRequiredFolders = new Set<string>();
+	const nonExistingRequiredFolders = new Set<string>();
 	for (const requiredFolder of requiredFolders) {
 		if (!loadedZip.files[mainFolderPath + requiredFolder + '/']) {
 			nonExistingRequiredFolders.add(requiredFolder);
@@ -114,8 +114,8 @@ function verifyTaskInOut(loadedZip: JSZip, mainFolderPath: string) {
 	const inFolder = loadedZip.folder(inFolderPath)!;
 	const outFolder = loadedZip.folder(outFolderPath)!;
 
-	let inFiles = inFolder.filter((_, file) => isValidInFile(inFolderPath, file.name));
-	let outFiles = outFolder.filter((_, file) => isValidOutFile(outFolderPath, file.name));
+	const inFiles = inFolder.filter((_, file) => isValidInFile(inFolderPath, file.name));
+	const outFiles = outFolder.filter((_, file) => isValidOutFile(outFolderPath, file.name));
 
 	if (inFiles.length !== outFiles.length) {
 		throw new Error('The number of input and output files is not equal');
