@@ -60,7 +60,8 @@
 				<p class="p-4">{m.loading()}</p>
 			{:then arrayBuffer}
 				{@const pdfUrl = URL.createObjectURL(new Blob([arrayBuffer], { type: 'application/pdf' }))}
-				<iframe src={pdfUrl} title="PDF Viewer" class="w-full h-full"></iframe>
+				{@const pdfUrlOnAdmin = localUser.role === UserRole.Admin ? pdfUrl : pdfUrl + '#toolbar=0'}
+				<iframe src={pdfUrlOnAdmin} title="PDF Viewer" class="w-full h-full"></iframe>
 			{/await}
 		</div>
 

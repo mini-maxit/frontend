@@ -1,59 +1,67 @@
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
+import * as m from '$lib/paraglide/messages.js';
 import { error, type Actions } from '@sveltejs/kit';
 import {
 	UserRole,
+	type ApiErrorResponse,
 	type GetAllSubmissionsResponse,
 	type GetUserResponse,
 	type UserData
 } from '$lib/backendSchemas';
 import { editPasswordSchema, editUserSchema } from '$components/users/formSchemas';
-import { fail, superValidate } from 'sveltekit-superforms';
+import { fail, message, superValidate, type ErrorStatus } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { PARSE_ERROR, parse_error_response } from '$lib/server/utils';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-	if (!locals.user || !locals.sessionId) {
-		return error(401, 'Unauthorized');
-	}
 	const { userId } = params;
 	let userIdInt: number;
+
+	const localUser = locals.user!;
 
 	try {
 		userIdInt = parseInt(userId);
 	} catch (e) {
-		throw error(400, 'Invalid task id');
+		error(400, { message: m.error_invalid_user_id_error_message() });
 	}
 
 	const { userData, submissionData } = await fetchUserAndSubmissionData(
-		locals.user,
+		localUser,
 		userIdInt,
-		locals.sessionId
+		locals.sessionId!
 	);
 
 	return {
-		editUserForm: await superValidate(zod(editUserSchema)),
+		editUserForm: await superValidate(
+			{
+				userId: userIdInt,
+				name: localUser.name,
+				email: localUser.email,
+				username: localUser.username,
+				surname: localUser.surname,
+				role: localUser.role
+			},
+			zod(editUserSchema)
+		),
 		editPasswordForm: await superValidate(zod(editPasswordSchema)),
-		localUser: locals.user,
+		localUser: localUser,
 		user: userData,
 		submissions: submissionData
 	};
 };
 
 export const actions: Actions = {
-	editUser: async (event) => {
+	editUser: async (event, { fetch } = event) => {
 		const form = await superValidate(event, zod(editUserSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
 			});
 		}
-		if (
-			!event.locals.user ||
-			!event.locals.sessionId ||
-			event.locals.user.id !== form.data.userId
-		) {
-			return fail(401, {
-				error: 'Unauthorized'
+		if (event.locals.user!.id !== form.data.userId && event.locals.user!.role !== UserRole.Admin) {
+			return message(form, 'Unauthorized', {
+				status: 401
 			});
 		}
 		const userUrl = `${env.BACKEND_URL}/api/v1/user/${form.data.userId}`;
@@ -66,31 +74,50 @@ export const actions: Actions = {
 			role: form.data.role.toString()
 		});
 
-		const response = await fetch(userUrl, {
-			method: 'PATCH',
-			body: jsonData,
-			headers: {
-				'Content-Type': 'application/json',
-				session: `${event.locals.sessionId}`
-			}
-		});
+		try {
+			const response = await fetch(userUrl, {
+				method: 'PATCH',
+				body: jsonData,
+				headers: {
+					'Content-Type': 'application/json',
+					session: `${event.locals.sessionId}`
+				}
+			});
 
-		if (!response.ok) {
+			if (!response.ok) {
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== PARSE_ERROR) {
+					return message(form, errorResponse.data.message, {
+						status: response.status as ErrorStatus
+					});
+				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
+				});
+			}
+			return { form };
+		} catch (e) {
 			return fail(500, {
-				form,
-				error: 'Failed to update user'
+				form
 			});
 		}
-		// #TODO handle errors
 	},
 
-	editPassword: async (event) => {
+	editPassword: async (event, { fetch } = event) => {
 		const form = await superValidate(event, zod(editPasswordSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
 			});
 		}
+
+		if (event.locals.user!.id !== form.data.userId) {
+			return message(form, 'Unauthorized', {
+				status: 401
+			});
+		}
+
 		const changePasswordUrl = `${env.BACKEND_URL}/api/v1/user/${form.data.userId}/password`;
 
 		const jsonData = JSON.stringify({
@@ -99,22 +126,34 @@ export const actions: Actions = {
 			new_password_confirm: form.data.confirmPassword
 		});
 
-		const response = await fetch(changePasswordUrl, {
-			method: 'PATCH',
-			body: jsonData,
-			headers: {
-				'Content-Type': 'application/json',
-				session: `${event.locals.sessionId}`
-			}
-		});
+		try {
+			const response = await fetch(changePasswordUrl, {
+				method: 'PATCH',
+				body: jsonData,
+				headers: {
+					'Content-Type': 'application/json',
+					session: `${event.locals.sessionId}`
+				}
+			});
 
-		if (!response.ok) {
+			if (!response.ok) {
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== PARSE_ERROR) {
+					return message(form, errorResponse.data.message, {
+						status: response.status as ErrorStatus
+					});
+				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
+				});
+			}
+			return { form };
+		} catch (e) {
 			return fail(500, {
-				form,
-				error: 'Failed to update password'
+				form
 			});
 		}
-		// #TODO handle errors
 	}
 };
 
@@ -123,54 +162,69 @@ const fetchUserAndSubmissionData = async (
 	userIdInt: number,
 	sessionId: string
 ) => {
-	try {
-		const userUrl = `${env.BACKEND_URL}/api/v1/user/${userIdInt}`;
-		const submissionUrl = `${env.BACKEND_URL}/api/v1/submission/user/${userIdInt}`;
+	const userUrl = `${env.BACKEND_URL}/api/v1/user/${userIdInt}`;
+	const submissionUrl = `${env.BACKEND_URL}/api/v1/submission/user/${userIdInt}`;
 
-		const userDataRequest = fetch(userUrl, {
-			headers: { session: `${sessionId}` }
-		});
-		const submissionDataRequest = fetch(submissionUrl, {
-			headers: { session: `${sessionId}` }
-		});
+	const userDataRequest = fetch(userUrl, {
+		headers: { session: `${sessionId}` }
+	});
+	const submissionDataRequest = fetch(submissionUrl, {
+		headers: { session: `${sessionId}` }
+	});
 
-		if (userIdInt == eventUserData.id) {
-			const submissionDataResponse = await submissionDataRequest;
-			if (!submissionDataResponse.ok) {
-				throw new Error('Failed to fetch submission data');
-			}
-			const submissionData: GetAllSubmissionsResponse = await submissionDataResponse.json();
-			return { userData: eventUserData, submissionData: submissionData.data };
+	if (userIdInt == eventUserData.id) {
+		const submissionDataResponse = await submissionDataRequest;
+		if (!submissionDataResponse.ok) {
+			const errorResponse: ApiErrorResponse = await parse_error_response(submissionDataResponse);
+			error(submissionDataResponse.status, {
+				code: errorResponse.data.code,
+				message: errorResponse.data.message
+			});
 		}
-
-		let userData: GetUserResponse | null = null;
-		let submissionData: GetAllSubmissionsResponse | null = null;
-
-		if (eventUserData.role === UserRole.Admin) {
-			const [userDataResponse, submissionDataResponse] = await Promise.all([
-				userDataRequest,
-				submissionDataRequest
-			]);
-
-			if (!userDataResponse.ok || !submissionDataResponse.ok) {
-				throw new Error('Failed to fetch user or submission data');
-			}
-
-			userData = await userDataResponse.json();
-			submissionData = await submissionDataResponse.json();
-		} else {
-			const userDataResponse = await userDataRequest;
-
-			if (!userDataResponse.ok) {
-				throw new Error('Failed to fetch user data');
-			}
-
-			userData = await userDataResponse.json();
-		}
-
-		return { userData: userData!.data, submissionData: submissionData?.data || [] };
-	} catch (error) {
-		console.error('Error fetching data:', error);
-		throw error;
+		const submissionData: GetAllSubmissionsResponse = await submissionDataResponse.json();
+		return { userData: eventUserData, submissionData: submissionData.data };
 	}
+
+	let userData: GetUserResponse | null = null;
+	let submissionData: GetAllSubmissionsResponse | null = null;
+
+	if (eventUserData.role === UserRole.Admin) {
+		const [userDataResponse, submissionDataResponse] = await Promise.all([
+			userDataRequest,
+			submissionDataRequest
+		]);
+
+		if (!submissionDataResponse.ok) {
+			const errorResponse: ApiErrorResponse = await parse_error_response(submissionDataResponse);
+			error(submissionDataResponse.status, {
+				code: errorResponse.data.code,
+				message: errorResponse.data.message
+			});
+		}
+
+		if (!userDataResponse.ok) {
+			const errorResponse: ApiErrorResponse = await parse_error_response(userDataResponse);
+			error(userDataResponse.status, {
+				code: errorResponse.data.code,
+				message: errorResponse.data.message
+			});
+		}
+
+		userData = await userDataResponse.json();
+		submissionData = await submissionDataResponse.json();
+	} else {
+		const userDataResponse = await userDataRequest;
+
+		if (!userDataResponse.ok) {
+			const errorResponse: ApiErrorResponse = await parse_error_response(userDataResponse);
+			error(userDataResponse.status, {
+				code: errorResponse.data.code,
+				message: errorResponse.data.message
+			});
+		}
+
+		userData = await userDataResponse.json();
+	}
+
+	return { userData: userData!.data, submissionData: submissionData?.data || [] };
 };

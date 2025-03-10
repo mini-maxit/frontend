@@ -6,12 +6,17 @@
 	import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as m from '$lib/paraglide/messages.js';
+	import { toast } from 'svelte-sonner';
 
-	let { data, userId }: { data: SuperValidated<Infer<CreateTaskSchema>>; userId: number } =
-		$props();
+	let { data }: { data: SuperValidated<Infer<CreateTaskSchema>> } = $props();
 
 	const form = superForm(data, {
-		validators: zodClient(createTaskSchema)
+		validators: zodClient(createTaskSchema),
+		onResult({ result }) {
+			if (result.status === 500) {
+				toast.error(m.error_unexpected_request_error_message());
+			}
+		}
 	});
 
 	const { form: formData, message, enhance } = form;
@@ -19,7 +24,7 @@
 	const file = fileProxy(form, 'archive');
 </script>
 
-<form enctype="multipart/form-data" method="POST" use:enhance>
+<form action="?/createTask" enctype="multipart/form-data" method="POST" use:enhance>
 	<h2 class="font-semibold mb-2">
 		{m.task_form_title()}
 	</h2>

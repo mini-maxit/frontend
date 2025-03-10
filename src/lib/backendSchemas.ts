@@ -76,12 +76,19 @@ export interface SubmissionResultData {
 	code: string;
 	message: string;
 	created_at: string;
-	test_results: TestResultData[];
+	test_results: TestResultData[] | null;
 }
 
 interface ApiResponse {
 	ok: boolean;
 	data: any;
+}
+
+export interface ApiErrorResponse extends ApiResponse {
+	data: {
+		code: string;
+		message: string;
+	};
 }
 
 export interface GetAvailableLanguagesResponse extends ApiResponse {

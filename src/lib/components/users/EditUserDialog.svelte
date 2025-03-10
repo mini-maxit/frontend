@@ -15,13 +15,16 @@
 	import Input from '../ui/input/input.svelte';
 	import Separator from '../ui/separator/separator.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import { toast } from 'svelte-sonner';
 
 	let {
-		user,
+		user = $bindable(),
+		localUser,
 		editPasswordForm,
 		editUserForm
 	}: {
 		user: UserData;
+		localUser: UserData;
 		editPasswordForm: SuperValidated<Infer<EditPasswordSchema>>;
 		editUserForm: SuperValidated<Infer<EditUserSchema>>;
 	} = $props();
@@ -29,21 +32,35 @@
 	const userForm = superForm(editUserForm, {
 		validators: zodClient(editUserSchema),
 		resetForm: false,
-		onResult: ({ result: { type } }) => {
-			if (type === 'success') {
+		onUpdate({ form, result }) {
+			console.log(result);
+			if (form.valid && result.type === 'success') {
+				toast.success(m.toaster_edit_user_success_message());
 				open = false;
-				location.reload();
+				user.email = form.data.email;
+				user.name = form.data.name;
+				user.surname = form.data.surname;
+				user.username = form.data.username;
+				user.role = form.data.role;
+			} else if (result.type === 'failure') {
+				toast.error(m.error_unexpected_request_error_message());
 			}
 		}
 	});
 
 	const passwordForm = superForm(editPasswordForm, {
 		validators: zodClient(editPasswordSchema),
-		onResult: ({ result: { type } }) => {
-			if (type === 'success') {
+		resetForm: false,
+		onUpdate({ form, result }) {
+			if (form.valid && result.type === 'success') {
+				toast.success(m.toaster_edit_password_success_message());
 				open = false;
-				location.reload();
+			} else if (result.type === 'failure') {
+				toast.error(m.error_unexpected_request_error_message());
 			}
+			form.data.currentPassword = '';
+			form.data.newPassword = '';
+			form.data.confirmPassword = '';
 		}
 	});
 
@@ -54,16 +71,10 @@
 		message: passwordFormMessage
 	} = passwordForm;
 
-	$userFormData.userId = user.id;
-	$userFormData.username = user.username;
-	$userFormData.email = user.email;
-	$userFormData.name = user.name;
-	$userFormData.surname = user.surname;
-	$userFormData.role = user.role;
-
 	$passwordFormData.userId = user.id;
 
 	let open = $state(false);
+	let alertDialogDescriptionClass = localUser.id === user.id ? 'flex space-x-4' : '';
 </script>
 
 <AlertDialog.Root bind:open>
@@ -73,7 +84,7 @@
 	<AlertDialog.Content>
 		<AlertDialog.Header>
 			<AlertDialog.Title>{m.edit_profile_title()}</AlertDialog.Title>
-			<AlertDialog.Description class="flex space-x-4">
+			<AlertDialog.Description class={alertDialogDescriptionClass}>
 				<form action="?/editUser" method="POST" use:userFormEnhance>
 					<Form.Field form={userForm} name="userId" hidden>
 						<Form.Control>
@@ -127,7 +138,7 @@
 									type="single"
 									bind:value={$userFormData.role}
 									name={props.name}
-									disabled
+									disabled={localUser.role !== UserRole.Admin}
 								>
 									<Select.Trigger {...props}>
 										{$userFormData.role}
@@ -153,54 +164,64 @@
 						<Form.Button type="submit">{m.edit_profile_submit()}</Form.Button>
 					</div>
 				</form>
-				<Separator orientation="vertical" />
-				<form action="?/editPassword" method="POST" use:passwordFormEnhance>
-					<Form.Field form={passwordForm} name="userId" hidden>
-						<Form.Control>
-							{#snippet children({ props })}
-								<Input {...props} type="number" bind:value={$passwordFormData.userId} />
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					<Form.Field form={passwordForm} name="currentPassword">
-						<Form.Control>
-							{#snippet children({ props })}
-								<Form.Label>{m.edit_profile_old_password_label()}</Form.Label>
-								<Input {...props} type="password" bind:value={$passwordFormData.currentPassword} />
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					<Form.Field form={passwordForm} name="newPassword">
-						<Form.Control>
-							{#snippet children({ props })}
-								<Form.Label>{m.edit_profile_password_label()}</Form.Label>
-								<Input {...props} type="password" bind:value={$passwordFormData.newPassword} />
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					<Form.Field form={passwordForm} name="confirmPassword">
-						<Form.Control>
-							{#snippet children({ props })}
-								<Form.Label>{m.edit_profile_password_confirm_label()}</Form.Label>
-								<Input {...props} type="password" bind:value={$passwordFormData.confirmPassword} />
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					{#if $passwordFormMessage}
-						<p class="text-destructive my-2 text-sm font-medium">{$passwordFormMessage}</p>
-					{/if}
-					<Separator class="my-4" />
-					<div class="flex-row w-full">
-						<div class="my-4">
-							{m.edit_profile_password_change_description()}
+				{#if localUser.id === user.id}
+					<Separator orientation="vertical" />
+					<form action="?/editPassword" method="POST" use:passwordFormEnhance>
+						<Form.Field form={passwordForm} name="userId" hidden>
+							<Form.Control>
+								{#snippet children({ props })}
+									<Input {...props} type="number" bind:value={$passwordFormData.userId} />
+								{/snippet}
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+						<Form.Field form={passwordForm} name="currentPassword">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{m.edit_profile_old_password_label()}</Form.Label>
+									<Input
+										{...props}
+										type="password"
+										bind:value={$passwordFormData.currentPassword}
+									/>
+								{/snippet}
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+						<Form.Field form={passwordForm} name="newPassword">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{m.edit_profile_password_label()}</Form.Label>
+									<Input {...props} type="password" bind:value={$passwordFormData.newPassword} />
+								{/snippet}
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+						<Form.Field form={passwordForm} name="confirmPassword">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{m.edit_profile_password_confirm_label()}</Form.Label>
+									<Input
+										{...props}
+										type="password"
+										bind:value={$passwordFormData.confirmPassword}
+									/>
+								{/snippet}
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
+						{#if $passwordFormMessage}
+							<p class="text-destructive my-2 text-sm font-medium">{$passwordFormMessage}</p>
+						{/if}
+						<Separator class="my-4" />
+						<div class="flex-row w-full">
+							<div class="my-4">
+								{m.edit_profile_password_change_description()}
+							</div>
+							<Form.Button type="submit">{m.edit_profile_submit()}</Form.Button>
 						</div>
-						<Form.Button type="submit">{m.edit_profile_submit()}</Form.Button>
-					</div>
-				</form>
+					</form>
+				{/if}
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
