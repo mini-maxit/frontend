@@ -75,12 +75,18 @@ export const actions: Actions = {
 		}
 
 		try {
+			const { confirmPassword, ...rest } = form.data;
+			const requestBody = JSON.stringify({
+				...rest,
+				confirm_password: confirmPassword
+			});
+
 			const response = await fetch(`${env.BACKEND_URL}/api/v1/auth/register`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(form.data)
+				body: requestBody
 			});
 
 			if (!response.ok) {

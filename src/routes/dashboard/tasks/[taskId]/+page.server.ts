@@ -51,7 +51,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	);
 
 	if (!taskDescriptionResponse.ok) {
-		error(500, { message: 'Failed to fetch task description' });
+		const errorResponse: ApiErrorResponse = await parse_error_response(taskDescriptionResponse);
+		error(taskDescriptionResponse.status, {
+			code: errorResponse.data.code,
+			message: errorResponse.data.message
+		});
 	}
 
 	const availableLanguagesResponse = await fetch(`${env.BACKEND_URL}/api/v1/submission/languages`, {

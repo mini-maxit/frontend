@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
-import type { GetAllSubmissionsResponse } from '$lib/backendSchemas';
+import type { ApiErrorResponse, GetAllSubmissionsResponse } from '$lib/backendSchemas';
+import { parse_error_response } from '$lib/server/utils';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { taskId } = params;
@@ -18,7 +19,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	});
 
 	if (!submissionDataResponse.ok) {
-		error(submissionDataResponse.status, 'Failed to fetch submission data');
+		const errorResponse: ApiErrorResponse = await parse_error_response(submissionDataResponse);
+		error(submissionDataResponse.status, {
+			code: errorResponse.data.code,
+			message: errorResponse.data.message
+		});
 	}
 
 	const submissionData: GetAllSubmissionsResponse = await submissionDataResponse.json();
