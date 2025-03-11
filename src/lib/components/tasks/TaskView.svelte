@@ -12,6 +12,8 @@
 	} from '$lib/backendSchemas';
 	import EditTaskDialog from './EditTaskDialog.svelte';
 	import type { AssingTaskToGroupsSchema, EditTaskSchema } from './formSchemas';
+	import Button from '$components/ui/button/button.svelte';
+	import { page } from '$app/state';
 
 	let {
 		localUser,
@@ -39,7 +41,9 @@
 		availableLanguages: availableLanguages
 	};
 
-	function isAllowedToEdit() {
+	const { taskId } = page.params;
+
+	function isAllowed() {
 		return (
 			(localUser.role === UserRole.Teacher && task.created_by === localUser.id) ||
 			localUser.role === UserRole.Admin
@@ -50,8 +54,13 @@
 <div class="container mb-12 flex flex-col flex-1">
 	<div class="flex justify-between p-4 items-center">
 		<h1 class="text-2xl font-bold my-4">{task.title}</h1>
-		{#if isAllowedToEdit()}
-			<EditTaskDialog taskData={task} {editTaskForm} {assingTaskToGroupsForm} {userGroups} />
+		{#if isAllowed()}
+			<div>
+				<Button href="/dashboard/tasks/{taskId}/submissions" variant="outline" size="lg">
+					{m.submissions_see_all_button_text()}
+				</Button>
+				<EditTaskDialog taskData={task} {editTaskForm} {assingTaskToGroupsForm} {userGroups} />
+			</div>
 		{/if}
 	</div>
 	<div class="flex-1 flex overflow-hidden">
