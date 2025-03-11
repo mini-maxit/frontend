@@ -69,6 +69,7 @@
 	"submissions_status_label": "Status",
 	"submissions_passed_label": "Zaliczone",
 	"submissions_user_link_label": "Link do użytkownika",
+	"submissions_see_all_button_text": "Zobacz wszystkie zgłoszenia",
 
 	"group_form_title": "Dodaj nową grupę",
 	"group_form_name_label": "Nazwa grupy",
@@ -113,6 +114,9 @@
 	"error_invalid_task_id_error_message": "Nieprawidłowe ID zadania",
 	"error_invalid_group_id_error_message": "Nieprawidłowe ID grupy",
 	"error_invalid_user_id_error_message": "Nieprawidłowe ID użytkownika",
+	"error_not_allowed_to_view_page_error_message": "Nie masz uprawnień do przeglądania tej strony",
+	"error_status_code_label": "Kod statusu",
+	"error_message_label": "Wiadomość o błędzie",
 
 	"toaster_edit_user_success_message": "Użytkownik został pomyślnie edytowany",
 	"toaster_edit_password_success_message": "Hasło zostało pomyślnie zmienione",
@@ -123,5 +127,5 @@
 	"toaster_group_create_success_message": "Grupa została pomyślnie utworzona",
 	"toaster_task_edit_success_message": "Zadanie zostało pomyślnie edytowane",
 	"toaster_task_create_success_message": "Zadanie zostało pomyślnie utworzone",
-	"task_form_submit_success": "Zadanie zostało pomyślnie przesłane"
+	"toaster_task_form_submit_success": "Zadanie zostało pomyślnie przesłane"
 }

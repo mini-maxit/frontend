@@ -1,10 +1,25 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
-import type { ApiErrorResponse, GetAllSubmissionsResponse } from '$lib/backendSchemas';
+import {
+	UserRole,
+	type ApiErrorResponse,
+	type GetAllSubmissionsResponse
+} from '$lib/backendSchemas';
 import { parse_error_response } from '$lib/server/utils';
+import * as m from '$lib/paraglide/messages';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ parent, params, locals }) => {
+	const { task } = await parent();
+	const user = locals.user!;
+	if (
+		(user.role !== UserRole.Teacher || task.created_by !== user.id) &&
+		user.role !== UserRole.Admin
+	) {
+		error(403, {
+			message: m.error_not_allowed_to_view_page_error_message()
+		});
+	}
 	const { taskId } = params;
 	let taskIdInt: number;
 
