@@ -45,7 +45,11 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 	});
 
 	if (!availableLanguagesResponse.ok) {
-		error(500, { message: 'Failed to fetch available languages' });
+		const errorResponse: ApiErrorResponse = await parse_error_response(availableLanguagesResponse);
+		error(availableLanguagesResponse.status, {
+			code: errorResponse.data.code,
+			message: errorResponse.data.message
+		});
 	}
 
 	const availableLanguages: GetAvailableLanguagesResponse = await availableLanguagesResponse.json();

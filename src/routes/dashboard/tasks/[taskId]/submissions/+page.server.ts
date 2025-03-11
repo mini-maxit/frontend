@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ parent, params, locals }) => {
 	try {
 		taskIdInt = parseInt(taskId);
 	} catch (e) {
-		error(400, { message: 'Invalid task id' });
+		error(400, m.error_invalid_task_id_error_message());
 	}
 	const submissionUrl = `${env.BACKEND_URL}/api/v1/submission/task/${taskIdInt}`;
 	const submissionDataResponse = await fetch(submissionUrl, {
