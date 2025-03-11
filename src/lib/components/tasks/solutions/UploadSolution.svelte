@@ -24,7 +24,7 @@
 		validators: zodClient(uploadTaskSolutionSchema),
 		onUpdate({ result }) {
 			if (result.type === 'success') {
-				toast.success(m.task_form_submit_success());
+				toast.success(m.toaster_task_form_submit_success());
 			} else if (result.type === 'failure') {
 				toast.error(m.error_unexpected_request_error_message());
 			}

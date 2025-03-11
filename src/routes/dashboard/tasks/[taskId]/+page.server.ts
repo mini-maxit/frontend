@@ -17,37 +17,11 @@ import { PARSE_ERROR, parse_error_response } from '$lib/server/utils';
 import { message } from 'sveltekit-superforms';
 import type { ErrorStatus } from 'sveltekit-superforms';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
-	const { taskId } = params;
-	let taskIdInt: number;
-
-	try {
-		taskIdInt = parseInt(taskId);
-	} catch (e) {
-		error(400, {
-			message: m.error_invalid_task_id_error_message()
-		});
-	}
-
-	const taskDataResponse = await fetch(`${env.BACKEND_URL}/api/v1/task/${taskIdInt}`, {
-		headers: {
-			session: `${locals.sessionId}`
-		}
-	});
-
-	if (!taskDataResponse.ok) {
-		const errorResponse: ApiErrorResponse = await parse_error_response(taskDataResponse);
-		error(taskDataResponse.status, {
-			code: errorResponse.data.code,
-			message: errorResponse.data.message
-		});
-	}
-
-	const task: GetTaskResponse = await taskDataResponse.json();
-
+export const load: PageServerLoad = async ({ locals, parent }) => {
+	const { task } = await parent();
 	const taskDescriptionResponse = await fetch(
 		`${env.FILESTORAGE_URL}/getTaskDescription?` +
-			new URLSearchParams({ taskID: taskIdInt.toString() }).toString()
+			new URLSearchParams({ taskID: task.id.toString() }).toString()
 	);
 
 	if (!taskDescriptionResponse.ok) {
@@ -71,7 +45,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	});
 
 	if (!availableLanguagesResponse.ok) {
-		error(500, { message: 'Failed to fetch available languages' });
+		const errorResponse: ApiErrorResponse = await parse_error_response(availableLanguagesResponse);
+		error(availableLanguagesResponse.status, {
+			code: errorResponse.data.code,
+			message: errorResponse.data.message
+		});
 	}
 
 	const availableLanguages: GetAvailableLanguagesResponse = await availableLanguagesResponse.json();
@@ -80,9 +58,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	const taskData: Omit<TaskData, 'description_url'> & {
 		description_file: Promise<ArrayBuffer>;
 	} = {
-		id: task.data.id,
-		title: task.data.title,
-		created_by: task.data.created_by,
+		id: task.id,
+		title: task.title,
+		created_by: task.created_by,
 		description_file: taskDescriptionResponse.arrayBuffer()
 	};
 
