@@ -10,7 +10,7 @@
 	const { localUser, createGroupForm } = data;
 </script>
 
-<div class="flex flex-1 items-center justify-center bg-gray-100">
+<div class="flex flex-1 items-center justify-center bg-gray-100 p-8">
 	<div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg text-center">
 		<h1 class="text-2xl font-semibold text-gray-700 mb-4">{m.hi()} {data.localUser.username}!</h1>
 		<p class="text-gray-600 mb-6">
