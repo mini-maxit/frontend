@@ -14,7 +14,7 @@
 	}
 </script>
 
-<div class="right-2 absolute">
+<div class="absolute right-2">
 	<button onclick={() => switchToLanguage('en')}><FlagGb4x3 /></button>
 	<button onclick={() => switchToLanguage('pl')}><FlagPl4x3 /></button>
 </div>

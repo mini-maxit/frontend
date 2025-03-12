@@ -72,6 +72,13 @@
 	const file = fileProxy(editForm, 'archive');
 
 	let open = $state(false);
+	const assignGroupTriggerValue = $derived.by(() => {
+		const set2 = new Set($assignToGroupsFormData.groupIds);
+		const common = userGroups.filter((userGroup) => set2.has(userGroup.id.toString()));
+		return common.length > 0
+			? common.map((userGroup) => userGroup.name).join(', ')
+			: m.task_assign_group_select_title();
+	});
 </script>
 
 <AlertDialog.Root bind:open>
@@ -149,7 +156,7 @@
 									{...props}
 								>
 									<Select.Trigger class="w-[180px]">
-										{m.task_assign_group_select_title()}
+										{assignGroupTriggerValue}
 									</Select.Trigger>
 									<Select.Content>
 										<Select.Group>

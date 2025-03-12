@@ -4,9 +4,25 @@
 
 	let { data }: { data: PageServerData } = $props();
 
-	const { user, submissions, localUser, editUserForm, editPasswordForm } = data;
+	const {
+		user,
+		submissions,
+		groups,
+		localUser,
+		editUserForm,
+		editPasswordForm,
+		assignUserToGroupsForm
+	} = data;
 </script>
 
 <div class="p-10 pb-16">
-	<UserView {user} {submissions} {localUser} {editUserForm} {editPasswordForm} />
+	<UserView
+		{user}
+		{submissions}
+		{groups}
+		{localUser}
+		{editUserForm}
+		{editPasswordForm}
+		{assignUserToGroupsForm}
+	/>
 </div>

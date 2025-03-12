@@ -121,6 +121,10 @@ export interface GetTaskResponse extends ApiResponse {
 	data: TaskData;
 }
 
+export interface GetGroupResponse extends ApiResponse {
+	data: GroupData;
+}
+
 export interface GetAllTasksResponse extends ApiResponse {
 	data: TaskData[];
 }

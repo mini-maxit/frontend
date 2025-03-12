@@ -201,6 +201,7 @@ export const actions: Actions = {
 					});
 				}
 			}
+			return { form };
 		} catch (e) {
 			return fail(500, {
 				form,

@@ -9,10 +9,15 @@ import {
 	type GetUserResponse,
 	type UserData
 } from '$lib/backendSchemas';
-import { editPasswordSchema, editUserSchema } from '$components/users/formSchemas';
+import {
+	assignUserToGroupsSchema,
+	editPasswordSchema,
+	editUserSchema
+} from '$components/users/formSchemas';
 import { fail, message, superValidate, type ErrorStatus } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { PARSE_ERROR, parse_error_response } from '$lib/server/utils';
+import type { GetAllGroupsResponse } from '$lib/backendSchemas';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { userId } = params;
@@ -32,6 +37,22 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		locals.sessionId!
 	);
 
+	const groupsResponse = await fetch(`${env.BACKEND_URL}/api/v1/group/`, {
+		headers: {
+			session: `${locals.sessionId}`
+		}
+	});
+
+	if (!groupsResponse.ok) {
+		const errorResponse: ApiErrorResponse = await parse_error_response(groupsResponse);
+		error(groupsResponse.status, {
+			code: errorResponse.data.code,
+			message: errorResponse.data.message
+		});
+	}
+
+	const groups: GetAllGroupsResponse = await groupsResponse.json();
+
 	return {
 		editUserForm: await superValidate(
 			{
@@ -45,14 +66,16 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 			zod(editUserSchema)
 		),
 		editPasswordForm: await superValidate(zod(editPasswordSchema)),
+		assignUserToGroupsForm: await superValidate(zod(assignUserToGroupsSchema)),
 		localUser: localUser,
+		groups: groups.data,
 		user: userData,
 		submissions: submissionData
 	};
 };
 
 export const actions: Actions = {
-	editUser: async (event, { fetch } = event) => {
+	editUser: async (event) => {
 		const form = await superValidate(event, zod(editUserSchema));
 		if (!form.valid) {
 			return fail(400, {
@@ -104,7 +127,7 @@ export const actions: Actions = {
 		}
 	},
 
-	editPassword: async (event, { fetch } = event) => {
+	editPassword: async (event) => {
 		const form = await superValidate(event, zod(editPasswordSchema));
 		if (!form.valid) {
 			return fail(400, {
@@ -132,6 +155,54 @@ export const actions: Actions = {
 				body: jsonData,
 				headers: {
 					'Content-Type': 'application/json',
+					session: `${event.locals.sessionId}`
+				}
+			});
+
+			if (!response.ok) {
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== PARSE_ERROR) {
+					return message(form, errorResponse.data.message, {
+						status: response.status as ErrorStatus
+					});
+				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
+				});
+			}
+			return { form };
+		} catch (e) {
+			return fail(500, {
+				form
+			});
+		}
+	},
+
+	assignGroups: async (event) => {
+		const form = await superValidate(event, zod(assignUserToGroupsSchema));
+		if (!form.valid) {
+			return fail(400, {
+				form
+			});
+		}
+
+		if (event.locals.user!.role === UserRole.Student) {
+			return message(form, 'Unauthorized', {
+				status: 401
+			});
+		}
+
+		const { userId, groupId } = form.data;
+		try {
+			const jsonData = JSON.stringify({
+				userIds: [userId]
+			});
+
+			const response = await fetch(`${env.BACKEND_URL}/api/v1/group/${groupId}/users`, {
+				method: 'POST',
+				body: jsonData,
+				headers: {
 					session: `${event.locals.sessionId}`
 				}
 			});

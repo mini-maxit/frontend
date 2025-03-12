@@ -40,6 +40,10 @@
 	"password_input_label": "Password",
 	"password_confirm_input_label": "Confirm password",
 
+	"user_assign_group_form_title": "Assign user to group",
+	"user_assign_group_select_title": "Available groups",
+	"user_assign_group_submit": "Assign to group",
+
 	"tasks_table_title": "A list of all available Tasks.",
 	"task_id": "Task ID",
 	"task_name": "Task name",
@@ -127,5 +131,6 @@
 	"toaster_group_create_success_message": "Group has been successfully created",
 	"toaster_task_edit_success_message": "Task has been successfully edited",
 	"toaster_task_create_success_message": "Task has been successfully created",
-	"toaster_task_form_submit_success": "Task has been successfully submitted"
+	"toaster_task_form_submit_success": "Task has been successfully submitted",
+	"toaster_assign_user_to_group_success_message": "User has been successfully assigned to the group"
 }

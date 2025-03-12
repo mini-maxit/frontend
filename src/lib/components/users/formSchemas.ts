@@ -28,5 +28,15 @@ export const editPasswordSchema = z
 		path: ['confirmPassword']
 	});
 
+export const assignUserToGroupsSchema = z.object({
+	userId: z.number().int().positive(),
+	groupId: z
+		.string()
+		.refine((groupId) => !isNaN(Number(groupId)) && Number.isInteger(Number(groupId)), {
+			message: 'Invalid group ID'
+		})
+});
+
 export type EditPasswordSchema = typeof editPasswordSchema;
 export type EditUserSchema = typeof editUserSchema;
+export type AssignUserToGroupsSchema = typeof assignUserToGroupsSchema;

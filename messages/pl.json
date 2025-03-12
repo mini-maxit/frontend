@@ -40,6 +40,10 @@
 	"password_input_label": "Hasło",
 	"password_confirm_input_label": "Potwierdź hasło",
 
+	"user_assign_group_form_title": "Przypisz użytkownika do grupy",
+	"user_assign_group_select_title": "Dostępne grupy",
+	"user_assign_group_submit": "Przypisz do grupy",
+
 	"tasks_table_title": "Lista wszystkich dostępnych zadań.",
 	"task_id": "ID zadania",
 	"task_name": "Nazwa zadania",
@@ -127,5 +131,6 @@
 	"toaster_group_create_success_message": "Grupa została pomyślnie utworzona",
 	"toaster_task_edit_success_message": "Zadanie zostało pomyślnie edytowane",
 	"toaster_task_create_success_message": "Zadanie zostało pomyślnie utworzone",
-	"toaster_task_form_submit_success": "Zadanie zostało pomyślnie przesłane"
+	"toaster_task_form_submit_success": "Zadanie zostało pomyślnie przesłane",
+	"toaster_assign_user_to_group_success_message": "Użytkownik został pomyślnie przypisany do grupy"
 }
