@@ -69,6 +69,7 @@
 	"submissions_status_label": "Status",
 	"submissions_passed_label": "Passed",
 	"submissions_user_link_label": "User link",
+	"submissions_see_all_button_text": "See all submissions",
 
 	"group_form_title": "Add a new group",
 	"group_form_name_label": "Group name",
@@ -113,6 +114,9 @@
 	"error_invalid_task_id_error_message": "Invalid task ID",
 	"error_invalid_group_id_error_message": "Invalid group ID",
 	"error_invalid_user_id_error_message": "Invalid user ID",
+	"error_not_allowed_to_view_page_error_message": "You are not allowed to view this page",
+	"error_status_code_label": "Status code",
+	"error_message_label": "Message",
 
 	"toaster_edit_user_success_message": "User has been successfully edited",
 	"toaster_edit_password_success_message": "Password has been successfully changed",
@@ -123,5 +127,5 @@
 	"toaster_group_create_success_message": "Group has been successfully created",
 	"toaster_task_edit_success_message": "Task has been successfully edited",
 	"toaster_task_create_success_message": "Task has been successfully created",
-	"task_form_submit_success": "Task has been successfully submitted"
+	"toaster_task_form_submit_success": "Task has been successfully submitted"
 }

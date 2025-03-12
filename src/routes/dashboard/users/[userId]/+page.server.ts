@@ -35,12 +35,12 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	return {
 		editUserForm: await superValidate(
 			{
-				userId: userIdInt,
-				name: localUser.name,
-				email: localUser.email,
-				username: localUser.username,
-				surname: localUser.surname,
-				role: localUser.role
+				userId: userData.id,
+				name: userData.name,
+				email: userData.email,
+				username: userData.username,
+				surname: userData.surname,
+				role: userData.role
 			},
 			zod(editUserSchema)
 		),
