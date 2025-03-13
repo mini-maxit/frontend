@@ -102,7 +102,6 @@ export const actions: Actions = {
 			});
 
 			if (!response.ok) {
-				console.log(response);
 				const errorResponse: ApiErrorResponse = await parse_error_response(response);
 				if (errorResponse.data.code !== PARSE_ERROR) {
 					return message(form, errorResponse.data.message, {

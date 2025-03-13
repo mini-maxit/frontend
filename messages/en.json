@@ -80,10 +80,10 @@
 	"group_form_submit": "Submit",
 
 	"groups_table_title": "A list of all groups.",
-	"groups_table_group_id": "Group ID",
-	"groups_table_group_name": "Group name",
-	"groups_table_group_link": "Group link",
-	"groups_table_group_link_text": "View Group",
+	"group_id": "Group ID",
+	"group_name": "Group name",
+	"group_link": "Group link",
+	"group_link_text": "View Group",
 
 	"edit_profile_title": "Edit profile",
 	"edit_profile_description": "Are you sure you want to edit profile?",

@@ -3,7 +3,7 @@
 	import GroupView from '$components/groups/GroupView.svelte';
 
 	let { data }: { data: PageServerData } = $props();
-	const { group, groupTasks, groupUsers } = data;
+	const { group } = data;
 </script>
 
-<GroupView {group} {groupTasks} {groupUsers} />
+<GroupView {group} />

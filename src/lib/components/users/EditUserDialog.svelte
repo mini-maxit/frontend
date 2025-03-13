@@ -39,7 +39,6 @@
 		validators: zodClient(editUserSchema),
 		resetForm: false,
 		onUpdate({ form, result }) {
-			console.log(result);
 			if (form.valid && result.type === 'success') {
 				toast.success(m.toaster_edit_user_success_message());
 				open = false;
@@ -80,6 +79,7 @@
 			} else if (result.type === 'failure') {
 				toast.error(m.error_unexpected_request_error_message());
 			}
+			form.data.groupId = '';
 		}
 	});
 

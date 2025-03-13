@@ -61,6 +61,8 @@ export interface GroupData {
 	created_by: number;
 	created_at: string;
 	updated_at: string;
+	tasks: TaskData[] | null;
+	users: UserData[] | null;
 }
 
 interface TestResultData {

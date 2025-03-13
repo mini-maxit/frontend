@@ -85,6 +85,11 @@
 	"groups_table_group_link": "Link do grupy",
 	"groups_table_group_link_text": "Zobacz grupę",
 
+	"group_id": "ID grupy",
+	"group_name": "Nazwa grupy",
+	"group_link": "Link do grupy",
+	"group_link_text": "Zobacz grupę",
+
 	"edit_profile_title": "Edytuj profil",
 	"edit_profile_description": "Czy na pewno chcesz edytować profil?",
 	"edit_profile_password_label": "Nowe Hasło",
