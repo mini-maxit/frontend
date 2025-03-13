@@ -14,9 +14,10 @@
 	const form = superForm(createGroupForm, {
 		validators: zodClient(createGroupSchema),
 		resetForm: false,
-		onResult: ({ result }) => {
+		onUpdate: ({ form, result }) => {
 			if (result.type === 'success') {
 				toast.success(m.toaster_group_create_success_message());
+				form.data.name = '';
 				open = false;
 			} else if (result.status === 500) {
 				toast.error(m.error_unexpected_request_error_message());

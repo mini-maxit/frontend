@@ -33,7 +33,7 @@
 	const editForm = superForm(editTaskForm, {
 		validators: zodClient(editTaskSchema),
 		resetForm: false,
-		onResult: ({ result }) => {
+		onUpdate: ({ result }) => {
 			if (result.type === 'success') {
 				toast.success(m.toaster_task_edit_success_message());
 				open = false;

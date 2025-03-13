@@ -12,7 +12,7 @@
 
 	const form = superForm(data, {
 		validators: zodClient(loginSchema),
-		onResult({ result }) {
+		onUpdate({ result }) {
 			if (result.type === 'success') {
 				toast.success(m.toaster_login_success_message());
 				goto('/dashboard');
