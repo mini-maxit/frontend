@@ -12,7 +12,7 @@
 
 	const form = superForm(data, {
 		validators: zodClient(createTaskSchema),
-		onResult({ result }) {
+		onUpdate({ result }) {
 			if (result.status === 500) {
 				toast.error(m.error_unexpected_request_error_message());
 			}

@@ -1,12 +1,17 @@
 <script lang="ts">
 	import * as Card from '$components/ui/card/index.js';
-	import { UserRole, type SubmissionData, type UserData } from '$lib/backendSchemas';
+	import {
+		UserRole,
+		type GroupData,
+		type SubmissionData,
+		type UserData
+	} from '$lib/backendSchemas';
 	import * as Table from '$components/ui/table';
 	import Separator from '../ui/separator/separator.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import EditUserDialog from './EditUserDialog.svelte';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	import type { EditPasswordSchema, EditUserSchema } from './formSchemas';
+	import type { EditPasswordSchema, EditUserSchema, AssignUserToGroupsSchema } from './formSchemas';
 	import {
 		get_submission_passed_color,
 		get_submission_passed_text,
@@ -16,15 +21,19 @@
 	let {
 		user: userData,
 		submissions,
+		groups,
 		localUser,
 		editUserForm,
-		editPasswordForm
+		editPasswordForm,
+		assignUserToGroupsForm
 	}: {
 		user: UserData;
 		submissions: SubmissionData[];
+		groups: GroupData[];
 		localUser: UserData;
 		editUserForm: SuperValidated<Infer<EditUserSchema>>;
 		editPasswordForm: SuperValidated<Infer<EditPasswordSchema>>;
+		assignUserToGroupsForm: SuperValidated<Infer<AssignUserToGroupsSchema>>;
 	} = $props();
 
 	let user = $state(userData);
@@ -34,7 +43,6 @@
 	<Card.Header class="pb-6  flex-row justify-between items-center">
 		<div id="UserData" class="flex flex-row space-x-8">
 			<h2 class="font-semibold text-xl">{m.profile_information()}:</h2>
-
 			<div>
 				<p>ID: {user.id}</p>
 				<p>Email: {user.email}</p>
@@ -48,7 +56,14 @@
 			</div>
 		</div>
 		{#if localUser.id == user.id || localUser.role === UserRole.Admin}
-			<EditUserDialog bind:user {localUser} {editUserForm} {editPasswordForm} />
+			<EditUserDialog
+				bind:user
+				{localUser}
+				{groups}
+				{editUserForm}
+				{editPasswordForm}
+				{assignUserToGroupsForm}
+			/>
 		{/if}
 	</Card.Header>
 	<Separator />

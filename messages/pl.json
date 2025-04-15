@@ -40,6 +40,10 @@
 	"password_input_label": "Hasło",
 	"password_confirm_input_label": "Potwierdź hasło",
 
+	"user_assign_group_form_title": "Przypisz użytkownika do grupy",
+	"user_assign_group_select_title": "Dostępne grupy",
+	"user_assign_group_submit": "Przypisz do grupy",
+
 	"tasks_table_title": "Lista wszystkich dostępnych zadań.",
 	"task_id": "ID zadania",
 	"task_name": "Nazwa zadania",
@@ -56,6 +60,8 @@
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",
 	"task_form_task_language_label": "Język zadania",
 	"task_form_submit": "Wyślij",
+	"task_delete_text": "Delete task",
+	"task_delete_confirmation_description": "Write the task name to confirm deletion",
 	"task_assign_groups_form_title": "Przypisz grupy do zadania",
 	"task_assign_group_select_title": "Dostępne grupy",
 	"task_assign_groups_submit": "Przypisz",
@@ -80,6 +86,11 @@
 	"groups_table_group_name": "Nazwa grupy",
 	"groups_table_group_link": "Link do grupy",
 	"groups_table_group_link_text": "Zobacz grupę",
+
+	"group_id": "ID grupy",
+	"group_name": "Nazwa grupy",
+	"group_link": "Link do grupy",
+	"group_link_text": "Zobacz grupę",
 
 	"edit_profile_title": "Edytuj profil",
 	"edit_profile_description": "Czy na pewno chcesz edytować profil?",
@@ -127,5 +138,6 @@
 	"toaster_group_create_success_message": "Grupa została pomyślnie utworzona",
 	"toaster_task_edit_success_message": "Zadanie zostało pomyślnie edytowane",
 	"toaster_task_create_success_message": "Zadanie zostało pomyślnie utworzone",
-	"toaster_task_form_submit_success": "Zadanie zostało pomyślnie przesłane"
+	"toaster_task_form_submit_success": "Zadanie zostało pomyślnie przesłane",
+	"toaster_assign_user_to_group_success_message": "Użytkownik został pomyślnie przypisany do grupy"
 }

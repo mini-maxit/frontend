@@ -40,6 +40,10 @@
 	"password_input_label": "Password",
 	"password_confirm_input_label": "Confirm password",
 
+	"user_assign_group_form_title": "Assign user to group",
+	"user_assign_group_select_title": "Available groups",
+	"user_assign_group_submit": "Assign to group",
+
 	"tasks_table_title": "A list of all available Tasks.",
 	"task_id": "Task ID",
 	"task_name": "Task name",
@@ -56,6 +60,8 @@
 	"task_form_task_file_description": "Please upload a file with the task description.",
 	"task_form_task_language_label": "Language of the solution",
 	"task_form_submit": "Submit",
+	"task_delete_text": "Delete task",
+	"task_delete_confirmation_description": "Write the task name to confirm deletion",
 	"task_assign_groups_form_title": "Assign groups to the task",
 	"task_assign_group_select_title": "Available groups",
 	"task_assign_groups_submit": "Assign groups",
@@ -76,10 +82,10 @@
 	"group_form_submit": "Submit",
 
 	"groups_table_title": "A list of all groups.",
-	"groups_table_group_id": "Group ID",
-	"groups_table_group_name": "Group name",
-	"groups_table_group_link": "Group link",
-	"groups_table_group_link_text": "View Group",
+	"group_id": "Group ID",
+	"group_name": "Group name",
+	"group_link": "Group link",
+	"group_link_text": "View Group",
 
 	"edit_profile_title": "Edit profile",
 	"edit_profile_description": "Are you sure you want to edit profile?",
@@ -127,5 +133,6 @@
 	"toaster_group_create_success_message": "Group has been successfully created",
 	"toaster_task_edit_success_message": "Task has been successfully edited",
 	"toaster_task_create_success_message": "Task has been successfully created",
-	"toaster_task_form_submit_success": "Task has been successfully submitted"
+	"toaster_task_form_submit_success": "Task has been successfully submitted",
+	"toaster_assign_user_to_group_success_message": "User has been successfully assigned to the group"
 }

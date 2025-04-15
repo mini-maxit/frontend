@@ -61,6 +61,8 @@ export interface GroupData {
 	created_by: number;
 	created_at: string;
 	updated_at: string;
+	tasks: TaskData[] | null;
+	users: UserData[] | null;
 }
 
 interface TestResultData {
@@ -119,6 +121,10 @@ export interface UploadTaskResponse extends ApiResponse {
 
 export interface GetTaskResponse extends ApiResponse {
 	data: TaskData;
+}
+
+export interface GetGroupResponse extends ApiResponse {
+	data: GroupData;
 }
 
 export interface GetAllTasksResponse extends ApiResponse {

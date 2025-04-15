@@ -1,4 +1,4 @@
-import { error, isRedirect, type Actions } from '@sveltejs/kit';
+import { error, isHttpError, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
 import { fail, superValidate } from 'sveltekit-superforms';
@@ -16,6 +16,7 @@ import type { ApiErrorResponse } from '$lib/backendSchemas';
 import { PARSE_ERROR, parse_error_response } from '$lib/server/utils';
 import { message } from 'sveltekit-superforms';
 import type { ErrorStatus } from 'sveltekit-superforms';
+import { i18n } from '$lib/i18n';
 
 export const load: PageServerLoad = async ({ locals, parent }) => {
 	const { task } = await parent();
@@ -102,7 +103,6 @@ export const actions: Actions = {
 			});
 
 			if (!response.ok) {
-				console.log(response);
 				const errorResponse: ApiErrorResponse = await parse_error_response(response);
 				if (errorResponse.data.code !== PARSE_ERROR) {
 					return message(form, errorResponse.data.message, {
@@ -194,18 +194,52 @@ export const actions: Actions = {
 			});
 
 			if (!response.ok) {
-				const errorReponse: ApiErrorResponse = await parse_error_response(response);
-				if (errorReponse.data.code !== 'PARSE_ERROR') {
-					return message(form, errorReponse.data.message, {
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				if (errorResponse.data.code !== 'PARSE_ERROR') {
+					return message(form, errorResponse.data.message, {
 						status: response.status as ErrorStatus
 					});
 				}
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
+				});
 			}
+			return { form };
 		} catch (e) {
 			return fail(500, {
 				form,
 				error: 'Failed to assign task to groups'
 			});
+		}
+	},
+
+	deleteTask: async ({ request, locals }) => {
+		const formData = await request.formData();
+		const taskId = formData.get('taskId');
+
+		if (!taskId) {
+			return fail(400, { message: 'Task ID is required.' });
+		}
+		try {
+			const response = await fetch(`${env.BACKEND_URL}/api/v1/task/${taskId}`, {
+				method: 'DELETE',
+				headers: {
+					session: `${locals.sessionId}`
+				}
+			});
+
+			if (!response.ok) {
+				const errorResponse: ApiErrorResponse = await parse_error_response(response);
+				error(response.status, {
+					code: errorResponse.data.code,
+					message: errorResponse.data.message
+				});
+			}
+			redirect(303, i18n.resolveRoute('/dashboard/tasks'));
+		} catch (e) {
+			if (isRedirect(e) || isHttpError(e)) throw e;
+			return fail(500, { message: 'Internal server error.' });
 		}
 	}
 };

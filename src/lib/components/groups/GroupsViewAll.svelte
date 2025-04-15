@@ -10,9 +10,9 @@
 	<Table.Caption>{m.groups_table_title()}</Table.Caption>
 	<Table.Header>
 		<Table.Row>
-			<Table.Head>{m.groups_table_group_id()}</Table.Head>
-			<Table.Head>{m.groups_table_group_name()}</Table.Head>
-			<Table.Head>{m.groups_table_group_link()}</Table.Head>
+			<Table.Head>{m.group_id()}</Table.Head>
+			<Table.Head>{m.group_name()}</Table.Head>
+			<Table.Head>{m.group_link()}</Table.Head>
 		</Table.Row>
 	</Table.Header>
 	<Table.Body>
@@ -21,8 +21,7 @@
 				<Table.Cell>{group.id}</Table.Cell>
 				<Table.Cell>{group.name}</Table.Cell>
 				<Table.Cell>
-					<a href={`/dashboard/groups/${group.id}`} class="hover:underline"
-						>{m.groups_table_group_link_text()}</a
+					<a href={`/dashboard/groups/${group.id}`} class="hover:underline">{m.group_link_text()}</a
 					>
 				</Table.Cell>
 			</Table.Row>
