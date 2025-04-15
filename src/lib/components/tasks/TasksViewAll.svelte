@@ -9,9 +9,13 @@
 
 <Table.Root>
 	<Table.Caption>{m.tasks_table_title()}</Table.Caption>
-
 	<Table.Header>
-		<Button class="hidden lg:block absolute right-2 mt-1.5" size="sm" variant="outline">
+		<Button
+			class="hidden lg:flex absolute right-2 mt-1.5"
+			size="sm"
+			variant="outline"
+			href="/dashboard/tasks/new"
+		>
 			Dodaj nowe zadanie
 		</Button>
 		<Table.Row>

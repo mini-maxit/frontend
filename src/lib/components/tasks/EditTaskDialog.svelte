@@ -17,6 +17,7 @@
 	import Label from '../ui/label/label.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { toast } from 'svelte-sonner';
+	import Button from '$components/ui/button/button.svelte';
 
 	let {
 		taskData,
@@ -36,7 +37,7 @@
 		onUpdate: ({ result }) => {
 			if (result.type === 'success') {
 				toast.success(m.toaster_task_edit_success_message());
-				open = false;
+				alertDialogOpen = false;
 			} else if (result.status === 500) {
 				toast.error(m.error_unexpected_request_error_message());
 			}
@@ -49,7 +50,7 @@
 		onUpdate: ({ result }) => {
 			if (result.type === 'success') {
 				toast.success(m.toaster_task_edit_success_message());
-				open = false;
+				alertDialogOpen = false;
 			} else if (result.status === 500) {
 				toast.error(m.error_unexpected_request_error_message());
 			}
@@ -71,7 +72,11 @@
 
 	const file = fileProxy(editForm, 'archive');
 
-	let open = $state(false);
+	let alertDialogOpen = $state(false);
+	let confirmationDeletionText = $state('');
+	let deleteButtionDisabled = $derived(
+		confirmationDeletionText.trim().toLowerCase() !== taskData.title.trim().toLowerCase()
+	);
 	const assignGroupTriggerValue = $derived.by(() => {
 		const set2 = new Set($assignToGroupsFormData.groupIds);
 		const common = userGroups.filter((userGroup) => set2.has(userGroup.id.toString()));
@@ -81,13 +86,13 @@
 	});
 </script>
 
-<AlertDialog.Root bind:open>
+<AlertDialog.Root bind:open={alertDialogOpen}>
 	<AlertDialog.Trigger class={buttonVariants({ variant: 'outline', size: 'lg' })}>
 		{m.edit_task_title()}
 	</AlertDialog.Trigger>
 	<AlertDialog.Content>
 		<AlertDialog.Header>
-			<AlertDialog.Title>{m.edit_task_title()}</AlertDialog.Title>
+			<AlertDialog.Title>{m.edit_task_title()}: {taskData.title}</AlertDialog.Title>
 			<AlertDialog.Description>
 				<form enctype="multipart/form-data" action="?/editTask" method="POST" use:editTaskEnhance>
 					<Form.Field form={editForm} name="id" hidden>
@@ -176,6 +181,24 @@
 						<p class="text-destructive my-2 text-sm font-medium">{$assignToGroupsMessage}</p>
 					{/if}
 					<Form.Button type="submit">{m.task_assign_groups_submit()}</Form.Button>
+				</form>
+				<Separator class="my-4" />
+				<h2 class="font-semibold text-lg text-foreground">
+					{m.task_delete_text()}
+				</h2>
+				<p class="my-4">{m.task_delete_confirmation_description()}</p>
+				<Input type="text" bind:value={confirmationDeletionText} />
+				<form action="?/deleteTask" method="POST" class="mt-4">
+					<input type="hidden" name="taskId" value={taskData.id} />
+					<Button
+						disabled={deleteButtionDisabled}
+						type="submit"
+						variant="destructive"
+						size="lg"
+						class="transition-opacity disabled:opacity-50 disabled:pointer-events-none"
+					>
+						{m.task_delete_text()}
+					</Button>
 				</form>
 			</AlertDialog.Description>
 		</AlertDialog.Header>

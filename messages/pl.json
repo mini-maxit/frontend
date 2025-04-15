@@ -60,6 +60,8 @@
 	"task_form_task_file_description": "Proszę przesłać plik z opisem zadania.",
 	"task_form_task_language_label": "Język zadania",
 	"task_form_submit": "Wyślij",
+	"task_delete_text": "Delete task",
+	"task_delete_confirmation_description": "Write the task name to confirm deletion",
 	"task_assign_groups_form_title": "Przypisz grupy do zadania",
 	"task_assign_group_select_title": "Dostępne grupy",
 	"task_assign_groups_submit": "Przypisz",
