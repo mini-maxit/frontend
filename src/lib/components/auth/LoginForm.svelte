@@ -25,7 +25,7 @@
 	const { form: formData, enhance, message } = form;
 </script>
 
-<form action="?/login" method="POST" use:enhance>
+<form action="?/login" method="POST" use:enhance class="flex-1">
 	<Form.Field {form} name="email">
 		<Form.Control>
 			{#snippet children({ props })}
