@@ -926,39 +926,39 @@ Forms containing `<input type="file">` must use `enctype="multipart/form-data"`.
 
 # SVELTEKIT + TAILWIND + TYPESCRIPT OPERATIONAL GUIDELINES
 
-## PRIME DIRECTIVE  
-Always prioritize maintainability, accessibility, and clean developer ergonomics.  
-Collaborate via conversation while coding — **explain what, how, and why**.  
+## PRIME DIRECTIVE
+Always prioritize maintainability, accessibility, and clean developer ergonomics.
+Collaborate via conversation while coding — **explain what, how, and why**.
 Avoid making multiple concurrent changes to the same file to prevent conflict or corruption.
 
 ---
 
 ## LARGE FILE & COMPLEX CHANGE PROTOCOL
 
-### MANDATORY PLANNING PHASE  
-When editing files larger than 300 lines or implementing deeply integrated features:  
+### MANDATORY PLANNING PHASE
+When editing files larger than 300 lines or implementing deeply integrated features:
 
-1. **Always begin with a detailed, structured edit plan**  
+1. **Always begin with a detailed, structured edit plan**
 2. The plan must include:
    - A breakdown of all affected components, stores, routes, or layouts
    - The order of operations for each edit
    - Dependencies and known side effects
-   - An estimated count of isolated edits required  
+   - An estimated count of isolated edits required
 
-**Plan format**:  
+**Plan format**:
 ```md
-## PROPOSED EDIT PLAN  
-Working with: [filename or route]  
-Total planned edits: [number]  
+## PROPOSED EDIT PLAN
+Working with: [filename or route]
+Total planned edits: [number]
 ```
 
 ---
 
-### MAKING EDITS  
-- Focus on **one conceptual change at a time**  
-- Use "before/after" snippets to demonstrate changes  
-- Explain the **purpose** and benefit of each change clearly  
-- Ensure edits comply with the project’s structure and coding conventions  
+### MAKING EDITS
+- Focus on **one conceptual change at a time**
+- Use "before/after" snippets to demonstrate changes
+- Explain the **purpose** and benefit of each change clearly
+- Ensure edits comply with the project’s structure and coding conventions
 
 **Edit Sequence Template**:
 ```md
@@ -969,9 +969,9 @@ Do you approve this plan? I will proceed with Edit [#] upon your confirmation.
 
 ---
 
-### EXECUTION PHASE  
-- After completing each step:  
-	✅ Completed edit [#] of [total]. Ready for next edit?  
+### EXECUTION PHASE
+- After completing each step:
+	✅ Completed edit [#] of [total]. Ready for next edit?
 - If additional issues arise, **pause**, revise the plan, and **seek user approval before continuing**
 
 ---
@@ -985,7 +985,7 @@ Use the following folder layout:
 messages/             # Paraglide translations
 src/
 ├── lib/              # Reusable UI components and utilities
-│   ├── components/   
+│   ├── components/
 ├── routes/           # SvelteKit endpoints, pages, and layouts
 ├── app.d.ts          # App-wide type definitions
 └── hooks.server.ts   # Server hooks for session/auth
@@ -993,7 +993,7 @@ src/
 
 ---
 
-### TYPING & TOOLING  
+### TYPING & TOOLING
 - Use **TypeScript 5.7+** syntax and features
 - Prefer **Zod** for runtime validation and schema definition
 - Ensure all components and functions are typed strictly
@@ -1001,30 +1001,30 @@ src/
 
 ---
 
-### UI COMPONENTS  
-- Use `bits-ui`, `lucide-svelte`, and `tailwind-variants` for consistent styling  
-- Create generic variants using **tailwind-variants** for composability  
-- Favor `clsx` for class merging where conditional logic is needed  
+### UI COMPONENTS
+- Use `bits-ui`, `lucide-svelte`, and `tailwind-variants` for consistent styling
+- Create generic variants using **tailwind-variants** for composability
+- Favor `clsx` for class merging where conditional logic is needed
 
 ---
 
-### STYLING  
-- Use **Tailwind CSS 3.4+**  
-- Leverage `tailwind-merge` to prevent class duplication  
-- Enable `prefers-color-scheme` dark mode  
-- Use `tailwindcss-animate` for smooth, native animations  
+### STYLING
+- Use **Tailwind CSS 3.4+**
+- Leverage `tailwind-merge` to prevent class duplication
+- Enable `prefers-color-scheme` dark mode
+- Use `tailwindcss-animate` for smooth, native animations
 - Organize custom styles using component-scoped `<style>` blocks or utility classes
 
 ---
 
-### FORM MANAGEMENT  
-- Use **sveltekit-superforms** with **Zod** for server-enhanced forms  
-- Apply `formsnap` components where structured UI patterns are needed  
-- Always display validation feedback using `aria-invalid`, `aria-describedby`, etc.  
+### FORM MANAGEMENT
+- Use **sveltekit-superforms** with **Zod** for server-enhanced forms
+- Apply `formsnap` components where structured UI patterns are needed
+- Always display validation feedback using `aria-invalid`, `aria-describedby`, etc.
 
 ---
 
-### ACCESSIBILITY  
+### ACCESSIBILITY
 Always meet **WCAG 2.1 AA minimum**, AAA where feasible:
 - Use semantic HTML tags (`<main>`, `<section>`, etc.)
 - Add labels and `aria-*` attributes to interactive elements
@@ -1033,55 +1033,55 @@ Always meet **WCAG 2.1 AA minimum**, AAA where feasible:
 
 ---
 
-### ESLINT & FORMATTER  
-- Use **ESLint 9+** and **Prettier 3+**  
-- Extend from `eslint-config-prettier` and `eslint-plugin-svelte`  
-- Auto-format with `prettier-plugin-svelte`  
+### ESLINT & FORMATTER
+- Use **ESLint 9+** and **Prettier 3+**
+- Extend from `eslint-config-prettier` and `eslint-plugin-svelte`
+- Auto-format with `prettier-plugin-svelte`
 - TypeScript rules managed via `typescript-eslint`
 
 ---
 
-### TESTING  
-- Use **Vitest** for unit and integration testing  
-- Use **Playwright** (recommended, not listed but consider) for E2E  
-- Prefer `describe`, `test`, `expect` for clarity  
+### TESTING
+- Use **Vitest** for unit and integration testing
+- Use **Playwright** (recommended, not listed but consider) for E2E
+- Prefer `describe`, `test`, `expect` for clarity
 - Structure tests under `/tests` with a mirrored folder structure of `/src`
 
 ---
 
-### PERFORMANCE & BUNDLING  
-- Use **Vite 5** with **@sveltejs/vite-plugin-svelte**  
-- Enable code-splitting via dynamic imports  
-- Optimize assets (use `WebP`, `AVIF`, lazy loading)  
-- Use `@iconify-json/flag` and `unplugin-icons` for scalable icon support  
+### PERFORMANCE & BUNDLING
+- Use **Vite 5** with **@sveltejs/vite-plugin-svelte**
+- Enable code-splitting via dynamic imports
+- Optimize assets (use `WebP`, `AVIF`, lazy loading)
+- Use `@iconify-json/flag` and `unplugin-icons` for scalable icon support
 
 ---
 
-### ERROR HANDLING  
-- Use `try/catch` consistently in load functions and API calls  
-- Provide user-friendly messages via `svelte-sonner`  
-- Log dev details to the console or a remote logger when applicable  
+### ERROR HANDLING
+- Use `try/catch` consistently in load functions and API calls
+- Provide user-friendly messages via `svelte-sonner`
+- Log dev details to the console or a remote logger when applicable
 - Handle:
   - Network errors
   - Business logic errors
-  - Runtime exceptions  
+  - Runtime exceptions
 - Use global event handlers like `window.addEventListener('unhandledrejection')`
 
 ---
 
-## SECURITY BEST PRACTICES  
-- Sanitize all form input using Zod schemas  
-- Avoid client-side secrets (e.g., in `.env`)  
-- Enforce proper CORS and CSP headers  
-- Store cookies securely: `SameSite=Strict`, `HttpOnly`, `Secure`  
+## SECURITY BEST PRACTICES
+- Sanitize all form input using Zod schemas
+- Avoid client-side secrets (e.g., in `.env`)
+- Enforce proper CORS and CSP headers
+- Store cookies securely: `SameSite=Strict`, `HttpOnly`, `Secure`
 - Use role-based access control in hooks and endpoints
 
 ---
 
-### DEPLOYMENT CONSIDERATIONS  
-- Use **adapter-auto** for portability  
-- Consider replacing it with `adapter-vercel` or `adapter-static` depending on target platform  
-- Ensure SSR + client hydration is functioning  
+### DEPLOYMENT CONSIDERATIONS
+- Use **adapter-auto** for portability
+- Consider replacing it with `adapter-vercel` or `adapter-static` depending on target platform
+- Ensure SSR + client hydration is functioning
 - Use `.env` and `config/` files for environment-specific settings
 
 ---
