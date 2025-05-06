@@ -27,6 +27,11 @@
 	"cancel": "Anuluj",
 
 	"loading": "Ładowanie",
+	"admin": "Admin",
+	"profile": "Profil",
+	"my_profile": "Mój profil",
+	"settings": "Ustawienia",
+	"tasks": "Zadania",
 
 	"users_table_title": "Lista wszystkich zarejestrowanych użytkowników.",
 	"user_id": "ID użytkownika",
