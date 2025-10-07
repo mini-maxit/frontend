@@ -1,141 +1,347 @@
 <script lang="ts">
+	let { width = 24, height = 24, isScrolled = $bindable(false) } = $props();
 
+	const strokeColor = $derived(isScrolled ? 'var(--primary)' : 'var(--primary-foreground)');
+	const fillColor = $derived(isScrolled ? 'var(--primary)' : 'var(--primary-foreground)');
 </script>
 
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
-  <defs>
-    <style>
-      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-13 {
-        fill: none;
-        stroke: #013d5a;
-        stroke-miterlimit: 10;
-      }
-
-      .cls-1, .cls-3, .cls-12 {
-        stroke-width: 2px;
-      }
-
-      .cls-2 {
-        stroke-dasharray: 11.801 4.917;
-      }
-
-      .cls-3 {
-        stroke-dasharray: 12.145 5.061;
-      }
-
-      .cls-4 {
-        stroke-dasharray: 7.177 2.99;
-      }
-
-      .cls-5 {
-        stroke-width: 11px;
-      }
-
-      .cls-6 {
-        stroke-width: 5px;
-      }
-
-      .cls-14 {
-        fill: #013d5a;
-      }
-
-      .cls-7 {
-        stroke-dasharray: 12.139 5.058;
-      }
-
-      .cls-8 {
-        stroke-dasharray: 13.131 5.05;
-      }
-
-      .cls-10 {
-        stroke-width: 4px;
-      }
-
-      .cls-11 {
-        stroke-width: 3px;
-      }
-
-      .cls-12 {
-        stroke-dasharray: 12.247 5.103;
-      }
-
-      .cls-13 {
-        stroke-dasharray: 13.339 5.13;
-      }
-    </style>
-  </defs>
-  <g>
-    <line class="cls-9" x1="128.278" y1="657.532" x2="133.185" y2="653.268"/>
-    <line class="cls-8" x1="136.997" y1="649.956" x2="491.912" y2="341.569"/>
-    <line class="cls-9" x1="493.818" y1="339.913" x2="498.725" y2="335.65"/>
-  </g>
-  <path class="cls-5" d="M499.7,903.055c-221.121,0-400.376-179.254-400.376-400.376S278.578,102.303,499.7,102.303s400.376,179.254,400.376,400.376-179.254,400.376-400.376,400.376"/>
-  <line class="cls-6" x1="384.901" y1="276.921" x2="897.03" y2="473.994"/>
-  <path class="cls-14" d="M162.512,462.998v100.314h-28.989v-113.266h235.802v113.266h-28.997v-100.314h-74.409v100.896l-28.989-.582v-100.314h-74.417Z"/>
-  <path class="cls-14" d="M402.326,563.312v-47.159h99.928v-23.583h-97.992v-11.205h123.503v81.947h-125.439ZM502.254,527.359h-74.417v24.74h74.417v-24.74Z"/>
-  <path class="cls-14" d="M658.123,563.312v-35.371h-73.252v35.371h-26.094v-36.142l14.88-4.832-14.88-4.832v-36.142h26.094v35.363h73.252v-35.363h26.094v36.142l-14.88,4.832,14.88,4.832v36.142h-26.094Z"/>
-  <path class="cls-14" d="M717.169,481.368v81.94h25.51v-81.94h-25.51Z"/>
-  <path class="cls-14" d="M783.877,563.312v-70.742h-15.651v-11.205h15.651v-31.319h25.511v31.319h62.818v11.205h-62.818v59.529h62.818v11.213h-88.329Z"/>
-  <circle class="cls-14" cx="512.635" cy="329.09" r="18.071"/>
-  <line class="cls-10" x1="516.795" y1="322.097" x2="607.148" y2="229.485"/>
-  <circle class="cls-14" cx="608.485" cy="227.999" r="10.165"/>
-  <circle class="cls-11" cx="160.912" cy="371.125" r="13.553"/>
-  <line class="cls-11" x1="167.49" y1="357.391" x2="252.513" y2="222.709"/>
-  <polyline class="cls-11" points="385.748 268.732 608.485 227.999 688.148 151.839"/>
-  <line class="cls-11" x1="151.996" y1="379.697" x2="106.819" y2="430.52"/>
-  <circle class="cls-14" cx="513.936" cy="636.638" r="19.2"/>
-  <line class="cls-6" x1="516.795" y1="636.073" x2="787.253" y2="784.59"/>
-  <circle class="cls-11" cx="591.866" cy="758.614" r="13.425"/>
-  <line class="cls-11" x1="522.125" y1="646.52" x2="583.96" y2="746.19"/>
-  <line class="cls-11" x1="579.16" y1="765.108" x2="356.948" y2="876.072"/>
-  <line class="cls-11" x1="604.854" y1="753.531" x2="891.159" y2="594.849"/>
-  <g>
-    <line class="cls-9" x1="513.936" y1="617.438" x2="513.91" y2="610.938"/>
-    <line class="cls-13" x1="513.889" y1="605.807" x2="512.844" y2="349.797"/>
-    <line class="cls-9" x1="512.833" y1="347.232" x2="512.807" y2="340.732"/>
-  </g>
-  <polyline class="cls-11" points="504.054 648.779 360.619 874.661 343.81 719.698"/>
-  <circle class="cls-14" cx="343.81" cy="706.709" r="12.988"/>
-  <line class="cls-11" x1="376.148" y1="260.544" x2="392.242" y2="115.697"/>
-  <circle class="cls-11" cx="374.851" cy="271.737" r="11.294"/>
-  <line class="cls-6" x1="363.725" y1="266.474" x2="224.525" y2="212.544"/>
-  <line class="cls-11" x1="527.207" y1="326.615" x2="728.242" y2="301.768"/>
-  <circle class="cls-11" cx="744.128" cy="297.511" r="16.376"/>
-  <line class="cls-11" x1="732.759" y1="284.968" x2="608.485" y2="227.999"/>
-  <line class="cls-11" x1="760.505" y1="297.511" x2="843.159" y2="304.874"/>
-  <polyline class="cls-6" points="740.101 313.344 729.01 406.39 729.01 449.147"/>
-  <g>
-    <path class="cls-1" d="M174.377,368.901c1.985-.243,3.97-.487,5.955-.73"/>
-    <path class="cls-12" d="M185.397,367.55c102.485-12.567,204.97-25.135,307.456-37.702"/>
-    <path class="cls-1" d="M495.385,329.538c1.985-.243,3.97-.487,5.955-.73"/>
-  </g>
-  <g>
-    <line class="cls-9" x1="518.692" y1="339.766" x2="522.508" y2="344.396"/>
-    <line class="cls-7" x1="525.725" y1="348.299" x2="830.376" y2="717.925"/>
-    <line class="cls-9" x1="831.984" y1="719.876" x2="835.8" y2="724.506"/>
-  </g>
-  <g>
-    <line class="cls-9" x1="394.064" y1="123.939" x2="399.469" y2="126.545"/>
-    <line class="cls-2" x1="403.898" y1="128.68" x2="597.451" y2="222.013"/>
-    <line class="cls-9" x1="599.665" y1="223.081" x2="605.07" y2="225.687"/>
-  </g>
-  <g>
-    <line class="cls-9" x1="124.757" y1="355.629" x2="130.083" y2="358.39"/>
-    <line class="cls-4" x1="132.738" y1="359.766" x2="140.437" y2="363.758"/>
-    <line class="cls-9" x1="141.764" y1="364.446" x2="147.091" y2="367.207"/>
-  </g>
-  <g>
-    <line class="cls-1" x1="199.81" y1="765.143" x2="205.39" y2="762.937"/>
-    <line class="cls-3" x1="210.096" y1="761.077" x2="495.759" y2="648.151"/>
-    <line class="cls-1" x1="498.112" y1="647.221" x2="503.692" y2="645.016"/>
-  </g>
-  <line class="cls-11" x1="597.795" y1="770.049" x2="662.171" y2="868.308"/>
-  <path class="cls-10" d="M267.643,654.534l233.647-17.082"/>
-  <circle class="cls-11" cx="256.824" cy="657.465" r="11.576"/>
-  <path class="cls-11" d="M245.247,657.465c-35.97,1.988-71.94,3.975-107.909,5.962"/>
-  <line class="cls-11" x1="266.09" y1="664.557" x2="341.196" y2="703.522"/>
-  <circle class="cls-14" cx="668.335" cy="718.846" r="10.729"/>
-  <circle class="cls-14" cx="251.71" cy="223.252" r="8.471"/>
-  <circle class="cls-14" cx="729.451" cy="408.999" r="9.6"/>
-  <circle class="cls-14" cx="728.726" cy="457.755" r="15.812"/>
+<svg {width} {height} viewBox="0 0 102 102" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path
+		d="M13.0843 67.0682L13.5848 66.6333"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M13.9737 66.2955L50.175 34.84"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+		stroke-dasharray="1.34 0.52"
+	/>
+	<path
+		d="M50.3694 34.6711L50.8699 34.2363"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M50.9694 92.1116C28.4151 92.1116 10.1311 73.8277 10.1311 51.2733C10.1311 28.7188 28.415 10.4349 50.9694 10.4349C73.5239 10.4349 91.8078 28.7188 91.8078 51.2733C91.8078 73.8277 73.5239 92.1116 50.9694 92.1116Z"
+		stroke={strokeColor}
+		stroke-width="1.122"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M39.2599 28.2459L91.4971 48.3474"
+		stroke={strokeColor}
+		stroke-width="0.51"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M16.5762 47.2258V57.4578H13.6193V45.9047H37.6711V57.4578H34.7134V47.2258H27.1237V57.5172L24.1668 57.4578V47.2258H16.5763H16.5762Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M41.0372 57.4578V52.6476H51.2299V50.2421H41.2347V49.0992H53.832V57.4578H41.0372ZM51.2299 53.7906H43.6394V56.3141H51.2299V53.7906Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M67.1285 57.4578V53.85H59.6568V57.4578H56.9952V53.7714L58.513 53.2785L56.9952 52.7856V49.0992H59.6568V52.7062H67.1285V49.0992H69.7901V52.7856L68.2724 53.2785L69.7901 53.7714V57.4578H67.1285Z"
+		fill={fillColor}
+	/>
+	<path d="M73.1512 49.0995V57.4574H75.7533V49.0995H73.1512Z" fill={fillColor} />
+	<path
+		d="M79.9555 57.4578V50.2421H78.3591V49.0992H79.9555V45.9047H82.5576V49.0992H88.965V50.2421H82.5576V56.3141H88.965V57.4578H79.9555Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M52.2888 35.4104C53.3068 35.4104 54.132 34.5852 54.132 33.5672C54.132 32.5492 53.3068 31.7239 52.2888 31.7239C51.2708 31.7239 50.4455 32.5492 50.4455 33.5672C50.4455 34.5852 51.2708 35.4104 52.2888 35.4104Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M52.7131 32.8539L61.9291 23.4075"
+		stroke={strokeColor}
+		stroke-width="0.408"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M62.0655 24.2927C62.6381 24.2927 63.1023 23.8285 63.1023 23.2559C63.1023 22.6833 62.6381 22.2191 62.0655 22.2191C61.4928 22.2191 61.0286 22.6833 61.0286 23.2559C61.0286 23.8285 61.4928 24.2927 62.0655 24.2927Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M16.413 39.2372C17.1765 39.2372 17.7955 38.6182 17.7955 37.8548C17.7955 37.0913 17.1765 36.4724 16.413 36.4724C15.6496 36.4724 15.0306 37.0913 15.0306 37.8548C15.0306 38.6182 15.6496 39.2372 16.413 39.2372Z"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M17.084 36.4539L25.7563 22.7163"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M39.3463 27.4107L62.0655 23.2559L70.1911 15.4876"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M15.5036 38.7291L10.8956 43.913"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M52.4215 66.8955C53.5031 66.8955 54.3799 66.0187 54.3799 64.9371C54.3799 63.8555 53.5031 62.9787 52.4215 62.9787C51.3399 62.9787 50.4631 63.8555 50.4631 64.9371C50.4631 66.0187 51.3399 66.8955 52.4215 66.8955Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M52.7131 64.8795L80.2998 80.0282"
+		stroke={strokeColor}
+		stroke-width="0.51"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M60.3703 78.748C61.1266 78.748 61.7397 78.1349 61.7397 77.3786C61.7397 76.6223 61.1266 76.0093 60.3703 76.0093C59.614 76.0093 59.001 76.6223 59.001 77.3786C59.001 78.1349 59.614 78.748 60.3703 78.748Z"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M53.2567 65.945L59.5639 76.1114"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M59.0743 78.041L36.4087 89.3593"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M61.6951 76.8602L90.8982 60.6746"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M52.4215 62.9787L52.4188 62.3157"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M52.4167 61.7923L52.3101 35.6793"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+		stroke-dasharray="1.36 0.52"
+	/>
+	<path
+		d="M52.309 35.4177L52.3063 34.7547"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M51.4135 66.1754L36.7831 89.2154L35.0686 73.4092"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M35.0686 73.4091C35.8003 73.4091 36.3934 72.816 36.3934 72.0843C36.3934 71.3527 35.8003 70.7595 35.0686 70.7595C34.337 70.7595 33.7438 71.3527 33.7438 72.0843C33.7438 72.816 34.337 73.4091 35.0686 73.4091Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M38.3671 26.5755L40.0087 11.8011"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M38.2348 28.8692C38.871 28.8692 39.3868 28.3534 39.3868 27.7172C39.3868 27.0809 38.871 26.5652 38.2348 26.5652C37.5986 26.5652 37.0828 27.0809 37.0828 27.7172C37.0828 28.3534 37.5986 28.8692 38.2348 28.8692Z"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M37.1 27.1803L22.9016 21.6795"
+		stroke={strokeColor}
+		stroke-width="0.51"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M53.7751 33.3147L74.2807 30.7803"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M75.9011 32.0165C76.8236 32.0165 77.5714 31.2686 77.5714 30.3461C77.5714 29.4236 76.8236 28.6758 75.9011 28.6758C74.9786 28.6758 74.2307 29.4236 74.2307 30.3461C74.2307 31.2686 74.9786 32.0165 75.9011 32.0165Z"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M74.7414 29.0667L62.0655 23.2559"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M77.5715 30.3461L86.0022 31.0971"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M75.4903 31.9611L74.359 41.4518V45.813"
+		stroke={strokeColor}
+		stroke-width="0.51"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M17.7865 37.6279C17.9889 37.6031 18.1914 37.5782 18.3939 37.5535"
+		stroke={strokeColor}
+		stroke-width="0.204"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M18.9105 37.4901C29.3639 36.2083 39.8174 34.9263 50.271 33.6445"
+		stroke={strokeColor}
+		stroke-width="0.204"
+		stroke-miterlimit="10"
+		stroke-dasharray="1.25 0.52"
+	/>
+	<path
+		d="M50.5293 33.6129C50.7318 33.5881 50.9342 33.5632 51.1367 33.5384"
+		stroke={strokeColor}
+		stroke-width="0.204"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M52.9066 34.6561L53.2958 35.1284"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M53.6239 35.5265L84.6983 73.2283"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+		stroke-dasharray="1.24 0.52"
+	/>
+	<path
+		d="M84.8624 73.4274L85.2516 73.8996"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M40.1945 12.6418L40.7458 12.9076"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M41.1976 13.1253L60.94 22.6453"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+		stroke-dasharray="1.2 0.5"
+	/>
+	<path
+		d="M61.1658 22.7542L61.7171 23.0201"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M12.7252 36.2742L13.2685 36.5558"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M13.5393 36.6961L14.3246 37.1033"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+		stroke-dasharray="0.73 0.3"
+	/>
+	<path
+		d="M14.4599 37.1735L15.0033 37.4551"
+		stroke={strokeColor}
+		stroke-width="0.102"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M20.3806 78.0446L20.9497 77.8196"
+		stroke={strokeColor}
+		stroke-width="0.204"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M21.4297 77.6299L50.5674 66.1114"
+		stroke={strokeColor}
+		stroke-width="0.204"
+		stroke-miterlimit="10"
+		stroke-dasharray="1.24 0.52"
+	/>
+	<path
+		d="M50.8074 66.0166L51.3766 65.7916"
+		stroke={strokeColor}
+		stroke-width="0.204"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M60.9751 78.545L67.5415 88.5674"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M27.2996 66.7625L51.1316 65.0201"
+		stroke={strokeColor}
+		stroke-width="0.408"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M26.196 68.2422C26.8482 68.2422 27.3768 67.7135 27.3768 67.0614C27.3768 66.4093 26.8482 65.8807 26.196 65.8807C25.5439 65.8807 25.0153 66.4093 25.0153 67.0614C25.0153 67.7135 25.5439 68.2422 26.196 68.2422Z"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M25.0152 67.0614C21.3463 67.2642 17.6773 67.4669 14.0085 67.6696"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M27.1412 67.7848L34.802 71.7592"
+		stroke={strokeColor}
+		stroke-width="0.306"
+		stroke-miterlimit="10"
+	/>
+	<path
+		d="M68.1702 74.4167C68.7746 74.4167 69.2645 73.9267 69.2645 73.3223C69.2645 72.7179 68.7746 72.228 68.1702 72.228C67.5658 72.228 67.0758 72.7179 67.0758 73.3223C67.0758 73.9267 67.5658 74.4167 68.1702 74.4167Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M25.6744 23.6357C26.1516 23.6357 26.5385 23.2489 26.5385 22.7717C26.5385 22.2945 26.1516 21.9077 25.6744 21.9077C25.1972 21.9077 24.8104 22.2945 24.8104 22.7717C24.8104 23.2489 25.1972 23.6357 25.6744 23.6357Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M74.404 42.6971C74.9448 42.6971 75.3832 42.2587 75.3832 41.7179C75.3832 41.1771 74.9448 40.7387 74.404 40.7387C73.8632 40.7387 73.4248 41.1771 73.4248 41.7179C73.4248 42.2587 73.8632 42.6971 74.404 42.6971Z"
+		fill={fillColor}
+	/>
+	<path
+		d="M74.33 48.3038C75.2208 48.3038 75.9429 47.5817 75.9429 46.691C75.9429 45.8003 75.2208 45.0782 74.33 45.0782C73.4393 45.0782 72.7172 45.8003 72.7172 46.691C72.7172 47.5817 73.4393 48.3038 74.33 48.3038Z"
+		fill={fillColor}
+	/>
 </svg>
