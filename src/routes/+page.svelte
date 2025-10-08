@@ -1,8 +1,8 @@
 <script lang="ts">
-	import HeroSection from '$lib/components/HeroSection.svelte';
-	import FeaturesSection from '$lib/components/FeaturesSection.svelte';
-	import HowItWorksSection from '$lib/components/HowItWorksSection.svelte';
-	import CallToActionSection from '$lib/components/CallToActionSection.svelte';
+  import HeroSection from '$lib/components/landing_page/HeroSection.svelte';
+  import FeaturesSection from '$lib/components/landing_page/FeaturesSection.svelte';
+  import HowItWorksSection from '$lib/components/landing_page/HowItWorksSection.svelte';
+  import CallToActionSection from '$lib/components/landing_page/CallToActionSection.svelte';
 </script>
 
 <HeroSection />

@@ -1,4 +1,26 @@
 {
-	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"hello_world": "Hello, {name} from en!"
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "hello_world": "Hello, {name} from en!",
+  "footer_copyright": "© 2025 MaxIT. Built for academic excellence.",
+  "header_dashboard": "Dashboard",
+  "hero_title": "A next-gen algorithmic contest platform for universities. Create, compete and master problem-solving",
+  "hero_cta": "Explore Features",
+  "features_heading": "Why Choose MaxIT?",
+  "features_create_title": "Create Algorithmic Tasks",
+  "features_create_description": "Easily design and publish programming challenges tailored to your students' skills.",
+  "features_organize_title": "Organize Contests",
+  "features_organize_description": "Host official competitions and monitor progress in real-time with built-in analytics.",
+  "features_engage_title": "Engage Students",
+  "features_engage_description": "Gamified experience keeps students motivated while sharpening coding skills.",
+  "how_it_works_heading": "How It Works",
+  "how_it_works_description": "MaxIT streamlines the entire competitive programming workflow in three simple steps",
+  "how_it_works_create_title": "Create",
+  "how_it_works_create_description": "Teachers set up algorithmic problems with test cases and difficulty levels.",
+  "how_it_works_compete_title": "Compete",
+  "how_it_works_compete_description": "Students join contests, solve challenges, and submit code in real-time.",
+  "how_it_works_evaluate_title": "Evaluate",
+  "how_it_works_evaluate_description": "Automatic grading, instant feedback, and leaderboard rankings.",
+  "cta_heading": "Ready to Maximize Your Coding Skills?",
+  "cta_description": "Join the platform trusted by teachers and loved by students. Start creating or competing today.",
+  "cta_button": "Get Started Now"
 }
