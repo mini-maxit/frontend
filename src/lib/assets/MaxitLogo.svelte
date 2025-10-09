@@ -1,8 +1,8 @@
 <script lang="ts">
   let { width = 24, height = 24, primaryColor = false } = $props();
 
-  const strokeColor = $derived(primaryColor ? 'var(--primary)' : 'var(--primary-foreground)');
-  const fillColor = $derived(primaryColor ? 'var(--primary)' : 'var(--primary-foreground)');
+  const strokeColor = primaryColor ? 'var(--primary)' : 'var(--primary-foreground)';
+  const fillColor = primaryColor ? 'var(--primary)' : 'var(--primary-foreground)';
 </script>
 
 <svg {width} {height} viewBox="0 0 102 102" fill="none" xmlns="http://www.w3.org/2000/svg">
