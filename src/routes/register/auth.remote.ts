@@ -1,23 +1,33 @@
 import * as v from 'valibot';
 import { error, redirect } from '@sveltejs/kit';
 import { form, getRequestEvent } from '$app/server';
-import { authService } from '$lib/services/AuthService';
-import { ApiError } from '$lib/services/ApiService';
+import { AuthService } from '$lib/services/AuthService';
+import { createApiClient, ApiError } from '$lib/services/ApiService';
 import { TokenManager } from '$lib/token';
 import { localizeUrl } from '$lib/paraglide/runtime';
 import { AppRoutes } from '$lib/routes';
 
 const RegisterSchema = v.pipe(
   v.object({
+    email: v.pipe(
+      v.string('Email is required'),
+      v.nonEmpty('Email cannot be empty'),
+      v.email('Please enter a valid email address')
+    ),
     name: v.pipe(
       v.string('Name is required'),
       v.nonEmpty('Name cannot be empty'),
       v.minLength(2, 'Name must be at least 2 characters')
     ),
-    email: v.pipe(
-      v.string('Email is required'),
-      v.nonEmpty('Email cannot be empty'),
-      v.email('Please enter a valid email address')
+    surname: v.pipe(
+      v.string('Surname is required'),
+      v.nonEmpty('Surname cannot be empty'),
+      v.minLength(2, 'Surname must be at least 2 characters')
+    ),
+    username: v.pipe(
+      v.string('Username is required'),
+      v.nonEmpty('Username cannot be empty'),
+      v.minLength(3, 'Username must be at least 3 characters')
     ),
     _password: v.pipe(
       v.string('Password is required'),
@@ -44,25 +54,24 @@ type RegisterData = v.InferOutput<typeof RegisterSchema>;
 export const register = form(RegisterSchema, async (data: RegisterData) => {
   const event = getRequestEvent();
 
-  try {
-    const result = await authService.register({
-      name: data.name,
-      email: data.email,
-      password: data._password
-    });
+  // Create API client with cookies for this request
+  const apiClient = createApiClient(event.cookies);
+  const authService = new AuthService(apiClient);
 
-    if (!result.success || !result.data) {
-      error(400, result.error || 'Registration failed');
-    }
+  const result = await authService.register({
+    email: data.email,
+    name: data.name,
+    surname: data.surname,
+    username: data.username,
+    password: data._password,
+    confirmPassword: data._confirmPassword
+  });
 
-    TokenManager.setAccessToken(result.data.access_token, result.data.expires_in);
-  } catch (err) {
-    console.error('Registration error:', err);
-    if (err instanceof ApiError) {
-      error(err.status || 500);
-    }
-    throw err;
+  if (!result.success || !result.data) {
+    error(result.status, { message: result.error || 'Registration failed' });
   }
+
+  TokenManager.setAccessToken(event.cookies, result.data);
 
   const localizedUrl = localizeUrl(new URL(AppRoutes.Dashboard, event.url.origin));
   redirect(303, localizedUrl.pathname);

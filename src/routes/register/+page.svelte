@@ -49,20 +49,6 @@
             class="space-y-4"
           >
             <div class="space-y-2">
-              <Label for="name">{m.register_name_label()}</Label>
-              <Input
-                {...register.fields.name.as('text')}
-                id="name"
-                name="name"
-                type="text"
-                placeholder={m.register_name_placeholder()}
-                required
-                autocomplete="name"
-                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
-              />
-            </div>
-
-            <div class="space-y-2">
               <Label for="email">{m.register_email_label()}</Label>
               <Input
                 {...register.fields.email.as('email')}
@@ -72,6 +58,48 @@
                 placeholder={m.register_email_placeholder()}
                 required
                 autocomplete="email"
+                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <Label for="name">{m.register_name_label()}</Label>
+              <Input
+                {...register.fields.name.as('text')}
+                id="name"
+                name="name"
+                type="text"
+                placeholder={m.register_name_placeholder()}
+                required
+                autocomplete="given-name"
+                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <Label for="surname">{m.register_surname_label()}</Label>
+              <Input
+                {...register.fields.surname.as('text')}
+                id="surname"
+                name="surname"
+                type="text"
+                placeholder={m.register_surname_placeholder()}
+                required
+                autocomplete="family-name"
+                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <Label for="username">{m.register_username_label()}</Label>
+              <Input
+                {...register.fields.username.as('text')}
+                id="username"
+                name="username"
+                type="text"
+                placeholder={m.register_username_placeholder()}
+                required
+                autocomplete="username"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
             </div>

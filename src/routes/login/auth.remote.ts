@@ -1,8 +1,8 @@
 import * as v from 'valibot';
 import { error, redirect } from '@sveltejs/kit';
 import { form, getRequestEvent } from '$app/server';
-import { authService } from '$lib/services/AuthService';
-import { ApiError } from '$lib/services/ApiService';
+import { AuthService } from '$lib/services/AuthService';
+import { createApiClient, ApiError } from '$lib/services/ApiService';
 import { TokenManager } from '$lib/token';
 import { localizeUrl } from '$lib/paraglide/runtime';
 import { AppRoutes } from '$lib/routes';
@@ -26,29 +26,24 @@ export const login = form(LoginSchema, async (data: LoginData) => {
   const event = getRequestEvent();
   const redirectToParam = event.url.searchParams.get('redirectTo');
 
-  // Localize the redirect URL for server-side redirect
   const targetPath = redirectToParam || AppRoutes.Dashboard;
   const localizedUrl = localizeUrl(new URL(targetPath, event.url.origin));
   const redirectTo = localizedUrl.pathname;
 
-  try {
-    const result = await authService.login({
-      email: data.email,
-      password: data._password
-    });
+  const apiClient = createApiClient(event.cookies);
+  const authService = new AuthService(apiClient);
 
-    if (!result.success || !result.data) {
-      error(400, result.error || 'Login failed');
-    }
+  const result = await authService.login({
+    email: data.email,
+    password: data._password
+  });
 
-    TokenManager.setAccessToken(result.data.access_token, result.data.expires_in);
-  } catch (err) {
-    console.error('Login error:', err);
-    if (err instanceof ApiError) {
-      error(err.status || 500);
-    }
-    throw err;
+  if (!result.success || !result.data) {
+    error(result.status, { message: result.error || 'Login failed' });
   }
+
+  // Store access token in HTTP-only cookie
+  TokenManager.setAccessToken(event.cookies, result.data);
 
   redirect(303, redirectTo);
 });

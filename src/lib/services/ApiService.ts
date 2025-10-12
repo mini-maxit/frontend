@@ -1,32 +1,96 @@
 import { TokenManager } from '../token';
-import { PUBLIC_API_URL } from '$env/static/public';
+import { BACKEND_API_URL } from '$env/static/private';
 import { goto } from '$app/navigation';
-import type { OAuth2TokenDto } from '../dto/auth';
+import type { AuthTokenData } from '../dto/auth';
 import { RequestMethod, RequestContentType, type Request } from '../dto/request';
+import type { ApiResponse } from '../dto/response';
+import { isApiErrorResponse } from '../dto/error';
+import type { Cookies } from '@sveltejs/kit';
 
 export class ApiError extends Error {
-  constructor(
-    public status: number,
-    public statusText: string,
-    public url: string,
-    public method: string,
-    public body?: unknown
-  ) {
-    super(`${method} ${url} failed: ${status} ${statusText}`);
+  public readonly status: number;
+  public readonly statusText: string;
+  public readonly url: string;
+  public readonly method: string;
+  public readonly code?: string;
+  public readonly body?: unknown;
+
+  constructor(status: number, statusText: string, url: string, method: string, body?: unknown) {
+    const message = isApiErrorResponse(body)
+      ? `${body.data.code}: ${body.data.message}`
+      : `${method} ${url} failed: ${status} ${statusText}`;
+
+    super(message);
     this.name = 'ApiError';
+    this.status = status;
+    this.statusText = statusText;
+    this.url = url;
+    this.method = method;
+    this.body = body;
+
+    if (isApiErrorResponse(body)) {
+      this.code = body.data.code;
+    }
+  }
+
+  getUserMessage(): string {
+    if (isApiErrorResponse(this.body)) {
+      return this.body.data.message;
+    }
+    return this.statusText || 'An unexpected error occurred';
+  }
+
+  getStatus(): number {
+    return this.status;
+  }
+
+  toJSON(): {
+    name: string;
+    message: string;
+    status: number;
+    statusText: string;
+    url: string;
+    method: string;
+    code?: string;
+    body?: unknown;
+  } {
+    return {
+      name: this.name,
+      message: this.message,
+      status: this.status,
+      statusText: this.statusText,
+      url: this.url,
+      method: this.method,
+      code: this.code,
+      body: this.body
+    };
   }
 }
 
-class ApiService {
+export class ApiService {
   private baseUrl: string;
   private isRefreshing = false;
   private refreshPromise: Promise<void> | null = null;
+  private cookies: Cookies | null = null;
 
-  constructor(baseUrl: string = PUBLIC_API_URL) {
+  constructor(baseUrl: string = BACKEND_API_URL) {
     this.baseUrl = baseUrl;
   }
 
+  /**
+   * Set cookies for this API client instance
+   * Must be called before making requests in server-side context
+   */
+  withCookies(cookies: Cookies): ApiService {
+    this.cookies = cookies;
+    return this;
+  }
+
   private async refreshToken(): Promise<void> {
+    if (!this.cookies) {
+      throw new Error('Cookies not set. Call withCookies() before making requests.');
+    }
+
     if (this.isRefreshing && this.refreshPromise) {
       return this.refreshPromise;
     }
@@ -41,15 +105,19 @@ class ApiService {
 
         if (!response.ok) {
           console.warn('Token refresh failed, clearing tokens and redirecting to login.');
-          TokenManager.clearTokens();
+          if (this.cookies) {
+            TokenManager.clearTokens(this.cookies);
+          }
           if (typeof window !== 'undefined') {
             goto('/login');
           }
           throw new Error('Token refresh failed');
         }
 
-        const data: OAuth2TokenDto = await response.json();
-        TokenManager.setAccessToken(data.access_token, data.expires_in);
+        const data: ApiResponse<AuthTokenData> = await response.json();
+        if (this.cookies) {
+          TokenManager.setAccessToken(this.cookies, data.data);
+        }
       } finally {
         this.isRefreshing = false;
         this.refreshPromise = null;
@@ -60,7 +128,11 @@ class ApiService {
   }
 
   private async request(request: Request): Promise<Response> {
-    const token = TokenManager.getAccessToken();
+    if (!this.cookies) {
+      throw new Error('Cookies not set. Call withCookies() before making requests.');
+    }
+
+    const token = TokenManager.getAccessToken(this.cookies);
 
     const headers = new Headers(request.options?.headers);
     if (token) {
@@ -81,29 +153,21 @@ class ApiService {
       credentials: 'include'
     });
 
-    if (response.status === 401) {
+    if (response.status === 401 && !request.url.includes('/auth/login')) {
       await this.refreshToken();
 
-      const newToken = TokenManager.getAccessToken();
-      if (newToken) {
-        headers.set('Authorization', `Bearer ${newToken}`);
-        response = await fetch(`${this.baseUrl}${request.url}`, {
-          method: request.method,
-          body: request.body,
-          ...request.options,
-          headers,
-          credentials: 'include'
-        });
-      }
-    }
-
-    if (!response.ok) {
-      if (response.headers.get('Content-Type')?.includes('application/json')) {
-        const data = await response.json();
-        console.error('API Error:', data);
-      } else {
-        const text = await response.text();
-        console.error('API Error (non-JSON):', text);
+      if (this.cookies) {
+        const newToken = TokenManager.getAccessToken(this.cookies);
+        if (newToken) {
+          headers.set('Authorization', `Bearer ${newToken}`);
+          response = await fetch(`${this.baseUrl}${request.url}`, {
+            method: request.method,
+            body: request.body,
+            ...request.options,
+            headers,
+            credentials: 'include'
+          });
+        }
       }
     }
 
@@ -112,10 +176,29 @@ class ApiService {
 
   private async parseErrorBody(response: Response): Promise<unknown> {
     const contentType = response.headers.get('Content-Type');
+    const clonedResponse = response.clone();
+
     if (contentType?.includes('application/json')) {
-      return response.json().catch(() => null);
+      try {
+        const data = await clonedResponse.json();
+
+        if (isApiErrorResponse(data)) {
+          return data;
+        }
+
+        console.warn('API returned JSON error response in unexpected format:', data);
+        return data;
+      } catch (error) {
+        console.error('Failed to parse JSON error response:', error);
+      }
     }
-    return response.text().catch(() => null);
+
+    try {
+      return await response.text();
+    } catch (error) {
+      console.error('Failed to parse error response as text:', error);
+      return null;
+    }
   }
 
   async get<T>(request: Omit<Request, 'method'>): Promise<T> {
@@ -123,16 +206,21 @@ class ApiService {
       ...request,
       method: RequestMethod.GET
     });
+
     if (!response.ok) {
       const body = await this.parseErrorBody(response);
-      throw new ApiError(
+      const error = new ApiError(
         response.status,
         response.statusText,
         request.url,
         RequestMethod.GET,
         body
       );
+
+      console.error('API GET request failed:', error.toJSON());
+      throw error;
     }
+
     return response.json();
   }
 
@@ -141,16 +229,21 @@ class ApiService {
       ...request,
       method: RequestMethod.POST
     });
+
     if (!response.ok) {
-      const errorBody = await this.parseErrorBody(response);
-      throw new ApiError(
+      const body = await this.parseErrorBody(response);
+      const error = new ApiError(
         response.status,
         response.statusText,
         request.url,
         RequestMethod.POST,
-        errorBody
+        body
       );
+
+      console.error('API POST request failed:', error.toJSON());
+      throw error;
     }
+
     return response.json();
   }
 
@@ -159,16 +252,21 @@ class ApiService {
       ...request,
       method: RequestMethod.PUT
     });
+
     if (!response.ok) {
-      const errorBody = await this.parseErrorBody(response);
-      throw new ApiError(
+      const body = await this.parseErrorBody(response);
+      const error = new ApiError(
         response.status,
         response.statusText,
         request.url,
         RequestMethod.PUT,
-        errorBody
+        body
       );
+
+      console.error('API PUT request failed:', error.toJSON());
+      throw error;
     }
+
     return response.json();
   }
 
@@ -177,16 +275,21 @@ class ApiService {
       ...request,
       method: RequestMethod.PATCH
     });
+
     if (!response.ok) {
-      const errorBody = await this.parseErrorBody(response);
-      throw new ApiError(
+      const body = await this.parseErrorBody(response);
+      const error = new ApiError(
         response.status,
         response.statusText,
         request.url,
         RequestMethod.PATCH,
-        errorBody
+        body
       );
+
+      console.error('API PATCH request failed:', error.toJSON());
+      throw error;
     }
+
     return response.json();
   }
 
@@ -195,18 +298,27 @@ class ApiService {
       ...request,
       method: RequestMethod.DELETE
     });
+
     if (!response.ok) {
-      const errorBody = await this.parseErrorBody(response);
-      throw new ApiError(
+      const body = await this.parseErrorBody(response);
+      const error = new ApiError(
         response.status,
         response.statusText,
         request.url,
         RequestMethod.DELETE,
-        errorBody
+        body
       );
+
+      console.error('API DELETE request failed:', error.toJSON());
+      throw error;
     }
+
     return response.json();
   }
 }
 
-export const apiClient = new ApiService();
+export function createApiClient(cookies: Cookies): ApiService {
+  const client = new ApiService();
+  client.withCookies(cookies);
+  return client;
+}

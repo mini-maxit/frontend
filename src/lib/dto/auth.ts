@@ -1,4 +1,4 @@
-export interface OAuth2TokenDto {
-  access_token: string;
-  expires_in: number;
+export interface AuthTokenData {
+  accessToken: string;
+  expiresAt: string;
 }

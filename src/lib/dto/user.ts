@@ -4,7 +4,10 @@ export interface UserLoginDto {
 }
 
 export interface UserRegisterDto {
-  name: string;
   email: string;
+  name: string;
+  surname: string;
+  username: string;
   password: string;
+  confirmPassword: string;
 }
