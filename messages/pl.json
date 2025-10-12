@@ -60,6 +60,7 @@
   "error_401_description": "Zaloguj się, aby uzyskać dostęp do tej strony.",
   "error_generic_title": "Błąd",
   "error_default_message": "Coś poszło nie tak",
+  "error_unknown_error": "Wystąpił nieznany błąd",
   "error_go_home": "Strona Główna",
   "error_try_again": "Spróbuj Ponownie"
 }

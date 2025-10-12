@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { register } from './auth.remote';
+  import { register } from './register.remote';
   import { m } from '$lib/paraglide/messages.js';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -10,6 +10,7 @@
   import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
   import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
+  import { isHttpError } from '@sveltejs/kit';
 </script>
 
 <div
@@ -39,8 +40,8 @@
               try {
                 await submit();
               } catch (error: unknown) {
-                if (error instanceof Error) {
-                  toast.error(error.message);
+                if (isHttpError(error)) {
+                  toast.error(error.body.message);
                 } else {
                   toast.error('An unknown error occurred');
                 }

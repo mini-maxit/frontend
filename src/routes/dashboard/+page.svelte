@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { logout } from './logout.remote';
   import { Button } from '$lib/components/ui/button';
   import { m } from '$lib/paraglide/messages.js';
-  import { enhance } from '$app/forms';
+  import { toast } from 'svelte-sonner';
+  import { isHttpError } from '@sveltejs/kit';
 </script>
 
 <div class="container mx-auto px-4 py-8">
@@ -14,7 +16,19 @@
 
   <div class="mt-4 mb-8 flex items-center justify-between">
     <h1 class="text-3xl font-bold">{m.header_dashboard()}</h1>
-    <form method="POST" action="?/logout" use:enhance>
+    <form
+      {...logout.enhance(async ({ submit }) => {
+        try {
+          await submit();
+        } catch (error: { message?: string } | unknown) {
+          if (isHttpError(error)) {
+            toast.error(error.body.message);
+          } else {
+            toast.error('An unknown error occurred');
+          }
+        }
+      })}
+    >
       <Button type="submit" variant="outline">Logout</Button>
     </form>
   </div>

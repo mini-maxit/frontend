@@ -60,6 +60,7 @@
   "error_401_description": "Please log in to access this page.",
   "error_generic_title": "Error",
   "error_default_message": "Something went wrong",
+  "error_unknown_error": "An unknown error occurred",
   "error_go_home": "Go Home",
   "error_try_again": "Try Again"
 }

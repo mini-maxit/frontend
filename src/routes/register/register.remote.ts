@@ -1,11 +1,12 @@
 import * as v from 'valibot';
-import { error, redirect } from '@sveltejs/kit';
+import { error, isHttpError, redirect } from '@sveltejs/kit';
 import { form, getRequestEvent } from '$app/server';
 import { AuthService } from '$lib/services/AuthService';
-import { createApiClient, ApiError } from '$lib/services/ApiService';
+import { createApiClient } from '$lib/services/ApiService';
 import { TokenManager } from '$lib/token';
 import { localizeUrl } from '$lib/paraglide/runtime';
 import { AppRoutes } from '$lib/routes';
+import * as m from '$lib/paraglide/messages';
 
 const RegisterSchema = v.pipe(
   v.object({
@@ -54,25 +55,32 @@ type RegisterData = v.InferOutput<typeof RegisterSchema>;
 export const register = form(RegisterSchema, async (data: RegisterData) => {
   const event = getRequestEvent();
 
-  // Create API client with cookies for this request
   const apiClient = createApiClient(event.cookies);
   const authService = new AuthService(apiClient);
-
-  const result = await authService.register({
-    email: data.email,
-    name: data.name,
-    surname: data.surname,
-    username: data.username,
-    password: data._password,
-    confirmPassword: data._confirmPassword
-  });
-
-  if (!result.success || !result.data) {
-    error(result.status, { message: result.error || 'Registration failed' });
-  }
-
-  TokenManager.setAccessToken(event.cookies, result.data);
-
   const localizedUrl = localizeUrl(new URL(AppRoutes.Dashboard, event.url.origin));
+  try {
+    const result = await authService.register({
+      email: data.email,
+      name: data.name,
+      surname: data.surname,
+      username: data.username,
+      password: data._password,
+      confirmPassword: data._confirmPassword
+    });
+
+    if (!result.success) {
+      error(result.status, { message: result.error || m.error_default_message() });
+    }
+    if (result.data) {
+      TokenManager.setAccessToken(event.cookies, result.data);
+    }
+  } catch (err) {
+    if (isHttpError(err)) {
+      error(err.status, { message: err.body.message });
+    } else {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      error(500, { message: errorMessage });
+    }
+  }
   redirect(303, localizedUrl.pathname);
 });

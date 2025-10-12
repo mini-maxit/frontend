@@ -26,9 +26,7 @@ export class AuthService {
           status: error.getStatus()
         };
       }
-
-      const errorMessage = error instanceof Error ? error.message : 'Login failed';
-      return { success: false, error: errorMessage, status: 500 };
+      throw error;
     }
   }
 
@@ -51,9 +49,7 @@ export class AuthService {
           status: error.getStatus()
         };
       }
-
-      const errorMessage = error instanceof Error ? error.message : 'Registration failed';
-      return { success: false, error: errorMessage, status: 500 };
+      throw error;
     }
   }
 
@@ -73,9 +69,7 @@ export class AuthService {
           status: error.getStatus()
         };
       }
-
-      const errorMessage = error instanceof Error ? error.message : 'Logout failed';
-      return { success: false, error: errorMessage, status: 500 };
+      throw error;
     }
   }
 }

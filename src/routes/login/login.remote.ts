@@ -1,11 +1,12 @@
 import * as v from 'valibot';
-import { error, redirect } from '@sveltejs/kit';
+import { error, isHttpError, redirect } from '@sveltejs/kit';
 import { form, getRequestEvent } from '$app/server';
 import { AuthService } from '$lib/services/AuthService';
-import { createApiClient, ApiError } from '$lib/services/ApiService';
+import { createApiClient } from '$lib/services/ApiService';
 import { TokenManager } from '$lib/token';
 import { localizeUrl } from '$lib/paraglide/runtime';
 import { AppRoutes } from '$lib/routes';
+import * as m from '$lib/paraglide/messages';
 
 const LoginSchema = v.object({
   email: v.pipe(
@@ -33,17 +34,25 @@ export const login = form(LoginSchema, async (data: LoginData) => {
   const apiClient = createApiClient(event.cookies);
   const authService = new AuthService(apiClient);
 
-  const result = await authService.login({
-    email: data.email,
-    password: data._password
-  });
+  try {
+    const result = await authService.login({
+      email: data.email,
+      password: data._password
+    });
+    if (!result.success) {
+      error(result.status, { message: result.error || m.error_default_message() });
+    }
 
-  if (!result.success || !result.data) {
-    error(result.status, { message: result.error || 'Login failed' });
+    if (result.data) {
+      TokenManager.setAccessToken(event.cookies, result.data);
+    }
+  } catch (err) {
+    if (isHttpError(err)) {
+      error(err.status, { message: err.body.message });
+    } else {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      error(500, { message: errorMessage });
+    }
   }
-
-  // Store access token in HTTP-only cookie
-  TokenManager.setAccessToken(event.cookies, result.data);
-
   redirect(303, redirectTo);
 });
