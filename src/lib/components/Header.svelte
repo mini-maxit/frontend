@@ -31,17 +31,16 @@
   }`}
 >
   <div class="relative mx-auto flex max-w-7xl items-center justify-between">
-    <a
+    <div
       class="absolute top-1/2 left-0 -translate-y-1/2 overflow-hidden"
       class:hidden={!isScrolled}
-      href={localizeHref('/')}
     >
       <MaxitLogo
         width={isMobile.current ? 64 : 128}
         height={isMobile.current ? 64 : 128}
         primaryColor={true}
       />
-    </a>
+    </div>
 
     <div class="ml-auto flex items-center gap-8">
       <div class={`flex items-center gap-2 transition-colors duration-300 ${textColor}`}>
