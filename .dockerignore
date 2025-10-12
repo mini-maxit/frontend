@@ -1,0 +1,77 @@
+# Dependencies
+node_modules/
+pnpm-debug.log*
+.pnpm-store/
+
+# Build outputs
+build/
+.svelte-kit/
+dist/
+.output/
+
+# Environment files
+.env.*
+!.env.example
+
+# Git
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+coverage/
+.nyc_output/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+
+# Documentation
+README.md
+CHANGELOG.md
+LICENSE
+*.md
+docs/
+
+# CI/CD
+.github/
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Prettier & Linting
+.prettierrc
+.prettierignore
+.eslintrc*
+eslint.config.js
+.eslintignore
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Optional eslint cache
+.eslintcache

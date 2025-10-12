@@ -1,11 +1,12 @@
 import { TokenManager } from '../token';
-import { BACKEND_API_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { goto } from '$app/navigation';
 import type { AuthTokenData } from '../dto/auth';
 import { RequestMethod, RequestContentType, type Request } from '../dto/request';
 import type { ApiResponse } from '../dto/response';
 import { isApiErrorResponse } from '../dto/error';
 import type { Cookies } from '@sveltejs/kit';
+import { AppRoutes } from '$lib/routes';
 
 export class ApiError extends Error {
   public readonly status: number;
@@ -73,7 +74,7 @@ export class ApiService {
   private refreshPromise: Promise<void> | null = null;
   private cookies: Cookies | null = null;
 
-  constructor(baseUrl: string = BACKEND_API_URL) {
+  constructor(baseUrl: string = env.BACKEND_API_URL || 'http://localhost:8000/api/v1') {
     this.baseUrl = baseUrl;
   }
 
@@ -109,7 +110,7 @@ export class ApiService {
             TokenManager.clearTokens(this.cookies);
           }
           if (typeof window !== 'undefined') {
-            goto('/login');
+            goto(AppRoutes.Login);
           }
           throw new Error('Token refresh failed');
         }
