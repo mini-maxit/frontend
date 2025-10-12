@@ -33,7 +33,7 @@ export class ApiError extends Error {
     }
   }
 
-  getUserMessage(): string {
+  getApiMessage(): string {
     if (isApiErrorResponse(this.body)) {
       return this.body.data.message;
     }

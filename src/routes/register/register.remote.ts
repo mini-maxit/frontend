@@ -78,7 +78,7 @@ export const register = form(RegisterSchema, async (data: RegisterData) => {
     if (isHttpError(err)) {
       error(err.status, { message: err.body.message });
     } else {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      const errorMessage = err instanceof Error ? err.message : m.error_default_message();
       error(500, { message: errorMessage });
     }
   }

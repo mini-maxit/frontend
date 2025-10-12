@@ -22,7 +22,7 @@ export class AuthService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getUserMessage(),
+          error: error.getApiMessage(),
           status: error.getStatus()
         };
       }
@@ -45,7 +45,7 @@ export class AuthService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getUserMessage(),
+          error: error.getApiMessage(),
           status: error.getStatus()
         };
       }
@@ -65,7 +65,7 @@ export class AuthService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getUserMessage(),
+          error: error.getApiMessage(),
           status: error.getStatus()
         };
       }

@@ -43,7 +43,7 @@
                 if (isHttpError(error)) {
                   toast.error(error.body.message);
                 } else {
-                  toast.error('An unknown error occurred');
+                  toast.error(m.error_default_message());
                 }
               }
             })}

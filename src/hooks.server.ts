@@ -5,6 +5,7 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { localizeUrl } from '$lib/paraglide/runtime';
 import { AppRoutes, isProtectedRoute } from '$lib/routes';
 import { ACCESS_TOKEN_KEY } from '$lib/token';
+import { decodeAccessToken } from '$lib/jwt';
 
 const handleParaglide: Handle = ({ event, resolve }) =>
   paraglideMiddleware(event.request, ({ request, locale }) => {
@@ -16,10 +17,18 @@ const handleParaglide: Handle = ({ event, resolve }) =>
   });
 
 const handleAuth: Handle = async ({ event, resolve }) => {
-  if (isProtectedRoute(event.url.pathname)) {
-    const accessToken = event.cookies.get(ACCESS_TOKEN_KEY);
+  event.locals.user = null;
 
-    if (!accessToken) {
+  const accessToken = event.cookies.get(ACCESS_TOKEN_KEY);
+  if (accessToken) {
+    const user = decodeAccessToken(accessToken);
+    if (user) {
+      event.locals.user = user;
+    }
+  }
+
+  if (isProtectedRoute(event.url.pathname)) {
+    if (!event.locals.user) {
       // Store the original URL to redirect back after login
       const redirectTo = event.url.pathname + event.url.search;
 
