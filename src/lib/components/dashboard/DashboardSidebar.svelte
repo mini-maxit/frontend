@@ -159,9 +159,9 @@
   <SidebarFooter>
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton isActive={isActive(AppRoutes.UserProfile)}>
+        <SidebarMenuButton isActive={isActive(localizeHref(AppRoutes.UserProfile))}>
           {#snippet child({ props })}
-            <a href={AppRoutes.UserProfile} {...props}>
+            <a href={localizeHref(AppRoutes.UserProfile)} {...props}>
               <UserCircle />
               <span>{m.sidebar_profile()}</span>
             </a>
