@@ -62,5 +62,15 @@
   "error_default_message": "Coś poszło nie tak",
   "error_unknown_error": "Wystąpił nieznany błąd",
   "error_go_home": "Strona Główna",
-  "error_try_again": "Spróbuj Ponownie"
+  "error_try_again": "Spróbuj Ponownie",
+  "sidebar_your_section": "Twoja Aktywność",
+  "sidebar_public_section": "Przeglądaj",
+  "sidebar_your_groups": "Twoje Grupy",
+  "sidebar_your_submissions": "Twoje Rozwiązania",
+  "sidebar_your_contests": "Twoje Konkursy",
+  "sidebar_your_tasks": "Twoje Zadania",
+  "sidebar_available_contests": "Dostępne Konkursy",
+  "sidebar_available_tasks": "Dostępne Zadania",
+  "sidebar_profile": "Mój Profil",
+  "sidebar_dashboard": "Panel"
 }

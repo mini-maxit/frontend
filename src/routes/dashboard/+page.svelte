@@ -9,7 +9,26 @@
   let { data }: PageProps = $props();
 </script>
 
-<div class="container mx-auto px-4 py-8">
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="text-3xl font-bold">{m.header_dashboard()}</h1>
+    <form
+      {...logout.enhance(async ({ submit }) => {
+        try {
+          await submit();
+        } catch (error: { message?: string } | unknown) {
+          if (isHttpError(error)) {
+            toast.error(error.body.message);
+          } else {
+            toast.error(m.error_default_message());
+          }
+        }
+      })}
+    >
+      <Button type="submit" variant="outline">Logout</Button>
+    </form>
+  </div>
+
   <div class="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
     <h2 class="mb-4 text-2xl font-semibold">Welcome to MaxIT Dashboard!</h2>
     <p class="text-muted-foreground">
@@ -29,24 +48,5 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="mt-4 mb-8 flex items-center justify-between">
-    <h1 class="text-3xl font-bold">{m.header_dashboard()}</h1>
-    <form
-      {...logout.enhance(async ({ submit }) => {
-        try {
-          await submit();
-        } catch (error: { message?: string } | unknown) {
-          if (isHttpError(error)) {
-            toast.error(error.body.message);
-          } else {
-            toast.error(m.error_default_message());
-          }
-        }
-      })}
-    >
-      <Button type="submit" variant="outline">Logout</Button>
-    </form>
   </div>
 </div>

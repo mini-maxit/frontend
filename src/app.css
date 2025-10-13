@@ -41,7 +41,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
+  --sidebar: var(--maxit-contrast);
   --sidebar-foreground: var(--maxit-foreground);
   --sidebar-primary: var(--maxit-primary);
   --sidebar-primary-foreground: var(--maxit-contrast);
