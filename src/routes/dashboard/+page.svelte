@@ -4,9 +4,9 @@
   import { m } from '$lib/paraglide/messages.js';
   import { toast } from 'svelte-sonner';
   import { isHttpError } from '@sveltejs/kit';
-  import type { LayoutServerLoad } from './$types';
+  import type { PageProps } from './$types';
 
-  let { data }: { data: LayoutServerLoad } = $props();
+  let { data }: PageProps = $props();
 </script>
 
 <div class="container mx-auto px-4 py-8">

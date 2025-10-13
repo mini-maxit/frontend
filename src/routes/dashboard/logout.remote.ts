@@ -12,7 +12,7 @@ const LogoutSchema = v.object({});
 
 type LogoutData = v.InferOutput<typeof LogoutSchema>;
 
-export const logout = form(LogoutSchema, async (data: LogoutData) => {
+export const logout = form(LogoutSchema, async (_: LogoutData) => {
   const event = getRequestEvent();
 
   const apiClient = createApiClient(event.cookies);
