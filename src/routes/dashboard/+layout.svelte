@@ -1,0 +1,24 @@
+<script lang="ts">
+  import { SidebarProvider, SidebarInset, SidebarTrigger } from '$lib/components/ui/sidebar';
+  import DashboardSidebar from '$lib/components/dashboard/DashboardSidebar.svelte';
+  import { getDashboardTitleTranslationFromPathname } from '$lib/components/dashboard/utils';
+  import { page } from '$app/stores';
+  import type { LayoutProps } from './$types';
+
+  let { children }: LayoutProps = $props();
+
+  const pageTitle = $derived(getDashboardTitleTranslationFromPathname($page.url.pathname));
+</script>
+
+<SidebarProvider>
+  <DashboardSidebar />
+  <SidebarInset class="flex flex-col">
+    <div class="flex items-center justify-center gap-4 border-b p-4">
+      <SidebarTrigger class={`absolute left-4`} hiddable={true} />
+      <h1 class="text-xl font-semibold">{pageTitle}</h1>
+    </div>
+    <main class="flex-1 p-4">
+      {@render children()}
+    </main>
+  </SidebarInset>
+</SidebarProvider>

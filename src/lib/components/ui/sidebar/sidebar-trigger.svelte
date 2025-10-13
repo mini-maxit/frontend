@@ -1,35 +1,35 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button/index.js';
   import { cn } from '$lib/utils.js';
   import PanelLeftIcon from '@lucide/svelte/icons/panel-left';
-  import type { ComponentProps } from 'svelte';
   import { useSidebar } from './context.svelte.js';
+  import SidebarMenuButton from './sidebar-menu-button.svelte';
 
   let {
-    ref = $bindable(null),
     class: className,
     onclick,
+    hiddable = false,
     ...restProps
-  }: ComponentProps<typeof Button> & {
+  }: {
+    class?: string;
     onclick?: (e: MouseEvent) => void;
+    [key: string]: any;
   } = $props();
 
   const sidebar = useSidebar();
+  const hidden = $derived(sidebar.open && hiddable);
 </script>
 
-<Button
+<SidebarMenuButton
   data-sidebar="trigger"
   data-slot="sidebar-trigger"
-  variant="ghost"
-  size="icon"
-  class={cn('size-7', className)}
-  type="button"
+  variant="default"
+  size="sm"
+  class={cn(`size-7 justify-center ${hidden ? 'hidden' : ''}`, className)}
   onclick={(e) => {
     onclick?.(e);
     sidebar.toggle();
   }}
   {...restProps}
 >
-  <PanelLeftIcon />
-  <span class="sr-only">Toggle Sidebar</span>
-</Button>
+  <PanelLeftIcon class="size-4" />
+</SidebarMenuButton>

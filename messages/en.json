@@ -62,5 +62,15 @@
   "error_default_message": "Something went wrong",
   "error_unknown_error": "An unknown error occurred",
   "error_go_home": "Go Home",
-  "error_try_again": "Try Again"
+  "error_try_again": "Try Again",
+  "sidebar_your_section": "Your Activity",
+  "sidebar_public_section": "Explore",
+  "sidebar_your_groups": "Your Groups",
+  "sidebar_your_submissions": "Your Submissions",
+  "sidebar_your_contests": "Your Contests",
+  "sidebar_your_tasks": "Your Tasks",
+  "sidebar_available_contests": "Available Contests",
+  "sidebar_available_tasks": "Available Tasks",
+  "sidebar_profile": "My Profile",
+  "sidebar_dashboard": "Dashboard"
 }

@@ -5,6 +5,7 @@
   import { onMount } from 'svelte';
   import { isMobile } from '$lib/hooks/is-mobile.svelte';
   import { m } from '$lib/paraglide/messages.js';
+  import { AppRoutes } from '$lib/routes';
 
   let isScrolled = $state(false);
 
@@ -57,7 +58,7 @@
         >
       </div>
 
-      <Button href={localizeHref('/dashboard')}>{m.header_dashboard()}</Button>
+      <Button href={localizeHref(AppRoutes.Dashboard)}>{m.header_dashboard()}</Button>
     </div>
   </div>
 </header>
