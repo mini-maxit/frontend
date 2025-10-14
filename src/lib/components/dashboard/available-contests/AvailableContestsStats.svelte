@@ -37,7 +37,7 @@
 </script>
 
 <div class="grid gap-6 sm:grid-cols-3">
-  {#each stats as stat}
+  {#each stats as stat (stat.label)}
     <Card.Root
       class="group relative overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
     >
