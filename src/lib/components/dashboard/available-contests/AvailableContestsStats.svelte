@@ -3,27 +3,37 @@
   import Trophy from '@lucide/svelte/icons/trophy';
   import Zap from '@lucide/svelte/icons/zap';
   import Calendar from '@lucide/svelte/icons/calendar';
+  import { calculateContestStats } from '$lib/utils/contest';
+  import type { Contest } from '$lib/dto/contest';
 
-  const stats = [
+  interface AvailableContestsStatsProps {
+    contests: Contest[];
+  }
+
+  let { contests }: AvailableContestsStatsProps = $props();
+
+  const contestStats = $derived(calculateContestStats(contests));
+
+  const stats = $derived([
     {
       icon: Trophy,
       label: 'Available Contests',
-      value: '8',
+      value: contestStats.total.toString(),
       color: 'from-blue-500 to-blue-600'
     },
     {
       icon: Zap,
       label: 'Live Now',
-      value: '2',
+      value: contestStats.live.toString(),
       color: 'from-red-500 to-red-600'
     },
     {
       icon: Calendar,
       label: 'Upcoming',
-      value: '4',
+      value: contestStats.upcoming.toString(),
       color: 'from-yellow-500 to-orange-600'
     }
-  ];
+  ]);
 </script>
 
 <div class="grid gap-6 sm:grid-cols-3">
