@@ -1,3 +1,9 @@
+export enum ContestRegistrationStatus {
+  Registered = 'registered',
+  AwaitingApproval = 'awaitingApproval',
+  RegistrationClosed = 'registrationClosed',
+  CanRegister = 'canRegister'
+}
 export interface Contest {
   id: number;
   name: string;
@@ -7,12 +13,12 @@ export interface Contest {
   createdAt: string;
   updatedAt: string;
   createdBy: number;
-  isVisible: boolean;
-  isRegistrationOpen: boolean;
-  isSubmissionOpen: boolean;
+  participantCount: number;
+  tasksCount: number;
+  registrationStatus: ContestRegistrationStatus;
 }
 
-export interface ContestListResponse {
+export interface ContestsResponse {
   data: Contest[];
   ok: boolean;
 }
@@ -23,8 +29,5 @@ export interface ContestWithStatus extends Contest {
   status: ContestStatus;
   startDate: string;
   endDate: string;
-  participantCount?: number;
-  tasksCount?: number;
-  isRegistered?: boolean;
   endsInMinutes?: number;
 }

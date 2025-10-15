@@ -1,23 +1,75 @@
 <script lang="ts">
   import AvailableContestsStats from '$lib/components/dashboard/available-contests/AvailableContestsStats.svelte';
   import AvailableContestCard from '$lib/components/dashboard/available-contests/AvailableContestCard.svelte';
-  import { getContests } from './contests.remote';
+  import {
+    getOngoingContests,
+    getUpcomingContests,
+    getPastContests,
+    registerForContest
+  } from './contests.remote';
+  import { toast } from 'svelte-sonner';
+  import { ContestRegistrationStatus } from '$lib/dto/contest';
+  import { goto } from '$app/navigation';
 
-  const contestsQuery = getContests();
+  const ongoingContestsQuery = getOngoingContests();
+  const upcomingContestsQuery = getUpcomingContests();
+  const pastContestsQuery = getPastContests();
+  let registering = $state<number | null>(null);
 
-  const contestGroups = $derived.by(() => {
-    if (contestsQuery.error || contestsQuery.loading) return { live: [], upcoming: [], past: [] };
-    const contests = contestsQuery.current || [];
-    return {
-      live: contests.filter((c) => c.status === 'live'),
-      upcoming: contests.filter((c) => c.status === 'upcoming'),
-      past: contests.filter((c) => c.status === 'past')
-    };
-  });
+  function handleViewContest(contestId: number) {
+    // Navigate to contest detail page
+    // This will work when the route /dashboard/contests/[id] is implemented
+    const contestPath = '/dashboard/contests/' + contestId;
+    goto(contestPath);
+  }
 
-  const liveContests = $derived(contestGroups.live);
-  const upcomingContests = $derived(contestGroups.upcoming);
-  const pastContests = $derived(contestGroups.past);
+  async function handleRegister(contestId: number) {
+    registering = contestId;
+    try {
+      await registerForContest(contestId).updates(
+        ongoingContestsQuery.withOverride((contests) =>
+          contests.map((contest) =>
+            contest.id === contestId
+              ? { ...contest, registrationStatus: ContestRegistrationStatus.Registered }
+              : contest
+          )
+        ),
+        upcomingContestsQuery.withOverride((contests) =>
+          contests.map((contest) =>
+            contest.id === contestId
+              ? { ...contest, registrationStatus: ContestRegistrationStatus.Registered }
+              : contest
+          )
+        )
+      );
+      toast.success('Successfully registered for the contest!');
+    } catch (error) {
+      console.error('Registration failed:', error);
+      toast.error('Failed to register for the contest. Please try again.');
+    } finally {
+      registering = null;
+    }
+  }
+
+  const liveContests = $derived(ongoingContestsQuery.current || []);
+  const upcomingContests = $derived(upcomingContestsQuery.current || []);
+  const pastContests = $derived(pastContestsQuery.current || []);
+
+  const isLoading = $derived(
+    ongoingContestsQuery.loading || upcomingContestsQuery.loading || pastContestsQuery.loading
+  );
+  const hasError = $derived(
+    ongoingContestsQuery.error || upcomingContestsQuery.error || pastContestsQuery.error
+  );
+
+  function refreshAllQueries() {
+    ongoingContestsQuery.refresh();
+    upcomingContestsQuery.refresh();
+    pastContestsQuery.refresh();
+  }
+
+  // Calculate all contests for stats
+  const allContests = $derived([...liveContests, ...upcomingContests, ...pastContests]);
 </script>
 
 <div class="space-y-8 p-4 sm:p-6 lg:p-8">
@@ -30,12 +82,12 @@
   </div>
 
   <!-- Loading State -->
-  {#if contestsQuery.loading}
+  {#if isLoading}
     <div class="flex items-center justify-center py-12">
       <div class="h-8 w-8 animate-spin rounded-full border-b-2 border-foreground"></div>
       <span class="ml-2 text-muted-foreground">Loading contests...</span>
     </div>
-  {:else if contestsQuery.error}
+  {:else if hasError}
     <!-- Error State -->
     <div class="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-center">
       <h2 class="mb-2 text-lg font-semibold text-destructive">Failed to load contests</h2>
@@ -43,7 +95,7 @@
         Something went wrong while fetching the contest data.
       </p>
       <button
-        onclick={() => contestsQuery.refresh()}
+        onclick={() => refreshAllQueries()}
         class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
       >
         Try Again
@@ -51,7 +103,7 @@
     </div>
   {:else}
     <!-- Stats Banner -->
-    <AvailableContestsStats contests={contestsQuery.current || []} />
+    <AvailableContestsStats contests={allContests} />
 
     <!-- Live Contests Section -->
     {#if liveContests.length > 0}
@@ -74,14 +126,18 @@
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {#each liveContests as contest (contest.id)}
             <AvailableContestCard
+              id={contest.id}
               name={contest.name}
               status={contest.status}
               startDate={contest.startDate}
               endDate={contest.endDate}
-              participantCount={contest.participantCount ?? 0}
-              tasksCount={contest.tasksCount ?? 0}
-              isRegistered={contest.isRegistered ?? false}
+              participantCount={contest.participantCount}
+              tasksCount={contest.tasksCount}
+              registrationStatus={contest.registrationStatus}
               endsInMinutes={contest.endsInMinutes}
+              onRegister={handleRegister}
+              onViewContest={handleViewContest}
+              isRegistering={registering === contest.id}
             />
           {/each}
         </div>
@@ -95,13 +151,17 @@
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {#each upcomingContests as contest (contest.id)}
             <AvailableContestCard
+              id={contest.id}
               name={contest.name}
               status={contest.status}
               startDate={contest.startDate}
               endDate={contest.endDate}
-              participantCount={contest.participantCount ?? 0}
-              tasksCount={contest.tasksCount ?? 0}
-              isRegistered={contest.isRegistered ?? false}
+              participantCount={contest.participantCount}
+              tasksCount={contest.tasksCount}
+              registrationStatus={contest.registrationStatus}
+              onRegister={handleRegister}
+              onViewContest={handleViewContest}
+              isRegistering={registering === contest.id}
             />
           {/each}
         </div>
@@ -115,13 +175,17 @@
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {#each pastContests as contest (contest.id)}
             <AvailableContestCard
+              id={contest.id}
               name={contest.name}
               status={contest.status}
               startDate={contest.startDate}
               endDate={contest.endDate}
-              participantCount={contest.participantCount ?? 0}
-              tasksCount={contest.tasksCount ?? 0}
-              isRegistered={contest.isRegistered ?? false}
+              participantCount={contest.participantCount}
+              tasksCount={contest.tasksCount}
+              registrationStatus={contest.registrationStatus}
+              onRegister={handleRegister}
+              onViewContest={handleViewContest}
+              isRegistering={registering === contest.id}
             />
           {/each}
         </div>

@@ -7,28 +7,41 @@
   import Clock from '@lucide/svelte/icons/clock';
   import Calendar from '@lucide/svelte/icons/calendar';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
+  import Loader2 from '@lucide/svelte/icons/loader-2';
+  import AlertCircle from '@lucide/svelte/icons/alert-circle';
+  import XCircle from '@lucide/svelte/icons/x-circle';
+  import Eye from '@lucide/svelte/icons/eye';
   import { onMount, onDestroy } from 'svelte';
+  import { ContestRegistrationStatus } from '$lib/dto/contest';
 
   interface AvailableContestCardProps {
+    id: number;
     name: string;
     status: 'live' | 'upcoming' | 'past';
     startDate: string;
     endDate: string;
     participantCount: number;
     tasksCount: number;
-    isRegistered: boolean;
+    registrationStatus: ContestRegistrationStatus;
     endsInMinutes?: number; // For countdown on live contests
+    onRegister?: (id: number) => void;
+    onViewContest?: (id: number) => void;
+    isRegistering?: boolean;
   }
 
   let {
+    id,
     name,
     status,
     startDate,
     endDate,
     participantCount,
     tasksCount,
-    isRegistered,
-    endsInMinutes
+    registrationStatus,
+    endsInMinutes,
+    onRegister,
+    onViewContest,
+    isRegistering = false
   }: AvailableContestCardProps = $props();
 
   let timeLeft = $state(endsInMinutes || 0);
@@ -85,6 +98,72 @@
   };
 
   const config = $derived(statusConfig[status]);
+
+  // Registration status configuration
+  const registrationConfig = $derived.by(() => {
+    switch (registrationStatus) {
+      case ContestRegistrationStatus.Registered:
+        return {
+          icon: CheckCircle,
+          text: 'Registered',
+          bgColor: 'bg-green-500/10',
+          textColor: 'text-green-600',
+          canRegister: false,
+          showButton: true,
+          buttonText:
+            status === 'past'
+              ? 'View Results'
+              : status === 'live'
+                ? 'Go to Contest'
+                : 'View Contest',
+          buttonVariant: status === 'past' ? ('outline' as const) : ('default' as const)
+        };
+      case ContestRegistrationStatus.AwaitingApproval:
+        return {
+          icon: AlertCircle,
+          text: 'Awaiting Approval',
+          bgColor: 'bg-yellow-500/10',
+          textColor: 'text-yellow-600',
+          canRegister: false,
+          showButton: false,
+          buttonText: '',
+          buttonVariant: 'default' as const
+        };
+      case ContestRegistrationStatus.RegistrationClosed:
+        return {
+          icon: XCircle,
+          text: 'Registration Closed',
+          bgColor: 'bg-red-500/10',
+          textColor: 'text-red-600',
+          canRegister: false,
+          showButton: status === 'past',
+          buttonText: 'View Results',
+          buttonVariant: 'outline' as const
+        };
+      case ContestRegistrationStatus.CanRegister:
+        return {
+          icon: null,
+          text: '',
+          bgColor: '',
+          textColor: '',
+          canRegister: true,
+          showButton: true,
+          buttonText: 'Register',
+          buttonVariant: 'default' as const
+        };
+      default:
+        return {
+          icon: null,
+          text: '',
+          bgColor: '',
+          textColor: '',
+          canRegister: false,
+          showButton: false,
+          buttonText: '',
+          buttonVariant: 'default' as const
+        };
+    }
+  });
 </script>
 
 <Card.Root
@@ -168,34 +247,45 @@
     </div>
 
     <!-- Registration Status & Action Buttons -->
-    <div class="space-y-2">
-      {#if isRegistered && status !== 'past'}
-        <div
-          class="flex items-center justify-center gap-2 rounded-lg bg-green-500/10 py-2 text-green-600"
-        >
-          <CheckCircle class="h-4 w-4" />
-          <span class="text-sm font-semibold">Registered</span>
-        </div>
+    <!-- Action Button -->
+    {#if registrationConfig.showButton}
+      {#if registrationConfig.canRegister}
         <Button
-          variant="default"
-          class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+          class="w-full bg-gradient-to-r {config.color} text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+          onclick={() => onRegister?.(id)}
+          disabled={isRegistering}
         >
-          {status === 'live' ? 'Go to Contest' : 'View Contest'}
-        </Button>
-      {:else if status === 'past'}
-        <Button
-          variant="outline"
-          class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        >
-          View Results
+          {#if isRegistering}
+            <Loader2 class="mr-2 h-4 w-4 animate-spin" />
+            Registering...
+          {:else}
+            {registrationConfig.buttonText}
+          {/if}
         </Button>
       {:else}
         <Button
-          class="w-full bg-gradient-to-r {config.color} text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+          variant={registrationConfig.buttonVariant}
+          class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+          onclick={() => onViewContest?.(id)}
         >
-          {status === 'live' ? 'Join Contest' : 'Register'}
+          {#if registrationConfig.buttonText === 'View Results'}
+            <Eye class="mr-2 h-4 w-4" />
+          {/if}
+          {registrationConfig.buttonText}
         </Button>
       {/if}
-    </div>
+    {:else if registrationStatus === ContestRegistrationStatus.AwaitingApproval}
+      <!-- Information text for awaiting approval -->
+      <div class="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-center">
+        <p class="text-xs text-yellow-700">
+          Your registration is pending review. You will be notified once approved.
+        </p>
+      </div>
+    {:else if registrationStatus === ContestRegistrationStatus.RegistrationClosed && status !== 'past'}
+      <!-- Information text for closed registration -->
+      <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-center">
+        <p class="text-xs text-red-700">Registration for this contest has been closed.</p>
+      </div>
+    {/if}
   </Card.Content>
 </Card.Root>

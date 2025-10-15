@@ -4,10 +4,10 @@
   import Zap from '@lucide/svelte/icons/zap';
   import Calendar from '@lucide/svelte/icons/calendar';
   import { calculateContestStats } from '$lib/utils/contest';
-  import type { Contest } from '$lib/dto/contest';
+  import type { ContestWithStatus } from '$lib/dto/contest';
 
   interface AvailableContestsStatsProps {
-    contests: Contest[];
+    contests: ContestWithStatus[];
   }
 
   let { contests }: AvailableContestsStatsProps = $props();

@@ -67,9 +67,11 @@ export function formatContestDate(dateString: string | null): string {
 /**
  * Transforms API contest data to the format expected by components
  */
-export function transformContestData(contest: Contest): ContestWithStatus {
-  const status = getContestStatus(contest);
-  const endsInMinutes = getMinutesUntilEnd(contest);
+export function transformContestData(
+  contest: Contest & { status: ContestStatus }
+): ContestWithStatus {
+  const status = contest.status;
+  const endsInMinutes = status === 'live' ? getMinutesUntilEnd(contest) : undefined;
 
   // Provide status-specific fallbacks for null dates
   let startDate: string;
@@ -92,10 +94,6 @@ export function transformContestData(contest: Contest): ContestWithStatus {
     status,
     startDate,
     endDate,
-    // These would need to come from additional API calls or be included in the contest response
-    participantCount: 0, // Placeholder - would need separate API call
-    tasksCount: 0, // Placeholder - would need separate API call
-    isRegistered: false, // Placeholder - would need user-specific data
     ...(endsInMinutes !== undefined && { endsInMinutes })
   };
 }
@@ -103,20 +101,18 @@ export function transformContestData(contest: Contest): ContestWithStatus {
 /**
  * Groups contests by their status
  */
-export function groupContestsByStatus(contests: Contest[]) {
-  const transformed = contests.map(transformContestData);
-
+export function groupContestsByStatus(contests: ContestWithStatus[]) {
   return {
-    live: transformed.filter((c) => c.status === 'live'),
-    upcoming: transformed.filter((c) => c.status === 'upcoming'),
-    past: transformed.filter((c) => c.status === 'past')
+    live: contests.filter((c) => c.status === 'live'),
+    upcoming: contests.filter((c) => c.status === 'upcoming'),
+    past: contests.filter((c) => c.status === 'past')
   };
 }
 
 /**
  * Calculates contest statistics from contest data
  */
-export function calculateContestStats(contests: Contest[]) {
+export function calculateContestStats(contests: ContestWithStatus[]) {
   const groups = groupContestsByStatus(contests);
 
   return {
