@@ -72,5 +72,9 @@
   "sidebar_available_contests": "Available Contests",
   "sidebar_available_tasks": "Available Tasks",
   "sidebar_profile": "My Profile",
-  "sidebar_dashboard": "Dashboard"
+  "sidebar_dashboard": "Dashboard",
+  "sidebar_admin": "Admin",
+  "sidebar_admin_contests": "Contests",
+  "sidebar_admin_groups": "Groups",
+  "sidebar_admin_tasks": "Tasks"
 }

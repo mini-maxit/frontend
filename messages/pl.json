@@ -72,5 +72,9 @@
   "sidebar_available_contests": "Dostępne Konkursy",
   "sidebar_available_tasks": "Dostępne Zadania",
   "sidebar_profile": "Mój Profil",
-  "sidebar_dashboard": "Panel"
+  "sidebar_dashboard": "Panel",
+  "sidebar_admin": "Admin",
+  "sidebar_admin_contests": "Konkursy",
+  "sidebar_admin_groups": "Grupy",
+  "sidebar_admin_tasks": "Zadania"
 }
