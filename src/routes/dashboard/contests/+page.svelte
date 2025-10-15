@@ -126,15 +126,7 @@
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {#each liveContests as contest (contest.id)}
             <AvailableContestCard
-              id={contest.id}
-              name={contest.name}
-              status={contest.status}
-              startDate={contest.startDate}
-              endDate={contest.endDate}
-              participantCount={contest.participantCount}
-              taskCount={contest.taskCount}
-              registrationStatus={contest.registrationStatus}
-              endsInMinutes={contest.endsInMinutes}
+              {contest}
               onRegister={handleRegister}
               onViewContest={handleViewContest}
               isRegistering={registering === contest.id}
@@ -151,14 +143,7 @@
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {#each upcomingContests as contest (contest.id)}
             <AvailableContestCard
-              id={contest.id}
-              name={contest.name}
-              status={contest.status}
-              startDate={contest.startDate}
-              endDate={contest.endDate}
-              participantCount={contest.participantCount}
-              taskCount={contest.taskCount}
-              registrationStatus={contest.registrationStatus}
+              {contest}
               onRegister={handleRegister}
               onViewContest={handleViewContest}
               isRegistering={registering === contest.id}
@@ -175,14 +160,7 @@
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {#each pastContests as contest (contest.id)}
             <AvailableContestCard
-              id={contest.id}
-              name={contest.name}
-              status={contest.status}
-              startDate={contest.startDate}
-              endDate={contest.endDate}
-              participantCount={contest.participantCount}
-              taskCount={contest.taskCount}
-              registrationStatus={contest.registrationStatus}
+              {contest}
               onRegister={handleRegister}
               onViewContest={handleViewContest}
               isRegistering={registering === contest.id}

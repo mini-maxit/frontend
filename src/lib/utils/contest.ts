@@ -1,4 +1,4 @@
-import type { Contest, ContestStatus, ContestWithStatus } from '$lib/dto/contest';
+import { ContestStatus, type Contest } from '$lib/dto/contest';
 
 /**
  * Determines the status of a contest based on current time and contest dates
@@ -10,28 +10,28 @@ export function getContestStatus(contest: Contest): ContestStatus {
   if (contest.startAt === null) {
     // If endAt is also null, it's live indefinitely
     if (contest.endAt === null) {
-      return 'live';
+      return ContestStatus.Ongoing;
     }
     // If endAt exists, check if it's still within the end time
     const endDate = new Date(contest.endAt);
-    return now <= endDate ? 'live' : 'past';
+    return now <= endDate ? ContestStatus.Ongoing : ContestStatus.Past;
   }
 
   const startDate = new Date(contest.startAt);
 
   // If endAt is null, contest is ongoing after start time
   if (contest.endAt === null) {
-    return now >= startDate ? 'live' : 'upcoming';
+    return now >= startDate ? ContestStatus.Ongoing : ContestStatus.Upcoming;
   }
 
   const endDate = new Date(contest.endAt);
 
   if (now < startDate) {
-    return 'upcoming';
+    return ContestStatus.Upcoming;
   } else if (now >= startDate && now <= endDate) {
-    return 'live';
+    return ContestStatus.Ongoing;
   } else {
-    return 'past';
+    return ContestStatus.Past;
   }
 }
 
@@ -40,7 +40,7 @@ export function getContestStatus(contest: Contest): ContestStatus {
  */
 export function getMinutesUntilEnd(contest: Contest): number | undefined {
   const status = getContestStatus(contest);
-  if (status !== 'live' || contest.endAt === null) return undefined;
+  if (status !== ContestStatus.Ongoing || contest.endAt === null) return undefined;
 
   const now = new Date();
   const endDate = new Date(contest.endAt);
@@ -65,54 +65,44 @@ export function formatContestDate(dateString: string | null): string {
 }
 
 /**
- * Transforms API contest data to the format expected by components
+ * Formats a contest's start date for display
  */
-export function transformContestData(
-  contest: Contest & { status: ContestStatus }
-): ContestWithStatus {
-  const status = contest.status;
-  const endsInMinutes = status === 'live' ? getMinutesUntilEnd(contest) : undefined;
-
-  // Provide status-specific fallbacks for null dates
-  let startDate: string;
-  let endDate: string;
-
+export function getFormattedStartDate(contest: Contest): string {
   if (contest.startAt === null) {
-    startDate = status === 'live' ? 'Already started' : 'TBD';
-  } else {
-    startDate = formatContestDate(contest.startAt);
+    return contest.status === ContestStatus.Ongoing ? 'Already started' : 'TBD';
   }
+  return formatContestDate(contest.startAt);
+}
 
+/**
+ * Formats a contest's end date for display
+ */
+export function getFormattedEndDate(contest: Contest): string {
   if (contest.endAt === null) {
-    endDate = status === 'live' ? 'Ongoing' : status === 'upcoming' ? 'TBD' : 'No end time';
-  } else {
-    endDate = formatContestDate(contest.endAt);
+    return contest.status === ContestStatus.Ongoing
+      ? 'Ongoing'
+      : contest.status === ContestStatus.Upcoming
+        ? 'TBD'
+        : 'No end time';
   }
-
-  return {
-    ...contest,
-    status,
-    startDate,
-    endDate,
-    ...(endsInMinutes !== undefined && { endsInMinutes })
-  };
+  return formatContestDate(contest.endAt);
 }
 
 /**
  * Groups contests by their status
  */
-export function groupContestsByStatus(contests: ContestWithStatus[]) {
+export function groupContestsByStatus(contests: Contest[]) {
   return {
-    live: contests.filter((c) => c.status === 'live'),
-    upcoming: contests.filter((c) => c.status === 'upcoming'),
-    past: contests.filter((c) => c.status === 'past')
+    live: contests.filter((c) => c.status === ContestStatus.Ongoing),
+    upcoming: contests.filter((c) => c.status === ContestStatus.Upcoming),
+    past: contests.filter((c) => c.status === ContestStatus.Past)
   };
 }
 
 /**
  * Calculates contest statistics from contest data
  */
-export function calculateContestStats(contests: ContestWithStatus[]) {
+export function calculateContestStats(contests: Contest[]) {
   const groups = groupContestsByStatus(contests);
 
   return {

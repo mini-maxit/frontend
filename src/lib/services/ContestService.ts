@@ -16,6 +16,27 @@ export class ContestService {
     });
     return response.data;
   }
+
+  async getOngoing() {
+    const response = await this.apiClient.get<ApiResponse<Contest[]>>({
+      url: '/contest/ongoing'
+    });
+    return response.data;
+  }
+
+  async getUpcoming() {
+    const response = await this.apiClient.get<ApiResponse<Contest[]>>({
+      url: '/contest/upcoming'
+    });
+    return response.data;
+  }
+
+  async getPast() {
+    const response = await this.apiClient.get<ApiResponse<Contest[]>>({
+      url: '/contest/past'
+    });
+    return response.data;
+  }
 }
 
 export function createContestService(cookies: Cookies): ContestService {

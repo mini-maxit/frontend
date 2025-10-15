@@ -15,14 +15,12 @@ export interface Contest {
   createdBy: number;
   participantCount: number;
   taskCount: number;
+  status: ContestStatus;
   registrationStatus: ContestRegistrationStatus;
 }
 
-export type ContestStatus = 'live' | 'upcoming' | 'past';
-
-export interface ContestWithStatus extends Contest {
-  status: ContestStatus;
-  startDate: string;
-  endDate: string;
-  endsInMinutes?: number;
+export enum ContestStatus {
+  Ongoing = 'ongoing',
+  Upcoming = 'upcoming',
+  Past = 'past'
 }

@@ -4,80 +4,36 @@
   import Trophy from '@lucide/svelte/icons/trophy';
   import Users from '@lucide/svelte/icons/users';
   import ListTodo from '@lucide/svelte/icons/list-todo';
-  import Clock from '@lucide/svelte/icons/clock';
+
   import Calendar from '@lucide/svelte/icons/calendar';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import Loader2 from '@lucide/svelte/icons/loader-2';
   import AlertCircle from '@lucide/svelte/icons/alert-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Eye from '@lucide/svelte/icons/eye';
-  import { onMount, onDestroy } from 'svelte';
-  import { ContestRegistrationStatus } from '$lib/dto/contest';
+
+  import { ContestRegistrationStatus, ContestStatus, type Contest } from '$lib/dto/contest';
+  import { getFormattedStartDate, getFormattedEndDate } from '$lib/utils/contest';
 
   interface AvailableContestCardProps {
-    id: number;
-    name: string;
-    status: 'live' | 'upcoming' | 'past';
-    startDate: string;
-    endDate: string;
-    participantCount: number;
-    taskCount: number;
-    registrationStatus: ContestRegistrationStatus;
-    endsInMinutes?: number; // For countdown on live contests
+    contest: Contest;
     onRegister?: (id: number) => void;
     onViewContest?: (id: number) => void;
     isRegistering?: boolean;
   }
 
   let {
-    id,
-    name,
-    status,
-    startDate,
-    endDate,
-    participantCount,
-    taskCount: tasksCount,
-    registrationStatus,
-    endsInMinutes,
+    contest,
     onRegister,
     onViewContest,
     isRegistering = false
   }: AvailableContestCardProps = $props();
 
-  let timeLeft = $state(endsInMinutes || 0);
-  let interval: ReturnType<typeof setInterval>;
-
-  onMount(() => {
-    if (status === 'live' && endsInMinutes) {
-      interval = setInterval(() => {
-        if (timeLeft > 0) {
-          timeLeft--;
-        }
-      }, 60000); // Update every minute
-    }
-  });
-
-  onDestroy(() => {
-    if (interval) clearInterval(interval);
-  });
-
-  const formatTime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    const days = Math.floor(hours / 24);
-    const remainingHours = hours % 24;
-
-    if (days > 0) {
-      return `${days}d ${remainingHours}h`;
-    } else if (hours > 0) {
-      return `${hours}h ${mins}m`;
-    } else {
-      return `${mins}m`;
-    }
-  };
+  const startDate = $derived(getFormattedStartDate(contest));
+  const endDate = $derived(getFormattedEndDate(contest));
 
   const statusConfig = {
-    live: {
+    ongoing: {
       label: 'LIVE',
       color: 'from-red-500 to-red-600',
       bgColor: 'bg-red-500/10',
@@ -95,13 +51,13 @@
       bgColor: 'bg-gray-500/10',
       textColor: 'text-gray-600'
     }
-  };
+  } as const;
 
-  const config = $derived(statusConfig[status]);
+  const config = $derived(statusConfig[contest.status as keyof typeof statusConfig]);
 
   // Registration status configuration
   const registrationConfig = $derived.by(() => {
-    switch (registrationStatus) {
+    switch (contest.registrationStatus) {
       case ContestRegistrationStatus.Registered:
         return {
           icon: CheckCircle,
@@ -111,12 +67,13 @@
           canRegister: false,
           showButton: true,
           buttonText:
-            status === 'past'
+            contest.status === ContestStatus.Past
               ? 'View Results'
-              : status === 'live'
+              : contest.status === ContestStatus.Ongoing
                 ? 'Go to Contest'
                 : 'View Contest',
-          buttonVariant: status === 'past' ? ('outline' as const) : ('default' as const)
+          buttonVariant:
+            contest.status === ContestStatus.Past ? ('outline' as const) : ('default' as const)
         };
       case ContestRegistrationStatus.AwaitingApproval:
         return {
@@ -136,7 +93,7 @@
           bgColor: 'bg-red-500/10',
           textColor: 'text-red-600',
           canRegister: false,
-          showButton: status === 'past',
+          showButton: contest.status === 'past',
           buttonText: 'View Results',
           buttonVariant: 'outline' as const
         };
@@ -184,7 +141,7 @@
       <div
         class="flex items-center gap-1.5 rounded-full {config.bgColor} px-3 py-1 {config.textColor}"
       >
-        {#if status === 'live'}
+        {#if contest.status === ContestStatus.Ongoing}
           <span class="relative flex h-2 w-2">
             <span
               class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"
@@ -196,7 +153,7 @@
       </div>
     </div>
     <Card.Title class="mt-3 text-xl transition-colors group-hover:text-primary">
-      {name}
+      {contest.name}
     </Card.Title>
   </Card.Header>
 
@@ -212,19 +169,6 @@
       </p>
     </div>
 
-    {#if status === 'live' && endsInMinutes}
-      <!-- Countdown Timer for Live Contests -->
-      <div class="rounded-lg border-2 {config.textColor} border-current bg-card p-3">
-        <div class="flex items-center justify-center gap-2">
-          <Clock class="h-4 w-4 {config.textColor}" />
-          <span class="text-xs font-medium text-muted-foreground">Ends in:</span>
-          <span class="text-xl font-bold {config.textColor}">
-            {formatTime(timeLeft)}
-          </span>
-        </div>
-      </div>
-    {/if}
-
     <!-- Contest Info Grid -->
     <div class="grid grid-cols-2 gap-3">
       <!-- Participants -->
@@ -233,7 +177,7 @@
           <Users class="h-4 w-4 text-primary" />
           <span class="text-xs font-medium text-muted-foreground">Participants</span>
         </div>
-        <p class="mt-1 text-lg font-bold text-foreground">{participantCount}</p>
+        <p class="mt-1 text-lg font-bold text-foreground">{contest.participantCount}</p>
       </div>
 
       <!-- Tasks -->
@@ -242,7 +186,7 @@
           <ListTodo class="h-4 w-4 text-primary" />
           <span class="text-xs font-medium text-muted-foreground">Tasks</span>
         </div>
-        <p class="mt-1 text-lg font-bold text-foreground">{tasksCount}</p>
+        <p class="mt-1 text-lg font-bold text-foreground">{contest.taskCount}</p>
       </div>
     </div>
 
@@ -252,7 +196,7 @@
       {#if registrationConfig.canRegister}
         <Button
           class="w-full bg-gradient-to-r {config.color} text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-          onclick={() => onRegister?.(id)}
+          onclick={() => onRegister?.(contest.id)}
           disabled={isRegistering}
         >
           {#if isRegistering}
@@ -266,7 +210,7 @@
         <Button
           variant={registrationConfig.buttonVariant}
           class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-          onclick={() => onViewContest?.(id)}
+          onclick={() => onViewContest?.(contest.id)}
         >
           {#if registrationConfig.buttonText === 'View Results'}
             <Eye class="mr-2 h-4 w-4" />
@@ -274,14 +218,14 @@
           {registrationConfig.buttonText}
         </Button>
       {/if}
-    {:else if registrationStatus === ContestRegistrationStatus.AwaitingApproval}
+    {:else if contest.registrationStatus === ContestRegistrationStatus.AwaitingApproval}
       <!-- Information text for awaiting approval -->
       <div class="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-center">
         <p class="text-xs text-yellow-700">
           Your registration is pending review. You will be notified once approved.
         </p>
       </div>
-    {:else if registrationStatus === ContestRegistrationStatus.RegistrationClosed && status !== 'past'}
+    {:else if contest.registrationStatus === ContestRegistrationStatus.RegistrationClosed && contest.status !== 'past'}
       <!-- Information text for closed registration -->
       <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-center">
         <p class="text-xs text-red-700">Registration for this contest has been closed.</p>

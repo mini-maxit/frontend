@@ -1,47 +1,32 @@
 import { query, command } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
 import { getRequestEvent } from '$app/server';
-import type { ContestWithStatus, ContestsResponse } from '$lib/dto/contest';
-import { transformContestData } from '$lib/utils/contest';
+import type { Contest } from '$lib/dto/contest';
 import * as v from 'valibot';
+import { ContestService } from '$lib/services/ContestService';
 
-export const getOngoingContests = query(async (): Promise<ContestWithStatus[]> => {
+export const getOngoingContests = query(async (): Promise<Contest[]> => {
   const event = getRequestEvent();
-  const apiClient = createApiClient(event.cookies);
 
-  const response = await apiClient.get<ContestsResponse>({
-    url: '/contest/ongoing'
-  });
-
-  return response.data.map((contest) =>
-    transformContestData({ ...contest, status: 'live' as const })
-  );
+  const contestService = new ContestService(event.cookies);
+  const response = await contestService.getOngoing();
+  return response;
 });
 
-export const getUpcomingContests = query(async (): Promise<ContestWithStatus[]> => {
+export const getUpcomingContests = query(async (): Promise<Contest[]> => {
   const event = getRequestEvent();
-  const apiClient = createApiClient(event.cookies);
+  const contestService = new ContestService(event.cookies);
 
-  const response = await apiClient.get<ContestsResponse>({
-    url: '/contest/upcoming'
-  });
-
-  return response.data.map((contest) =>
-    transformContestData({ ...contest, status: 'upcoming' as const })
-  );
+  const response = await contestService.getUpcoming();
+  return response;
 });
 
-export const getPastContests = query(async (): Promise<ContestWithStatus[]> => {
+export const getPastContests = query(async (): Promise<Contest[]> => {
   const event = getRequestEvent();
-  const apiClient = createApiClient(event.cookies);
 
-  const response = await apiClient.get<ContestsResponse>({
-    url: '/contest/past'
-  });
-
-  return response.data.map((contest) =>
-    transformContestData({ ...contest, status: 'past' as const })
-  );
+  const contestService = new ContestService(event.cookies);
+  const response = await contestService.getPast();
+  return response;
 });
 
 export const registerForContest = command(v.number(), async (contestId: number) => {
