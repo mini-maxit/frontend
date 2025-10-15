@@ -3,7 +3,6 @@
   import TaskCard from '$lib/components/dashboard/tasks/TaskCard.svelte';
   import Trophy from '@lucide/svelte/icons/trophy';
 
-
   const contestTasks = [
     {
       contestName: 'Spring Code Sprint 2025',
