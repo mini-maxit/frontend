@@ -30,7 +30,7 @@
   --secondary-foreground: var(--maxit-primary);
   --muted: oklch(0.75 0.02 230);
   --muted-foreground: oklch(0.45 0.05 230);
-  --accent: var(--maxit-secondary);
+  --accent: var(--maxit-contrast);
   --accent-foreground: var(--maxit-primary);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.929 0.013 255.508);

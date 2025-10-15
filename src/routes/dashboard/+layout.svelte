@@ -4,6 +4,7 @@
   import { getDashboardTitleTranslationFromPathname } from '$lib/components/dashboard/utils';
   import { page } from '$app/stores';
   import type { LayoutProps } from './$types';
+  import Footer from '$lib/components/Footer.svelte';
 
   let { children }: LayoutProps = $props();
 
@@ -20,5 +21,6 @@
     <main class="flex-1 p-4">
       {@render children()}
     </main>
+    <Footer />
   </SidebarInset>
 </SidebarProvider>
