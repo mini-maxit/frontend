@@ -10,13 +10,6 @@ export class ContestService {
     this.apiClient = createApiClient(cookies);
   }
 
-  async getContests() {
-    const response = await this.apiClient.get<ApiResponse<Contest>>({
-      url: '/contest/'
-    });
-    return response.data;
-  }
-
   async getOngoing() {
     const response = await this.apiClient.get<ApiResponse<Contest[]>>({
       url: '/contest/ongoing'
