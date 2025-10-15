@@ -15,6 +15,7 @@
   import { getLocale, setLocale, localizeHref } from '$lib/paraglide/runtime';
   import { page } from '$app/state';
   import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
+  import { UserRole } from '$lib/dto/jwt';
 
   // Lucide icons
   import Users from '@lucide/svelte/icons/users';
@@ -26,6 +27,12 @@
   import Languages from '@lucide/svelte/icons/languages';
   import LayoutDashboard from '@lucide/svelte/icons/layout-dashboard';
   import SidebarTrigger from '../ui/sidebar/sidebar-trigger.svelte';
+
+  interface Props {
+    user: { userId: number; role: UserRole };
+  }
+
+  let { user }: Props = $props();
   const userMenuItems = [
     {
       title: () => m.sidebar_your_groups(),
@@ -59,6 +66,24 @@
       title: () => m.sidebar_available_tasks(),
       href: localizeHref(AppRoutes.AvailableTasks),
       icon: Globe
+    }
+  ];
+
+  const adminMenuItems = [
+    {
+      title: () => m.sidebar_admin_contests(),
+      href: localizeHref(AppRoutes.AdminContests),
+      icon: Trophy
+    },
+    {
+      title: () => m.sidebar_admin_groups(),
+      href: localizeHref(AppRoutes.AdminGroups),
+      icon: Users
+    },
+    {
+      title: () => m.sidebar_admin_tasks(),
+      href: localizeHref(AppRoutes.AdminTasks),
+      icon: ListTodo
     }
   ];
 
@@ -116,6 +141,37 @@
   </SidebarHeader>
 
   <SidebarContent>
+    <!-- Admin Section -->
+    {#if user.role === UserRole.Admin}
+      <SidebarGroup>
+        <SidebarGroupLabel>{m.sidebar_admin()}</SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton isActive={isActive(localizeHref(AppRoutes.Admin))}>
+              {#snippet child({ props })}
+                <a href={localizeHref(AppRoutes.Admin)} {...props}>
+                  <LayoutDashboard />
+                  <span>{m.sidebar_admin()}</span>
+                </a>
+              {/snippet}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          {#each adminMenuItems as item}
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive={isActive(item.href)}>
+                {#snippet child({ props })}
+                  <a href={item.href} {...props}>
+                    <item.icon />
+                    <span>{item.title()}</span>
+                  </a>
+                {/snippet}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          {/each}
+        </SidebarMenu>
+      </SidebarGroup>
+    {/if}
+
     <!-- User Activity Section -->
     <SidebarGroup>
       <SidebarGroupLabel>{m.sidebar_your_section()}</SidebarGroupLabel>

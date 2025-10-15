@@ -19,6 +19,11 @@ export enum AppRoutes {
   AvailableContests = '/dashboard/contests',
   AvailableTasks = '/dashboard/tasks',
 
+  Admin = '/dashboard/admin',
+  AdminContests = '/dashboard/admin/contests',
+  AdminGroups = '/dashboard/admin/groups',
+  AdminTasks = '/dashboard/admin/tasks',
+
   Error = '/error'
 }
 
