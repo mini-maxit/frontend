@@ -18,11 +18,6 @@ export interface Contest {
   registrationStatus: ContestRegistrationStatus;
 }
 
-export interface ContestsResponse {
-  data: Contest[];
-  ok: boolean;
-}
-
 export type ContestStatus = 'live' | 'upcoming' | 'past';
 
 export interface ContestWithStatus extends Contest {
