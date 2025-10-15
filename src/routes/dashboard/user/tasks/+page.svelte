@@ -1,5 +1,5 @@
 <script lang="ts">
-  // import TasksStats from '$lib/components/dashboard/tasks/TasksStats.svelte';
+  import TasksStats from '$lib/components/dashboard/tasks/TasksStats.svelte';
   import TaskCard from '$lib/components/dashboard/tasks/TaskCard.svelte';
   import Trophy from '@lucide/svelte/icons/trophy';
 
@@ -65,7 +65,7 @@
   </div>
 
   <!-- Stats Banner -->
-  <!-- <TasksStats /> -->
+  <TasksStats />
 
   <!-- Tasks from Contests -->
   <div class="space-y-6">
