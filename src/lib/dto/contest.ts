@@ -14,7 +14,7 @@ export interface Contest {
   updatedAt: string;
   createdBy: number;
   participantCount: number;
-  tasksCount: number;
+  taskCount: number;
   registrationStatus: ContestRegistrationStatus;
 }
 

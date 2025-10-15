@@ -132,7 +132,7 @@
               startDate={contest.startDate}
               endDate={contest.endDate}
               participantCount={contest.participantCount}
-              tasksCount={contest.tasksCount}
+              taskCount={contest.taskCount}
               registrationStatus={contest.registrationStatus}
               endsInMinutes={contest.endsInMinutes}
               onRegister={handleRegister}
@@ -157,7 +157,7 @@
               startDate={contest.startDate}
               endDate={contest.endDate}
               participantCount={contest.participantCount}
-              tasksCount={contest.tasksCount}
+              taskCount={contest.taskCount}
               registrationStatus={contest.registrationStatus}
               onRegister={handleRegister}
               onViewContest={handleViewContest}
@@ -181,7 +181,7 @@
               startDate={contest.startDate}
               endDate={contest.endDate}
               participantCount={contest.participantCount}
-              tasksCount={contest.tasksCount}
+              taskCount={contest.taskCount}
               registrationStatus={contest.registrationStatus}
               onRegister={handleRegister}
               onViewContest={handleViewContest}

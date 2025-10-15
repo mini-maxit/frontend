@@ -21,7 +21,7 @@
     startDate: string;
     endDate: string;
     participantCount: number;
-    tasksCount: number;
+    taskCount: number;
     registrationStatus: ContestRegistrationStatus;
     endsInMinutes?: number; // For countdown on live contests
     onRegister?: (id: number) => void;
@@ -36,7 +36,7 @@
     startDate,
     endDate,
     participantCount,
-    tasksCount,
+    taskCount: tasksCount,
     registrationStatus,
     endsInMinutes,
     onRegister,
