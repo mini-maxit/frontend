@@ -95,7 +95,7 @@
         Something went wrong while fetching the contest data.
       </p>
       <button
-        onclick={() => refreshAllQueries()}
+        on:click={() => refreshAllQueries()}
         class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
       >
         Try Again

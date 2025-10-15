@@ -1,6 +1,5 @@
-import { query, command } from '$app/server';
+import { query, command, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
-import { getRequestEvent } from '$app/server';
 import type { Contest } from '$lib/dto/contest';
 import * as v from 'valibot';
 import { ContestService } from '$lib/services/ContestService';
@@ -38,10 +37,7 @@ export const registerForContest = command(v.number(), async (contestId: number) 
       url: `/contest/${contestId}/register`
     });
 
-    // Refresh all contest queries to update registration status
-    await getOngoingContests().refresh();
-    await getUpcomingContests().refresh();
-    await getPastContests().refresh();
+    // Registration successful; client will update caches optimistically
 
     return { success: true, data: response };
   } catch (error) {
