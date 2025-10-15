@@ -14,7 +14,11 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.UserTasks]: () => m.sidebar_your_tasks(),
     [AppRoutes.UserProfile]: () => m.sidebar_profile(),
     [AppRoutes.AvailableContests]: () => m.sidebar_available_contests(),
-    [AppRoutes.AvailableTasks]: () => m.sidebar_available_tasks()
+    [AppRoutes.AvailableTasks]: () => m.sidebar_available_tasks(),
+    [AppRoutes.Admin]: () => m.sidebar_admin(),
+    [AppRoutes.AdminContests]: () => m.sidebar_admin_contests(),
+    [AppRoutes.AdminGroups]: () => m.sidebar_admin_groups(),
+    [AppRoutes.AdminTasks]: () => m.sidebar_admin_tasks()
   };
 
   // Return the translation for the route, or default to main dashboard title
