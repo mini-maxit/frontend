@@ -1,5 +1,5 @@
 import { createApiClient } from './ApiService';
-import type { Contest } from '$lib/dto/contest';
+import type { Contest, UserContestsResponse } from '$lib/dto/contest';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 
@@ -27,6 +27,13 @@ export class ContestService {
   async getPast() {
     const response = await this.apiClient.get<ApiResponse<Contest[]>>({
       url: '/contest/past'
+    });
+    return response.data;
+  }
+
+  async getUserContests(userId: number) {
+    const response = await this.apiClient.get<ApiResponse<UserContestsResponse>>({
+      url: `/user/${userId}/contests`
     });
     return response.data;
   }

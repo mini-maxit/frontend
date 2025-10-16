@@ -24,3 +24,24 @@ export enum ContestStatus {
   Upcoming = 'upcoming',
   Past = 'past'
 }
+
+export interface UserContest {
+  id: number;
+  name: string;
+  description: string;
+  startAt: string;
+  endAt: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: number;
+  participantCount: number;
+  taskCount: number;
+  solvedTaskCount: number;
+  status: string;
+}
+
+export interface UserContestsResponse {
+  ongoing: UserContest[];
+  upcoming: UserContest[];
+  past: UserContest[];
+}
