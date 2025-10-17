@@ -124,5 +124,6 @@
   "task_submit_success": "Solution submitted successfully!",
   "task_submit_error": "Failed to submit solution",
   "task_created_by": "Created by",
-  "task_error_title": "Error Loading Task"
+  "task_error_title": "Error Loading Task",
+  "header_task_details": "Task Details"
 }

@@ -127,5 +127,6 @@
   "task_error_title": "Błąd Ładowania Zadania",
   "task_id_prefix": "Zadanie #",
   "task_language_extension_hint": "Plik musi mieć rozszerzenie: .{extension}",
-  "task_submit_button_loading": "Przesyłanie..."
+  "task_submit_button_loading": "Przesyłanie...",
+  "header_task_details": "Szczegóły Zadania"
 }
