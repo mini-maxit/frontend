@@ -14,6 +14,7 @@
 
   import { ContestRegistrationStatus, ContestStatus, type Contest } from '$lib/dto/contest';
   import { getFormattedStartDate, getFormattedEndDate } from '$lib/utils/contest';
+  import * as m from '$lib/paraglide/messages';
 
   interface AvailableContestCardProps {
     contest: Contest;
@@ -34,19 +35,19 @@
 
   const statusConfig = {
     ongoing: {
-      label: 'LIVE',
+      label: m.available_contest_live(),
       color: 'from-red-500 to-red-600',
       bgColor: 'bg-red-500/10',
       textColor: 'text-red-600'
     },
     upcoming: {
-      label: 'UPCOMING',
+      label: m.available_contest_upcoming(),
       color: 'from-yellow-500 to-orange-600',
       bgColor: 'bg-yellow-500/10',
       textColor: 'text-yellow-600'
     },
     past: {
-      label: 'PAST',
+      label: m.available_contest_past(),
       color: 'from-gray-500 to-gray-600',
       bgColor: 'bg-gray-500/10',
       textColor: 'text-gray-600'
@@ -61,24 +62,24 @@
       case ContestRegistrationStatus.Registered:
         return {
           icon: CheckCircle,
-          text: 'Registered',
+          text: m.available_contest_registered(),
           bgColor: 'bg-green-500/10',
           textColor: 'text-green-600',
           canRegister: false,
           showButton: true,
           buttonText:
             contest.status === ContestStatus.Past
-              ? 'View Results'
+              ? m.available_contest_view_results()
               : contest.status === ContestStatus.Ongoing
-                ? 'Go to Contest'
-                : 'View Contest',
+                ? m.available_contest_go_to_contest()
+                : m.available_contest_view_contest(),
           buttonVariant:
             contest.status === ContestStatus.Past ? ('outline' as const) : ('default' as const)
         };
       case ContestRegistrationStatus.AwaitingApproval:
         return {
           icon: AlertCircle,
-          text: 'Awaiting Approval',
+          text: m.available_contest_awaiting_approval(),
           bgColor: 'bg-yellow-500/10',
           textColor: 'text-yellow-600',
           canRegister: false,
@@ -89,12 +90,12 @@
       case ContestRegistrationStatus.RegistrationClosed:
         return {
           icon: XCircle,
-          text: 'Registration Closed',
+          text: m.available_contest_registration_closed(),
           bgColor: 'bg-red-500/10',
           textColor: 'text-red-600',
           canRegister: false,
           showButton: contest.status === 'past',
-          buttonText: 'View Results',
+          buttonText: m.available_contest_view_results(),
           buttonVariant: 'outline' as const
         };
       case ContestRegistrationStatus.CanRegister:
@@ -105,7 +106,7 @@
           textColor: '',
           canRegister: true,
           showButton: true,
-          buttonText: 'Register',
+          buttonText: m.available_contest_register(),
           buttonVariant: 'default' as const
         };
       default:
@@ -162,7 +163,7 @@
     <div class="space-y-2 rounded-lg border border-border bg-card p-3">
       <div class="flex items-center gap-2 text-sm text-muted-foreground">
         <Calendar class="h-4 w-4 text-primary" />
-        <span>Duration</span>
+        <span>{m.available_contest_duration()}</span>
       </div>
       <p class="text-sm font-semibold text-foreground">
         {startDate} - {endDate}
@@ -175,7 +176,9 @@
       <div class="rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
         <div class="flex items-center gap-2">
           <Users class="h-4 w-4 text-primary" />
-          <span class="text-xs font-medium text-muted-foreground">Participants</span>
+          <span class="text-xs font-medium text-muted-foreground"
+            >{m.available_contest_participants()}</span
+          >
         </div>
         <p class="mt-1 text-lg font-bold text-foreground">{contest.participantCount}</p>
       </div>
@@ -184,7 +187,9 @@
       <div class="rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
         <div class="flex items-center gap-2">
           <ListTodo class="h-4 w-4 text-primary" />
-          <span class="text-xs font-medium text-muted-foreground">Tasks</span>
+          <span class="text-xs font-medium text-muted-foreground"
+            >{m.available_contest_tasks()}</span
+          >
         </div>
         <p class="mt-1 text-lg font-bold text-foreground">{contest.taskCount}</p>
       </div>
@@ -201,7 +206,7 @@
         >
           {#if isRegistering}
             <Loader2 class="mr-2 h-4 w-4 animate-spin" />
-            Registering...
+            {m.available_contest_registering()}
           {:else}
             {registrationConfig.buttonText}
           {/if}
@@ -212,7 +217,7 @@
           class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
           onclick={() => onViewContest?.(contest.id)}
         >
-          {#if registrationConfig.buttonText === 'View Results'}
+          {#if registrationConfig.buttonText === m.available_contest_view_results()}
             <Eye class="mr-2 h-4 w-4" />
           {/if}
           {registrationConfig.buttonText}
@@ -222,13 +227,13 @@
       <!-- Information text for awaiting approval -->
       <div class="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-center">
         <p class="text-xs text-yellow-700">
-          Your registration is pending review. You will be notified once approved.
+          {m.available_contest_pending_review()}
         </p>
       </div>
     {:else if contest.registrationStatus === ContestRegistrationStatus.RegistrationClosed && contest.status !== 'past'}
       <!-- Information text for closed registration -->
       <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-center">
-        <p class="text-xs text-red-700">Registration for this contest has been closed.</p>
+        <p class="text-xs text-red-700">{m.available_contest_registration_closed_msg()}</p>
       </div>
     {/if}
   </Card.Content>

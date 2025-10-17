@@ -3,31 +3,32 @@
   import Trophy from '@lucide/svelte/icons/trophy';
   import Zap from '@lucide/svelte/icons/zap';
   import Award from '@lucide/svelte/icons/award';
+  import * as m from '$lib/paraglide/messages';
 
-  const stats = [
+  const stats = $derived([
     {
       icon: Trophy,
-      label: 'Total Contests',
+      label: m.contests_stats_total(),
       value: '12',
       color: 'from-blue-500 to-blue-600'
     },
     {
       icon: Zap,
-      label: 'Active Contests',
+      label: m.contests_stats_active(),
       value: '3',
       color: 'from-orange-500 to-red-600'
     },
     {
       icon: Award,
-      label: 'Best Rank',
+      label: m.contests_stats_best_rank(),
       value: '#3',
       color: 'from-yellow-500 to-yellow-600'
     }
-  ];
+  ]);
 </script>
 
 <div class="grid gap-6 sm:grid-cols-3">
-  {#each stats as stat}
+  {#each stats as stat (stat.label)}
     <Card.Root
       class="group relative overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
     >

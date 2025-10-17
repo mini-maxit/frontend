@@ -6,6 +6,7 @@
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import Zap from '@lucide/svelte/icons/zap';
   import { onMount, onDestroy } from 'svelte';
+  import * as m from '$lib/paraglide/messages';
 
   interface ActiveContestCardProps {
     name: string;
@@ -65,18 +66,18 @@
   const statusConfig = $derived(
     status === 'live'
       ? {
-          label: 'LIVE',
+          label: m.contest_card_live(),
           color: 'from-red-500 to-red-600',
           bgColor: 'bg-red-500/10',
           textColor: 'text-red-600',
-          buttonText: 'Continue Contest'
+          buttonText: m.contest_card_continue()
         }
       : {
-          label: 'UPCOMING',
+          label: m.contest_card_upcoming(),
           color: 'from-blue-500 to-blue-600',
           bgColor: 'bg-blue-500/10',
           textColor: 'text-blue-600',
-          buttonText: 'Show Contest'
+          buttonText: m.contest_card_show()
         }
   );
 </script>
@@ -118,7 +119,7 @@
       <div class="flex items-center justify-center gap-2">
         <Clock class="h-5 w-5 {statusConfig.textColor}" />
         <span class="text-sm font-medium text-muted-foreground">
-          {status === 'live' ? 'Ends in:' : 'Starts in:'}
+          {status === 'live' ? m.contest_card_ends_in() : m.contest_card_starts_in()}
         </span>
         <span class="text-2xl font-bold {statusConfig.textColor}">
           {formatTime(timeLeft)}
@@ -132,7 +133,9 @@
       <div class="rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
         <div class="flex items-center gap-2">
           <Users class="h-4 w-4 text-primary" />
-          <span class="text-xs font-medium text-muted-foreground">Participants</span>
+          <span class="text-xs font-medium text-muted-foreground"
+            >{m.contest_card_participants()}</span
+          >
         </div>
         <p class="mt-1 text-lg font-bold text-foreground">{participants}</p>
       </div>
@@ -141,7 +144,7 @@
       <div class="rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
         <div class="flex items-center gap-2">
           <ListTodo class="h-4 w-4 text-primary" />
-          <span class="text-xs font-medium text-muted-foreground">Tasks</span>
+          <span class="text-xs font-medium text-muted-foreground">{m.contest_card_tasks()}</span>
         </div>
         <p class="mt-1 text-lg font-bold text-foreground">
           {completedTasks}/{totalTasks}
@@ -151,7 +154,9 @@
 
     {#if currentRank && status === 'live'}
       <div class="rounded-lg bg-gradient-to-r {statusConfig.color} p-3 text-center">
-        <p class="text-sm font-medium text-white">Current Rank: #{currentRank}</p>
+        <p class="text-sm font-medium text-white">
+          {m.contest_card_current_rank({ rank: currentRank })}
+        </p>
       </div>
     {/if}
 

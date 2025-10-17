@@ -37,7 +37,7 @@ export interface UserContest {
   participantCount: number;
   taskCount: number;
   solvedTaskCount: number;
-  status: string;
+  status: ContestStatus;
 }
 
 export interface UserContestsResponse {
