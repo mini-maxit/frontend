@@ -21,3 +21,19 @@ You MUST use this tool whenever writing Svelte code before sending it to the use
 
 Generates a Svelte Playground link with the provided code.
 After completing the code, ask the user if they want a playground link. Only call this tool after user confirmation and NEVER if code was written to files in their project.
+
+## Internationalization (i18n)
+
+This project uses Paraglide for internationalization with support for English (en) and Polish (pl).
+
+- **Message files**: All translatable strings are stored in `/messages/en.json` and `/messages/pl.json`
+- **Required translations**: When adding new user-facing text, ALWAYS add the corresponding keys to BOTH `en.json` and `pl.json`
+- **Message format**: Follow the existing pattern and naming conventions (e.g., `section_element_description`)
+- **Usage**: Import and use messages via Paraglide's message functions in your Svelte components
+
+Example:
+
+```typescript
+import * as m from '$lib/paraglide/messages';
+// Use: {m.hello_world({ name: 'User' })}
+```

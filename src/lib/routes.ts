@@ -18,6 +18,7 @@ export enum AppRoutes {
   UserProfile = '/dashboard/user/profile',
   AvailableContests = '/dashboard/contests',
   AvailableTasks = '/dashboard/tasks',
+  TaskDetails = '/dashboard/tasks/',
 
   Admin = '/dashboard/admin',
   AdminContests = '/dashboard/admin/contests',

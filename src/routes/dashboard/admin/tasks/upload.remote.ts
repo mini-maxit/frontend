@@ -17,7 +17,10 @@ export const uploadTask = form(UploadTaskSchema, async (data: UploadTaskData) =>
   const apiClient = createApiClient(event.cookies);
   const taskService = new TaskService(apiClient);
 
-  const result = await taskService.uploadTask(data.title, data.archive);
+  const result = await taskService.uploadTask({
+    title: data.title,
+    archive: data.archive
+  });
   if (!result.success) {
     error(result.status, { message: result.error || 'Failed to upload task.' });
   }

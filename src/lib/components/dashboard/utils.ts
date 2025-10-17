@@ -21,6 +21,11 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.AdminTasks]: () => m.sidebar_admin_tasks()
   };
 
+  // Check for dynamic routes (e.g., /dashboard/tasks/[taskId])
+  if (path.startsWith(AppRoutes.TaskDetails)) {
+    return m.header_task_details();
+  }
+
   // Return the translation for the route, or default to main dashboard title
   return routeTitleMap[path]?.() ?? m.header_dashboard();
 }

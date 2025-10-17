@@ -4,7 +4,7 @@
   import Users from '@lucide/svelte/icons/users';
   import { m } from '$lib/paraglide/messages.js';
 
-  const features = $derived([
+  const features = [
     {
       icon: Code,
       title: m.features_create_title(),
@@ -20,7 +20,7 @@
       title: m.features_engage_title(),
       description: m.features_engage_description()
     }
-  ]);
+  ];
 </script>
 
 <section id="features" class="relative overflow-hidden bg-background px-4 py-16">

@@ -7,7 +7,7 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import Upload from '@lucide/svelte/icons/upload';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
+  import { isHttpError, type HttpError } from '@sveltejs/kit';
   import AdminTaskCard from '$lib/components/dashboard/tasks/AdminTaskCard.svelte';
   import Loader from '@lucide/svelte/icons/loader-circle';
   import * as m from '$lib/paraglide/messages';
@@ -85,7 +85,7 @@
               try {
                 await submit();
                 await handleTaskUploadSuccess();
-              } catch (error: { message?: string } | unknown) {
+              } catch (error: HttpError | unknown) {
                 if (isHttpError(error)) {
                   toast.error(error.body.message);
                 } else {
