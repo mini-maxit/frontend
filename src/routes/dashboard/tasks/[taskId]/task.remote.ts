@@ -26,7 +26,7 @@ export const getTask = query(v.number(), async (id: number) => {
         const blob = await response.blob();
         const arrayBuffer = await blob.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
-        const base64 = btoa(String.fromCharCode(...uint8Array));
+        const base64 = Buffer.from(uint8Array).toString('base64');
         pdfDataUrl = `data:application/pdf;base64,${base64}`;
       }
     } catch (err) {

@@ -19,8 +19,7 @@
         <iframe
           src={pdfDataUrl}
           title={m.task_description_title()}
-          class="h-full w-full"
-          frameborder="0"
+          class="h-full w-full border-none"
         ></iframe>
       {:else}
         <div class="flex h-full items-center justify-center">
