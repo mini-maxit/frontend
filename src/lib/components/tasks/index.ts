@@ -1,0 +1,9 @@
+export { default as TaskHeader } from './TaskHeader.svelte';
+export { default as TaskPdfViewer } from './TaskPdfViewer.svelte';
+export { default as TaskSubmissionForm } from './TaskSubmissionForm.svelte';
+export { default as FilePreview } from './FilePreview.svelte';
+export { default as TaskErrorCard } from './TaskErrorCard.svelte';
+export { default as TaskLoadingSpinner } from './TaskLoadingSpinner.svelte';
+export { default as LanguageSelector } from './LanguageSelector.svelte';
+export { default as FileUploader } from './FileUploader.svelte';
+export { default as SubmitButton } from './SubmitButton.svelte';

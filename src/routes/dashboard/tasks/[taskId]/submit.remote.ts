@@ -32,3 +32,5 @@ export const submitSolution = form(SubmitSolutionSchema, async (data: SubmitSolu
 
   return { success: true };
 });
+
+export type SubmitSolutionRemoteForm = typeof submitSolution;
