@@ -14,7 +14,8 @@
   import Send from '@lucide/svelte/icons/send';
   import Code from '@lucide/svelte/icons/code';
   import Loader from '@lucide/svelte/icons/loader-circle';
-
+  import * as m from '$lib/paraglide/messages';
+  import { getLocale } from '$lib/paraglide/runtime';
   interface Props {
     data: {
       taskId: number;
@@ -30,6 +31,7 @@
   let selectedFile = $state<File | null>(null);
   let fileInput = $state<HTMLInputElement | null>(null);
   let fileContent = $state<string>('');
+  let formElement = $state<HTMLFormElement | null>(null);
 
   function handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -48,7 +50,7 @@
 
   function formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
+    return new Intl.DateTimeFormat(getLocale(), {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -74,13 +76,18 @@
 
   async function handleSubmit() {
     if (!selectedFile || !selectedLanguageId) {
-      toast.error('Please select both a file and a language');
+      toast.error(m.task_submit_validation_both());
       return;
     }
 
     if (!validateFileExtension(selectedFile, selectedLanguageId)) {
       const language = languagesQuery.current?.find((l) => l.id === selectedLanguageId);
-      toast.error(`File extension must be .${language?.fileExtension} for ${language?.language}`);
+      toast.error(
+        m.task_submit_validation_extension({
+          extension: language?.fileExtension || '',
+          language: language?.language || ''
+        })
+      );
       return;
     }
 
@@ -91,15 +98,12 @@
         languageId: selectedLanguageId
       });
 
-      const formElement = document.getElementById('submission-form') as HTMLFormElement;
-      if (formElement) {
-        formElement.requestSubmit();
-      }
+      formElement?.requestSubmit();
     } catch (error) {
       if (isHttpError(error)) {
         toast.error(error.body.message);
       } else {
-        toast.error('Failed to submit solution');
+        toast.error(m.task_submit_error());
       }
     }
   }
@@ -109,14 +113,14 @@
   {#if taskQuery.error}
     <Card.Root class="border-destructive/20 bg-destructive/5">
       <Card.Header>
-        <Card.Title class="text-destructive">Error Loading Task</Card.Title>
+        <Card.Title class="text-destructive">{m.task_error_title()}</Card.Title>
       </Card.Header>
       <Card.Content>
         <p class="text-sm text-muted-foreground">
-          {taskQuery.error?.message || 'Unknown error occurred'}
+          {taskQuery.error?.message || m.task_error_unknown()}
         </p>
         <Button variant="outline" class="mt-4" onclick={() => taskQuery.refresh()}>
-          Try Again
+          {m.task_error_try_again()}
         </Button>
       </Card.Content>
     </Card.Root>
@@ -129,14 +133,12 @@
     <div class="space-y-4">
       <div class="flex items-start justify-between">
         <div class="space-y-2">
-          <div class="flex items-center gap-2">
+          <h1 class="flex items-center gap-3 text-3xl font-bold text-foreground">
             <span
               class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary"
             >
-              Task #{taskQuery.current.id}
+              {m.task_badge_prefix()}{taskQuery.current.id}
             </span>
-          </div>
-          <h1 class="flex items-center gap-3 text-3xl font-bold text-foreground">
             <FileText class="h-8 w-8" />
             {taskQuery.current.title}
           </h1>
@@ -147,7 +149,7 @@
       <div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
         <div class="flex items-center gap-2">
           <User class="h-4 w-4" />
-          <span>Created by <strong>{taskQuery.current.createdByName}</strong></span>
+          <span>{m.task_created_by()} <strong>{taskQuery.current.createdByName}</strong></span>
         </div>
         <div class="flex items-center gap-2">
           <Calendar class="h-4 w-4" />
@@ -156,24 +158,24 @@
       </div>
     </div>
 
-    <div class="grid gap-6 lg:grid-cols-2">
+    <div class="grid h-screen gap-6 lg:grid-cols-2">
       <!-- Left: PDF Description -->
       <Card.Root class="flex flex-col">
         <Card.Header>
-          <Card.Title>Task Description</Card.Title>
+          <Card.Title>{m.task_description_title()}</Card.Title>
         </Card.Header>
         <Card.Content class="flex-1">
-          <div class="h-[600px] w-full overflow-hidden rounded-lg border">
+          <div class="h-full w-full overflow-hidden rounded-lg border">
             {#if taskQuery.current.pdfDataUrl}
               <iframe
                 src={taskQuery.current.pdfDataUrl}
-                title="Task Description"
+                title={m.task_description_title()}
                 class="h-full w-full"
                 frameborder="0"
               ></iframe>
             {:else}
               <div class="flex h-full items-center justify-center">
-                <p class="text-sm text-muted-foreground">No description available</p>
+                <p class="text-sm text-muted-foreground">{m.task_description_none()}</p>
               </div>
             {/if}
           </div>
@@ -181,13 +183,13 @@
       </Card.Root>
 
       <!-- Right: Solution Submission -->
-      <div class="space-y-6">
+      <div class="flex flex-col gap-6 overflow-hidden lg:space-y-6">
         <!-- Language Selection & File Upload -->
-        <Card.Root>
+        <Card.Root class="shrink-0">
           <Card.Header>
             <Card.Title class="flex items-center gap-2">
               <Code class="h-5 w-5" />
-              Submit Your Solution
+              {m.task_submit_title()}
             </Card.Title>
           </Card.Header>
           <Card.Content class="space-y-4">
@@ -196,15 +198,16 @@
                 <Loader class="h-6 w-6 animate-spin text-primary" />
               </div>
             {:else if languagesQuery.error}
-              <p class="text-sm text-destructive">Failed to load languages</p>
+              <p class="text-sm text-destructive">{m.task_languages_error()}</p>
             {:else}
               <form
+                bind:this={formElement}
                 id="submission-form"
                 class="hidden"
                 {...submitSolution.enhance(async ({ submit }) => {
                   try {
                     await submit();
-                    toast.success('Solution submitted successfully!');
+                    toast.success(m.task_submit_success());
                     selectedFile = null;
                     selectedLanguageId = null;
                     fileContent = '';
@@ -215,7 +218,7 @@
                     if (isHttpError(error)) {
                       toast.error(error.body.message);
                     } else {
-                      toast.error('Failed to submit solution');
+                      toast.error(m.task_submit_error());
                     }
                   }
                 })}
@@ -225,13 +228,13 @@
 
               <!-- Language Selection -->
               <div class="space-y-2">
-                <Label for="language">Programming Language</Label>
+                <Label for="language">{m.task_language_label()}</Label>
                 <select
                   id="language"
                   bind:value={selectedLanguageId}
                   class="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <option value={null}>Select a language</option>
+                  <option value={null}>{m.task_language_placeholder()}</option>
                   {#each languagesQuery.current as language}
                     <option value={language.id}>
                       {language.language} ({language.version}) - .{language.fileExtension}
@@ -243,16 +246,14 @@
                     (l) => l.id === selectedLanguageId
                   )}
                   <p class="text-xs text-muted-foreground">
-                    File must have extension: <code class="rounded bg-muted px-1 py-0.5"
-                      >.{language?.fileExtension}</code
-                    >
+                    {m.task_file_extension_required({ extension: language?.fileExtension || '' })}
                   </p>
                 {/if}
               </div>
 
               <!-- File Upload -->
               <div class="space-y-2">
-                <Label for="solution">Solution File</Label>
+                <Label for="solution">{m.task_file_label()}</Label>
                 <input
                   bind:this={fileInput}
                   id="solution"
@@ -264,9 +265,10 @@
                 />
                 {#if selectedFile}
                   <p class="text-sm text-muted-foreground">
-                    Selected: <strong>{selectedFile.name}</strong> ({(
-                      selectedFile.size / 1024
-                    ).toFixed(2)} KB)
+                    {m.task_file_selected({
+                      filename: selectedFile.name,
+                      size: (selectedFile.size / 1024).toFixed(2)
+                    })}
                   </p>
                 {/if}
               </div>
@@ -281,10 +283,10 @@
               >
                 {#if submitSolution.pending}
                   <Loader class="mr-2 h-4 w-4 animate-spin" />
-                  Submitting...
+                  {m.task_submit_loading()}
                 {:else}
                   <Send class="mr-2 h-4 w-4" />
-                  Submit Solution
+                  {m.task_submit_button()}
                 {/if}
               </Button>
             {/if}
@@ -292,18 +294,14 @@
         </Card.Root>
 
         <!-- File Content Preview -->
-        {#if fileContent}
-          <Card.Root>
-            <Card.Header>
-              <Card.Title>File Preview</Card.Title>
-            </Card.Header>
-            <Card.Content>
-              <pre class="max-h-96 overflow-auto rounded-lg bg-muted p-4 text-xs"><code
-                  >{fileContent}</code
-                ></pre>
-            </Card.Content>
-          </Card.Root>
-        {/if}
+        <Card.Root class="flex-1 overflow-hidden">
+          <Card.Header>
+            <Card.Title>{m.task_preview_title()}</Card.Title>
+          </Card.Header>
+          <Card.Content class="mx-6 overflow-auto px-0">
+            <pre class="rounded-lg p-4 text-xs"><code>{fileContent}</code></pre>
+          </Card.Content>
+        </Card.Root>
       </div>
     </div>
   {/if}
