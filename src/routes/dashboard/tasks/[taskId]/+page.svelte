@@ -1,12 +1,13 @@
 <script lang="ts">
   import { getTask, getLanguages } from './task.remote';
-  import { submitSolution } from './submit.remote';
+  import { submitSolution, type SubmitSolutionRemoteForm } from './submit.remote';
   import TaskHeader from '$lib/components/tasks/TaskHeader.svelte';
   import TaskPdfViewer from '$lib/components/tasks/TaskPdfViewer.svelte';
   import TaskSubmissionForm from '$lib/components/tasks/TaskSubmissionForm.svelte';
   import FilePreview from '$lib/components/tasks/FilePreview.svelte';
   import TaskErrorCard from '$lib/components/tasks/TaskErrorCard.svelte';
   import TaskLoadingSpinner from '$lib/components/tasks/TaskLoadingSpinner.svelte';
+  import type { SvelteComponent } from 'svelte';
 
   interface Props {
     data: {
@@ -20,7 +21,6 @@
   const languagesQuery = getLanguages();
 
   let fileContent = $state<string>('');
-  let submissionForm = $state<any>(null);
 </script>
 
 <div class="space-y-6">
@@ -41,7 +41,6 @@
 
       <div class="flex flex-col gap-6 overflow-hidden lg:space-y-6">
         <TaskSubmissionForm
-          bind:this={submissionForm}
           bind:fileContent
           languages={languagesQuery.current || []}
           loading={languagesQuery.loading}
