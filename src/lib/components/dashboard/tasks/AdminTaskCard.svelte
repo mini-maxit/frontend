@@ -7,6 +7,7 @@
   import Clock from '@lucide/svelte/icons/clock';
   import type { Task } from '$lib/dto/task';
   import * as m from '$lib/paraglide/messages';
+  import { getLocale } from '$lib/paraglide/runtime';
 
   interface AdminTaskCardProps {
     task: Task;
@@ -16,7 +17,7 @@
 
   function formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
+    return new Intl.DateTimeFormat(getLocale(), {
       year: 'numeric',
       month: 'short',
       day: 'numeric',

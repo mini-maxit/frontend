@@ -4,7 +4,7 @@
   import Award from '@lucide/svelte/icons/award';
   import { m } from '$lib/paraglide/messages.js';
 
-  const steps = $derived([
+  const steps = [
     {
       title: m.how_it_works_create_title(),
       description: m.how_it_works_create_description(),
@@ -20,7 +20,7 @@
       description: m.how_it_works_evaluate_description(),
       icon: Award
     }
-  ]);
+  ];
 </script>
 
 <section id="howitworks" class="relative overflow-hidden bg-background px-4 py-16">
