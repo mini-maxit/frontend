@@ -113,7 +113,7 @@
             selectedFiles = new DataTransfer().files;
             selectedLanguageId = null;
             fileUploader?.clear();
-          } catch (error: { message?: string } | unknown) {
+          } catch (error: HttpError | unknown) {
             if (isHttpError(error)) {
               toast.error(error.body.message);
             } else {
@@ -122,21 +122,17 @@
           }
         })}
       >
-        <input
-          {...submitAction.fields.taskId.as('number')}
-          bind:value={taskId}
-          style="display: none;"
-        />
+        <input {...submitAction.fields.taskId.as('number')} bind:value={taskId} hidden />
         <input
           {...submitAction.fields.languageId.as('number')}
           bind:value={selectedLanguageId}
-          style="display: none;"
+          hidden
         />
         <input
           {...submitAction.fields.solution.as('file')}
           bind:files={selectedFiles}
           type="file"
-          style="display: none;"
+          hidden
         />
       </form>
 

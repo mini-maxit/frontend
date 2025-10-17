@@ -10,7 +10,7 @@
   import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
   import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
-  import { isHttpError } from '@sveltejs/kit';
+  import { isHttpError, type HttpError } from '@sveltejs/kit';
 </script>
 
 <div
@@ -37,7 +37,7 @@
             {...login.enhance(async ({ submit }) => {
               try {
                 await submit();
-              } catch (error: { message?: string } | unknown) {
+              } catch (error: HttpError | unknown) {
                 if (isHttpError(error)) {
                   toast.error(error.body.message);
                 } else {
