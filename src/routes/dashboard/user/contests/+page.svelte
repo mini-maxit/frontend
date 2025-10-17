@@ -117,9 +117,7 @@
             <PastContestCard
               name={contest.name}
               score={contest.taskCount > 0
-                ? Math.round(
-                    (contest.solvedTaskCount / contest.taskCount) * contest.taskCount * 100
-                  )
+                ? Math.round((contest.solvedTaskCount / contest.taskCount) * 100)
                 : 0}
               maxScore={contest.taskCount * 100}
               completionPercentage={contest.taskCount > 0

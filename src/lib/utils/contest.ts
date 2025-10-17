@@ -96,6 +96,17 @@ export function calculateTimeInMinutes(
 }
 
 /**
+ * Helper function to get pluralized message based on count
+ */
+function getRelativeTimeMessage(
+  count: number,
+  singularMessage: (params: { count: number }) => string,
+  pluralMessage: (params: { count: number }) => string
+): string {
+  return count === 1 ? singularMessage({ count }) : pluralMessage({ count });
+}
+
+/**
  * Format a date to relative time string (e.g., "2 weeks ago", "1 month ago")
  */
 export function formatRelativeDate(dateString: string): string {
@@ -110,31 +121,47 @@ export function formatRelativeDate(dateString: string): string {
   const months = Math.floor(days / 30);
   const years = Math.floor(days / 365);
 
-  if (years > 0) {
-    return years === 1
-      ? m.relative_time_years_ago({ count: years })
-      : m.relative_time_years_ago_plural({ count: years });
-  } else if (months > 0) {
-    return months === 1
-      ? m.relative_time_months_ago({ count: months })
-      : m.relative_time_months_ago_plural({ count: months });
-  } else if (weeks > 0) {
-    return weeks === 1
-      ? m.relative_time_weeks_ago({ count: weeks })
-      : m.relative_time_weeks_ago_plural({ count: weeks });
-  } else if (days > 0) {
-    return days === 1
-      ? m.relative_time_days_ago({ count: days })
-      : m.relative_time_days_ago_plural({ count: days });
-  } else if (hours > 0) {
-    return hours === 1
-      ? m.relative_time_hours_ago({ count: hours })
-      : m.relative_time_hours_ago_plural({ count: hours });
-  } else if (minutes > 0) {
-    return minutes === 1
-      ? m.relative_time_minutes_ago({ count: minutes })
-      : m.relative_time_minutes_ago_plural({ count: minutes });
-  } else {
-    return m.relative_time_just_now();
+  // Configuration array for time units (ordered from largest to smallest)
+  const timeUnits = [
+    {
+      value: years,
+      singular: m.relative_time_years_ago,
+      plural: m.relative_time_years_ago_plural
+    },
+    {
+      value: months,
+      singular: m.relative_time_months_ago,
+      plural: m.relative_time_months_ago_plural
+    },
+    {
+      value: weeks,
+      singular: m.relative_time_weeks_ago,
+      plural: m.relative_time_weeks_ago_plural
+    },
+    {
+      value: days,
+      singular: m.relative_time_days_ago,
+      plural: m.relative_time_days_ago_plural
+    },
+    {
+      value: hours,
+      singular: m.relative_time_hours_ago,
+      plural: m.relative_time_hours_ago_plural
+    },
+    {
+      value: minutes,
+      singular: m.relative_time_minutes_ago,
+      plural: m.relative_time_minutes_ago_plural
+    }
+  ];
+
+  // Find the first unit with a value > 0 and return its formatted message
+  for (const unit of timeUnits) {
+    if (unit.value > 0) {
+      return getRelativeTimeMessage(unit.value, unit.singular, unit.plural);
+    }
   }
+
+  // If no time has passed, return "just now"
+  return m.relative_time_just_now();
 }
