@@ -245,5 +245,15 @@
   "user_contests_page_description": "Uczestniczaj w konkursach i rywalizuj z innymi studentami",
   "user_contests_page_title": "Twoje konkursy",
   "user_contests_past_load_error": "Nie udało się załadować przeszłych konkursów. Spróbuj ponownie później.",
-  "user_contests_past_section": "Przeszłe konkursy"
+  "user_contests_past_section": "Przeszłe konkursy",
+  "user_tasks_all_tasks": "Wszystkie Dostępne Zadania",
+  "user_tasks_card_created": "Utworzono:",
+  "user_tasks_card_view": "Zobacz Zadanie",
+  "user_tasks_load_error": "Nie udało się załadować zadań",
+  "user_tasks_loading": "Ładowanie zadań...",
+  "user_tasks_no_tasks": "Brak dostępnych zadań",
+  "user_tasks_no_tasks_description": "Zadania pojawią się tutaj, gdy dołączysz do grup lub konkursów",
+  "user_tasks_page_description": "Przeglądaj i rozwiązuj zadania ze swoich grup i aktywnych konkursów",
+  "user_tasks_page_title": "Twoje Zadania",
+  "user_tasks_try_again": "Spróbuj Ponownie"
 }

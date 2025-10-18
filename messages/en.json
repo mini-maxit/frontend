@@ -245,5 +245,15 @@
   "user_contests_page_description": "Participate in contests and compete with other students",
   "user_contests_page_title": "Your Contests",
   "user_contests_past_load_error": "Failed to load past contests. Please try again later.",
-  "user_contests_past_section": "Past Contests"
+  "user_contests_past_section": "Past Contests",
+  "user_tasks_page_title": "Your Tasks",
+  "user_tasks_page_description": "View and solve tasks from your groups and active contests",
+  "user_tasks_all_tasks": "All Available Tasks",
+  "user_tasks_loading": "Loading tasks...",
+  "user_tasks_load_error": "Failed to load tasks",
+  "user_tasks_try_again": "Try Again",
+  "user_tasks_no_tasks": "No tasks available",
+  "user_tasks_no_tasks_description": "Tasks will appear here when you join groups or contests",
+  "user_tasks_card_created": "Created:",
+  "user_tasks_card_view": "View Task"
 }
