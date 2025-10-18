@@ -1,56 +1,67 @@
 <script lang="ts">
   import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Clock from '@lucide/svelte/icons/clock';
   import Code from '@lucide/svelte/icons/code';
-  import Eye from '@lucide/svelte/icons/eye';
-  import Cpu from '@lucide/svelte/icons/cpu';
-  import HardDrive from '@lucide/svelte/icons/hard-drive';
+  import Calendar from '@lucide/svelte/icons/calendar';
+  import { SubmissionStatus, type Submission } from '$lib/dto/submission';
+  import * as m from '$lib/paraglide/messages';
+  import { formatDate } from '$lib/utils';
 
-  interface SubmissionRowProps {
-    taskName: string;
-    status: 'success' | 'failed' | 'pending';
-    score: string;
-    language: string;
-    submissionDate: string;
-    executionTime: string;
-    memoryUsed: string;
+  interface SubmissionListRowProps {
+    submission: Submission;
   }
 
-  let {
-    taskName,
-    status,
-    score,
-    language,
-    submissionDate,
-    executionTime,
-    memoryUsed
-  }: SubmissionRowProps = $props();
+  let { submission }: SubmissionListRowProps = $props();
 
   const statusConfig = {
     success: {
       color: 'from-green-500 to-green-600',
       bgColor: 'bg-green-500/10',
       textColor: 'text-green-600',
-      label: 'Success'
+      label: m.submissions_status_success(),
+      icon: CheckCircle
     },
     failed: {
       color: 'from-red-500 to-red-600',
       bgColor: 'bg-red-500/10',
       textColor: 'text-red-600',
-      label: 'Failed'
+      label: m.submissions_status_failed(),
+      icon: XCircle
     },
     pending: {
       color: 'from-yellow-500 to-orange-600',
       bgColor: 'bg-yellow-500/10',
       textColor: 'text-yellow-600',
-      label: 'Pending'
+      label: m.submissions_status_pending(),
+      icon: Clock
     }
   };
 
-  const config = $derived(statusConfig[status]);
+  const getStatusKey = (status: SubmissionStatus): 'success' | 'failed' | 'pending' => {
+    switch (status) {
+      case SubmissionStatus.Evaluated:
+        return 'success';
+      case SubmissionStatus.Lost:
+        return 'failed';
+      case SubmissionStatus.Received:
+      case SubmissionStatus.SentForEvaluation:
+        return 'pending';
+      default:
+        return 'pending';
+    }
+  };
+
+  const config = $derived(statusConfig[getStatusKey(submission.status)]);
+  const Icon = $derived(config.icon);
+
+  const getScore = () => {
+    if (!submission.result?.testResults) return '-/-';
+    const passed = submission.result.testResults.filter((t) => t.passed).length;
+    const total = submission.result.testResults.length;
+    return `${passed}/${total}`;
+  };
 </script>
 
 <Card.Root
@@ -69,17 +80,11 @@
           <div
             class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg {config.bgColor} transition-transform duration-300 group-hover:scale-110"
           >
-            {#if status === 'success'}
-              <CheckCircle class="h-5 w-5 {config.textColor}" />
-            {:else if status === 'failed'}
-              <XCircle class="h-5 w-5 {config.textColor}" />
-            {:else}
-              <Clock class="h-5 w-5 {config.textColor}" />
-            {/if}
+            <Icon class="h-5 w-5 {config.textColor}" />
           </div>
           <div class="min-w-0 flex-1">
             <h3 class="font-semibold text-foreground transition-colors group-hover:text-primary">
-              {taskName}
+              {submission.task.title}
             </h3>
             <div class="mt-1 flex flex-wrap items-center gap-2">
               <span
@@ -87,61 +92,44 @@
               >
                 {config.label}
               </span>
-              <span class="text-sm font-medium text-foreground">{score}</span>
+              <span class="text-sm font-medium text-foreground">{getScore()}</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Middle Section: Stats Grid -->
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
         <!-- Language -->
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
             <Code class="h-3.5 w-3.5 text-primary" />
             <span class="text-xs text-muted-foreground">Language</span>
           </div>
-          <p class="mt-1 text-sm font-semibold text-foreground">{language}</p>
+          <p class="mt-1 text-sm font-semibold text-foreground">
+            {submission.language.language}
+          </p>
         </div>
 
-        <!-- Execution Time -->
+        <!-- Submitted Date -->
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
-            <Cpu class="h-3.5 w-3.5 text-primary" />
-            <span class="text-xs text-muted-foreground">Time</span>
+            <Calendar class="h-3.5 w-3.5 text-primary" />
+            <span class="text-xs text-muted-foreground">Submitted</span>
           </div>
-          <p class="mt-1 text-sm font-semibold text-foreground">{executionTime}</p>
+          <p class="mt-1 text-sm font-semibold text-foreground">
+            {formatDate(submission.submittedAt)}
+          </p>
         </div>
 
-        <!-- Memory -->
-        <div class="rounded-lg border border-border bg-card p-2">
-          <div class="flex items-center gap-1.5">
-            <HardDrive class="h-3.5 w-3.5 text-primary" />
-            <span class="text-xs text-muted-foreground">Memory</span>
-          </div>
-          <p class="mt-1 text-sm font-semibold text-foreground">{memoryUsed}</p>
-        </div>
-
-        <!-- Date -->
+        <!-- Order -->
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
             <Clock class="h-3.5 w-3.5 text-primary" />
-            <span class="text-xs text-muted-foreground">Submitted</span>
+            <span class="text-xs text-muted-foreground">Attempt</span>
           </div>
-          <p class="mt-1 text-sm font-semibold text-foreground">{submissionDate}</p>
+          <p class="mt-1 text-sm font-semibold text-foreground">#{submission.order}</p>
         </div>
-      </div>
-
-      <!-- Right Section: Action Button -->
-      <div class="flex-shrink-0">
-        <Button
-          variant="outline"
-          size="sm"
-          class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md lg:w-auto"
-        >
-          <Eye class="mr-2 h-4 w-4" />
-          View Details
-        </Button>
       </div>
     </div>
   </Card.Content>
