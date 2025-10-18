@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { getLocale } from './paraglide/runtime';
+import * as m from './paraglide/messages';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,7 +15,7 @@ export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
 
 export function formatDate(dateString: string | null): string {
-  if (!dateString) return 'N/A';
+  if (!dateString) return m.common_not_available();
 
   const date = new Date(dateString);
 

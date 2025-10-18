@@ -11,18 +11,12 @@
   import { toast } from 'svelte-sonner';
   import { isHttpError, type HttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
-  import type { RemoteFormFunction } from '@sveltejs/kit';
-  import {
-    DateFormatter,
-    type DateValue,
-    getLocalTimeZone,
-    parseDate,
-    today
-  } from '@internationalized/date';
+  import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
   import { cn } from '$lib/utils';
+  import type { CreateContestForm } from '../../../../../routes/dashboard/admin/contests/contests.remote';
 
   interface Props {
-    createContest: RemoteFormFunction<any, any>;
+    createContest: CreateContestForm;
   }
 
   let { createContest }: Props = $props();
@@ -68,7 +62,15 @@
     const [hours, minutes] = time.split(':').map(Number);
     const dateObj = date.toDate(getLocalTimeZone());
     dateObj.setHours(hours, minutes, 0, 0);
-    return dateObj.toISOString().slice(0, 16);
+
+    // Build YYYY-MM-DDTHH:mm string from local components to avoid timezone conversion
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const hour = String(dateObj.getHours()).padStart(2, '0');
+    const minute = String(dateObj.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hour}:${minute}`;
   }
 
   let startAtValue = $derived(getDateTimeString(startDate, startTime));
@@ -225,7 +227,7 @@
               autocomplete="off"
               bind:value={startTime}
               required
-              class="transition-all duration-200 focus:ring-2 focus:ring-primary [color-scheme:light] dark:[color-scheme:dark]"
+              class="[color-scheme:light] transition-all duration-200 focus:ring-2 focus:ring-primary dark:[color-scheme:dark]"
             />
           </div>
 
@@ -236,7 +238,7 @@
 
         <!-- End Date & Time -->
         <div class="space-y-3">
-          <div class="flex items-center gap-2 h-8">
+          <div class="flex h-8 items-center gap-2">
             <Checkbox id="hasEndTime" bind:checked={hasEndTime} />
             <Label for="hasEndTime" class="cursor-pointer">
               {m.admin_contests_form_end_label()}
@@ -280,7 +282,7 @@
                 autocomplete="off"
                 bind:value={endTime}
                 required
-                class="transition-all duration-200 focus:ring-2 focus:ring-primary [color-scheme:light] dark:[color-scheme:dark]"
+                class="[color-scheme:light] transition-all duration-200 focus:ring-2 focus:ring-primary dark:[color-scheme:dark]"
               />
             </div>
 

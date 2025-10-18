@@ -59,3 +59,5 @@ export const createContest = form(
     }
   }
 );
+
+export type CreateContestForm = typeof createContest;

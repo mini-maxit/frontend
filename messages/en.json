@@ -135,6 +135,7 @@
   "error_go_home": "Go Home",
   "error_try_again": "Try Again",
   "error_unknown_error": "An unknown error occurred",
+  "common_not_available": "N/A",
   "features_create_description": "Easily design and publish programming challenges tailored to your students' skills.",
   "features_create_title": "Create Algorithmic Tasks",
   "features_engage_description": "Gamified experience keeps students motivated while sharpening coding skills.",

@@ -7,7 +7,6 @@
   import Clock from '@lucide/svelte/icons/clock';
   import type { Task } from '$lib/dto/task';
   import * as m from '$lib/paraglide/messages';
-  import { getLocale } from '$lib/paraglide/runtime';
   import { formatDate } from '$lib/utils';
 
   interface AdminTaskCardProps {
