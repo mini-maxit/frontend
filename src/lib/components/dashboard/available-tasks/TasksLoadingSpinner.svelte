@@ -5,5 +5,5 @@
 
 <div class="flex flex-col items-center justify-center space-y-4 py-12">
   <Loader class="h-8 w-8 animate-spin text-primary" />
-  <p class="text-sm text-muted-foreground">{m.user_tasks_loading()}</p>
+  <p class="text-sm text-muted-foreground">{m.tasks_loading()}</p>
 </div>

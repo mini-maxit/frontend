@@ -16,7 +16,7 @@
   <Card.Header>
     <div class="flex items-center gap-2">
       <AlertCircle class="h-5 w-5 text-destructive" />
-      <Card.Title class="text-destructive">{m.user_tasks_load_error()}</Card.Title>
+      <Card.Title class="text-destructive">{m.tasks_load_error()}</Card.Title>
     </div>
   </Card.Header>
   <Card.Content>
@@ -24,7 +24,7 @@
   </Card.Content>
   <Card.Footer>
     <Button onclick={onRetry} variant="outline" size="sm">
-      {m.user_tasks_try_again()}
+      {m.tasks_try_again()}
     </Button>
   </Card.Footer>
 </Card.Root>

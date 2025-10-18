@@ -12,7 +12,6 @@
   }
 
   let { task }: Props = $props();
-
 </script>
 
 <Card.Root
@@ -40,14 +39,14 @@
   <Card.Content class="relative flex-1 space-y-4">
     <div class="flex items-center gap-2 text-sm text-muted-foreground">
       <Calendar class="h-4 w-4" />
-      <span>{m.user_tasks_card_created()}</span>
+      <span>{m.tasks_card_created()}</span>
       <span class="font-medium text-foreground">{formatDate(task.createdAt)}</span>
     </div>
   </Card.Content>
 
   <Card.Footer class="relative">
     <Button href="/dashboard/tasks/{task.id}" class="w-full" variant="default">
-      {m.user_tasks_card_view()}
+      {m.tasks_card_view()}
     </Button>
   </Card.Footer>
 </Card.Root>

@@ -15,16 +15,16 @@
   <!-- Page Header -->
   <div class="space-y-2">
     <h1 class="text-4xl font-bold tracking-tight text-foreground">
-      {m.user_tasks_page_title()}
+      {m.tasks_page_title()}
     </h1>
     <p class="text-lg text-muted-foreground">
-      {m.user_tasks_page_description()}
+      {m.tasks_page_description()}
     </p>
   </div>
 
   <!-- Tasks List Section -->
   <div class="space-y-4">
-    <h2 class="text-2xl font-bold text-foreground">{m.user_tasks_all_tasks()}</h2>
+    <h2 class="text-2xl font-bold text-foreground">{m.tasks_all_tasks()}</h2>
 
     {#if tasksQuery.error}
       <TasksErrorCard error={tasksQuery.error} onRetry={() => tasksQuery.refresh()} />

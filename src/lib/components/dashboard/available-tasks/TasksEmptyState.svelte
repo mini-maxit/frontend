@@ -8,8 +8,8 @@
   <Card.Content class="flex flex-col items-center justify-center space-y-4 py-12">
     <FileQuestion class="h-12 w-12 text-muted-foreground" />
     <div class="text-center">
-      <h3 class="font-semibold">{m.user_tasks_no_tasks()}</h3>
-      <p class="text-sm text-muted-foreground">{m.user_tasks_no_tasks_description()}</p>
+      <h3 class="font-semibold">{m.tasks_no_tasks()}</h3>
+      <p class="text-sm text-muted-foreground">{m.tasks_no_tasks_description()}</p>
     </div>
   </Card.Content>
 </Card.Root>
