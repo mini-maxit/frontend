@@ -13,7 +13,7 @@
   import * as m from '$lib/paraglide/messages';
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
   import { cn } from '$lib/utils';
-  import type { CreateContestForm } from '../../../../../routes/dashboard/admin/contests/contests.remote';
+  import type { CreateContestForm } from '$routes/dashboard/admin/contests/contests.remote';
 
   interface Props {
     createContest: CreateContestForm;
