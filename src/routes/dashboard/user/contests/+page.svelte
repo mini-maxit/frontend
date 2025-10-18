@@ -21,9 +21,6 @@
       </p>
     </div>
 
-    <!-- Stats Banner -->
-    <!-- <ContestsStats /> -->
-
     <!-- Active Contests Section -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
@@ -70,7 +67,7 @@
           {#each [...contestsQuery.current.ongoing, ...contestsQuery.current.upcoming] as contest (contest.id)}
             <ActiveContestCard
               name={contest.name}
-              status={contest.status === 'ongoing' ? 'live' : 'upcoming'}
+              status={contest.status}
               endsIn={calculateTimeInMinutes(contest.startAt, contest.endAt, contest.status)}
               participants={contest.participantCount}
               totalTasks={contest.taskCount}

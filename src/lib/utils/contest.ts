@@ -1,25 +1,6 @@
 import { ContestStatus, type Contest } from '$lib/dto/contest';
 import * as m from '$lib/paraglide/messages';
-import { getLocale } from '$lib/paraglide/runtime';
-
-/**
- * Formats a date string for display
- */
-export function formatContestDate(dateString: string | null): string {
-  if (dateString === null) return m.contest_not_specified();
-
-  const date = new Date(dateString);
-  const locale = getLocale();
-
-  // Use the current locale for date formatting
-  return date.toLocaleDateString(locale === 'pl' ? 'pl-PL' : 'en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  });
-}
+import { formatDate } from '$lib/utils';
 
 /**
  * Formats a contest's start date for display
@@ -28,7 +9,7 @@ export function getFormattedStartDate(contest: Contest): string {
   if (contest.startAt === null) {
     return contest.status === ContestStatus.Ongoing ? m.contest_already_started() : m.contest_tbd();
   }
-  return formatContestDate(contest.startAt);
+  return formatDate(contest.startAt);
 }
 
 /**
@@ -40,9 +21,9 @@ export function getFormattedEndDate(contest: Contest): string {
       ? m.contest_ongoing()
       : contest.status === ContestStatus.Upcoming
         ? m.contest_tbd()
-        : m.contest_no_end_time();
+        : m.contest_not_specified();
   }
-  return formatContestDate(contest.endAt);
+  return formatDate(contest.endAt);
 }
 
 /**
@@ -93,17 +74,6 @@ export function calculateTimeInMinutes(
   }
 
   return 0;
-}
-
-/**
- * Helper function to get pluralized message based on count
- */
-function getRelativeTimeMessage(
-  count: number,
-  singularMessage: (params: { count: number }) => string,
-  pluralMessage: (params: { count: number }) => string
-): string {
-  return count === 1 ? singularMessage({ count }) : pluralMessage({ count });
 }
 
 /**
@@ -158,7 +128,9 @@ export function formatRelativeDate(dateString: string): string {
   // Find the first unit with a value > 0 and return its formatted message
   for (const unit of timeUnits) {
     if (unit.value > 0) {
-      return getRelativeTimeMessage(unit.value, unit.singular, unit.plural);
+      return unit.value === 1
+        ? unit.singular({ count: unit.value })
+        : unit.plural({ count: unit.value });
     }
   }
 

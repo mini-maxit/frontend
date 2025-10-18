@@ -7,10 +7,11 @@
   import Zap from '@lucide/svelte/icons/zap';
   import { onMount, onDestroy } from 'svelte';
   import * as m from '$lib/paraglide/messages';
+  import { ContestStatus } from '$lib/dto/contest';
 
   interface ActiveContestCardProps {
     name: string;
-    status: 'live' | 'upcoming';
+    status: ContestStatus;
     endsIn: number; // minutes until end/start
     participants: number;
     totalTasks: number;
@@ -64,7 +65,7 @@
   };
 
   const statusConfig = $derived(
-    status === 'live'
+    status === ContestStatus.Ongoing
       ? {
           label: m.contest_card_live(),
           color: 'from-red-500 to-red-600',
@@ -101,7 +102,7 @@
         class="flex items-center gap-1.5 rounded-full {statusConfig.bgColor} px-3 py-1 {statusConfig.textColor}"
       >
         <span class="relative flex h-2 w-2">
-          {#if status === 'live'}
+          {#if status === ContestStatus.Ongoing}
             <span
               class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"
             ></span>
@@ -119,7 +120,7 @@
       <div class="flex items-center justify-center gap-2">
         <Clock class="h-5 w-5 {statusConfig.textColor}" />
         <span class="text-sm font-medium text-muted-foreground">
-          {status === 'live' ? m.contest_card_ends_in() : m.contest_card_starts_in()}
+          {status === ContestStatus.Ongoing ? m.contest_card_ends_in() : m.contest_card_starts_in()}
         </span>
         <span class="text-2xl font-bold {statusConfig.textColor}">
           {formatTime(timeLeft)}
@@ -152,7 +153,7 @@
       </div>
     </div>
 
-    {#if currentRank && status === 'live'}
+    {#if currentRank && status === ContestStatus.Ongoing}
       <div class="rounded-lg bg-gradient-to-r {statusConfig.color} p-3 text-center">
         <p class="text-sm font-medium text-white">
           {m.contest_card_current_rank({ rank: currentRank })}
