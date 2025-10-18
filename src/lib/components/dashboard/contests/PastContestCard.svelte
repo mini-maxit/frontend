@@ -19,31 +19,22 @@
 
   let { name, score, maxScore, completionPercentage, date, participants }: PastContestCardProps =
     $props();
-
-  const getScoreColor = (percentage: number) => {
-    if (percentage >= 90) return 'from-green-500 to-green-600';
-    if (percentage >= 70) return 'from-blue-500 to-blue-600';
-    if (percentage >= 50) return 'from-yellow-500 to-yellow-600';
-    return 'from-red-500 to-red-600';
-  };
-
-  const scoreColor = $derived(getScoreColor(completionPercentage));
 </script>
 
 <Card.Root
-  class="group relative flex h-full flex-col overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+  class="group relative flex h-full flex-col overflow-hidden border-border shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
 >
   <!-- Gradient Background Overlay -->
   <div
-    class="absolute inset-0 bg-gradient-to-br {scoreColor} opacity-5 transition-opacity duration-300 group-hover:opacity-10"
+    class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-[var(--secondary)]/5 to-[var(--primary)]/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
   ></div>
 
   <Card.Header class="relative">
     <div class="flex items-start gap-3">
       <div
-        class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br {scoreColor} shadow-md transition-transform duration-300 group-hover:scale-110"
+        class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] shadow-md transition-transform duration-300 group-hover:scale-110"
       >
-        <Trophy class="h-6 w-6 text-white" />
+        <Trophy class="h-6 w-6 text-primary-foreground" />
       </div>
       <div class="min-w-0 flex-1">
         <Card.Title class="text-lg transition-colors group-hover:text-primary">
@@ -56,9 +47,13 @@
 
   <Card.Content class="relative mt-auto space-y-4">
     <!-- Score Display -->
-    <div class="rounded-lg bg-gradient-to-r {scoreColor} p-4 text-center">
-      <p class="text-sm font-medium text-white/90">{m.past_contest_score_achieved()}</p>
-      <p class="mt-1 text-3xl font-bold text-white">
+    <div
+      class="rounded-lg bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] p-4 text-center shadow-md"
+    >
+      <p class="text-sm font-medium text-primary-foreground/90">
+        {m.past_contest_score_achieved()}
+      </p>
+      <p class="mt-1 text-3xl font-bold text-primary-foreground">
         {score}/{maxScore}
       </p>
     </div>

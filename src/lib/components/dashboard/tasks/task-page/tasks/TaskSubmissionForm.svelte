@@ -8,7 +8,7 @@
   import SubmitButton from './SubmitButton.svelte';
   import { toast } from 'svelte-sonner';
   import { isHttpError, type HttpError } from '@sveltejs/kit';
-  import type { SubmitSolutionRemoteForm } from '../../../routes/dashboard/tasks/[taskId]/submit.remote';
+  import type { SubmitSolutionRemoteForm } from '../../../../../../routes/dashboard/tasks/[taskId]/submit.remote';
   import type { SvelteComponent } from 'svelte';
 
   interface Language {

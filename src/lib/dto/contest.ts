@@ -45,3 +45,13 @@ export interface UserContestsResponse {
   upcoming: UserContest[];
   past: UserContest[];
 }
+
+export interface CreateContestDto {
+  name: string;
+  description: string;
+  startAt: string;
+  endAt: string | null;
+  isRegistrationOpen: boolean;
+  isSubmissionOpen: boolean;
+  isVisible: boolean;
+}

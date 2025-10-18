@@ -1,13 +1,12 @@
 <script lang="ts">
   import { getTask, getLanguages } from './task.remote';
-  import { submitSolution, type SubmitSolutionRemoteForm } from './submit.remote';
-  import TaskHeader from '$lib/components/tasks/TaskHeader.svelte';
-  import TaskPdfViewer from '$lib/components/tasks/TaskPdfViewer.svelte';
-  import TaskSubmissionForm from '$lib/components/tasks/TaskSubmissionForm.svelte';
-  import FilePreview from '$lib/components/tasks/FilePreview.svelte';
-  import TaskErrorCard from '$lib/components/tasks/TaskErrorCard.svelte';
-  import TaskLoadingSpinner from '$lib/components/tasks/TaskLoadingSpinner.svelte';
-  import type { SvelteComponent } from 'svelte';
+  import { submitSolution } from './submit.remote';
+  import TaskHeader from '$lib/components/dashboard/tasks/task-page/tasks/TaskHeader.svelte';
+  import TaskPdfViewer from '$lib/components/dashboard/tasks/task-page/tasks/TaskPdfViewer.svelte';
+  import TaskSubmissionForm from '$lib/components/dashboard/tasks/task-page/tasks/TaskSubmissionForm.svelte';
+  import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
+  import TaskErrorCard from '$lib/components/dashboard/tasks/task-page/tasks/TaskErrorCard.svelte';
+  import TaskLoadingSpinner from '$lib/components/dashboard/tasks/task-page/tasks/TaskLoadingSpinner.svelte';
 
   interface Props {
     data: {

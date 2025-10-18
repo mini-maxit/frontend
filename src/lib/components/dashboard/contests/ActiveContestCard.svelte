@@ -68,27 +68,25 @@
     status === ContestStatus.Ongoing
       ? {
           label: m.contest_card_live(),
-          color: 'from-red-500 to-red-600',
-          bgColor: 'bg-red-500/10',
-          textColor: 'text-red-600',
+          bgColor: 'bg-primary/10',
+          textColor: 'text-primary',
           buttonText: m.contest_card_continue()
         }
       : {
           label: m.contest_card_upcoming(),
-          color: 'from-blue-500 to-blue-600',
-          bgColor: 'bg-blue-500/10',
-          textColor: 'text-blue-600',
+          bgColor: 'bg-secondary/10',
+          textColor: 'text-secondary-foreground',
           buttonText: m.contest_card_show()
         }
   );
 </script>
 
 <Card.Root
-  class="group relative overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+  class="group relative overflow-hidden border-border shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
 >
   <!-- Gradient Background Overlay -->
   <div
-    class="absolute inset-0 bg-gradient-to-br {statusConfig.color} opacity-5 transition-opacity duration-300 group-hover:opacity-10"
+    class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-[var(--secondary)]/5 to-[var(--primary)]/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
   ></div>
 
   <Card.Header class="relative">
@@ -116,13 +114,13 @@
 
   <Card.Content class="relative space-y-4">
     <!-- Countdown Timer -->
-    <div class="rounded-lg border-2 {statusConfig.textColor} border-current bg-card p-4">
+    <div class="rounded-lg border border-border bg-card p-4">
       <div class="flex items-center justify-center gap-2">
-        <Clock class="h-5 w-5 {statusConfig.textColor}" />
+        <Clock class="h-5 w-5 text-primary" />
         <span class="text-sm font-medium text-muted-foreground">
           {status === ContestStatus.Ongoing ? m.contest_card_ends_in() : m.contest_card_starts_in()}
         </span>
-        <span class="text-2xl font-bold {statusConfig.textColor}">
+        <span class="text-2xl font-bold text-foreground">
           {formatTime(timeLeft)}
         </span>
       </div>
@@ -154,8 +152,8 @@
     </div>
 
     {#if currentRank && status === ContestStatus.Ongoing}
-      <div class="rounded-lg bg-gradient-to-r {statusConfig.color} p-3 text-center">
-        <p class="text-sm font-medium text-white">
+      <div class="rounded-lg bg-primary/10 p-3 text-center">
+        <p class="text-sm font-medium text-primary">
           {m.contest_card_current_rank({ rank: currentRank })}
         </p>
       </div>
@@ -163,7 +161,7 @@
 
     <!-- Action Button -->
     <Button
-      class="w-full bg-gradient-to-r {statusConfig.color} text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+      class="w-full bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
     >
       <Zap class="mr-2 h-4 w-4" />
       {statusConfig.buttonText}

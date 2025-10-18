@@ -89,9 +89,11 @@
 
 <div class="space-y-8 p-4 sm:p-6 lg:p-8">
   <!-- Page Header -->
-  <div class="space-y-2">
-    <h1 class="text-4xl font-bold tracking-tight text-foreground">{m.contests_page_title()}</h1>
-    <p class="text-lg text-muted-foreground">
+  <div class="space-y-3">
+    <h1 class="text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
+      {m.contests_page_title()}
+    </h1>
+    <p class="text-muted-foreground">
       {m.contests_page_description()}
     </p>
   </div>
@@ -122,15 +124,15 @@
     <!-- Live Contests Section -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-bold text-foreground">{m.contests_live_section()}</h2>
+        <h2 class="text-xl font-bold text-foreground lg:text-2xl">{m.contests_live_section()}</h2>
         <span
-          class="inline-flex items-center gap-2 rounded-full bg-red-500/10 px-3 py-1 text-sm font-medium text-red-600"
+          class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary"
         >
           <span class="relative flex h-2 w-2">
             <span
-              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"
             ></span>
-            <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
           </span>
           {ongoingContestsQuery.current
             ? m.contests_live_count({ count: ongoingContestsQuery.current.length })
@@ -175,7 +177,7 @@
 
     <!-- Upcoming Contests Section -->
     <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-foreground">{m.contests_upcoming_section()}</h2>
+      <h2 class="text-xl font-bold text-foreground lg:text-2xl">{m.contests_upcoming_section()}</h2>
 
       {#if upcomingContestsQuery.error}
         <div
@@ -214,7 +216,7 @@
 
     <!-- Past Contests Section -->
     <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-foreground">{m.contests_past_section()}</h2>
+      <h2 class="text-xl font-bold text-foreground lg:text-2xl">{m.contests_past_section()}</h2>
 
       {#if pastContestsQuery.error}
         <div

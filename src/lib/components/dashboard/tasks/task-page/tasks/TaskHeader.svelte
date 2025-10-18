@@ -4,6 +4,7 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import * as m from '$lib/paraglide/messages';
   import { getLocale } from '$lib/paraglide/runtime';
+  import { formatDate } from '$lib/utils';
 
   interface Props {
     id: number;
@@ -13,17 +14,6 @@
   }
 
   let { id, title, createdByName, createdAt }: Props = $props();
-
-  function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat(getLocale(), {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date);
-  }
 </script>
 
 <div class="space-y-4">
