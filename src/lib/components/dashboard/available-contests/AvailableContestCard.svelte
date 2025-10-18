@@ -36,21 +36,18 @@
   const statusConfig = {
     ongoing: {
       label: m.available_contest_live(),
-      color: 'from-red-500 to-red-600',
-      bgColor: 'bg-red-500/10',
-      textColor: 'text-red-600'
+      bgColor: 'bg-primary/10',
+      textColor: 'text-primary'
     },
     upcoming: {
       label: m.available_contest_upcoming(),
-      color: 'from-yellow-500 to-orange-600',
-      bgColor: 'bg-yellow-500/10',
-      textColor: 'text-yellow-600'
+      bgColor: 'bg-secondary/10',
+      textColor: 'text-secondary-foreground'
     },
     past: {
       label: m.available_contest_past(),
-      color: 'from-gray-500 to-gray-600',
-      bgColor: 'bg-gray-500/10',
-      textColor: 'text-gray-600'
+      bgColor: 'bg-muted',
+      textColor: 'text-muted-foreground'
     }
   } as const;
 
@@ -63,8 +60,8 @@
         return {
           icon: CheckCircle,
           text: m.available_contest_registered(),
-          bgColor: 'bg-green-500/10',
-          textColor: 'text-green-600',
+          bgColor: 'bg-primary/10',
+          textColor: 'text-primary',
           canRegister: false,
           showButton: true,
           buttonText:
@@ -80,8 +77,8 @@
         return {
           icon: AlertCircle,
           text: m.available_contest_awaiting_approval(),
-          bgColor: 'bg-yellow-500/10',
-          textColor: 'text-yellow-600',
+          bgColor: 'bg-secondary/10',
+          textColor: 'text-secondary-foreground',
           canRegister: false,
           showButton: false,
           buttonText: '',
@@ -91,8 +88,8 @@
         return {
           icon: XCircle,
           text: m.available_contest_registration_closed(),
-          bgColor: 'bg-red-500/10',
-          textColor: 'text-red-600',
+          bgColor: 'bg-destructive/10',
+          textColor: 'text-destructive',
           canRegister: false,
           showButton: contest.status === 'past',
           buttonText: m.available_contest_view_results(),
@@ -125,19 +122,19 @@
 </script>
 
 <Card.Root
-  class="group relative flex h-full flex-col overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+  class="group relative flex h-full flex-col overflow-hidden border-border shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
 >
   <!-- Gradient Background Overlay -->
   <div
-    class="absolute inset-0 bg-gradient-to-br {config.color} opacity-5 transition-opacity duration-300 group-hover:opacity-10"
+    class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-[var(--secondary)]/5 to-[var(--primary)]/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
   ></div>
 
   <Card.Header class="relative">
     <div class="flex items-start justify-between gap-2">
       <div
-        class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br {config.color} shadow-md transition-transform duration-300 group-hover:scale-110"
+        class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] shadow-md transition-transform duration-300 group-hover:scale-110"
       >
-        <Trophy class="h-5 w-5 text-white" />
+        <Trophy class="h-5 w-5 text-primary-foreground" />
       </div>
       <div
         class="flex items-center gap-1.5 rounded-full {config.bgColor} px-3 py-1 {config.textColor}"
@@ -145,9 +142,9 @@
         {#if contest.status === ContestStatus.Ongoing}
           <span class="relative flex h-2 w-2">
             <span
-              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"
             ></span>
-            <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
           </span>
         {/if}
         <span class="text-xs font-bold">{config.label}</span>
@@ -200,7 +197,7 @@
     {#if registrationConfig.showButton}
       {#if registrationConfig.canRegister}
         <Button
-          class="w-full bg-gradient-to-r {config.color} text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+          class="w-full bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
           onclick={() => onRegister?.(contest.id)}
           disabled={isRegistering}
         >
@@ -225,15 +222,15 @@
       {/if}
     {:else if contest.registrationStatus === ContestRegistrationStatus.AwaitingApproval}
       <!-- Information text for awaiting approval -->
-      <div class="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-center">
-        <p class="text-xs text-yellow-700">
+      <div class="rounded-lg border border-border bg-secondary/10 p-3 text-center">
+        <p class="text-xs text-secondary-foreground">
           {m.available_contest_pending_review()}
         </p>
       </div>
     {:else if contest.registrationStatus === ContestRegistrationStatus.RegistrationClosed && contest.status !== 'past'}
       <!-- Information text for closed registration -->
-      <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-center">
-        <p class="text-xs text-red-700">{m.available_contest_registration_closed_msg()}</p>
+      <div class="rounded-lg border border-border bg-destructive/10 p-3 text-center">
+        <p class="text-xs text-destructive">{m.available_contest_registration_closed_msg()}</p>
       </div>
     {/if}
   </Card.Content>

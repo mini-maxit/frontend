@@ -1,7 +1,8 @@
 import { ApiError, createApiClient } from './ApiService';
-import type { Contest, UserContestsResponse } from '$lib/dto/contest';
+import type { Contest, UserContestsResponse, CreateContestDto } from '$lib/dto/contest';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
+import { toRFC3339 } from '$lib/utils';
 
 export class ContestService {
   private apiClient;
@@ -78,6 +79,46 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to register for contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getAllContests(): Promise<Contest[]> {
+    try {
+      const [ongoing, upcoming, past] = await Promise.all([
+        this.getOngoing(),
+        this.getUpcoming(),
+        this.getPast()
+      ]);
+
+      return [...ongoing, ...upcoming, ...past];
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get all contests:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async createContest(data: CreateContestDto): Promise<Contest> {
+    try {
+      const requestData = {
+        ...data,
+        startAt: toRFC3339(data.startAt),
+        endAt: data.endAt ? toRFC3339(data.endAt) : null
+      };
+
+      const response = await this.apiClient.post<ApiResponse<Contest>>({
+        url: '/contest/',
+        body: JSON.stringify(requestData)
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to create contest:', error.toJSON());
         throw error;
       }
       throw error;
