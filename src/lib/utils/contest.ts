@@ -1,77 +1,15 @@
 import { ContestStatus, type Contest } from '$lib/dto/contest';
-
-/**
- * Determines the status of a contest based on current time and contest dates
- */
-export function getContestStatus(contest: Contest): ContestStatus {
-  const now = new Date();
-
-  // If startAt is null, contest is already ongoing
-  if (contest.startAt === null) {
-    // If endAt is also null, it's live indefinitely
-    if (contest.endAt === null) {
-      return ContestStatus.Ongoing;
-    }
-    // If endAt exists, check if it's still within the end time
-    const endDate = new Date(contest.endAt);
-    return now <= endDate ? ContestStatus.Ongoing : ContestStatus.Past;
-  }
-
-  const startDate = new Date(contest.startAt);
-
-  // If endAt is null, contest is ongoing after start time
-  if (contest.endAt === null) {
-    return now >= startDate ? ContestStatus.Ongoing : ContestStatus.Upcoming;
-  }
-
-  const endDate = new Date(contest.endAt);
-
-  if (now < startDate) {
-    return ContestStatus.Upcoming;
-  } else if (now >= startDate && now <= endDate) {
-    return ContestStatus.Ongoing;
-  } else {
-    return ContestStatus.Past;
-  }
-}
-
-/**
- * Calculates minutes remaining until contest ends (for live contests)
- */
-export function getMinutesUntilEnd(contest: Contest): number | undefined {
-  const status = getContestStatus(contest);
-  if (status !== ContestStatus.Ongoing || contest.endAt === null) return undefined;
-
-  const now = new Date();
-  const endDate = new Date(contest.endAt);
-  const diffMs = endDate.getTime() - now.getTime();
-  return Math.max(0, Math.floor(diffMs / (1000 * 60)));
-}
-
-/**
- * Formats a date string for display
- */
-export function formatContestDate(dateString: string | null): string {
-  if (dateString === null) return 'Not specified';
-
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  });
-}
+import * as m from '$lib/paraglide/messages';
+import { formatDate } from '$lib/utils';
 
 /**
  * Formats a contest's start date for display
  */
 export function getFormattedStartDate(contest: Contest): string {
   if (contest.startAt === null) {
-    return contest.status === ContestStatus.Ongoing ? 'Already started' : 'TBD';
+    return contest.status === ContestStatus.Ongoing ? m.contest_already_started() : m.contest_tbd();
   }
-  return formatContestDate(contest.startAt);
+  return formatDate(contest.startAt);
 }
 
 /**
@@ -80,12 +18,12 @@ export function getFormattedStartDate(contest: Contest): string {
 export function getFormattedEndDate(contest: Contest): string {
   if (contest.endAt === null) {
     return contest.status === ContestStatus.Ongoing
-      ? 'Ongoing'
+      ? m.contest_ongoing()
       : contest.status === ContestStatus.Upcoming
-        ? 'TBD'
-        : 'No end time';
+        ? m.contest_tbd()
+        : m.contest_not_specified();
   }
-  return formatContestDate(contest.endAt);
+  return formatDate(contest.endAt);
 }
 
 /**
@@ -111,4 +49,91 @@ export function calculateContestStats(contests: Contest[]) {
     upcoming: groups.upcoming.length,
     past: groups.past.length
   };
+}
+
+/**
+ * Calculate minutes until a date (for upcoming contests) or minutes since start (for ongoing contests)
+ */
+export function calculateTimeInMinutes(
+  startAt: string | null,
+  endAt: string | null,
+  status: ContestStatus
+): number {
+  const now = new Date();
+
+  if (status === ContestStatus.Upcoming) {
+    // For upcoming contests, calculate minutes until start
+    if (!startAt) return -1; // Special value for null start time
+    const startTime = new Date(startAt);
+    return Math.max(0, Math.floor((startTime.getTime() - now.getTime()) / (1000 * 60)));
+  } else if (status === ContestStatus.Ongoing) {
+    // For ongoing contests, calculate minutes until end
+    if (!endAt) return -1; // Special value for null end time (indefinite contest)
+    const endTime = new Date(endAt);
+    return Math.max(0, Math.floor((endTime.getTime() - now.getTime()) / (1000 * 60)));
+  }
+
+  return 0;
+}
+
+/**
+ * Format a date to relative time string (e.g., "2 weeks ago", "1 month ago")
+ */
+export function formatRelativeDate(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInMs = now.getTime() - date.getTime();
+
+  const minutes = Math.floor(diffInMs / (1000 * 60));
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  // Configuration array for time units (ordered from largest to smallest)
+  const timeUnits = [
+    {
+      value: years,
+      singular: m.relative_time_years_ago,
+      plural: m.relative_time_years_ago_plural
+    },
+    {
+      value: months,
+      singular: m.relative_time_months_ago,
+      plural: m.relative_time_months_ago_plural
+    },
+    {
+      value: weeks,
+      singular: m.relative_time_weeks_ago,
+      plural: m.relative_time_weeks_ago_plural
+    },
+    {
+      value: days,
+      singular: m.relative_time_days_ago,
+      plural: m.relative_time_days_ago_plural
+    },
+    {
+      value: hours,
+      singular: m.relative_time_hours_ago,
+      plural: m.relative_time_hours_ago_plural
+    },
+    {
+      value: minutes,
+      singular: m.relative_time_minutes_ago,
+      plural: m.relative_time_minutes_ago_plural
+    }
+  ];
+
+  // Find the first unit with a value > 0 and return its formatted message
+  for (const unit of timeUnits) {
+    if (unit.value > 0) {
+      return unit.value === 1
+        ? unit.singular({ count: unit.value })
+        : unit.plural({ count: unit.value });
+    }
+  }
+
+  // If no time has passed, return "just now"
+  return m.relative_time_just_now();
 }

@@ -6,10 +6,12 @@
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import Zap from '@lucide/svelte/icons/zap';
   import { onMount, onDestroy } from 'svelte';
+  import * as m from '$lib/paraglide/messages';
+  import { ContestStatus } from '$lib/dto/contest';
 
   interface ActiveContestCardProps {
     name: string;
-    status: 'live' | 'upcoming';
+    status: ContestStatus;
     endsIn: number; // minutes until end/start
     participants: number;
     totalTasks: number;
@@ -32,7 +34,7 @@
 
   onMount(() => {
     interval = setInterval(() => {
-      if (timeLeft > 0) {
+      if (timeLeft > 0 && timeLeft !== -1) {
         timeLeft--;
       }
     }, 60000); // Update every minute
@@ -43,6 +45,11 @@
   });
 
   const formatTime = (minutes: number) => {
+    // Handle special case for contests with no end time
+    if (minutes === -1) {
+      return '∞';
+    }
+
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     const days = Math.floor(hours / 24);
@@ -58,20 +65,20 @@
   };
 
   const statusConfig = $derived(
-    status === 'live'
+    status === ContestStatus.Ongoing
       ? {
-          label: 'LIVE',
+          label: m.contest_card_live(),
           color: 'from-red-500 to-red-600',
           bgColor: 'bg-red-500/10',
           textColor: 'text-red-600',
-          buttonText: 'Continue Contest'
+          buttonText: m.contest_card_continue()
         }
       : {
-          label: 'UPCOMING',
+          label: m.contest_card_upcoming(),
           color: 'from-blue-500 to-blue-600',
           bgColor: 'bg-blue-500/10',
           textColor: 'text-blue-600',
-          buttonText: 'Show Contest'
+          buttonText: m.contest_card_show()
         }
   );
 </script>
@@ -95,7 +102,7 @@
         class="flex items-center gap-1.5 rounded-full {statusConfig.bgColor} px-3 py-1 {statusConfig.textColor}"
       >
         <span class="relative flex h-2 w-2">
-          {#if status === 'live'}
+          {#if status === ContestStatus.Ongoing}
             <span
               class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"
             ></span>
@@ -113,7 +120,7 @@
       <div class="flex items-center justify-center gap-2">
         <Clock class="h-5 w-5 {statusConfig.textColor}" />
         <span class="text-sm font-medium text-muted-foreground">
-          {status === 'live' ? 'Ends in:' : 'Starts in:'}
+          {status === ContestStatus.Ongoing ? m.contest_card_ends_in() : m.contest_card_starts_in()}
         </span>
         <span class="text-2xl font-bold {statusConfig.textColor}">
           {formatTime(timeLeft)}
@@ -127,7 +134,9 @@
       <div class="rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
         <div class="flex items-center gap-2">
           <Users class="h-4 w-4 text-primary" />
-          <span class="text-xs font-medium text-muted-foreground">Participants</span>
+          <span class="text-xs font-medium text-muted-foreground"
+            >{m.contest_card_participants()}</span
+          >
         </div>
         <p class="mt-1 text-lg font-bold text-foreground">{participants}</p>
       </div>
@@ -136,7 +145,7 @@
       <div class="rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
         <div class="flex items-center gap-2">
           <ListTodo class="h-4 w-4 text-primary" />
-          <span class="text-xs font-medium text-muted-foreground">Tasks</span>
+          <span class="text-xs font-medium text-muted-foreground">{m.contest_card_tasks()}</span>
         </div>
         <p class="mt-1 text-lg font-bold text-foreground">
           {completedTasks}/{totalTasks}
@@ -144,9 +153,11 @@
       </div>
     </div>
 
-    {#if currentRank && status === 'live'}
+    {#if currentRank && status === ContestStatus.Ongoing}
       <div class="rounded-lg bg-gradient-to-r {statusConfig.color} p-3 text-center">
-        <p class="text-sm font-medium text-white">Current Rank: #{currentRank}</p>
+        <p class="text-sm font-medium text-white">
+          {m.contest_card_current_rank({ rank: currentRank })}
+        </p>
       </div>
     {/if}
 

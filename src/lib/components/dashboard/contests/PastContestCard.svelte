@@ -6,6 +6,7 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import TrendingUp from '@lucide/svelte/icons/trending-up';
   import Eye from '@lucide/svelte/icons/eye';
+  import * as m from '$lib/paraglide/messages';
 
   interface PastContestCardProps {
     name: string;
@@ -48,7 +49,7 @@
         <Card.Title class="text-lg transition-colors group-hover:text-primary">
           {name}
         </Card.Title>
-        <p class="mt-1 text-sm text-muted-foreground">Completed</p>
+        <p class="mt-1 text-sm text-muted-foreground">{m.past_contest_completed()}</p>
       </div>
     </div>
   </Card.Header>
@@ -56,7 +57,7 @@
   <Card.Content class="relative mt-auto space-y-4">
     <!-- Score Display -->
     <div class="rounded-lg bg-gradient-to-r {scoreColor} p-4 text-center">
-      <p class="text-sm font-medium text-white/90">Score Achieved</p>
+      <p class="text-sm font-medium text-white/90">{m.past_contest_score_achieved()}</p>
       <p class="mt-1 text-3xl font-bold text-white">
         {score}/{maxScore}
       </p>
@@ -68,7 +69,9 @@
       <div class="rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
         <div class="flex items-center gap-2">
           <TrendingUp class="h-4 w-4 text-primary" />
-          <span class="text-xs font-medium text-muted-foreground">Completion</span>
+          <span class="text-xs font-medium text-muted-foreground"
+            >{m.past_contest_completion()}</span
+          >
         </div>
         <p class="mt-1 text-lg font-bold text-foreground">{completionPercentage}%</p>
       </div>
@@ -77,7 +80,9 @@
       <div class="rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
         <div class="flex items-center gap-2">
           <Users class="h-4 w-4 text-primary" />
-          <span class="text-xs font-medium text-muted-foreground">Participants</span>
+          <span class="text-xs font-medium text-muted-foreground"
+            >{m.past_contest_participants()}</span
+          >
         </div>
         <p class="mt-1 text-lg font-bold text-foreground">{participants}</p>
       </div>
@@ -95,7 +100,7 @@
       class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
     >
       <Eye class="mr-2 h-4 w-4" />
-      View Details
+      {m.past_contest_view_details()}
     </Button>
   </Card.Content>
 </Card.Root>

@@ -5,6 +5,7 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import { calculateContestStats } from '$lib/utils/contest';
   import type { Contest } from '$lib/dto/contest';
+  import * as m from '$lib/paraglide/messages';
 
   interface AvailableContestsStatsProps {
     contests: Contest[];
@@ -17,19 +18,19 @@
   const stats = $derived([
     {
       icon: Trophy,
-      label: 'Available Contests',
+      label: m.available_contests_stats_available(),
       value: contestStats.total.toString(),
       color: 'from-blue-500 to-blue-600'
     },
     {
       icon: Zap,
-      label: 'Live Now',
+      label: m.available_contests_stats_live(),
       value: contestStats.live.toString(),
       color: 'from-red-500 to-red-600'
     },
     {
       icon: Calendar,
-      label: 'Upcoming',
+      label: m.available_contests_stats_upcoming(),
       value: contestStats.upcoming.toString(),
       color: 'from-yellow-500 to-orange-600'
     }
