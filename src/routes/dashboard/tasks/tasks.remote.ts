@@ -10,9 +10,9 @@ export const getTasks = query(async (): Promise<Task[]> => {
   const taskService = new TaskService(apiClient);
 
   const result = await taskService.getAllTasks();
-  if (!result.success) {
+  if (!result.success || !result.data) {
     error(result.status, { message: result.error || 'Failed to fetch tasks.' });
   }
 
-  return result.data || [];
+  return result.data;
 });
