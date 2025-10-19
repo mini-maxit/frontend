@@ -17,23 +17,23 @@
 
   const statusConfig = {
     success: {
-      color: 'from-green-500 to-green-600',
-      bgColor: 'bg-green-500/10',
-      textColor: 'text-green-600',
+      bgColor: 'bg-primary/10',
+      textColor: 'text-primary',
+      cardBgClass: '',
       label: m.submissions_status_success(),
       icon: CheckCircle
     },
     failed: {
-      color: 'from-red-500 to-red-600',
-      bgColor: 'bg-red-500/10',
-      textColor: 'text-red-600',
+      bgColor: 'bg-muted',
+      textColor: 'text-muted-foreground',
+      cardBgClass: 'bg-muted/30',
       label: m.submissions_status_failed(),
       icon: XCircle
     },
     pending: {
-      color: 'from-yellow-500 to-orange-600',
-      bgColor: 'bg-yellow-500/10',
-      textColor: 'text-yellow-600',
+      bgColor: 'bg-secondary/10',
+      textColor: 'text-secondary',
+      cardBgClass: 'bg-muted/15',
       label: m.submissions_status_pending(),
       icon: Clock
     }
@@ -42,7 +42,6 @@
   const getStatusKey = (status: SubmissionStatus): 'success' | 'failed' | 'pending' => {
     switch (status) {
       case SubmissionStatus.Evaluated: {
-        // Check if all tests passed
         if (submission.result?.testResults) {
           const passed = submission.result.testResults.filter((t) => t.passed).length;
           const total = submission.result.testResults.length;
@@ -61,7 +60,6 @@
   };
 
   const config = $derived(statusConfig[getStatusKey(submission.status)]);
-  const Icon = $derived(config.icon);
 
   const getScore = () => {
     if (!submission.result?.testResults) return '-/-';
@@ -72,13 +70,8 @@
 </script>
 
 <Card.Root
-  class="group relative overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+  class="group relative overflow-hidden shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg {config.cardBgClass}"
 >
-  <!-- Status gradient overlay -->
-  <div
-    class="absolute inset-0 bg-gradient-to-r {config.color} opacity-[0.02] transition-opacity duration-300 group-hover:opacity-[0.05]"
-  ></div>
-
   <Card.Content class="relative p-4">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <!-- Left Section: Task Name & Status -->
@@ -87,7 +80,7 @@
           <div
             class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg {config.bgColor} transition-transform duration-300 group-hover:scale-110"
           >
-            <Icon class="h-5 w-5 {config.textColor}" />
+            <config.icon class="h-5 w-5 {config.textColor}" />
           </div>
           <div class="min-w-0 flex-1">
             <h3 class="font-semibold text-foreground transition-colors group-hover:text-primary">
