@@ -1,6 +1,6 @@
 import { ApiError, type ApiService } from './ApiService';
 import type { ApiResponse } from '../dto/response';
-import type { Language, SubmitSolutionDto } from '../dto/submission';
+import type { Language, SubmitSolutionDto, Submission } from '../dto/submission';
 
 export class SubmissionService {
   constructor(private apiClient: ApiService) {}
@@ -18,7 +18,7 @@ export class SubmissionService {
 
     try {
       const response = await this.apiClient.post<ApiResponse<null>>({
-        url: '/submission/submit',
+        url: '/submissions/submit',
         body: formData
       });
       return { success: true, data: response.data, status: 200 };
@@ -42,7 +42,36 @@ export class SubmissionService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<Language[]>>({
-        url: '/submission/languages'
+        url: '/submissions/languages'
+      });
+      return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async getAllSubmissions(params?: { limit?: number; offset?: number }): Promise<{
+    success: boolean;
+    status: number;
+    data?: Submission[];
+    error?: string;
+  }> {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+
+      const url = `/submissions/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+
+      const response = await this.apiClient.get<ApiResponse<Submission[]>>({
+        url
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {

@@ -14,7 +14,7 @@ export class TaskService {
 
     try {
       const response = await this.apiClient.post<ApiResponse<UploadTaskResponse>>({
-        url: '/task/',
+        url: '/tasks/',
         body: formData
       });
       return { success: true, data: response.data, status: 200 };
@@ -38,7 +38,7 @@ export class TaskService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<Task[]>>({
-        url: '/task/'
+        url: '/tasks/'
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -61,7 +61,7 @@ export class TaskService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<TaskDetail>>({
-        url: `/task/${id}`
+        url: `/tasks/${id}`
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
