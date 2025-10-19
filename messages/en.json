@@ -266,5 +266,8 @@
   "tasks_no_tasks_description": "Tasks will appear here when you join groups or contests",
   "tasks_page_description": "View and solve tasks from your groups and active contests",
   "tasks_page_title": "Your Tasks",
-  "tasks_try_again": "Try Again"
+  "tasks_try_again": "Try Again",
+  "submissions_language_label": "Language",
+  "submissions_submitted_label": "Submitted",
+  "submissions_attempt_label": "Attempt"
 }

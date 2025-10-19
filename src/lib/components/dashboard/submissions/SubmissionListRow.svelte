@@ -104,7 +104,7 @@
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
             <Code class="h-3.5 w-3.5 text-primary" />
-            <span class="text-xs text-muted-foreground">Language</span>
+            <span class="text-xs text-muted-foreground">{m.submissions_language_label()}</span>
           </div>
           <p class="mt-1 text-sm font-semibold text-foreground">
             {submission.language.language}
@@ -115,7 +115,7 @@
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
             <Calendar class="h-3.5 w-3.5 text-primary" />
-            <span class="text-xs text-muted-foreground">Submitted</span>
+            <span class="text-xs text-muted-foreground">{m.submissions_submitted_label()}</span>
           </div>
           <p class="mt-1 text-sm font-semibold text-foreground">
             {formatDate(submission.submittedAt)}
@@ -126,7 +126,7 @@
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
             <Clock class="h-3.5 w-3.5 text-primary" />
-            <span class="text-xs text-muted-foreground">Attempt</span>
+            <span class="text-xs text-muted-foreground">{m.submissions_attempt_label()}</span>
           </div>
           <p class="mt-1 text-sm font-semibold text-foreground">#{submission.order}</p>
         </div>
