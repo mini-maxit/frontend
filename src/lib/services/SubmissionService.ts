@@ -18,7 +18,7 @@ export class SubmissionService {
 
     try {
       const response = await this.apiClient.post<ApiResponse<null>>({
-        url: '/submission/submit',
+        url: '/submissions/submit',
         body: formData
       });
       return { success: true, data: response.data, status: 200 };
@@ -42,7 +42,7 @@ export class SubmissionService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<Language[]>>({
-        url: '/submission/languages'
+        url: '/submissions/languages'
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -68,7 +68,7 @@ export class SubmissionService {
       if (params?.limit) queryParams.append('limit', params.limit.toString());
       if (params?.offset) queryParams.append('offset', params.offset.toString());
 
-      const url = `/submission/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+      const url = `/submissions/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
       const response = await this.apiClient.get<ApiResponse<Submission[]>>({
         url

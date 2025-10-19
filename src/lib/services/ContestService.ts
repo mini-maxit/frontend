@@ -14,7 +14,7 @@ export class ContestService {
   async getOngoing(): Promise<Contest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contest/ongoing'
+        url: '/contests/ongoing'
       });
       return response.data;
     } catch (error) {
@@ -29,7 +29,7 @@ export class ContestService {
   async getUpcoming(): Promise<Contest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contest/upcoming'
+        url: '/contests/upcoming'
       });
       return response.data;
     } catch (error) {
@@ -44,7 +44,7 @@ export class ContestService {
   async getPast(): Promise<Contest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contest/past'
+        url: '/contests/past'
       });
       return response.data;
     } catch (error) {
@@ -59,7 +59,7 @@ export class ContestService {
   async getUserContests(userId: number): Promise<UserContestsResponse> {
     try {
       const response = await this.apiClient.get<ApiResponse<UserContestsResponse>>({
-        url: `/user/${userId}/contests`
+        url: `/users/${userId}/contests`
       });
       return response.data;
     } catch (error) {
@@ -74,7 +74,7 @@ export class ContestService {
   async registerForContest(contestId: number): Promise<void> {
     try {
       await this.apiClient.post<ApiResponse<void>>({
-        url: `/contest/${contestId}/register`
+        url: `/contests/${contestId}/register`
       });
     } catch (error) {
       if (error instanceof ApiError) {
@@ -112,7 +112,7 @@ export class ContestService {
       };
 
       const response = await this.apiClient.post<ApiResponse<Contest>>({
-        url: '/contest/',
+        url: '/contests/',
         body: JSON.stringify(requestData)
       });
       return response.data;
