@@ -39,7 +39,7 @@
     }
   };
 
-  const getStatusKey = (status: SubmissionStatus): 'success' | 'failed' | 'pending' => {
+  const getStatusKey = (status: SubmissionStatus): keyof typeof statusConfig => {
     switch (status) {
       case SubmissionStatus.Evaluated: {
         if (submission.result?.testResults) {
