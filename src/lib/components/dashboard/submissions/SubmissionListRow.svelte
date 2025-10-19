@@ -41,8 +41,15 @@
 
   const getStatusKey = (status: SubmissionStatus): 'success' | 'failed' | 'pending' => {
     switch (status) {
-      case SubmissionStatus.Evaluated:
-        return 'success';
+      case SubmissionStatus.Evaluated: {
+        // Check if all tests passed
+        if (submission.result?.testResults) {
+          const passed = submission.result.testResults.filter((t) => t.passed).length;
+          const total = submission.result.testResults.length;
+          return passed === total && total > 0 ? 'success' : 'failed';
+        }
+        return 'failed';
+      }
       case SubmissionStatus.Lost:
         return 'failed';
       case SubmissionStatus.Received:
