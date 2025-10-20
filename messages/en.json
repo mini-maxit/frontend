@@ -269,5 +269,6 @@
   "tasks_try_again": "Try Again",
   "submissions_language_label": "Language",
   "submissions_submitted_label": "Submitted",
-  "submissions_attempt_label": "Attempt"
+  "submissions_attempt_label": "Attempt",
+  "sidebar_logout": "Logout"
 }

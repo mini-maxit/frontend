@@ -26,7 +26,9 @@
   import UserCircle from '@lucide/svelte/icons/user-circle';
   import Languages from '@lucide/svelte/icons/languages';
   import LayoutDashboard from '@lucide/svelte/icons/layout-dashboard';
+  import LogOut from '@lucide/svelte/icons/log-out';
   import SidebarTrigger from '../ui/sidebar/sidebar-trigger.svelte';
+  import { logout } from '$routes/dashboard/logout.remote';
 
   interface Props {
     user: { userId: number; role: UserRole };
@@ -221,6 +223,22 @@
               <UserCircle />
               <span>{m.sidebar_profile()}</span>
             </a>
+          {/snippet}
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+      <SidebarMenuItem>
+        <SidebarMenuButton>
+          {#snippet child({ props })}
+            <form
+              {...logout.enhance(async ({ submit }) => {
+                await submit();
+              })}
+            >
+              <button type="submit" {...props}>
+                <LogOut />
+                <span>{m.sidebar_logout()}</span>
+              </button>
+            </form>
           {/snippet}
         </SidebarMenuButton>
       </SidebarMenuItem>

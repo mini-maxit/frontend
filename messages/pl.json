@@ -269,5 +269,6 @@
   "tasks_no_tasks_description": "Zadania pojawią się tutaj, gdy dołączysz do grup lub konkursów",
   "tasks_page_description": "Przeglądaj i rozwiązuj zadania ze swoich grup i aktywnych konkursów",
   "tasks_page_title": "Twoje Zadania",
-  "tasks_try_again": "Spróbuj Ponownie"
+  "tasks_try_again": "Spróbuj Ponownie",
+  "sidebar_logout": "Wyloguj się"
 }
