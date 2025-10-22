@@ -270,5 +270,14 @@
   "tasks_page_description": "Przeglądaj i rozwiązuj zadania ze swoich grup i aktywnych konkursów",
   "tasks_page_title": "Twoje Zadania",
   "tasks_try_again": "Spróbuj Ponownie",
-  "sidebar_logout": "Wyloguj się"
+  "sidebar_logout": "Wyloguj się",
+  "admin_tasks_manage_test_cases_description": "Dostosuj limity pamięci i czasu dla {taskTitle}",
+  "admin_tasks_manage_test_cases_title": "Zarządzaj Testami",
+  "admin_tasks_memory_limit": "Limit Pamięci (KB)",
+  "admin_tasks_no_test_cases": "Nie znaleziono testów dla tego zadania",
+  "admin_tasks_save_changes": "Zapisz Zmiany",
+  "admin_tasks_test_case_id": "ID Testu",
+  "admin_tasks_test_cases_update_error": "Nie udało się zaktualizować testów. Spróbuj ponownie.",
+  "admin_tasks_test_cases_updated": "Testy zostały pomyślnie zaktualizowane!",
+  "admin_tasks_time_limit": "Limit Czasu (ms)"
 }

@@ -16,6 +16,20 @@ export interface TaskDetail {
   pdfDataUrl?: string | null;
 }
 
+export interface TaskLimit {
+  order: number;
+  memoryLimit: number;
+  timeLimit: number;
+}
+
+export interface UpdateTaskLimitsDto {
+  limits: Array<{
+    order: number;
+    memoryLimit: number;
+    timeLimit: number;
+  }>;
+}
+
 export interface UploadTaskResponse {
   id: number;
 }

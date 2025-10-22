@@ -4,18 +4,16 @@
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import * as Dialog from '$lib/components/ui/dialog';
-  import Upload from '@lucide/svelte/icons/upload';
   import { toast } from 'svelte-sonner';
   import { isHttpError, type HttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
 
   interface TasksUploadDialogProps {
     open: boolean;
-    onOpenChange: (open: boolean) => void;
     onSuccess: () => void;
   }
 
-  let { open = $bindable(), onOpenChange, onSuccess }: TasksUploadDialogProps = $props();
+  let { open = $bindable(), onSuccess }: TasksUploadDialogProps = $props();
 
   let fileInput = $state<HTMLInputElement | null>(null);
   let selectedFile = $state<File | null>(null);
