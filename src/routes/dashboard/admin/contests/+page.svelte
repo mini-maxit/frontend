@@ -1,12 +1,8 @@
 <script lang="ts">
   import { createContest, getAllContests } from './contests.remote';
-  import {
-    CreateContestButton,
-    ContestsErrorCard,
-    ContestsLoadingSpinner,
-    ContestsEmptyState,
-    ContestsList
-  } from '$lib/components/dashboard/admin/contests';
+  import { CreateContestButton, ContestsList } from '$lib/components/dashboard/admin/contests';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import Trophy from '@lucide/svelte/icons/trophy';
   import * as m from '$lib/paraglide/messages';
 
   const contestsQuery = getAllContests();
@@ -30,11 +26,19 @@
     <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_all_contests()}</h2>
 
     {#if contestsQuery.error}
-      <ContestsErrorCard error={contestsQuery.error} onRetry={() => contestsQuery.refresh()} />
+      <ErrorCard
+        title={m.admin_contests_load_error_title()}
+        error={contestsQuery.error}
+        onRetry={() => contestsQuery.refresh()}
+      />
     {:else if contestsQuery.loading}
-      <ContestsLoadingSpinner />
+      <LoadingSpinner />
     {:else if contestsQuery.current && contestsQuery.current.length === 0}
-      <ContestsEmptyState />
+      <EmptyState
+        title={m.admin_contests_no_contests_title()}
+        description={m.admin_contests_no_contests_description()}
+        icon={Trophy}
+      />
     {:else if contestsQuery.current}
       <ContestsList contests={contestsQuery.current} />
     {/if}

@@ -1,11 +1,8 @@
 <script lang="ts">
   import { getSubmissions } from './submissions.remote';
-  import {
-    SubmissionsList,
-    SubmissionsErrorCard,
-    SubmissionsLoadingSpinner,
-    SubmissionsEmptyState
-  } from '$lib/components/dashboard/submissions';
+  import { SubmissionsList } from '$lib/components/dashboard/submissions';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import FileQuestion from '@lucide/svelte/icons/file-question';
   import * as m from '$lib/paraglide/messages';
 
   const submissionsQuery = getSubmissions();
@@ -27,14 +24,23 @@
     <h2 class="text-2xl font-bold text-foreground">{m.submissions_all_submissions()}</h2>
 
     {#if submissionsQuery.error}
-      <SubmissionsErrorCard
+      <ErrorCard
+        title={m.submissions_load_error()}
         error={submissionsQuery.error}
         onRetry={() => submissionsQuery.refresh()}
+        card
+        iconBackground
       />
     {:else if submissionsQuery.loading}
-      <SubmissionsLoadingSpinner />
+      <LoadingSpinner message={m.submissions_loading()} card size="h-12 w-12" />
     {:else if submissionsQuery.current && submissionsQuery.current.length === 0}
-      <SubmissionsEmptyState />
+      <EmptyState
+        title={m.submissions_empty_title()}
+        description={m.submissions_empty_description()}
+        icon={FileQuestion}
+        card
+        iconBackground
+      />
     {:else if submissionsQuery.current}
       <SubmissionsList submissions={submissionsQuery.current} />
     {/if}
