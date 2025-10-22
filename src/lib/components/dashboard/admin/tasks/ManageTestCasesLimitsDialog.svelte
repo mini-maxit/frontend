@@ -24,12 +24,6 @@
   let editedLimits = $state<Array<{ order: number; memoryLimit: number; timeLimit: number }>>([]);
 
   $effect(() => {
-    if (open) {
-      taskLimitsQuery.refresh();
-    }
-  });
-
-  $effect(() => {
     if (taskLimitsQuery?.current) {
       editedLimits = taskLimitsQuery.current.map((l) => ({ ...l }));
     }
@@ -66,8 +60,6 @@
       <form
         class="space-y-4"
         {...updateTaskLimits.enhance(async ({ submit }) => {
-          updateTaskLimits.fields.limits.set(editedLimits);
-
           try {
             await submit();
             toast.success(m.admin_tasks_test_cases_updated());
@@ -77,8 +69,7 @@
           }
         })}
       >
-        <!-- Hidden inputs for form fields -->
-        <input {...updateTaskLimits.fields.taskId.as('number')} type="hidden" />
+        <input {...updateTaskLimits.fields.taskId.as('number')} type="hidden" value={taskId} />
 
         {#each editedLimits as limit, i (limit.order)}
           <input
@@ -159,5 +150,7 @@
         </Dialog.Footer>
       </form>
     {/if}
+
+    <!-- Dialog.Footer moved inside the form for proper form submission -->
   </Dialog.Content>
 </Dialog.Root>
