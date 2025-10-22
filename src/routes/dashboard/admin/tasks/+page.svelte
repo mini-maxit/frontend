@@ -26,11 +26,7 @@
       <TasksUploadButton onclick={() => (dialogOpen = true)} />
     </div>
 
-    <TasksUploadDialog
-      bind:open={dialogOpen}
-      onOpenChange={(open) => (dialogOpen = open)}
-      onSuccess={() => tasksQuery.refresh()}
-    />
+    <TasksUploadDialog bind:open={dialogOpen} onSuccess={() => tasksQuery.refresh()} />
   </div>
 
   <!-- Tasks List Section -->

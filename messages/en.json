@@ -270,5 +270,14 @@
   "submissions_language_label": "Language",
   "submissions_submitted_label": "Submitted",
   "submissions_attempt_label": "Attempt",
-  "sidebar_logout": "Logout"
+  "sidebar_logout": "Logout",
+  "admin_tasks_manage_test_cases_description": "Adjust memory and time limits for {taskTitle}",
+  "admin_tasks_manage_test_cases_title": "Manage Test Cases",
+  "admin_tasks_memory_limit": "Memory Limit (MB)",
+  "admin_tasks_no_test_cases": "No test cases found for this task",
+  "admin_tasks_save_changes": "Save Changes",
+  "admin_tasks_test_case_id": "Test Case ID",
+  "admin_tasks_test_cases_update_error": "Failed to update test cases. Please try again.",
+  "admin_tasks_test_cases_updated": "Test cases updated successfully!",
+  "admin_tasks_time_limit": "Time Limit (ms)"
 }

@@ -8,12 +8,17 @@
   import type { Task } from '$lib/dto/task';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
+  import { localizeHref } from '$lib/paraglide/runtime';
+  import { AppRoutes } from '$lib/routes';
+  import ManageTestCasesLimitsDialog from '$lib/components/dashboard/admin/tasks/ManageTestCasesLimitsDialog.svelte';
 
   interface AdminTaskCardProps {
     task: Task;
   }
 
   let { task }: AdminTaskCardProps = $props();
+
+  let manageDialogOpen = $state(false);
 </script>
 
 <Card.Root
@@ -66,18 +71,23 @@
 
     <!-- Action Buttons -->
     <div class="flex gap-2">
-      <Button
-        variant="outline"
-        class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-      >
-        {m.admin_tasks_card_view_details()}
-      </Button>
+      <a href={localizeHref(`${AppRoutes.TaskDetails}${task.id}`)} class="flex-1">
+        <Button
+          variant="outline"
+          class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        >
+          {m.admin_tasks_card_view_details()}
+        </Button>
+      </a>
       <Button
         variant="default"
         class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        onclick={() => (manageDialogOpen = true)}
       >
         {m.admin_tasks_card_manage()}
       </Button>
     </div>
   </Card.Content>
 </Card.Root>
+
+<ManageTestCasesLimitsDialog bind:open={manageDialogOpen} taskId={task.id} taskTitle={task.title} />
