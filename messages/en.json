@@ -273,7 +273,7 @@
   "sidebar_logout": "Logout",
   "admin_tasks_manage_test_cases_description": "Adjust memory and time limits for {taskTitle}",
   "admin_tasks_manage_test_cases_title": "Manage Test Cases",
-  "admin_tasks_memory_limit": "Memory Limit (MB)",
+  "admin_tasks_memory_limit": "Memory Limit (KB)",
   "admin_tasks_no_test_cases": "No test cases found for this task",
   "admin_tasks_save_changes": "Save Changes",
   "admin_tasks_test_case_id": "Test Case ID",

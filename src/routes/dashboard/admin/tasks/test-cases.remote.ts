@@ -6,8 +6,8 @@ import { error } from '@sveltejs/kit';
 
 const TaskLimitSchema = v.object({
   order: v.number(),
-  memoryLimit: v.number(),
-  timeLimit: v.number()
+  memoryLimit: v.pipe(v.number(), v.minValue(1), v.maxValue(131072)),
+  timeLimit: v.pipe(v.number(), v.minValue(1), v.maxValue(30000))
 });
 
 const UpdateTaskLimitsSchema = v.object({

@@ -108,6 +108,7 @@
                 id="memory-{limit.order}"
                 type="number"
                 min="1"
+                max="131072"
                 class="w-full"
                 bind:value={editedLimits[i].memoryLimit}
               />
@@ -120,6 +121,7 @@
                 id="time-{limit.order}"
                 type="number"
                 min="1"
+                max="30000"
                 class="w-full"
                 bind:value={editedLimits[i].timeLimit}
               />
