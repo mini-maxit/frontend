@@ -330,5 +330,22 @@
   "profile_quick_actions": "Szybkie akcje",
   "profile_change_password_description": "Zaktualizuj bezpieczeństwo swojego konta",
   "profile_edit_profile": "Edytuj profil",
-  "profile_edit_profile_description": "Zaktualizuj swoje dane osobowe"
+  "profile_edit_profile_description": "Zaktualizuj swoje dane osobowe",
+  "overlay_mocked_page": "Strona Makietowa - W trakcie rozwoju",
+  "overlay_go_back": "Wróć",
+  "dashboard_welcome": "Witaj ponownie",
+  "dashboard_quick_actions": "Szybkie Akcje",
+  "dashboard_error_title": "Nie udało się załadować panelu",
+  "quick_actions_solve_task": "Rozwiąż Zadanie",
+  "quick_actions_solve_task_description": "Przeglądaj i rozwiązuj wyzwania programistyczne",
+  "quick_actions_join_contest": "Dołącz do Konkursu",
+  "quick_actions_join_contest_description": "Rywalizuj z innymi w konkursach programistycznych",
+  "quick_actions_my_submissions": "Moje Zgłoszenia",
+  "quick_actions_my_submissions_description": "Zobacz swoje przesłane rozwiązania",
+  "quick_actions_my_groups": "Moje Grupy",
+  "quick_actions_my_groups_description": "Zarządzaj swoimi grupami naukowymi",
+  "quick_actions_my_contests": "Moje Konkursy",
+  "quick_actions_my_contests_description": "Zobacz konkursy, w których bierzesz udział",
+  "quick_actions_profile": "Profil",
+  "quick_actions_profile_description": "Zarządzaj ustawieniami konta"
 }

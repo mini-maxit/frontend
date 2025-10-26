@@ -26,4 +26,5 @@ export interface UserChangePasswordDto {
   oldPassword: string;
   newPassword: string;
   newPasswordConfirm: string;
+  role: string;
 }

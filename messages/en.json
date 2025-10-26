@@ -330,5 +330,22 @@
   "profile_quick_actions": "Quick Actions",
   "profile_change_password_description": "Update your account security",
   "profile_edit_profile": "Edit Profile",
-  "profile_edit_profile_description": "Update your personal information"
+  "profile_edit_profile_description": "Update your personal information",
+  "overlay_mocked_page": "Mocked Page - Work in Progress",
+  "overlay_go_back": "Go Back",
+  "dashboard_welcome": "Welcome back",
+  "dashboard_quick_actions": "Quick Actions",
+  "dashboard_error_title": "Failed to load dashboard",
+  "quick_actions_solve_task": "Solve a Task",
+  "quick_actions_solve_task_description": "Browse and solve programming challenges",
+  "quick_actions_join_contest": "Join a Contest",
+  "quick_actions_join_contest_description": "Compete with others in coding contests",
+  "quick_actions_my_submissions": "My Submissions",
+  "quick_actions_my_submissions_description": "View your submitted solutions",
+  "quick_actions_my_groups": "My Groups",
+  "quick_actions_my_groups_description": "Manage your learning groups",
+  "quick_actions_my_contests": "My Contests",
+  "quick_actions_my_contests_description": "View contests you're participating in",
+  "quick_actions_profile": "Profile",
+  "quick_actions_profile_description": "Manage your account settings"
 }
