@@ -1,42 +1,42 @@
 <script lang="ts">
-  import DashboardStats from '$lib/components/dashboard/home/DashboardStats.svelte';
   import QuickActions from '$lib/components/dashboard/home/QuickActions.svelte';
-  import type { PageProps } from './$types';
+  import { getCurrentUser } from './user.remote';
+  import { LoadingSpinner, ErrorCard } from '$lib/components/common';
+  import * as m from '$lib/paraglide/messages';
+  import { getLocale } from '$lib/paraglide/runtime';
 
-  let { data }: PageProps = $props();
+  const userQuery = getCurrentUser();
 
-  // Get current date for welcome message
   const today = new Date();
-  const dateString = today.toLocaleDateString('en-US', {
+  const dateString = today.toLocaleDateString(getLocale(), {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
-
-  // Extract username from data if available
-  const username = 'John'; // TODO: Get from data.user when available
 </script>
 
-<div class="space-y-8 p-4 sm:p-6 lg:p-8">
-  <!-- Welcome Header -->
-  <div class="space-y-2">
-    <h1 class="text-4xl font-bold tracking-tight text-foreground">
-      👋 Welcome back, {username}!
-    </h1>
-    <p class="text-lg text-muted-foreground">{dateString}</p>
-    <p class="text-md text-muted-foreground">
-      You've completed <span class="font-semibold text-foreground">15 tasks</span> this week. Keep it
-      up!
-    </p>
-  </div>
+{#if userQuery.error}
+  <ErrorCard
+    title={m.dashboard_error_title()}
+    error={userQuery.error}
+    onRetry={() => userQuery.refresh()}
+  />
+{:else if userQuery.loading}
+  <LoadingSpinner />
+{:else if userQuery.current}
+  <div class="space-y-8">
+    <!-- Welcome Header -->
+    <div class="space-y-2">
+      <h1 class="text-4xl font-bold tracking-tight">
+        👋 {m.dashboard_welcome()}, {userQuery.current.name}!
+      </h1>
+      <p class="text-lg text-muted-foreground">{dateString}</p>
+    </div>
 
-  <!-- Quick Stats -->
-  <DashboardStats />
-
-  <!-- Quick Actions -->
-  <div class="space-y-4">
-    <h2 class="text-2xl font-bold text-foreground">Quick Actions</h2>
-    <QuickActions />
+    <div class="space-y-4">
+      <h2 class="text-2xl font-bold">{m.dashboard_quick_actions()}</h2>
+      <QuickActions />
+    </div>
   </div>
-</div>
+{/if}
