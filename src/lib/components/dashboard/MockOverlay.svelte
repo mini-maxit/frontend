@@ -10,7 +10,6 @@
 
   // Define mocked pages
   const MOCKED_PAGES = [
-    AppRoutes.UserProfile,
     AppRoutes.UserTasks,
     AppRoutes.UserGroups,
     AppRoutes.AdminGroups,

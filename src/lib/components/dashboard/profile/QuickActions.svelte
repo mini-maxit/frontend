@@ -1,15 +1,28 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
   import Lock from '@lucide/svelte/icons/lock';
   import UserCog from '@lucide/svelte/icons/user-cog';
+  import * as m from '$lib/paraglide/messages';
+
+  import ChangePasswordDialog from './ChangePasswordDialog.svelte';
+
+  let showChangePasswordDialog = $state(false);
+
+  function openChangePasswordDialog() {
+    showChangePasswordDialog = true;
+  }
+
+  function handlePasswordDialogChange(open: boolean) {
+    showChangePasswordDialog = open;
+  }
 </script>
 
 <div class="space-y-4">
-  <h2 class="text-2xl font-bold text-foreground">Quick Actions</h2>
+  <h2 class="text-2xl font-bold text-foreground">{m.profile_quick_actions()}</h2>
 
   <div class="grid gap-4 sm:grid-cols-2">
     <!-- Change Password Button -->
     <button
+      onclick={openChangePasswordDialog}
       class="group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary to-secondary p-6 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
     >
       <div
@@ -23,8 +36,10 @@
           <Lock class="h-8 w-8 text-primary-foreground" />
         </div>
         <div>
-          <h3 class="text-lg font-bold text-primary-foreground">Change Password</h3>
-          <p class="mt-1 text-sm text-primary-foreground/80">Update your account security</p>
+          <h3 class="text-lg font-bold text-primary-foreground">{m.profile_change_password()}</h3>
+          <p class="mt-1 text-sm text-primary-foreground/80">
+            {m.profile_change_password_description()}
+          </p>
         </div>
       </div>
     </button>
@@ -44,10 +59,18 @@
           <UserCog class="h-8 w-8 text-primary-foreground" />
         </div>
         <div>
-          <h3 class="text-lg font-bold text-primary-foreground">Edit Profile</h3>
-          <p class="mt-1 text-sm text-primary-foreground/80">Update your personal information</p>
+          <h3 class="text-lg font-bold text-primary-foreground">{m.profile_edit_profile()}</h3>
+          <p class="mt-1 text-sm text-primary-foreground/80">
+            {m.profile_edit_profile_description()}
+          </p>
         </div>
       </div>
     </button>
   </div>
+
+  <!-- Change Password Dialog -->
+  <ChangePasswordDialog
+    bind:open={showChangePasswordDialog}
+    onOpenChange={handlePasswordDialogChange}
+  />
 </div>

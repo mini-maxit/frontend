@@ -1,3 +1,5 @@
+import { UserRole } from './jwt';
+
 export interface UserLoginDto {
   email: string;
   password: string;
@@ -18,5 +20,12 @@ export interface User {
   name: string;
   surname: string;
   username: string;
-  role: string;
+  role: UserRole;
+  createdAt: string;
+}
+
+export interface UserChangePasswordDto {
+  oldPassword: string;
+  newPassword: string;
+  newPasswordConfirm: string;
 }
