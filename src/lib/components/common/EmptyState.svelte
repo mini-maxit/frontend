@@ -2,19 +2,12 @@
   import type { Component } from 'svelte';
 
   interface EmptyStateProps {
-    /** Title text to display */
     title: string;
-    /** Optional description text */
     description?: string;
-    /** Lucide icon component to display */
-    icon: Component<any>;
-    /** Size of the icon (default: 'h-12 w-12') */
+    icon: Component;
     iconSize?: string;
-    /** Whether to wrap in a Card component */
-    card?: boolean;
-    /** Whether to show icon in a rounded background (requires card=true) */
+    inCard?: boolean;
     iconBackground?: boolean;
-    /** Additional CSS classes for the container */
     class?: string;
   }
 
@@ -23,13 +16,13 @@
     description,
     icon: Icon,
     iconSize = 'h-12 w-12',
-    card = false,
+    inCard = false,
     iconBackground = false,
     class: className = ''
   }: EmptyStateProps = $props();
 </script>
 
-{#if card}
+{#if inCard}
   <div class="rounded-2xl border bg-card text-card-foreground shadow-md {className}">
     <div class="p-12">
       <div class="flex flex-col items-center gap-4 text-center">

@@ -28,7 +28,7 @@
       title={m.task_error_title()}
       error={taskQuery.error}
       onRetry={() => taskQuery.refresh()}
-      card
+      inCard
     />
   {:else if taskQuery.loading}
     <LoadingSpinner />

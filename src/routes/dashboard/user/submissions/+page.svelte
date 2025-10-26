@@ -28,17 +28,17 @@
         title={m.submissions_load_error()}
         error={submissionsQuery.error}
         onRetry={() => submissionsQuery.refresh()}
-        card
+        inCard
         iconBackground
       />
     {:else if submissionsQuery.loading}
-      <LoadingSpinner message={m.submissions_loading()} card size="h-12 w-12" />
+      <LoadingSpinner message={m.submissions_loading()} inCard size="h-12 w-12" />
     {:else if submissionsQuery.current && submissionsQuery.current.length === 0}
       <EmptyState
         title={m.submissions_empty_title()}
         description={m.submissions_empty_description()}
         icon={FileQuestion}
-        card
+        inCard
         iconBackground
       />
     {:else if submissionsQuery.current}

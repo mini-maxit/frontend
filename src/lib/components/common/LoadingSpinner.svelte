@@ -2,25 +2,21 @@
   import Loader from '@lucide/svelte/icons/loader-circle';
 
   interface LoadingSpinnerProps {
-    /** Optional loading message to display below the spinner */
     message?: string;
-    /** Size of the spinner icon (default: 'h-8 w-8') */
     size?: string;
-    /** Whether to wrap in a Card component */
-    card?: boolean;
-    /** Additional CSS classes for the container */
+    inCard?: boolean;
     class?: string;
   }
 
   let {
     message,
     size = 'h-8 w-8',
-    card = false,
+    inCard = false,
     class: className = ''
   }: LoadingSpinnerProps = $props();
 </script>
 
-{#if card}
+{#if inCard}
   <div class="rounded-2xl border bg-card text-card-foreground shadow-md">
     <div class="flex items-center justify-center p-12 {className}">
       <div class="flex flex-col items-center gap-4 text-center">

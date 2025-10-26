@@ -28,7 +28,7 @@
         title={m.tasks_load_error()}
         error={tasksQuery.error}
         onRetry={() => tasksQuery.refresh()}
-        card
+        inCard
       />
     {:else if tasksQuery.loading}
       <LoadingSpinner message={m.tasks_loading()} />
@@ -37,7 +37,7 @@
         title={m.tasks_no_tasks()}
         description={m.tasks_no_tasks_description()}
         icon={FileQuestion}
-        card
+        inCard
       />
     {:else if tasksQuery.current}
       <TasksList tasks={tasksQuery.current} />

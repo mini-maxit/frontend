@@ -2,6 +2,7 @@
   import { Button } from '$lib/components/ui/button';
   import { m } from '$lib/paraglide/messages.js';
   import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
+  import { AppRoutes } from '$lib/routes';
 </script>
 
 <section
@@ -22,6 +23,7 @@
     </p>
 
     <Button
+      href={AppRoutes.Dashboard}
       size="lg"
       class="bg-primary-foreground px-8 py-6 text-lg text-primary shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-primary-foreground/90"
     >

@@ -9,7 +9,6 @@
   import { toast } from 'svelte-sonner';
   import { isHttpError, type HttpError } from '@sveltejs/kit';
   import type { SubmitSolutionRemoteForm } from '$routes/dashboard/tasks/[taskId]/submit.remote';
-  import type { SvelteComponent } from 'svelte';
 
   interface Language {
     id: number;
@@ -38,7 +37,7 @@
 
   let selectedLanguageId = $state<number | null>(null);
   let selectedFiles = $state<FileList | null>(null);
-  let fileUploader = $state<SvelteComponent | null>(null);
+  let fileUploader = $state<FileUploader | null>(null);
   let formElement = $state<HTMLFormElement | null>(null);
 
   function getFileExtension(filename: string): string {

@@ -4,19 +4,12 @@
   import * as m from '$lib/paraglide/messages';
 
   interface ErrorCardProps {
-    /** Error title message */
     title: string;
-    /** Error object or error message string */
     error?: Error | string | null;
-    /** Retry callback function */
     onRetry?: () => void;
-    /** Whether to show the alert icon */
     showIcon?: boolean;
-    /** Whether to wrap in a Card component with more styling */
-    card?: boolean;
-    /** Whether to show icon in a rounded background (requires card=true) */
+    inCard?: boolean;
     iconBackground?: boolean;
-    /** Additional CSS classes for the container */
     class?: string;
   }
 
@@ -25,7 +18,7 @@
     error,
     onRetry,
     showIcon = true,
-    card = false,
+    inCard = false,
     iconBackground = false,
     class: className = ''
   }: ErrorCardProps = $props();
@@ -35,7 +28,7 @@
   );
 </script>
 
-{#if card}
+{#if inCard}
   <div
     class="rounded-2xl border border-destructive/50 bg-destructive/5 text-card-foreground shadow-md {className}"
   >
