@@ -6,15 +6,8 @@ import * as v from 'valibot';
 
 const passwordChangeSchema = v.object({
   oldPassword: v.pipe(v.string(), v.nonEmpty('Current password is required')),
-  newPassword: v.pipe(
-    v.string(),
-    v.minLength(8, 'Password must be at least 8 characters'),
-    v.regex(/[A-Z]/, 'Password must contain at least one uppercase letter'),
-    v.regex(/[a-z]/, 'Password must contain at least one lowercase letter'),
-    v.regex(/\d/, 'Password must contain at least one number'),
-    v.regex(/[^A-Za-z\d]/, 'Password must contain at least one special character')
-  ),
-  newPasswordConfirm: v.string() // Only basic string validation, equality check is separate
+  newPassword: v.pipe(v.string(), v.nonEmpty('New password is required')),
+  newPasswordConfirm: v.pipe(v.string(), v.nonEmpty('Please confirm your new password'))
 });
 
 export const changePassword = form(

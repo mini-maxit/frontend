@@ -60,7 +60,7 @@
 
   function handleClose() {
     open = false;
-    onOpenChange?.(false);
+    onOpenChange(false);
     // Reset form when closing
     changePassword.fields.set({
       oldPassword: '',

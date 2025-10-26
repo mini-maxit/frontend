@@ -71,7 +71,9 @@
           class="flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent"
         >
           <Calendar class="h-5 w-5 text-primary" />
-          <span class="text-sm text-muted-foreground">Joined: {formatDate(user.createdAt)}</span>
+          <span class="text-sm text-muted-foreground"
+            >{m.profile_joined()}: {formatDate(user.createdAt)}</span
+          >
         </div>
       </div>
     </div>
