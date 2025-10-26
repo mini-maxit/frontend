@@ -74,9 +74,14 @@
   }
 
   // Set form values based on local state
+  // Update date/time fields when they change
   $effect(() => {
     createContest.fields.startAt.set(getDateTimeString(startDate, startTime));
     createContest.fields.endAt.set(hasEndTime ? getDateTimeString(endDate, endTime) : '');
+  });
+
+  // Update boolean options when they change
+  $effect(() => {
     createContest.fields.isRegistrationOpen.set(isRegistrationOpen);
     createContest.fields.isSubmissionOpen.set(isSubmissionOpen);
     createContest.fields.isVisible.set(isVisible);

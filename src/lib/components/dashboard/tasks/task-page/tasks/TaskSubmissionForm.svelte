@@ -41,11 +41,20 @@
   let formElement = $state<HTMLFormElement | null>(null);
 
   // Set form values programmatically instead of using hidden inputs
+  // Update taskId when it changes
   $effect(() => {
     submitAction.fields.taskId.set(taskId);
+  });
+
+  // Update languageId when it changes
+  $effect(() => {
     if (selectedLanguageId !== null) {
       submitAction.fields.languageId.set(selectedLanguageId);
     }
+  });
+
+  // Update solution file when it changes
+  $effect(() => {
     if (selectedFiles) {
       submitAction.fields.solution.set(selectedFiles);
     }

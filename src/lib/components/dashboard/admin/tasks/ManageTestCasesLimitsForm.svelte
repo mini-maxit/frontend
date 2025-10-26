@@ -26,8 +26,13 @@
   });
 
   // Set the form values programmatically based on props and state
+  // Update taskId when it changes
   $effect(() => {
     updateTaskLimits.fields.taskId.set(taskId);
+  });
+
+  // Update limits when editedLimits changes
+  $effect(() => {
     updateTaskLimits.fields.limits.set(editedLimits);
   });
 </script>
