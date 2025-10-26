@@ -24,7 +24,7 @@
   });
 
   // Only show overlay in development mode and on mocked pages
-  const shouldShowOverlay = $derived(dev && isMockedPage);
+  const shouldShowOverlay = $derived(isMockedPage);
 </script>
 
 {#if shouldShowOverlay}
@@ -39,7 +39,7 @@
       <Info class="h-5 w-5 flex-shrink-0 text-orange-600 dark:text-orange-400" />
       <div class="flex items-center gap-3">
         <span class="text-sm font-medium text-orange-900 dark:text-orange-100">
-          {m.dev_overlay_mocked_page()}
+          {m.overlay_mocked_page()}
         </span>
         <Button
           href={localizeHref(AppRoutes.Dashboard)}
@@ -48,7 +48,7 @@
           class="gap-2 border-orange-300 bg-white hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-900 dark:hover:bg-orange-800"
         >
           <ArrowLeft class="h-4 w-4" />
-          {m.dev_overlay_go_back()}
+          {m.overlay_go_back()}
         </Button>
       </div>
     </div>

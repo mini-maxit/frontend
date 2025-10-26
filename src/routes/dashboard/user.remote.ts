@@ -1,33 +1,18 @@
 import { query, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
-import type { ApiResponse } from '$lib/dto/response';
+import { UserService } from '$lib/services/UserService';
+import type { User } from '$lib/dto/user';
 import { error } from '@sveltejs/kit';
 
-export interface User {
-  id: number;
-  email: string;
-  name: string;
-  surname: string;
-  username: string;
-  role: string;
-}
-
 export const getCurrentUser = query(async (): Promise<User> => {
-  const { cookies, locals } = getRequestEvent();
+  const event = getRequestEvent();
+  const apiClient = createApiClient(event.cookies);
+  const userService = new UserService(apiClient);
 
-  if (!locals.user) {
-    throw error(401, 'Unauthorized');
+  const result = await userService.getCurrentUser();
+  if (!result.success || !result.data) {
+    error(result.status, { message: result.error || 'Failed to fetch user data.' });
   }
 
-  try {
-    const apiClient = createApiClient(cookies);
-    const response = await apiClient.get<ApiResponse<User>>({
-      url: `/users/${locals.user.userId}`
-    });
-
-    return response.data;
-  } catch (err) {
-    console.error('Failed to load user:', err);
-    throw error(500, 'Failed to load user data');
-  }
+  return result.data;
 });
