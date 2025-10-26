@@ -39,7 +39,7 @@
       await submit();
       toast.success(m.admin_tasks_test_cases_updated());
       onSuccess?.();
-    } catch (error) {
+    } catch {
       toast.error(m.admin_tasks_test_cases_update_error());
     }
   })}

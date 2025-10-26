@@ -40,6 +40,17 @@
   let fileUploader = $state<FileUploader | null>(null);
   let formElement = $state<HTMLFormElement | null>(null);
 
+  // Set form values programmatically instead of using hidden inputs
+  $effect(() => {
+    submitAction.fields.taskId.set(taskId);
+    if (selectedLanguageId !== null) {
+      submitAction.fields.languageId.set(selectedLanguageId);
+    }
+    if (selectedFiles) {
+      submitAction.fields.solution.set(selectedFiles);
+    }
+  });
+
   function getFileExtension(filename: string): string {
     return filename.split('.').pop()?.toLowerCase() || '';
   }
@@ -120,20 +131,7 @@
             }
           }
         })}
-      >
-        <input {...submitAction.fields.taskId.as('number')} bind:value={taskId} hidden />
-        <input
-          {...submitAction.fields.languageId.as('number')}
-          bind:value={selectedLanguageId}
-          hidden
-        />
-        <input
-          {...submitAction.fields.solution.as('file')}
-          bind:files={selectedFiles}
-          type="file"
-          hidden
-        />
-      </form>
+      ></form>
 
       <LanguageSelector {languages} bind:selectedLanguageId />
 

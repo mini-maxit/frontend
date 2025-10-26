@@ -7,7 +7,7 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Popover from '$lib/components/ui/popover';
   import { toast } from 'svelte-sonner';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
+  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
   import { cn } from '$lib/utils';
@@ -89,7 +89,7 @@
       await submit();
       toast.success(m.admin_contests_create_success());
       onSuccess?.();
-    } catch (error: HttpError | unknown) {
+    } catch (error: unknown) {
       if (isHttpError(error)) {
         toast.error(error.body.message);
       } else {
