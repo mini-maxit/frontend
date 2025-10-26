@@ -10,14 +10,13 @@ import * as m from '$lib/paraglide/messages';
 
 const LoginSchema = v.object({
   email: v.pipe(
-    v.string('Email is required'),
-    v.nonEmpty('Email cannot be empty'),
-    v.email('Please enter a valid email address')
+    v.string(m.validation_email_required()),
+    v.nonEmpty(m.validation_email_required()),
+    v.email(m.validation_email_invalid())
   ),
   _password: v.pipe(
-    v.string('Password is required'),
-    v.nonEmpty('Password cannot be empty'),
-    v.minLength(6, 'Password must be at least 6 characters')
+    v.string(m.validation_password_required()),
+    v.nonEmpty(m.validation_password_required())
   )
 });
 

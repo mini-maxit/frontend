@@ -59,6 +59,9 @@
                 autocomplete="email"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
+              {#each login.fields.email.issues() as issue}
+                <p class="text-sm text-destructive">{issue.message}</p>
+              {/each}
             </div>
 
             <div class="space-y-2">
@@ -81,6 +84,9 @@
                 autocomplete="current-password"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
+              {#each login.fields._password.issues() as issue}
+                <p class="text-sm text-destructive">{issue.message}</p>
+              {/each}
             </div>
 
             <Button

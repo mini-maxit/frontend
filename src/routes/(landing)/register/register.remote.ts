@@ -11,40 +11,50 @@ import * as m from '$lib/paraglide/messages';
 const RegisterSchema = v.pipe(
   v.object({
     email: v.pipe(
-      v.string('Email is required'),
-      v.nonEmpty('Email cannot be empty'),
-      v.email('Please enter a valid email address')
+      v.string(m.validation_email_required()),
+      v.nonEmpty(m.validation_email_required()),
+      v.email(m.validation_email_invalid())
     ),
     name: v.pipe(
-      v.string('Name is required'),
-      v.nonEmpty('Name cannot be empty'),
-      v.minLength(2, 'Name must be at least 2 characters')
+      v.string(m.validation_name_required()),
+      v.nonEmpty(m.validation_name_required()),
+      v.minLength(3, m.validation_name_min()),
+      v.maxLength(50, m.validation_name_max())
     ),
     surname: v.pipe(
-      v.string('Surname is required'),
-      v.nonEmpty('Surname cannot be empty'),
-      v.minLength(2, 'Surname must be at least 2 characters')
+      v.string(m.validation_surname_required()),
+      v.nonEmpty(m.validation_surname_required()),
+      v.minLength(3, m.validation_surname_min()),
+      v.maxLength(50, m.validation_surname_max())
     ),
     username: v.pipe(
-      v.string('Username is required'),
-      v.nonEmpty('Username cannot be empty'),
-      v.minLength(3, 'Username must be at least 3 characters')
+      v.string(m.validation_username_required()),
+      v.nonEmpty(m.validation_username_required()),
+      v.minLength(3, m.validation_username_min()),
+      v.maxLength(30, m.validation_username_max()),
+      v.regex(/^[a-zA-Z]/, m.validation_username_start()),
+      v.regex(/^[a-zA-Z][a-zA-Z0-9_]*$/, m.validation_username_pattern())
     ),
     _password: v.pipe(
-      v.string('Password is required'),
-      v.nonEmpty('Password cannot be empty'),
-      v.minLength(6, 'Password must be at least 6 characters')
+      v.string(m.validation_password_required()),
+      v.nonEmpty(m.validation_password_required()),
+      v.minLength(8, m.validation_password_min()),
+      v.maxLength(50, m.validation_password_max()),
+      v.regex(/[A-Z]/, m.validation_password_uppercase()),
+      v.regex(/[a-z]/, m.validation_password_lowercase()),
+      v.regex(/[0-9]/, m.validation_password_digit()),
+      v.regex(/[!#?@$%^&*-]/, m.validation_password_special())
     ),
     _confirmPassword: v.pipe(
-      v.string('Please confirm your password'),
-      v.nonEmpty('Please confirm your password')
+      v.string(m.validation_confirm_password_required()),
+      v.nonEmpty(m.validation_confirm_password_required())
     )
   }),
   v.forward(
     v.partialCheck(
       [['_password'], ['_confirmPassword']],
       (input) => input._password === input._confirmPassword,
-      'Passwords do not match'
+      m.validation_passwords_match()
     ),
     ['_confirmPassword']
   )

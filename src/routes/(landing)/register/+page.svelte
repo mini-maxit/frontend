@@ -61,6 +61,9 @@
                 autocomplete="email"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
+              {#each register.fields.email.issues() as issue}
+                <p class="text-sm text-destructive">{issue.message}</p>
+              {/each}
             </div>
 
             <div class="space-y-2">
@@ -75,6 +78,9 @@
                 autocomplete="given-name"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
+              {#each register.fields.name.issues() as issue}
+                <p class="text-sm text-destructive">{issue.message}</p>
+              {/each}
             </div>
 
             <div class="space-y-2">
@@ -89,6 +95,9 @@
                 autocomplete="family-name"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
+              {#each register.fields.surname.issues() as issue}
+                <p class="text-sm text-destructive">{issue.message}</p>
+              {/each}
             </div>
 
             <div class="space-y-2">
@@ -103,6 +112,9 @@
                 autocomplete="username"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
+              {#each register.fields.username.issues() as issue}
+                <p class="text-sm text-destructive">{issue.message}</p>
+              {/each}
             </div>
 
             <div class="space-y-2">
@@ -117,6 +129,9 @@
                 autocomplete="new-password"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
+              {#each register.fields._password.issues() as issue}
+                <p class="text-sm text-destructive">{issue.message}</p>
+              {/each}
             </div>
 
             <div class="space-y-2">
@@ -131,6 +146,9 @@
                 autocomplete="new-password"
                 class="transition-all duration-200 focus:ring-2 focus:ring-primary"
               />
+              {#each register.fields._confirmPassword.issues() as issue}
+                <p class="text-sm text-destructive">{issue.message}</p>
+              {/each}
             </div>
 
             <Button
