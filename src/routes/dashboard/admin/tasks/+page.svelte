@@ -2,12 +2,11 @@
   import { getTasks } from './tasks.remote';
   import {
     TasksList,
-    TasksErrorCard,
-    TasksLoadingSpinner,
-    TasksEmptyState,
     TasksUploadDialog,
     TasksUploadButton
   } from '$lib/components/dashboard/admin/tasks';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import Upload from '@lucide/svelte/icons/upload';
   import * as m from '$lib/paraglide/messages';
 
   let dialogOpen = $state(false);
@@ -34,11 +33,19 @@
     <h2 class="text-2xl font-bold text-foreground">{m.admin_tasks_all_tasks()}</h2>
 
     {#if tasksQuery.error}
-      <TasksErrorCard error={tasksQuery.error} onRetry={() => tasksQuery.refresh()} />
+      <ErrorCard
+        title={m.admin_tasks_load_error_title()}
+        error={tasksQuery.error}
+        onRetry={() => tasksQuery.refresh()}
+      />
     {:else if tasksQuery.loading}
-      <TasksLoadingSpinner />
+      <LoadingSpinner />
     {:else if tasksQuery.current && tasksQuery.current.length === 0}
-      <TasksEmptyState />
+      <EmptyState
+        title={m.admin_tasks_no_tasks_title()}
+        description={m.admin_tasks_no_tasks_description()}
+        icon={Upload}
+      />
     {:else if tasksQuery.current}
       <TasksList tasks={tasksQuery.current} />
     {/if}

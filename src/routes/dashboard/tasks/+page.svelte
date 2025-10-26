@@ -1,11 +1,8 @@
 <script lang="ts">
   import { getTasks } from './tasks.remote';
-  import {
-    TasksList,
-    TasksErrorCard,
-    TasksLoadingSpinner,
-    TasksEmptyState
-  } from '$lib/components/dashboard/available-tasks';
+  import { TasksList } from '$lib/components/dashboard/available-tasks';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import FileQuestion from '@lucide/svelte/icons/file-question';
   import * as m from '$lib/paraglide/messages';
 
   const tasksQuery = getTasks();
@@ -27,11 +24,21 @@
     <h2 class="text-2xl font-bold text-foreground">{m.tasks_all_tasks()}</h2>
 
     {#if tasksQuery.error}
-      <TasksErrorCard error={tasksQuery.error} onRetry={() => tasksQuery.refresh()} />
+      <ErrorCard
+        title={m.tasks_load_error()}
+        error={tasksQuery.error}
+        onRetry={() => tasksQuery.refresh()}
+        inCard
+      />
     {:else if tasksQuery.loading}
-      <TasksLoadingSpinner />
+      <LoadingSpinner message={m.tasks_loading()} />
     {:else if tasksQuery.current && tasksQuery.current.length === 0}
-      <TasksEmptyState />
+      <EmptyState
+        title={m.tasks_no_tasks()}
+        description={m.tasks_no_tasks_description()}
+        icon={FileQuestion}
+        inCard
+      />
     {:else if tasksQuery.current}
       <TasksList tasks={tasksQuery.current} />
     {/if}

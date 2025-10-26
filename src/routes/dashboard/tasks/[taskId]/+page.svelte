@@ -5,8 +5,8 @@
   import TaskPdfViewer from '$lib/components/dashboard/tasks/task-page/tasks/TaskPdfViewer.svelte';
   import TaskSubmissionForm from '$lib/components/dashboard/tasks/task-page/tasks/TaskSubmissionForm.svelte';
   import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
-  import TaskErrorCard from '$lib/components/dashboard/tasks/task-page/tasks/TaskErrorCard.svelte';
-  import TaskLoadingSpinner from '$lib/components/dashboard/tasks/task-page/tasks/TaskLoadingSpinner.svelte';
+  import { LoadingSpinner, ErrorCard } from '$lib/components/common';
+  import * as m from '$lib/paraglide/messages';
 
   interface Props {
     data: {
@@ -24,9 +24,14 @@
 
 <div class="space-y-6">
   {#if taskQuery.error}
-    <TaskErrorCard error={taskQuery.error} onRetry={() => taskQuery.refresh()} />
+    <ErrorCard
+      title={m.task_error_title()}
+      error={taskQuery.error}
+      onRetry={() => taskQuery.refresh()}
+      inCard
+    />
   {:else if taskQuery.loading}
-    <TaskLoadingSpinner />
+    <LoadingSpinner />
   {:else if taskQuery.current}
     <TaskHeader
       id={taskQuery.current.id}
