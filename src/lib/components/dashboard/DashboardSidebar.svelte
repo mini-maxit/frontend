@@ -144,20 +144,24 @@
 
   <SidebarContent>
     <!-- Admin Section -->
-    {#if user.role === UserRole.Admin}
+    {#if user.role === UserRole.Teacher || user.role === UserRole.Admin}
       <SidebarGroup>
-        <SidebarGroupLabel>{m.sidebar_admin()}</SidebarGroupLabel>
+        {@const sidebarTitle =
+          user.role === UserRole.Admin ? m.sidebar_admin() : m.sidebar_teacher()}
+        <SidebarGroupLabel>{sidebarTitle}</SidebarGroupLabel>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton isActive={isActive(localizeHref(AppRoutes.Admin))}>
-              {#snippet child({ props })}
-                <a href={localizeHref(AppRoutes.Admin)} {...props}>
-                  <LayoutDashboard />
-                  <span>{m.sidebar_admin()}</span>
-                </a>
-              {/snippet}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {#if user.role === UserRole.Admin}
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive={isActive(localizeHref(AppRoutes.Admin))}>
+                {#snippet child({ props })}
+                  <a href={localizeHref(AppRoutes.Admin)} {...props}>
+                    <LayoutDashboard />
+                    <span>{m.sidebar_admin()}</span>
+                  </a>
+                {/snippet}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          {/if}
           {#each adminMenuItems as item}
             <SidebarMenuItem>
               <SidebarMenuButton isActive={isActive(item.href)}>
