@@ -16,7 +16,7 @@
   } = $props();
 
   const sidebar = useSidebar();
-  const hidden = $derived(sidebar.open && hiddable);
+  const hidden = $derived(sidebar.open && hiddable && !sidebar.isMobile);
 </script>
 
 <SidebarMenuButton
