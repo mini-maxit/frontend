@@ -301,5 +301,8 @@
   "validation_username_min": "Nazwa użytkownika musi mieć co najmniej 3 znaki",
   "validation_username_max": "Nazwa użytkownika może mieć maksymalnie 30 znaków",
   "validation_username_start": "Nazwa użytkownika musi zaczynać się od litery",
-  "validation_username_pattern": "Nazwa użytkownika może zawierać tylko litery, cyfry i podkreślenia"
+  "validation_username_pattern": "Nazwa użytkownika może zawierać tylko litery, cyfry i podkreślenia",
+  "development_overlay_title": "Strona w Trakcie Tworzenia",
+  "development_overlay_description": "Ta strona jest obecnie w fazie rozwoju. Pracujemy ciężko, aby wkrótce dostarczyć Ci tę funkcjonalność!",
+  "development_overlay_back_button": "Wróć"
 }

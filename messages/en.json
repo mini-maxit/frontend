@@ -301,5 +301,8 @@
   "validation_username_min": "Username must be at least 3 characters",
   "validation_username_max": "Username must be at most 30 characters",
   "validation_username_start": "Username must start with a letter",
-  "validation_username_pattern": "Username can only contain letters, digits, and underscores"
+  "validation_username_pattern": "Username can only contain letters, digits, and underscores",
+  "development_overlay_title": "Page Under Development",
+  "development_overlay_description": "This page is currently under development. We're working hard to bring you this feature soon!",
+  "development_overlay_back_button": "Go Back"
 }
