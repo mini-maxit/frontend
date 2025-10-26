@@ -203,6 +203,7 @@
   "relative_time_years_ago": "{count} rok temu",
   "relative_time_years_ago_plural": "{count} lat temu",
   "sidebar_admin": "Admin",
+  "sidebar_teacher": "Nauczyciel",
   "sidebar_admin_contests": "Konkursy",
   "sidebar_admin_groups": "Grupy",
   "sidebar_admin_tasks": "Zadania",
