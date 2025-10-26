@@ -4,10 +4,6 @@
   import * as m from '$lib/paraglide/messages';
 
   import ChangePasswordDialog from './ChangePasswordDialog.svelte';
-  import {
-    profile_edit_profile,
-    profile_edit_profile_description
-  } from '$lib/paraglide/messages/pl';
 
   let showChangePasswordDialog = $state(false);
 
