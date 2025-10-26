@@ -8,7 +8,6 @@
   import Lock from '@lucide/svelte/icons/lock';
   import Eye from '@lucide/svelte/icons/eye';
   import EyeOff from '@lucide/svelte/icons/eye-off';
-  import * as v from 'valibot';
   import * as m from '$lib/paraglide/messages';
 
   interface ChangePasswordDialogProps {
@@ -22,42 +21,6 @@
   let showNewPassword = $state(false);
   let showConfirmPassword = $state(false);
 
-  // Client-side validation schema for immediate feedback
-  const clientSchema = v.pipe(
-    v.object({
-      oldPassword: v.pipe(v.string(), v.nonEmpty(m.validation_password_required())),
-      newPassword: v.pipe(
-        v.string(),
-        v.minLength(8, m.validation_password_min()),
-        v.regex(/[A-Z]/, m.validation_password_uppercase()),
-        v.regex(/[a-z]/, m.validation_password_lowercase()),
-        v.regex(/\d/, m.validation_password_digit()),
-        v.regex(/[^A-Za-z\d]/, m.validation_password_special())
-      ),
-      newPasswordConfirm: v.string() // Only basic string validation
-    }),
-    v.forward(
-      v.partialCheck(
-        [['newPassword'], ['newPasswordConfirm']],
-        (input) => input.newPassword === input.newPasswordConfirm,
-        m.validation_passwords_match()
-      ),
-      ['newPasswordConfirm']
-    )
-  );
-
-  function toggleCurrentPasswordVisibility() {
-    showCurrentPassword = !showCurrentPassword;
-  }
-
-  function toggleNewPasswordVisibility() {
-    showNewPassword = !showNewPassword;
-  }
-
-  function toggleConfirmPasswordVisibility() {
-    showConfirmPassword = !showConfirmPassword;
-  }
-
   function handleClose() {
     open = false;
     onOpenChange(false);
@@ -67,15 +30,6 @@
       newPassword: '',
       newPasswordConfirm: ''
     });
-  }
-
-  function handleSuccess() {
-    toast.success(m.profile_password_change_success());
-    handleClose();
-  }
-
-  function handleError() {
-    toast.error(m.profile_password_change_error());
   }
 
   // Helper function to get the first error for a field
@@ -117,16 +71,17 @@
     </Dialog.Header>
 
     <form
-      {...changePassword.preflight(clientSchema).enhance(async ({ submit }) => {
+      {...changePassword.enhance(async ({ submit }) => {
         try {
           await submit();
           // Check if form was actually successful by looking at the result
           if (changePassword.result?.success) {
-            handleSuccess();
+            toast.success(m.profile_password_change_success());
+            handleClose();
           }
           // If there are validation errors or no success, keep dialog open
         } catch {
-          handleError();
+          toast.error(m.profile_password_change_error());
         }
       })}
       class="space-y-4"
@@ -148,7 +103,7 @@
             variant="ghost"
             size="sm"
             class="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-            onclick={toggleCurrentPasswordVisibility}
+            onclick={() => (showCurrentPassword = !showCurrentPassword)}
           >
             {#if showCurrentPassword}
               <EyeOff class="h-4 w-4" />
@@ -180,7 +135,7 @@
             variant="ghost"
             size="sm"
             class="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-            onclick={toggleNewPasswordVisibility}
+            onclick={() => (showNewPassword = !showNewPassword)}
           >
             {#if showNewPassword}
               <EyeOff class="h-4 w-4" />
@@ -212,7 +167,7 @@
             variant="ghost"
             size="sm"
             class="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-            onclick={toggleConfirmPasswordVisibility}
+            onclick={() => (showConfirmPassword = !showConfirmPassword)}
           >
             {#if showConfirmPassword}
               <EyeOff class="h-4 w-4" />

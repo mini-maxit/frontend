@@ -6,17 +6,18 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import * as m from '$lib/paraglide/messages';
   import type { User } from '$lib/dto/user';
+  import { UserRole } from '$lib/dto/jwt';
   import { formatDate } from '$lib/utils';
 
   export let user: User;
 
-  function formatRole(role: string): string {
+  function formatRole(role: UserRole): string {
     switch (role) {
-      case 'student':
+      case UserRole.Student:
         return m.profile_user_role_student();
-      case 'teacher':
+      case UserRole.Teacher:
         return m.profile_user_role_teacher();
-      case 'admin':
+      case UserRole.Admin:
         return m.profile_user_role_admin();
       default:
         return role;

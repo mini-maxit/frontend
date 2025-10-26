@@ -1,10 +1,11 @@
 <script lang="ts">
   import UserInfoCard from '$lib/components/dashboard/profile/UserInfoCard.svelte';
   import QuickActions from '$lib/components/dashboard/profile/QuickActions.svelte';
+  import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as m from '$lib/paraglide/messages';
-  import type { PageData } from './$types';
+  import { getUserProfile } from './profile.remote';
 
-  export let data: PageData;
+  const userProfileQuery = getUserProfile();
 </script>
 
 <div class="space-y-8 p-4 sm:p-6 lg:p-8">
@@ -14,15 +15,27 @@
     <p class="text-lg text-muted-foreground">{m.profile_page_description()}</p>
   </div>
 
-  <!-- Top Section: User Info + Quick Actions -->
-  <div class="grid gap-6 lg:grid-cols-3">
-    <div class="lg:col-span-2">
-      <UserInfoCard user={data.user} />
+  {#if userProfileQuery.error}
+    <ErrorCard
+      title={m.profile_error_title()}
+      error={userProfileQuery.error}
+      onRetry={() => userProfileQuery.refresh()}
+      inCard
+      iconBackground
+    />
+  {:else if userProfileQuery.loading}
+    <LoadingSpinner message={m.profile_loading()} inCard size="h-12 w-12" />
+  {:else if userProfileQuery.current}
+    <!-- Top Section: User Info + Quick Actions -->
+    <div class="grid gap-6 lg:grid-cols-3">
+      <div class="lg:col-span-2">
+        <UserInfoCard user={userProfileQuery.current} />
+      </div>
+      <div class="lg:col-span-1">
+        <QuickActions />
+      </div>
     </div>
-    <div class="lg:col-span-1">
-      <QuickActions />
-    </div>
-  </div>
+  {/if}
 
   <!-- Stats Overview -->
   <!-- TODO IMPLEMENT THIS -->
