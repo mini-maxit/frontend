@@ -26,6 +26,11 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     return m.header_task_details();
   }
 
+  // Check for admin contest registration requests (e.g., /dashboard/admin/contests/[contestId]/registration-requests)
+  if (path.match(/^\/dashboard\/admin\/contests\/\d+\/registration-requests/)) {
+    return m.admin_registration_requests_title();
+  }
+
   // Return the translation for the route, or default to main dashboard title
   return routeTitleMap[path]?.() ?? m.header_dashboard();
 }

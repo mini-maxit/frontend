@@ -7,9 +7,10 @@
   import Clock from '@lucide/svelte/icons/clock';
   import Users from '@lucide/svelte/icons/users';
   import ListTodo from '@lucide/svelte/icons/list-todo';
+  import UserCheck from '@lucide/svelte/icons/user-check';
   import type { Contest } from '$lib/dto/contest';
   import * as m from '$lib/paraglide/messages';
-  import { getLocale } from '$lib/paraglide/runtime';
+  import { localizeHref } from '$lib/paraglide/runtime';
   import { formatDate } from '$lib/utils';
 
   interface AdminContestCardProps {
@@ -111,18 +112,28 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="flex gap-2">
-      <Button
-        variant="outline"
-        class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-      >
-        {m.admin_contests_card_view_details()}
-      </Button>
+    <div class="space-y-2">
+      <div class="flex gap-2">
+        <Button
+          variant="outline"
+          class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        >
+          {m.admin_contests_card_view_details()}
+        </Button>
+        <Button
+          variant="default"
+          class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        >
+          {m.admin_contests_card_manage()}
+        </Button>
+      </div>
       <Button
         variant="default"
-        class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        href={localizeHref(`/dashboard/admin/contests/${contest.id}/registration-requests`)}
       >
-        {m.admin_contests_card_manage()}
+        <UserCheck class="mr-2 h-4 w-4" />
+        {m.admin_contests_card_view_requests()}
       </Button>
     </div>
   </Card.Content>

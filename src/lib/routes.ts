@@ -22,6 +22,7 @@ export enum AppRoutes {
 
   Admin = '/dashboard/admin',
   AdminContests = '/dashboard/admin/contests',
+  AdminContestsRegistrationRequests = '/dashboard/admin/contests/',
   AdminGroups = '/dashboard/admin/groups',
   AdminTasks = '/dashboard/admin/tasks',
 
