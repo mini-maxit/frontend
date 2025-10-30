@@ -1,5 +1,9 @@
 node_modules
 
+# Lock files (pnpm only)
+package-lock.json
+yarn.lock
+
 # Output
 .output
 .vercel
