@@ -32,7 +32,7 @@ export const submitContestSolution = form(
       error(result.status, { message: result.error || 'Failed to submit solution.' });
     }
 
-    await getContestTask({ contestId: data.contestId, taskId: data.taskId }).refresh();
+    getContestTask({ contestId: data.contestId, taskId: data.taskId }).refresh();
 
     return { success: true };
   }

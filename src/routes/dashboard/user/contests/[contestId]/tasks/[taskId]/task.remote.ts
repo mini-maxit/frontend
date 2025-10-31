@@ -17,9 +17,6 @@ export const getContestTask = query(GetContestTaskSchema, async (input: GetConte
   const contestService = createContestService(event.cookies);
 
   const task = await contestService.getContestTask(input.contestId, input.taskId);
-  if (!task) {
-    error(404, { message: 'Task not found in contest.' });
-  }
 
   // Fetch PDF description if available
   let pdfDataUrl: string | null = null;
@@ -30,8 +27,7 @@ export const getContestTask = query(GetContestTaskSchema, async (input: GetConte
       if (response.ok) {
         const blob = await response.blob();
         const arrayBuffer = await blob.arrayBuffer();
-        const uint8Array = new Uint8Array(arrayBuffer);
-        const base64 = Buffer.from(uint8Array).toString('base64');
+        const base64 = Buffer.from(arrayBuffer).toString('base64');
         pdfDataUrl = `data:application/pdf;base64,${base64}`;
       }
     } catch (err) {

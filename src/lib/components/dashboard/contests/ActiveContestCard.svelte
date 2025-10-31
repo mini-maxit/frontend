@@ -8,8 +8,10 @@
   import { onMount, onDestroy } from 'svelte';
   import * as m from '$lib/paraglide/messages';
   import { ContestStatus } from '$lib/dto/contest';
+  import { localizeHref } from '$lib/paraglide/runtime';
 
   interface ActiveContestCardProps {
+    contestId: number;
     name: string;
     status: ContestStatus;
     endsIn: number; // minutes until end/start
@@ -20,6 +22,7 @@
   }
 
   let {
+    contestId,
     name,
     status,
     endsIn,
@@ -161,6 +164,7 @@
 
     <!-- Action Button -->
     <Button
+      href={localizeHref(`/dashboard/user/contests/${contestId}`)}
       class="w-full bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
     >
       <Zap class="mr-2 h-4 w-4" />

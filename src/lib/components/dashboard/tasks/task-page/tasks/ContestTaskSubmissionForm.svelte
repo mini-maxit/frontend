@@ -108,7 +108,7 @@
             selectedFiles = new DataTransfer().files;
             selectedLanguageId = null;
             fileUploader?.clear();
-          } catch (error: HttpError | unknown) {
+          } catch (error: unknown) {
             if (isHttpError(error)) {
               toast.error(error.body.message);
             } else {

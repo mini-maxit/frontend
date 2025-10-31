@@ -184,7 +184,6 @@ export class ContestService {
       const response = await this.apiClient.get<ApiResponse<Task[]>>({
         url: `/contests/${contestId}/tasks/assignable-tasks`
       });
-      console.log('Assignable tasks response:', response);
       return response.data;
     } catch (error) {
       if (error instanceof ApiError) {

@@ -186,7 +186,7 @@
           toast.success(m.admin_contest_tasks_add_success());
           dialogOpen = false;
           selectedTaskId = null;
-        } catch (error: HttpError | unknown) {
+        } catch (error: unknown) {
           if (isHttpError(error)) {
             toast.error(error.body.message);
           } else {

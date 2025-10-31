@@ -66,6 +66,7 @@
         <div class="grid gap-6 lg:grid-cols-3">
           {#each [...contestsQuery.current.ongoing, ...contestsQuery.current.upcoming] as contest (contest.id)}
             <ActiveContestCard
+              contestId={contest.id}
               name={contest.name}
               status={contest.status}
               endsIn={calculateTimeInMinutes(contest.startAt, contest.endAt, contest.status)}
