@@ -3,7 +3,9 @@ import type {
   Contest,
   UserContestsResponse,
   CreateContestDto,
-  RegistrationRequest
+  RegistrationRequest,
+  AddContestTaskDto,
+  ContestTask
 } from '$lib/dto/contest';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
@@ -170,6 +172,28 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to reject registration request:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async addTaskToContest(contestId: number, data: AddContestTaskDto): Promise<ContestTask> {
+    try {
+      const requestData = {
+        taskId: data.taskId,
+        startAt: toRFC3339(data.startAt),
+        endAt: toRFC3339(data.endAt)
+      };
+
+      const response = await this.apiClient.post<ApiResponse<ContestTask>>({
+        url: `/contests/${contestId}/tasks`,
+        body: JSON.stringify(requestData)
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to add task to contest:', error.toJSON());
         throw error;
       }
       throw error;

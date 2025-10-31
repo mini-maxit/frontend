@@ -78,3 +78,18 @@ export interface RegistrationRequest {
     createdAt: string;
   };
 }
+
+export interface AddContestTaskDto {
+  taskId: number;
+  startAt: string;
+  endAt: string;
+}
+
+export interface ContestTask {
+  id: number;
+  contestId: number;
+  taskId: number;
+  startAt: string;
+  endAt: string;
+  createdAt: string;
+}
