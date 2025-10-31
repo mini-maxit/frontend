@@ -184,6 +184,7 @@ export class ContestService {
       const response = await this.apiClient.get<ApiResponse<Task[]>>({
         url: `/contests/${contestId}/tasks/assignable-tasks`
       });
+      console.log('Assignable tasks response:', response);
       return response.data;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -199,7 +200,7 @@ export class ContestService {
       const requestData = {
         taskId: data.taskId,
         startAt: toRFC3339(data.startAt),
-        endAt: toRFC3339(data.endAt)
+        endAt: data.endAt ? toRFC3339(data.endAt) : null
       };
 
       const response = await this.apiClient.post<ApiResponse<ContestTask>>({

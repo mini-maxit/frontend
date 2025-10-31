@@ -5,7 +5,7 @@ import type { Task } from '$lib/dto/task';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 
-export const getAssignableTasks = query(async (contestId: number): Promise<Task[]> => {
+export const getAssignableTasks = query(v.number(), async (contestId): Promise<Task[]> => {
   const { cookies } = getRequestEvent();
 
   try {
@@ -17,11 +17,12 @@ export const getAssignableTasks = query(async (contestId: number): Promise<Task[
     console.error('Failed to load assignable tasks:', err);
 
     if (err instanceof ApiError) {
-      throw error(err.getStatus(), err.getApiMessage());
+      error(err.getStatus(), err.getApiMessage());
     }
 
-    throw error(500, 'Failed to load assignable tasks');
+    error(500, 'Failed to load assignable tasks');
   }
+  return [];
 });
 
 export const addTaskToContest = form(
@@ -29,7 +30,7 @@ export const addTaskToContest = form(
     contestId: v.pipe(v.number(), v.minValue(1)),
     taskId: v.pipe(v.number(), v.minValue(1)),
     startAt: v.pipe(v.string(), v.nonEmpty('Start date is required')),
-    endAt: v.pipe(v.string(), v.nonEmpty('End date is required'))
+    endAt: v.optional(v.string())
   }),
   async (data) => {
     const { cookies } = getRequestEvent();
@@ -39,7 +40,7 @@ export const addTaskToContest = form(
       const contestTask = await contestService.addTaskToContest(data.contestId, {
         taskId: data.taskId,
         startAt: data.startAt,
-        endAt: data.endAt
+        endAt: data.endAt ?? null
       });
 
       return { success: true, contestTask };

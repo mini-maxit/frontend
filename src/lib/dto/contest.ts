@@ -82,7 +82,7 @@ export interface RegistrationRequest {
 export interface AddContestTaskDto {
   taskId: number;
   startAt: string;
-  endAt: string;
+  endAt: string | null;
 }
 
 export interface ContestTask {

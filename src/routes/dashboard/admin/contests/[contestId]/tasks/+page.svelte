@@ -6,6 +6,7 @@
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import { Calendar } from '$lib/components/ui/calendar';
+  import { Checkbox } from '$lib/components/ui/checkbox';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Popover from '$lib/components/ui/popover';
   import * as Card from '$lib/components/ui/card';
@@ -14,14 +15,18 @@
   import Plus from '@lucide/svelte/icons/plus';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { toast } from 'svelte-sonner';
+  import { type HttpError } from '@sveltejs/kit';
   import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
   import { cn, formatDate } from '$lib/utils';
-
-  let contestId = $state(Number($page.params.contestId));
-
-  const tasksQuery = getAssignableTasks(contestId);
+  interface Props {
+    data: {
+      contestId: number;
+    };
+  }
+  let { data }: Props = $props();
+  const tasksQuery = getAssignableTasks(data.contestId);
 
   let dialogOpen = $state(false);
   let selectedTaskId = $state<number | null>(null);
@@ -51,10 +56,12 @@
   let startDate = $state<DateValue | undefined>(getDefaultStartDateTime().date);
   let startTime = $state<string>(getDefaultStartDateTime().time);
   let endDate = $state<DateValue | undefined>(getDefaultEndDateTime().date);
-  let endTime = $state<string>(getDefaultEndDateTime().time);
+  let endTime = $state<string | null>(getDefaultEndDateTime().time);
+  let hasEndTime = $state(false);
 
-  function getDateTimeString(date: DateValue | undefined, time: string): string {
+  function getDateTimeString(date: DateValue | undefined, time: string | null): string {
     if (!date) return '';
+    if (!time) return '';
     const [hours, minutes] = time.split(':').map(Number);
     const dateObj = date.toDate(getLocalTimeZone());
     dateObj.setHours(hours, minutes, 0, 0);
@@ -70,7 +77,7 @@
   }
 
   let startAtValue = $derived(getDateTimeString(startDate, startTime));
-  let endAtValue = $derived(getDateTimeString(endDate, endTime));
+  let endAtValue = $derived(hasEndTime ? getDateTimeString(endDate, endTime) : '');
 
   function openDialog(taskId: number) {
     selectedTaskId = taskId;
@@ -81,6 +88,7 @@
     startTime = defaultStart.time;
     endDate = defaultEnd.date;
     endTime = defaultEnd.time;
+    hasEndTime = false;
     dialogOpen = true;
   }
 </script>
@@ -189,7 +197,11 @@
       class="space-y-6"
     >
       <!-- Hidden inputs for form submission -->
-      <input {...addTaskToContest.fields.contestId.as('number')} bind:value={contestId} hidden />
+      <input
+        {...addTaskToContest.fields.contestId.as('number')}
+        bind:value={data.contestId}
+        hidden
+      />
       <input {...addTaskToContest.fields.taskId.as('number')} bind:value={selectedTaskId} hidden />
       <input
         {...addTaskToContest.fields.startAt.as('datetime-local')}
@@ -254,51 +266,58 @@
 
         <!-- End Date & Time -->
         <div class="space-y-3">
-          <Label class="h-8">{m.admin_contests_form_end_label()}</Label>
-
-          <div class="space-y-2">
-            <span class="block text-sm text-muted-foreground">
-              {m.admin_contests_form_end_date()}
-            </span>
-            <Popover.Root>
-              <Popover.Trigger
-                class={cn(
-                  buttonVariants({
-                    variant: 'outline',
-                    class: 'w-full justify-start text-left font-normal'
-                  }),
-                  !endDate && 'text-muted-foreground'
-                )}
-              >
-                <CalendarIcon class="mr-2 h-4 w-4" />
-                {endDate
-                  ? df.format(endDate.toDate(getLocalTimeZone()))
-                  : m.admin_contests_form_pick_date()}
-              </Popover.Trigger>
-              <Popover.Content class="w-auto p-0">
-                <Calendar type="single" bind:value={endDate} />
-              </Popover.Content>
-            </Popover.Root>
-          </div>
-
-          <div class="space-y-2">
-            <Label for="endTime" class="text-sm text-muted-foreground">
-              {m.admin_contests_form_end_time()}
+          <div class="flex h-8 items-center gap-2">
+            <Checkbox id="hasEndTime" bind:checked={hasEndTime} />
+            <Label for="hasEndTime" class="cursor-pointer">
+              {m.admin_contests_form_end_label()}
             </Label>
-            <Input
-              type="time"
-              id="endTime"
-              name="endTime"
-              autocomplete="off"
-              bind:value={endTime}
-              required
-              class="[color-scheme:light] transition-all duration-200 focus:ring-2 focus:ring-primary dark:[color-scheme:dark]"
-            />
           </div>
 
-          {#each addTaskToContest.fields.endAt.issues() as issue (issue.message)}
-            <p class="text-sm text-destructive">{issue.message}</p>
-          {/each}
+          {#if hasEndTime}
+            <div class="space-y-2">
+              <span class="block text-sm text-muted-foreground">
+                {m.admin_contests_form_end_date()}
+              </span>
+              <Popover.Root>
+                <Popover.Trigger
+                  class={cn(
+                    buttonVariants({
+                      variant: 'outline',
+                      class: 'w-full justify-start text-left font-normal'
+                    }),
+                    !endDate && 'text-muted-foreground'
+                  )}
+                >
+                  <CalendarIcon class="mr-2 h-4 w-4" />
+                  {endDate
+                    ? df.format(endDate.toDate(getLocalTimeZone()))
+                    : m.admin_contests_form_pick_date()}
+                </Popover.Trigger>
+                <Popover.Content class="w-auto p-0">
+                  <Calendar type="single" bind:value={endDate} />
+                </Popover.Content>
+              </Popover.Root>
+            </div>
+
+            <div class="space-y-2">
+              <Label for="endTime" class="text-sm text-muted-foreground">
+                {m.admin_contests_form_end_time()}
+              </Label>
+              <Input
+                type="time"
+                id="endTime"
+                name="endTime"
+                autocomplete="off"
+                bind:value={endTime}
+                required
+                class="[color-scheme:light] transition-all duration-200 focus:ring-2 focus:ring-primary dark:[color-scheme:dark]"
+              />
+            </div>
+
+            {#each addTaskToContest.fields.endAt.issues() as issue (issue.message)}
+              <p class="text-sm text-destructive">{issue.message}</p>
+            {/each}
+          {/if}
         </div>
       </div>
 
