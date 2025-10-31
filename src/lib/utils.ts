@@ -19,7 +19,7 @@ export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?:
 /**
  * Get date-fns locale based on current app locale
  */
-function getDateFnsLocale() {
+export function getDateFnsLocale() {
   const locale = getLocale();
   return locale === 'pl' ? pl : enUS;
 }

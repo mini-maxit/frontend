@@ -18,10 +18,9 @@
   import Users from '@lucide/svelte/icons/users';
   import * as m from '$lib/paraglide/messages';
   import { formatDistanceToNow, parseISO } from 'date-fns';
-  import { enUS, pl } from 'date-fns/locale';
-  import { getLocale } from '$lib/paraglide/runtime';
+  import { getDateFnsLocale } from '$lib/utils';
 
-  const locale = getLocale() === 'pl' ? pl : enUS;
+  const locale = getDateFnsLocale();
 
   interface Props {
     data: {

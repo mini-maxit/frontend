@@ -1,17 +1,7 @@
 import { ContestStatus, type Contest } from '$lib/dto/contest';
 import { differenceInMinutes, formatDistanceToNow, parseISO } from 'date-fns';
-import { enUS, pl } from 'date-fns/locale';
-import { getLocale } from '$lib/paraglide/runtime';
 import * as m from '$lib/paraglide/messages';
-import { formatDate } from '$lib/utils';
-
-/**
- * Get date-fns locale based on current app locale
- */
-function getDateFnsLocale() {
-  const locale = getLocale();
-  return locale === 'pl' ? pl : enUS;
-}
+import { formatDate, getDateFnsLocale } from '$lib/utils';
 
 /**
  * Formats a contest's start date for display
