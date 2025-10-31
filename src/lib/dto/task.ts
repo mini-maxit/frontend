@@ -39,7 +39,7 @@ export interface UploadTaskDto {
   archive: File;
 }
 
-export interface ContestTask {
+export interface UserContestTask {
   id: number;
   title: string;
   createdAt: string;

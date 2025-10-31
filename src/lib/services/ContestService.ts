@@ -5,7 +5,7 @@ import type {
   CreateContestDto,
   RegistrationRequest
 } from '$lib/dto/contest';
-import type { ContestTask } from '$lib/dto/task';
+import type { UserContestTask } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 import { toRFC3339 } from '$lib/utils';
@@ -177,9 +177,9 @@ export class ContestService {
     }
   }
 
-  async getContestTasks(contestId: number): Promise<ContestTask[]> {
+  async getContestTasks(contestId: number): Promise<UserContestTask[]> {
     try {
-      const response = await this.apiClient.get<ApiResponse<ContestTask[]>>({
+      const response = await this.apiClient.get<ApiResponse<UserContestTask[]>>({
         url: `/contests/${contestId}/tasks`
       });
       return response.data;
@@ -200,7 +200,7 @@ export class ContestService {
    * with many tasks. Consider adding a dedicated API endpoint `/contests/{contestId}/tasks/{taskId}`
    * for better performance.
    */
-  async getContestTask(contestId: number, taskId: number): Promise<ContestTask> {
+  async getContestTask(contestId: number, taskId: number): Promise<UserContestTask> {
     try {
       const tasks = await this.getContestTasks(contestId);
       const task = tasks.find((t) => t.id === taskId);
