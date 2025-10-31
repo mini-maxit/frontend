@@ -1,23 +1,27 @@
 import { query, form, getRequestEvent } from '$app/server';
 import { createContestService } from '$lib/services/ContestService';
-import { createApiClient } from '$lib/services/ApiService';
-import { TaskService } from '$lib/services/TaskService';
 import { ApiError } from '$lib/services/ApiService';
 import type { Task } from '$lib/dto/task';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 
-export const getAllTasks = query(async (): Promise<Task[]> => {
-  const event = getRequestEvent();
-  const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+export const getAssignableTasks = query(async (contestId: number): Promise<Task[]> => {
+  const { cookies } = getRequestEvent();
 
-  const result = await taskService.getAllTasks();
-  if (!result.success || !result.data) {
-    error(result.status, { message: result.error || 'Failed to fetch tasks.' });
+  try {
+    const contestService = createContestService(cookies);
+    const tasks = await contestService.getAssignableTasks(contestId);
+
+    return tasks;
+  } catch (err) {
+    console.error('Failed to load assignable tasks:', err);
+
+    if (err instanceof ApiError) {
+      throw error(err.getStatus(), err.getApiMessage());
+    }
+
+    throw error(500, 'Failed to load assignable tasks');
   }
-
-  return result.data;
 });
 
 export const addTaskToContest = form(

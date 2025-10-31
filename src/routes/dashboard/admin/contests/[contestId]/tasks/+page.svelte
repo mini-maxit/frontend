@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { getAllTasks, addTaskToContest } from './tasks.remote';
+  import { getAssignableTasks, addTaskToContest } from './tasks.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -21,7 +21,7 @@
 
   let contestId = $state(Number($page.params.contestId));
 
-  const tasksQuery = getAllTasks();
+  const tasksQuery = getAssignableTasks(contestId);
 
   let dialogOpen = $state(false);
   let selectedTaskId = $state<number | null>(null);

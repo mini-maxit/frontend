@@ -7,6 +7,7 @@ import type {
   AddContestTaskDto,
   ContestTask
 } from '$lib/dto/contest';
+import type { Task } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 import { toRFC3339 } from '$lib/utils';
@@ -172,6 +173,21 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to reject registration request:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getAssignableTasks(contestId: number): Promise<Task[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<Task[]>>({
+        url: `/contests/${contestId}/tasks/assignable-tasks`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get assignable tasks:', error.toJSON());
         throw error;
       }
       throw error;
