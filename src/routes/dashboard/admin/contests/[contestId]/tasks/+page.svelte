@@ -41,7 +41,7 @@
 
   function getDefaultEndDateTime() {
     const tomorrow = new Date();
-    tomorrow.setHours(tomorrow.getHours() + 24);
+    tomorrow.setDate(tomorrow.getDate() + 1);
     const date = today(getLocalTimeZone()).add({ days: 1 });
     const time = `${String(tomorrow.getHours()).padStart(2, '0')}:${String(tomorrow.getMinutes()).padStart(2, '0')}`;
     return { date, time };

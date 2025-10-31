@@ -38,9 +38,6 @@ export const addTaskToContest = form(
         endAt: data.endAt
       });
 
-      // Refresh the tasks list
-      await getAllTasks().refresh();
-
       return { success: true, contestTask };
     } catch (err) {
       console.error('Failed to add task to contest:', err);
