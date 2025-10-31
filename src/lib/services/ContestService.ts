@@ -1,5 +1,10 @@
 import { ApiError, createApiClient } from './ApiService';
-import type { Contest, UserContestsResponse, CreateContestDto } from '$lib/dto/contest';
+import type {
+  Contest,
+  UserContestsResponse,
+  CreateContestDto,
+  RegistrationRequest
+} from '$lib/dto/contest';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 import { toRFC3339 } from '$lib/utils';
@@ -119,6 +124,52 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to create contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getRegistrationRequests(
+    contestId: number,
+    status: string = 'pending'
+  ): Promise<RegistrationRequest[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<RegistrationRequest[]>>({
+        url: `/contests/${contestId}/registration-requests?status=${status}`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get registration requests:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async approveRegistrationRequest(contestId: number, userId: number): Promise<void> {
+    try {
+      await this.apiClient.post<ApiResponse<{ message: string }>>({
+        url: `/contests/${contestId}/registration-requests/${userId}/approve`
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to approve registration request:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async rejectRegistrationRequest(contestId: number, userId: number): Promise<void> {
+    try {
+      await this.apiClient.post<ApiResponse<{ message: string }>>({
+        url: `/contests/${contestId}/registration-requests/${userId}/reject`
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to reject registration request:', error.toJSON());
         throw error;
       }
       throw error;

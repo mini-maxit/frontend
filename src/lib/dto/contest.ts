@@ -55,3 +55,26 @@ export interface CreateContestDto {
   isSubmissionOpen: boolean;
   isVisible: boolean;
 }
+
+export enum RegistrationRequestStatus {
+  Approved = 'approved',
+  Pending = 'pending',
+  Rejected = 'rejected'
+}
+
+export interface RegistrationRequest {
+  id: number;
+  contestId: number;
+  userId: number;
+  status: RegistrationRequestStatus;
+  createdAt: string;
+  user: {
+    id: number;
+    email: string;
+    name: string;
+    surname: string;
+    username: string;
+    role: string;
+    createdAt: string;
+  };
+}

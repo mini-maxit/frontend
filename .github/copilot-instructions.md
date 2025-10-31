@@ -19,18 +19,22 @@ This is a **Svelte 5 + SvelteKit** application for a programming contest platfor
 You have access to the Svelte MCP server for up-to-date documentation:
 
 #### 1. list-sections
+
 Use this FIRST to discover all available documentation sections. Returns a structured list with titles, use_cases, and paths.
 When asked about Svelte or SvelteKit topics, ALWAYS use this tool at the start of the chat to find relevant sections.
 
 #### 2. get-documentation
+
 Retrieves full documentation content for specific sections. Accepts single or multiple sections.
 After calling the list-sections tool, you MUST analyze the returned documentation sections (especially the use_cases field) and then use the get-documentation tool to fetch ALL documentation sections that are relevant for the user's task.
 
 #### 3. svelte-autofixer
+
 Analyzes Svelte code and returns issues and suggestions.
 You MUST use this tool whenever writing Svelte code before sending it to the user. Keep calling it until no issues or suggestions are returned.
 
 #### 4. playground-link
+
 Generates a Svelte Playground link with the provided code.
 After completing the code, ask the user if they want a playground link. Only call this tool after user confirmation and NEVER if code was written to files in their project.
 
@@ -41,14 +45,16 @@ This project uses **Svelte 5** with the following patterns:
 - **Runes**: Use `$state`, `$derived`, `$effect`, `$props` instead of legacy reactive declarations
 - **Async components**: Enabled via `experimental.async` in svelte.config.js - can use top-level `await` in components
 - **Props**: Use destructuring with `$props()` rune:
+
   ```typescript
   interface Props {
     title: string;
     count?: number;
   }
-  
+
   let { title, count = 0 }: Props = $props();
   ```
+
 - **State**: Use `$state()` for reactive variables:
   ```typescript
   let dialogOpen = $state(false);
@@ -64,11 +70,13 @@ This project uses **Svelte 5** with the following patterns:
 This project extensively uses **SvelteKit remote functions** instead of traditional `+page.server.ts` load functions. This is enabled via `experimental.remoteFunctions: true` in svelte.config.js.
 
 **When to use remote functions:**
+
 - For server-side data fetching
 - For form actions
 - For any server-only operations
 
 **Pattern structure:**
+
 ```
 /routes/
   ├── dashboard/
@@ -80,6 +88,7 @@ This project extensively uses **SvelteKit remote functions** instead of traditio
 **Example implementation:**
 
 **File: `tasks.remote.ts`**
+
 ```typescript
 import { query, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
@@ -101,10 +110,11 @@ export const getTasks = query(async () => {
 ```
 
 **File: `+page.svelte`**
+
 ```typescript
 <script lang="ts">
   import { getTasks } from './tasks.remote';
-  
+
   const tasksQuery = getTasks();
 </script>
 
@@ -120,6 +130,7 @@ export const getTasks = query(async () => {
 **For form actions, use the `form()` helper:**
 
 **File: `login.remote.ts`**
+
 ```typescript
 import { form, getRequestEvent } from '$app/server';
 import * as v from 'valibot';
@@ -136,9 +147,124 @@ export const login = form(LoginSchema, async (data) => {
 ```
 
 **Examples in the codebase:**
+
 - Query: `/src/routes/dashboard/tasks/tasks.remote.ts`
 - Form: `/src/routes/(landing)/login/login.remote.ts`
 - With params: `/src/routes/dashboard/tasks/[taskId]/task.remote.ts`
+- Command: `/src/routes/dashboard/admin/contests/[contestId]/registration-requests/registration-requests.remote.ts`
+
+### Remote Function Types
+
+There are **three types** of remote functions in SvelteKit:
+
+#### 1. `query` - For reading data
+
+Use `query()` for server-side data fetching. Queries are reactive and can be refreshed.
+
+**Without parameters:**
+
+```typescript
+export const getTasks = query(async () => {
+  const { cookies } = getRequestEvent();
+  const taskService = createTaskService(cookies);
+  return await taskService.getAllTasks();
+});
+```
+
+**With parameters (requires schema validation):**
+
+```typescript
+import * as v from 'valibot';
+
+export const getTask = query(v.number(), async (taskId: number) => {
+  const { cookies } = getRequestEvent();
+  const taskService = createTaskService(cookies);
+  return await taskService.getTaskById(taskId);
+});
+```
+
+**Usage in component:**
+
+```typescript
+const tasksQuery = getTasks();
+// or with params
+const taskQuery = getTask(taskId);
+
+// Access data: taskQuery.current
+// Check loading: taskQuery.loading
+// Check error: taskQuery.error
+// Refresh: taskQuery.refresh()
+```
+
+#### 2. `form` - For form submissions with progressive enhancement
+
+Use `form()` for traditional HTML form submissions. Prefers `form` where possible since it gracefully degrades if JavaScript is disabled.
+
+```typescript
+export const login = form(
+  v.object({
+    email: v.pipe(v.string(), v.email()),
+    password: v.pipe(v.string(), v.nonEmpty())
+  }),
+  async (data) => {
+    const { cookies } = getRequestEvent();
+    // Handle form submission
+    return { success: true };
+  }
+);
+```
+
+**Usage in component:**
+
+```typescript
+const loginAction = login();
+
+<form method="POST" use:loginAction.enhance>
+  <input name="email" type="email" />
+  <button type="submit" disabled={loginAction.submitting}>
+    Submit
+  </button>
+</form>
+```
+
+#### 3. `command` - For programmatic mutations
+
+Use `command()` for mutations that are called programmatically (not from forms). Unlike `form`, it's not specific to an element and can be called from anywhere (e.g., event handlers).
+
+```typescript
+export const approveRequest = command(
+  v.object({
+    contestId: v.pipe(v.number(), v.integer()),
+    userId: v.pipe(v.number(), v.integer())
+  }),
+  async (data) => {
+    const { cookies } = getRequestEvent();
+    const contestService = createContestService(cookies);
+    await contestService.approveRegistrationRequest(data.contestId, data.userId);
+    return { success: true };
+  }
+);
+```
+
+**Usage in component:**
+
+```typescript
+async function handleApprove(userId: number) {
+  try {
+    await approveRequest({ contestId: data.contestId, userId });
+    // Optionally refresh query
+    requestsQuery.refresh();
+  } catch (error) {
+    console.error('Failed to approve:', error);
+  }
+}
+
+<button onclick={() => handleApprove(user.id)}>
+  Approve
+</button>
+```
+
+**Important:** Commands cannot be called during render - only from event handlers or effects.
 
 ## Service Layer Architecture
 
@@ -189,6 +315,8 @@ export class TaskService {
 - **ContestService**: Contest operations
 - **SubmissionService**: Code submission handling
 
+And probably more...
+
 ### Using Services in Remote Functions
 
 ```typescript
@@ -202,6 +330,7 @@ const taskService = new TaskService(apiClient);
 ```
 
 **Key points:**
+
 - Always create `apiClient` with `createApiClient(event.cookies)` for proper authentication
 - Services handle all error states - check `result.success` before accessing data
 - Services return consistent response format: `{ success, status, data?, error? }`
@@ -240,22 +369,86 @@ This project uses **Paraglide** for internationalization with support for **Engl
 import * as m from '$lib/paraglide/messages';
 
 // Simple usage
-{m.admin_tasks_title()}
+{
+  m.admin_tasks_title();
+}
 
 // With parameters
-{m.hello_world({ name: 'User' })}
+{
+  m.hello_world({ name: 'User' });
+}
 
 // In validation schemas
-v.pipe(
-  v.string(m.validation_email_required()),
-  v.email(m.validation_email_invalid())
-)
+v.pipe(v.string(m.validation_email_required()), v.email(m.validation_email_invalid()));
 ```
 
 **Key points:**
+
 - Import as `* as m` for consistency
 - Never hardcode user-facing strings
 - Check existing messages before adding new ones to avoid duplicates
+
+### Dashboard Page Title Translations
+
+Dashboard pages display their title in the layout header using the `getDashboardTitleTranslationFromPathname()` utility function. This function maps routes to translation keys.
+
+**Location**: `/src/lib/components/dashboard/utils.ts`
+
+#### Static Routes
+
+For static routes, add entries to the `routeTitleMap` object:
+
+```typescript
+const routeTitleMap: Record<string, () => string> = {
+  [AppRoutes.Dashboard]: () => m.header_dashboard(),
+  [AppRoutes.UserProfile]: () => m.sidebar_profile(),
+  [AppRoutes.AdminContests]: () => m.sidebar_admin_contests()
+  // Add new static routes here
+};
+```
+
+#### Dynamic Routes
+
+For dynamic routes with parameters (e.g., `/dashboard/tasks/[taskId]` or `/dashboard/admin/contests/[contestId]/registration-requests`), add pattern matching before the static route check:
+
+```typescript
+// Check for dynamic routes
+if (path.startsWith(AppRoutes.TaskDetails)) {
+  return m.header_task_details();
+}
+
+// Check for admin contest registration requests
+if (path.match(/^\/dashboard\/admin\/contests\/\d+\/registration-requests/)) {
+  return m.admin_registration_requests_title();
+}
+```
+
+**Steps to add a new dashboard page with translation:**
+
+1. **Add translation strings** to both `messages/en.json` and `messages/pl.json`:
+
+   ```json
+   {
+     "admin_registration_requests_title": "Registration Requests"
+   }
+   ```
+
+2. **Update routes** in `/src/lib/routes.ts` (if needed for route constants):
+
+   ```typescript
+   export enum AppRoutes {
+     AdminContestsRegistrationRequests = '/dashboard/admin/contests/'
+   }
+   ```
+
+3. **Update `getDashboardTitleTranslationFromPathname()`** in `/src/lib/components/dashboard/utils.ts`:
+   - For static routes: Add to `routeTitleMap`
+   - For dynamic routes: Add pattern matching with regex
+
+4. **Compile Paraglide** after adding translations:
+   ```bash
+   pnpm run paraglide:compile
+   ```
 
 ## TypeScript Conventions
 
@@ -303,10 +496,7 @@ import * as v from 'valibot';
 import * as m from '$lib/paraglide/messages';
 
 const FormSchema = v.object({
-  email: v.pipe(
-    v.string(m.validation_email_required()),
-    v.email(m.validation_email_invalid())
-  ),
+  email: v.pipe(v.string(m.validation_email_required()), v.email(m.validation_email_invalid())),
   password: v.pipe(
     v.string(m.validation_password_required()),
     v.minLength(8, m.validation_password_min_length())
@@ -323,12 +513,14 @@ type FormData = v.InferOutput<typeof FormSchema>;
 The app uses a consistent color scheme defined in `/src/app.css`:
 
 **Light mode:**
+
 - Primary: `oklch(0.3879 0.0851 237.33)` - Deep blue
 - Secondary: `oklch(0.4725 0.0809 206.34)` - Lighter blue
 - Background: `oklch(0.96 0.01 79.34)` - Off-white
 - Foreground: `oklch(0.14 0.046 240.5)` - Dark blue
 
 **Dark mode:**
+
 - Automatically switches based on `.dark` class
 
 ### Tailwind CSS 4
@@ -341,6 +533,7 @@ The app uses a consistent color scheme defined in `/src/app.css`:
 ### Component Styling Patterns
 
 **Card pattern:**
+
 ```svelte
 <div class="rounded-2xl border bg-card text-card-foreground shadow-md">
   <div class="p-6">
@@ -350,6 +543,7 @@ The app uses a consistent color scheme defined in `/src/app.css`:
 ```
 
 **Section headers:**
+
 ```svelte
 <h1 class="text-3xl font-bold text-foreground">
   {m.section_title()}
@@ -357,6 +551,7 @@ The app uses a consistent color scheme defined in `/src/app.css`:
 ```
 
 **Consistent spacing:**
+
 ```svelte
 <div class="space-y-6">
   <div class="space-y-4">
@@ -403,14 +598,14 @@ import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
 <LoadingSpinner message="Loading tasks..." />
 
 // Error state
-<ErrorCard 
+<ErrorCard
   title={m.error_title()}
   error={error}
   onRetry={() => query.refresh()}
 />
 
 // Empty state
-<EmptyState 
+<EmptyState
   title={m.no_items_title()}
   description={m.no_items_description()}
   icon={Upload}
@@ -432,6 +627,7 @@ Base components are in `/src/lib/components/ui/` (based on shadcn-svelte):
 ### Linting and Formatting
 
 **Before committing, always run:**
+
 ```bash
 pnpm run format  # Auto-fix formatting
 pnpm run lint    # Check for issues
@@ -449,6 +645,7 @@ pnpm run check   # TypeScript + Svelte checks
 ### ESLint Rules
 
 Key rules enforced:
+
 - TypeScript strict checks
 - Svelte-specific rules (keys in each blocks, resolve() for navigation)
 - No unused variables
@@ -457,6 +654,7 @@ Key rules enforced:
 ### Pre-commit Hooks
 
 The project uses pre-commit hooks (`.pre-commit-config.yaml`):
+
 - Syntax validation
 - Trailing whitespace removal
 - File size checks
@@ -518,7 +716,7 @@ pnpm run check     # Type checking
 <script lang="ts">
   import { getData } from './data.remote';
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
-  
+
   const query = getData();
 </script>
 
@@ -537,15 +735,13 @@ pnpm run check     # Type checking
 ```svelte
 <script lang="ts">
   import { submitForm } from './form.remote';
-  
+
   const formAction = submitForm();
 </script>
 
 <form method="POST" use:formAction.enhance>
   <input name="email" type="email" />
-  <button type="submit" disabled={formAction.submitting}>
-    Submit
-  </button>
+  <button type="submit" disabled={formAction.submitting}> Submit </button>
 </form>
 ```
 
@@ -556,9 +752,7 @@ pnpm run check     # Type checking
   let dialogOpen = $state(false);
 </script>
 
-<Button onclick={() => (dialogOpen = true)}>
-  Open Dialog
-</Button>
+<Button onclick={() => (dialogOpen = true)}>Open Dialog</Button>
 
 <MyDialog bind:open={dialogOpen} onSuccess={() => query.refresh()} />
 ```
