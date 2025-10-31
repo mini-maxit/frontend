@@ -18,6 +18,7 @@ export interface SubmitSolutionDto {
   taskID: number;
   solution: File;
   languageID: number;
+  contestID?: number;
 }
 
 export interface TestResult {

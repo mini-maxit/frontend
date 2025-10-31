@@ -38,3 +38,16 @@ export interface UploadTaskDto {
   title: string;
   archive: File;
 }
+
+export interface ContestTask {
+  id: number;
+  title: string;
+  createdAt: string;
+  createdBy: number;
+  createdByName: string;
+  descriptionUrl: string;
+  pdfDataUrl?: string | null;
+  attemptCount: number;
+  bestScore: number;
+  maxScore: number;
+}

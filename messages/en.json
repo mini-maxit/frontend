@@ -359,5 +359,7 @@
   "quick_actions_my_contests": "My Contests",
   "quick_actions_my_contests_description": "View contests you're participating in",
   "quick_actions_profile": "Profile",
-  "quick_actions_profile_description": "Manage your account settings"
+  "quick_actions_profile_description": "Manage your account settings",
+  "contest_task_attempts": "Attempts",
+  "contest_task_best_score": "Best Score"
 }

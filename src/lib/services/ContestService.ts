@@ -5,6 +5,7 @@ import type {
   CreateContestDto,
   RegistrationRequest
 } from '$lib/dto/contest';
+import type { ContestTask } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 import { toRFC3339 } from '$lib/utils';
@@ -170,6 +171,40 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to reject registration request:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestTasks(contestId: number): Promise<ContestTask[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<ContestTask[]>>({
+        url: `/contests/${contestId}/tasks`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest tasks:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestTask(contestId: number, taskId: number): Promise<ContestTask> {
+    try {
+      const tasks = await this.getContestTasks(contestId);
+      const task = tasks.find((t) => t.id === taskId);
+      if (!task) {
+        throw new ApiError(404, 'Not Found', `/contests/${contestId}/tasks`, 'GET', {
+          data: { code: 'NOT_FOUND', message: 'Task not found in contest' }
+        });
+      }
+      return task;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest task:', error.toJSON());
         throw error;
       }
       throw error;
