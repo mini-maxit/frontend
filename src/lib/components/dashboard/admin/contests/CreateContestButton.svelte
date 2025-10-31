@@ -12,6 +12,7 @@
   import { isHttpError, type HttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
+  import { format, add } from 'date-fns';
   import { cn } from '$lib/utils';
   import type { CreateContestForm } from '$routes/dashboard/admin/contests/contests.remote';
 
@@ -32,15 +33,14 @@
   function getDefaultStartDateTime() {
     const now = new Date();
     const date = today(getLocalTimeZone());
-    const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const time = format(now, 'HH:mm');
     return { date, time };
   }
 
   function getDefaultEndDateTime() {
-    const tomorrow = new Date();
-    tomorrow.setHours(tomorrow.getHours() + 24);
+    const tomorrow = add(new Date(), { hours: 24 });
     const date = today(getLocalTimeZone()).add({ days: 1 });
-    const time = `${String(tomorrow.getHours()).padStart(2, '0')}:${String(tomorrow.getMinutes()).padStart(2, '0')}`;
+    const time = format(tomorrow, 'HH:mm');
     return { date, time };
   }
 

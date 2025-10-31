@@ -4,16 +4,13 @@
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as m from '$lib/paraglide/messages';
   import { getLocale } from '$lib/paraglide/runtime';
+  import { format } from 'date-fns';
+  import { enUS, pl } from 'date-fns/locale';
 
   const userQuery = getCurrentUser();
 
-  const today = new Date();
-  const dateString = today.toLocaleDateString(getLocale(), {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const locale = getLocale() === 'pl' ? pl : enUS;
+  const dateString = format(new Date(), 'EEEE, MMMM d, yyyy', { locale });
 </script>
 
 {#if userQuery.error}
