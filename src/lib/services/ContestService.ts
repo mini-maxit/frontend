@@ -3,9 +3,11 @@ import type {
   Contest,
   UserContestsResponse,
   CreateContestDto,
-  RegistrationRequest
+  RegistrationRequest,
+  AddContestTaskDto,
+  ContestTask
 } from '$lib/dto/contest';
-import type { UserContestTask } from '$lib/dto/task';
+import type { Task, UserContestTask } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 import { toRFC3339 } from '$lib/utils';
@@ -171,6 +173,44 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to reject registration request:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getAssignableTasks(contestId: number): Promise<Task[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<Task[]>>({
+        url: `/contests/${contestId}/tasks/assignable-tasks`
+      });
+      console.log('Assignable tasks response:', response);
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get assignable tasks:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async addTaskToContest(contestId: number, data: AddContestTaskDto): Promise<ContestTask> {
+    try {
+      const requestData = {
+        taskId: data.taskId,
+        startAt: toRFC3339(data.startAt),
+        endAt: data.endAt ? toRFC3339(data.endAt) : null
+      };
+
+      const response = await this.apiClient.post<ApiResponse<ContestTask>>({
+        url: `/contests/${contestId}/tasks`,
+        body: JSON.stringify(requestData)
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to add task to contest:', error.toJSON());
         throw error;
       }
       throw error;
