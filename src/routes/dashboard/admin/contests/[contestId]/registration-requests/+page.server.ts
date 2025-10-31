@@ -4,7 +4,7 @@ export const load = async ({ params }: { params: { contestId: string } }) => {
   const contestId = parseInt(params.contestId, 10);
 
   if (isNaN(contestId)) {
-    throw error(500, 'Invalid contest ID');
+    throw error(400, 'Invalid contest ID');
   }
 
   return {
