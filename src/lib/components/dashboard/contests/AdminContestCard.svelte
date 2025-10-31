@@ -130,6 +130,14 @@
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        href={localizeHref(`/dashboard/admin/contests/${contest.id}/tasks`)}
+      >
+        <ListTodo class="mr-2 h-4 w-4" />
+        {m.admin_contests_card_manage_tasks()}
+      </Button>
+      <Button
+        variant="default"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
         href={localizeHref(`/dashboard/admin/contests/${contest.id}/registration-requests`)}
       >
         <UserCheck class="mr-2 h-4 w-4" />
