@@ -9,13 +9,7 @@
   import { toast } from 'svelte-sonner';
   import { isHttpError, type HttpError } from '@sveltejs/kit';
   import type { SubmitContestSolutionRemoteForm } from '$routes/dashboard/user/contests/[contestId]/tasks/[taskId]/submit.remote';
-
-  interface Language {
-    id: number;
-    language: string;
-    version: string;
-    fileExtension: string;
-  }
+  import type { Language } from '$lib/dto/submission';
 
   interface Props {
     languages: Language[];

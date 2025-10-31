@@ -5,11 +5,11 @@ export const load = async ({ params }: { params: { contestId: string; taskId: st
   const taskId = parseInt(params.taskId, 10);
 
   if (isNaN(contestId)) {
-    throw error(500, 'Invalid contest ID');
+    throw error(400, 'Invalid contest ID');
   }
 
   if (isNaN(taskId)) {
-    throw error(500, 'Invalid task ID');
+    throw error(400, 'Invalid task ID');
   }
 
   return {

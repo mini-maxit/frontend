@@ -192,6 +192,14 @@ export class ContestService {
     }
   }
 
+  /**
+   * Fetches a specific task within a contest by first getting all contest tasks
+   * and filtering for the requested task ID.
+   *
+   * Note: This implementation fetches all tasks which may be inefficient for contests
+   * with many tasks. Consider adding a dedicated API endpoint `/contests/{contestId}/tasks/{taskId}`
+   * for better performance.
+   */
   async getContestTask(contestId: number, taskId: number): Promise<ContestTask> {
     try {
       const tasks = await this.getContestTasks(contestId);
