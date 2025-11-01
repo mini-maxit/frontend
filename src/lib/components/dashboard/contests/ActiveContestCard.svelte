@@ -9,6 +9,7 @@
   import * as m from '$lib/paraglide/messages';
   import { ContestStatus } from '$lib/dto/contest';
   import { localizeHref } from '$lib/paraglide/runtime';
+  import { AppRoutes } from '$lib/routes';
 
   interface ActiveContestCardProps {
     contestId: number;
@@ -105,10 +106,12 @@
         <span class="relative flex h-2 w-2">
           {#if status === ContestStatus.Ongoing}
             <span
-              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"
             ></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+          {:else}
+            <span class="relative inline-flex h-2 w-2 rounded-full {statusConfig.bgColor}"></span>
           {/if}
-          <span class="relative inline-flex h-2 w-2 rounded-full {statusConfig.bgColor}"></span>
         </span>
         <span class="text-xs font-bold">{statusConfig.label}</span>
       </div>
@@ -164,7 +167,7 @@
 
     <!-- Action Button -->
     <Button
-      href={localizeHref(`/dashboard/user/contests/${contestId}`)}
+      href={localizeHref(`${AppRoutes.UserContests}/${contestId}`)}
       class="w-full bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
     >
       <Zap class="mr-2 h-4 w-4" />

@@ -26,13 +26,13 @@
       <div class="flex items-center justify-between">
         <h2 class="text-2xl font-bold text-foreground">{m.user_contests_active_section()}</h2>
         <span
-          class="inline-flex items-center gap-2 rounded-full bg-red-500/10 px-3 py-1 text-sm font-medium text-red-600"
+          class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary"
         >
           <span class="relative flex h-2 w-2">
             <span
-              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"
             ></span>
-            <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
           </span>
           {#if contestsQuery.loading}
             {m.contests_live_count({ count: 0 })}
