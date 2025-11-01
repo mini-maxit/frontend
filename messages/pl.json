@@ -369,5 +369,14 @@
   "quick_actions_my_contests": "Moje Konkursy",
   "quick_actions_my_contests_description": "Zobacz konkursy, w których bierzesz udział",
   "quick_actions_profile": "Profil",
-  "quick_actions_profile_description": "Zarządzaj ustawieniami konta"
+  "quick_actions_profile_description": "Zarządzaj ustawieniami konta",
+  "contest_task_attempts": "Próby",
+  "contest_task_best_score": "Najlepszy Wynik",
+  "user_contest_tasks_title": "Zadania Konkursu",
+  "user_contest_tasks_description": "Zobacz dostępne zadania i swój postęp",
+  "user_contest_tasks_no_tasks_title": "Brak dostępnych zadań",
+  "user_contest_tasks_no_tasks_description": "Obecnie w tym konkursie nie ma żadnych zadań.",
+  "user_contest_tasks_loading": "Ładowanie zadań...",
+  "user_contest_tasks_view_task": "Zobacz Zadanie",
+  "user_contest_tasks_load_error": "Nie udało się załadować zadań konkursu"
 }

@@ -17,12 +17,11 @@ export const getAssignableTasks = query(v.number(), async (contestId): Promise<T
     console.error('Failed to load assignable tasks:', err);
 
     if (err instanceof ApiError) {
-      error(err.getStatus(), err.getApiMessage());
+      throw error(err.getStatus(), err.getApiMessage());
     }
 
-    error(500, 'Failed to load assignable tasks');
+    throw error(500, 'Failed to load assignable tasks');
   }
-  return [];
 });
 
 export const addTaskToContest = form(

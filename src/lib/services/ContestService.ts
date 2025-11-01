@@ -7,7 +7,7 @@ import type {
   AddContestTaskDto,
   ContestTask
 } from '$lib/dto/contest';
-import type { Task } from '$lib/dto/task';
+import type { Task, UserContestTask, ContestTaskWithStatistics } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 import { toRFC3339 } from '$lib/utils';
@@ -184,7 +184,6 @@ export class ContestService {
       const response = await this.apiClient.get<ApiResponse<Task[]>>({
         url: `/contests/${contestId}/tasks/assignable-tasks`
       });
-      console.log('Assignable tasks response:', response);
       return response.data;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -211,6 +210,63 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to add task to contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestTasks(contestId: number): Promise<UserContestTask[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<UserContestTask[]>>({
+        url: `/contests/${contestId}/tasks`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest tasks:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestTasksWithStatistics(contestId: number): Promise<ContestTaskWithStatistics[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<ContestTaskWithStatistics[]>>({
+        url: `/contests/${contestId}/tasks/user-statistics`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest tasks with statistics:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Fetches a specific task within a contest by first getting all contest tasks
+   * and filtering for the requested task ID.
+   *
+   * Note: This implementation fetches all tasks which may be inefficient for contests
+   * with many tasks. Consider adding a dedicated API endpoint `/contests/{contestId}/tasks/{taskId}`
+   * for better performance.
+   */
+  async getContestTask(contestId: number, taskId: number): Promise<UserContestTask> {
+    try {
+      const tasks = await this.getContestTasks(contestId);
+      const task = tasks.find((t) => t.id === taskId);
+      if (!task) {
+        throw new ApiError(404, 'Not Found', `/contests/${contestId}/tasks`, 'GET', {
+          data: { code: 'NOT_FOUND', message: 'Task not found in contest' }
+        });
+      }
+      return task;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest task:', error.toJSON());
         throw error;
       }
       throw error;

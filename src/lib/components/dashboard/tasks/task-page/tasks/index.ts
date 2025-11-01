@@ -5,3 +5,5 @@ export { default as FilePreview } from './FilePreview.svelte';
 export { default as LanguageSelector } from './LanguageSelector.svelte';
 export { default as FileUploader } from './FileUploader.svelte';
 export { default as SubmitButton } from './SubmitButton.svelte';
+export { default as ContestTaskHeader } from './ContestTaskHeader.svelte';
+export { default as ContestTaskSubmissionForm } from './ContestTaskSubmissionForm.svelte';

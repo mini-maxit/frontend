@@ -369,5 +369,14 @@
   "quick_actions_my_contests": "My Contests",
   "quick_actions_my_contests_description": "View contests you're participating in",
   "quick_actions_profile": "Profile",
-  "quick_actions_profile_description": "Manage your account settings"
+  "quick_actions_profile_description": "Manage your account settings",
+  "contest_task_attempts": "Attempts",
+  "contest_task_best_score": "Best Score",
+  "user_contest_tasks_title": "Contest Tasks",
+  "user_contest_tasks_description": "View available tasks and your progress",
+  "user_contest_tasks_no_tasks_title": "No tasks available",
+  "user_contest_tasks_no_tasks_description": "There are currently no tasks in this contest.",
+  "user_contest_tasks_loading": "Loading tasks...",
+  "user_contest_tasks_view_task": "View Task",
+  "user_contest_tasks_load_error": "Failed to load contest tasks"
 }

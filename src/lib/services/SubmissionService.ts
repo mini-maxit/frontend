@@ -15,6 +15,9 @@ export class SubmissionService {
     formData.append('taskID', body.taskID.toString());
     formData.append('solution', body.solution);
     formData.append('languageID', body.languageID.toString());
+    if (body.contestID !== undefined) {
+      formData.append('contestID', body.contestID.toString());
+    }
 
     try {
       const response = await this.apiClient.post<ApiResponse<null>>({
