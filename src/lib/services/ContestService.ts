@@ -7,7 +7,7 @@ import type {
   AddContestTaskDto,
   ContestTask
 } from '$lib/dto/contest';
-import type { Task, UserContestTask } from '$lib/dto/task';
+import type { Task, UserContestTask, ContestTaskWithStatistics } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 import { toRFC3339 } from '$lib/utils';
@@ -225,6 +225,21 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get contest tasks:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestTasksWithStatistics(contestId: number): Promise<ContestTaskWithStatistics[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<ContestTaskWithStatistics[]>>({
+        url: `/contests/${contestId}/tasks/user-statistics`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest tasks with statistics:', error.toJSON());
         throw error;
       }
       throw error;

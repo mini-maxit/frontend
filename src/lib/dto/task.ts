@@ -51,3 +51,13 @@ export interface UserContestTask {
   bestScore: number;
   maxScore: number;
 }
+
+export interface ContestTaskWithStatistics {
+  id: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: number;
+  attemptCount: number;
+  bestScore: number | null;
+}

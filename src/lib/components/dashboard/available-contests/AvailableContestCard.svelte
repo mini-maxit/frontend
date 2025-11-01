@@ -15,6 +15,7 @@
   import { ContestRegistrationStatus, ContestStatus, type Contest } from '$lib/dto/contest';
   import { getFormattedStartDate, getFormattedEndDate } from '$lib/utils/contest';
   import * as m from '$lib/paraglide/messages';
+  import { AppRoutes } from '$lib/routes';
 
   interface AvailableContestCardProps {
     contest: Contest;
@@ -207,6 +208,14 @@
           {:else}
             {registrationConfig.buttonText}
           {/if}
+        </Button>
+      {:else if contest.registrationStatus === ContestRegistrationStatus.Registered && contest.status === ContestStatus.Ongoing}
+        <Button
+          variant={registrationConfig.buttonVariant}
+          class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+          href={`${AppRoutes.UserContests}/${contest.id}`}
+        >
+          {registrationConfig.buttonText}
         </Button>
       {:else}
         <Button
