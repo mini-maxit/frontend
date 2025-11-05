@@ -60,7 +60,7 @@ export class SubmissionService {
     }
   }
 
-  async getAllSubmissions(params?: { limit?: number; offset?: number }): Promise<{
+  async getMySubmissions(params?: { limit?: number; offset?: number }): Promise<{
     success: boolean;
     status: number;
     data?: Submission[];
@@ -71,7 +71,7 @@ export class SubmissionService {
       if (params?.limit) queryParams.append('limit', params.limit.toString());
       if (params?.offset) queryParams.append('offset', params.offset.toString());
 
-      const url = `/submissions/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+      const url = `/submissions/my${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
       const response = await this.apiClient.get<ApiResponse<Submission[]>>({
         url

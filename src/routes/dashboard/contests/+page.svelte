@@ -12,6 +12,7 @@
   import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button';
   import Loader from '@lucide/svelte/icons/loader-circle';
+
   import * as m from '$lib/paraglide/messages';
 
   const ongoingContestsQuery = getOngoingContests();

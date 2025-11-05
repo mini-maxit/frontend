@@ -79,6 +79,21 @@ export class ContestService {
     }
   }
 
+  async getMyContests(): Promise<UserContestsResponse> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<UserContestsResponse>>({
+        url: `/contests/my`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get user contests:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
   async registerForContest(contestId: number): Promise<void> {
     try {
       await this.apiClient.post<ApiResponse<void>>({
@@ -139,7 +154,7 @@ export class ContestService {
   ): Promise<RegistrationRequest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<RegistrationRequest[]>>({
-        url: `/contests/${contestId}/registration-requests?status=${status}`
+        url: `/contests-management/contests/${contestId}/registration-requests?status=${status}`
       });
       return response.data;
     } catch (error) {
@@ -154,7 +169,7 @@ export class ContestService {
   async approveRegistrationRequest(contestId: number, userId: number): Promise<void> {
     try {
       await this.apiClient.post<ApiResponse<{ message: string }>>({
-        url: `/contests/${contestId}/registration-requests/${userId}/approve`
+        url: `/contests-management/contests/${contestId}/registration-requests/${userId}/approve`
       });
     } catch (error) {
       if (error instanceof ApiError) {
@@ -168,7 +183,7 @@ export class ContestService {
   async rejectRegistrationRequest(contestId: number, userId: number): Promise<void> {
     try {
       await this.apiClient.post<ApiResponse<{ message: string }>>({
-        url: `/contests/${contestId}/registration-requests/${userId}/reject`
+        url: `/contests-management/contests/${contestId}/registration-requests/${userId}/reject`
       });
     } catch (error) {
       if (error instanceof ApiError) {
@@ -182,7 +197,7 @@ export class ContestService {
   async getAssignableTasks(contestId: number): Promise<Task[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<Task[]>>({
-        url: `/contests/${contestId}/tasks/assignable-tasks`
+        url: `/contests-management/contests/${contestId}/tasks/assignable-tasks`
       });
       return response.data;
     } catch (error) {

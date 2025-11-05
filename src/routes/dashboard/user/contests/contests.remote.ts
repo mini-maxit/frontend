@@ -5,11 +5,11 @@ import { error } from '@sveltejs/kit';
 import type { UserContestsResponse } from '$lib/dto/contest';
 
 export const getUserContests = query(async (): Promise<UserContestsResponse> => {
-  const { cookies, locals } = getRequestEvent();
+  const { cookies } = getRequestEvent();
 
   try {
     const contestService = createContestService(cookies);
-    const contests = await contestService.getUserContests(locals.user!.userId);
+    const contests = await contestService.getMyContests();
 
     return {
       ongoing: contests.ongoing,

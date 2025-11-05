@@ -9,7 +9,7 @@ export const getSubmissions = query(async (): Promise<Submission[]> => {
   const apiClient = createApiClient(event.cookies);
   const submissionService = new SubmissionService(apiClient);
 
-  const result = await submissionService.getAllSubmissions();
+  const result = await submissionService.getMySubmissions();
   if (!result.success || !result.data) {
     error(result.status, { message: result.error || 'Failed to fetch submissions.' });
   }
