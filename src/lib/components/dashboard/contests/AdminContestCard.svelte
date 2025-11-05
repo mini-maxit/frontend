@@ -114,22 +114,13 @@
 
     <!-- Action Buttons -->
     <div class="space-y-2">
-      <div class="flex gap-2">
-        <Button
-          variant="outline"
-          class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-          href={contestDetailsUrl}
-        >
-          {m.admin_contests_card_view_details()}
-        </Button>
-        <Button
-          variant="default"
-          class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-          href={contestDetailsUrl}
-        >
-          {m.admin_contests_card_manage()}
-        </Button>
-      </div>
+      <Button
+        variant="outline"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        href={contestDetailsUrl}
+      >
+        {m.admin_contests_card_view_details()}
+      </Button>
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
