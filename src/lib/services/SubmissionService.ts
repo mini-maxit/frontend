@@ -28,9 +28,11 @@ export class SubmissionService {
     }
 
     try {
-      // Note: The submit endpoint is not documented in the swagger file.
-      // Keeping the original path until clarified with backend team.
-      // This might need to be updated to a role-based endpoint later.
+      /**
+       * Note: The submit endpoint is not documented in the swagger file.
+       * Keeping the original path until clarified with backend team.
+       * This might need to be updated to a role-based endpoint later.
+       */
       const response = await this.apiClient.post<ApiResponse<null>>({
         url: '/submissions/submit',
         body: formData
@@ -55,9 +57,11 @@ export class SubmissionService {
     error?: string;
   }> {
     try {
-      // Note: The languages endpoint is not documented in the swagger file.
-      // Keeping the original path until clarified with backend team.
-      // This might need to be updated to a role-based endpoint later.
+      /**
+       * Note: The languages endpoint is not documented in the swagger file.
+       * Keeping the original path until clarified with backend team.
+       * This might need to be updated to a role-based endpoint later.
+       */
       const response = await this.apiClient.get<ApiResponse<Language[]>>({
         url: '/submissions/languages'
       });

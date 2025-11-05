@@ -94,7 +94,16 @@ export class ContestService {
 
   /**
    * @deprecated Use getAllContests() or getContestsByStatus() instead
-   * Note: The new API does not provide solvedTaskCount, so this will return 0 for that field
+   *
+   * Gets user contests grouped by status. Note that in the new API structure,
+   * contests are fetched based on user role rather than user ID. The userId
+   * parameter is maintained for API compatibility but is not used internally.
+   *
+   * @param _userId - User ID (kept for backward compatibility, not used)
+   * @returns Contests grouped by ongoing, upcoming, and past status
+   *
+   * @remarks
+   * The new API does not provide solvedTaskCount, so this field will return 0.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getUserContests(_userId: number): Promise<UserContestsResponse> {
