@@ -22,7 +22,7 @@ export class ContestService {
   async getOngoing(): Promise<Contest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contests/ongoing'
+        url: '/contests?status=ongoing'
       });
       return response.data;
     } catch (error) {
@@ -37,7 +37,7 @@ export class ContestService {
   async getUpcoming(): Promise<Contest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contests/upcoming'
+        url: '/contests?status=upcoming'
       });
       return response.data;
     } catch (error) {
@@ -52,7 +52,7 @@ export class ContestService {
   async getPast(): Promise<Contest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contests/past'
+        url: '/contests?status=past'
       });
       return response.data;
     } catch (error) {
@@ -120,7 +120,7 @@ export class ContestService {
       };
 
       const response = await this.apiClient.post<ApiResponse<Contest>>({
-        url: '/contests/',
+        url: '/contests',
         body: JSON.stringify(requestData)
       });
       return response.data;
