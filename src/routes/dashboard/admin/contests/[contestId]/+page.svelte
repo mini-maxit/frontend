@@ -4,8 +4,6 @@
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import ListTodo from '@lucide/svelte/icons/list-todo';
-  import Trophy from '@lucide/svelte/icons/trophy';
-  import Target from '@lucide/svelte/icons/target';
   import ChevronRight from '@lucide/svelte/icons/chevron-right';
   import { getContestTasks } from './contest.remote';
   import { AppRoutes } from '$lib/routes';
@@ -56,30 +54,6 @@
               </Card.Title>
             </Card.Header>
             <Card.Content class="space-y-4">
-              <div class="grid grid-cols-2 gap-3">
-                <!-- Max Score -->
-                <div class="rounded-lg border border-border bg-card p-3">
-                  <div class="flex items-center gap-2">
-                    <Trophy class="h-4 w-4 text-primary" />
-                    <span class="text-xs font-medium text-muted-foreground"> Max Score </span>
-                  </div>
-                  <p class="mt-1 text-lg font-bold text-foreground">
-                    {task.maxScore}
-                  </p>
-                </div>
-
-                <!-- Attempts -->
-                <div class="rounded-lg border border-border bg-card p-3">
-                  <div class="flex items-center gap-2">
-                    <Target class="h-4 w-4 text-primary" />
-                    <span class="text-xs font-medium text-muted-foreground"> Total Attempts </span>
-                  </div>
-                  <p class="mt-1 text-lg font-bold text-foreground">
-                    {task.attemptCount}
-                  </p>
-                </div>
-              </div>
-
               <div class="pt-2">
                 <Button
                   href={`${AppRoutes.AdminTasks}/${task.id}`}
