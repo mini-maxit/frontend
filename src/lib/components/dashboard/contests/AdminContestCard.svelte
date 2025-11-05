@@ -26,6 +26,7 @@
   };
 
   const statusColor = $derived(statusColors[contest.status] || statusColors.past);
+  const contestDetailsUrl = $derived(localizeHref(`/dashboard/admin/contests/${contest.id}`));
 </script>
 
 <Card.Root
@@ -53,7 +54,7 @@
       class="mt-3 flex items-start gap-2 text-lg transition-colors group-hover:text-primary"
     >
       <Trophy class="mt-0.5 h-5 w-5 flex-shrink-0" />
-      <span class="break-words">{contest.name}</span>
+      <a href={contestDetailsUrl} class="break-words hover:underline">{contest.name}</a>
     </Card.Title>
     <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">{contest.description}</p>
   </Card.Header>
@@ -117,12 +118,14 @@
         <Button
           variant="outline"
           class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+          href={contestDetailsUrl}
         >
           {m.admin_contests_card_view_details()}
         </Button>
         <Button
           variant="default"
           class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+          href={contestDetailsUrl}
         >
           {m.admin_contests_card_manage()}
         </Button>
