@@ -29,7 +29,8 @@ export class ContestService {
    */
   async getAllContests(): Promise<Contest[]> {
     try {
-      const baseUrl = this.userRole === UserRole.Student ? '/student/contests' : '/teacher/contests';
+      const baseUrl =
+        this.userRole === UserRole.Student ? '/student/contests' : '/teacher/contests';
       const response = await this.apiClient.get<ApiResponse<Contest[]>>({
         url: baseUrl
       });
@@ -50,7 +51,9 @@ export class ContestService {
   async getContestsByStatus(status?: 'ongoing' | 'upcoming' | 'past'): Promise<Contest[]> {
     try {
       if (this.userRole !== UserRole.Student) {
-        console.warn('getContestsByStatus should only be used for students. Use getAllContests() for teachers.');
+        console.warn(
+          'getContestsByStatus should only be used for students. Use getAllContests() for teachers.'
+        );
         return this.getAllContests();
       }
 
@@ -93,22 +96,23 @@ export class ContestService {
    * @deprecated Use getAllContests() or getContestsByStatus() instead
    * Note: The new API does not provide solvedTaskCount, so this will return 0 for that field
    */
-  async getUserContests(userId: number): Promise<UserContestsResponse> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getUserContests(_userId: number): Promise<UserContestsResponse> {
     try {
       // For backward compatibility, fetch all contests and group by status
       // Note: This is inefficient and should be replaced with proper usage of new endpoints
       const contests = await this.getAllContests();
-      
+
       // Group contests by status and map to UserContest format
       // Note: solvedTaskCount is not available in the new API, defaulting to 0
-      const mapToUserContest = (contest: Contest): any => ({
+      const mapToUserContest = (contest: Contest) => ({
         ...contest,
         solvedTaskCount: 0 // Not available in new API
       });
 
-      const ongoing = contests.filter(c => c.status === 'ongoing').map(mapToUserContest);
-      const upcoming = contests.filter(c => c.status === 'upcoming').map(mapToUserContest);
-      const past = contests.filter(c => c.status === 'past').map(mapToUserContest);
+      const ongoing = contests.filter((c) => c.status === 'ongoing').map(mapToUserContest);
+      const upcoming = contests.filter((c) => c.status === 'upcoming').map(mapToUserContest);
+      const past = contests.filter((c) => c.status === 'past').map(mapToUserContest);
 
       return { ongoing, upcoming, past };
     } catch (error) {
@@ -241,10 +245,11 @@ export class ContestService {
 
   async getContestTasks(contestId: number): Promise<UserContestTask[]> {
     try {
-      const baseUrl = this.userRole === UserRole.Student 
-        ? `/student/contests/${contestId}/tasks`
-        : `/teacher/contests/${contestId}/tasks`;
-      
+      const baseUrl =
+        this.userRole === UserRole.Student
+          ? `/student/contests/${contestId}/tasks`
+          : `/teacher/contests/${contestId}/tasks`;
+
       const response = await this.apiClient.get<ApiResponse<UserContestTask[]>>({
         url: baseUrl
       });
@@ -286,9 +291,10 @@ export class ContestService {
       const tasks = await this.getContestTasks(contestId);
       const task = tasks.find((t) => t.id === taskId);
       if (!task) {
-        const baseUrl = this.userRole === UserRole.Student 
-          ? `/student/contests/${contestId}/tasks`
-          : `/teacher/contests/${contestId}/tasks`;
+        const baseUrl =
+          this.userRole === UserRole.Student
+            ? `/student/contests/${contestId}/tasks`
+            : `/teacher/contests/${contestId}/tasks`;
         throw new ApiError(404, 'Not Found', baseUrl, 'GET', {
           data: { code: 'NOT_FOUND', message: 'Task not found in contest' }
         });

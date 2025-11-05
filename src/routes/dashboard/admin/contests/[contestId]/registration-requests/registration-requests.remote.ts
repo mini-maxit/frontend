@@ -1,7 +1,7 @@
 import { query, command, getRequestEvent } from '$app/server';
 import { createContestService } from '$lib/services/ContestService';
 import { ApiError } from '$lib/services/ApiService';
-import { RegistrationRequestStatus, type RegistrationRequest } from '$lib/dto/contest';
+import { RegistrationRequestStatus } from '$lib/dto/contest';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 

@@ -14,7 +14,10 @@ import { UserRole } from '../dto/jwt';
 export class TaskService {
   private userRole: UserRole;
 
-  constructor(private apiClient: ApiService, userRole: UserRole) {
+  constructor(
+    private apiClient: ApiService,
+    userRole: UserRole
+  ) {
     this.userRole = userRole;
   }
 
