@@ -29,12 +29,13 @@ export class SubmissionService {
 
     try {
       /**
-       * Note: The submit endpoint is not documented in the swagger file.
-       * Keeping the original path until clarified with backend team.
-       * This might need to be updated to a role-based endpoint later.
+       * Use role-based submission endpoint.
+       * Note: The new Swagger only documents /teacher/submissions/submit.
+       * Both students and teachers use the teacher endpoint until a separate
+       * student endpoint is added to the API.
        */
       const response = await this.apiClient.post<ApiResponse<null>>({
-        url: '/submissions/submit',
+        url: '/teacher/submissions/submit',
         body: formData
       });
       return { success: true, data: response.data, status: 200 };
@@ -58,12 +59,10 @@ export class SubmissionService {
   }> {
     try {
       /**
-       * Note: The languages endpoint is not documented in the swagger file.
-       * Keeping the original path until clarified with backend team.
-       * This might need to be updated to a role-based endpoint later.
+       * Use student-scoped languages endpoint as documented in new Swagger.
        */
       const response = await this.apiClient.get<ApiResponse<Language[]>>({
-        url: '/submissions/languages'
+        url: '/student/submissions/languages'
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
