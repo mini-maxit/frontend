@@ -38,6 +38,29 @@ export class TaskService {
     }
   }
 
+  async getCreatedTasks(): Promise<{
+    success: boolean;
+    status: number;
+    data?: Task[];
+    error?: string;
+  }> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<Task[]>>({
+        url: '/tasks-management/tasks/created'
+      });
+      return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
   async getAllTasks(): Promise<{
     success: boolean;
     status: number;
@@ -92,7 +115,7 @@ export class TaskService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<TaskLimit[]>>({
-        url: `/tasks/${taskId}/limits`
+        url: `/tasks-management/tasks/${taskId}/limits`
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -118,7 +141,7 @@ export class TaskService {
   }> {
     try {
       const response = await this.apiClient.put<ApiResponse<TaskLimit[]>>({
-        url: `/tasks/${taskId}/limits`,
+        url: `/tasks-management/tasks/${taskId}/limits`,
         body: JSON.stringify(body),
         contentType: RequestContentType.Json
       });

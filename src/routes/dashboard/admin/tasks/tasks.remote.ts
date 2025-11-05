@@ -8,7 +8,7 @@ export const getTasks = query(async () => {
   const apiClient = createApiClient(event.cookies);
   const taskService = new TaskService(apiClient);
 
-  const result = await taskService.getAllTasks();
+  const result = await taskService.getCreatedTasks();
   if (!result.success || !result.data) {
     error(result.status, { message: result.error || 'Failed to fetch tasks.' });
   }
