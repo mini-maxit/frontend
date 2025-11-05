@@ -16,7 +16,7 @@ type SubmitSolutionData = v.InferOutput<typeof SubmitSolutionSchema>;
 export const submitSolution = form(SubmitSolutionSchema, async (data: SubmitSolutionData) => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const submissionService = new SubmissionService(apiClient);
+  const submissionService = new SubmissionService(apiClient, event.locals.user!.role);
 
   const result = await submissionService.submitSolution({
     taskID: data.taskId,

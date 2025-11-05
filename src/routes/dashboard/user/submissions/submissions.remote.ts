@@ -7,7 +7,7 @@ import type { Submission } from '$lib/dto/submission';
 export const getSubmissions = query(async (): Promise<Submission[]> => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const submissionService = new SubmissionService(apiClient);
+  const submissionService = new SubmissionService(apiClient, event.locals.user!.role);
 
   const result = await submissionService.getAllSubmissions();
   if (!result.success || !result.data) {

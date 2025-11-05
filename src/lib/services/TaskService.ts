@@ -9,9 +9,14 @@ import type {
   UpdateTaskLimitsDto
 } from '../dto/task';
 import { RequestContentType } from '../dto/request';
+import { UserRole } from '../dto/jwt';
 
 export class TaskService {
-  constructor(private apiClient: ApiService) {}
+  private userRole: UserRole;
+
+  constructor(private apiClient: ApiService, userRole: UserRole) {
+    this.userRole = userRole;
+  }
 
   async uploadTask(
     body: UploadTaskDto
@@ -22,7 +27,7 @@ export class TaskService {
 
     try {
       const response = await this.apiClient.post<ApiResponse<UploadTaskResponse>>({
-        url: '/tasks/',
+        url: '/teacher/tasks',
         body: formData
       });
       return { success: true, data: response.data, status: 200 };
@@ -45,8 +50,9 @@ export class TaskService {
     error?: string;
   }> {
     try {
+      const baseUrl = this.userRole === UserRole.Student ? '/student/tasks' : '/teacher/tasks';
       const response = await this.apiClient.get<ApiResponse<Task[]>>({
-        url: '/tasks/'
+        url: baseUrl
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -69,7 +75,7 @@ export class TaskService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<TaskDetail>>({
-        url: `/tasks/${id}`
+        url: `/teacher/tasks/${id}`
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -92,7 +98,7 @@ export class TaskService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<TaskLimit[]>>({
-        url: `/tasks/${taskId}/limits`
+        url: `/teacher/tasks/${taskId}/limits`
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -118,7 +124,7 @@ export class TaskService {
   }> {
     try {
       const response = await this.apiClient.put<ApiResponse<TaskLimit[]>>({
-        url: `/tasks/${taskId}/limits`,
+        url: `/teacher/tasks/${taskId}/limits`,
         body: JSON.stringify(body),
         contentType: RequestContentType.Json
       });

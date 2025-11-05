@@ -18,7 +18,7 @@ const UpdateTaskLimitsSchema = v.object({
 export const getTaskLimits = query(v.number(), async (taskId) => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const taskService = new TaskService(apiClient, event.locals.user!.role);
 
   const result = await taskService.getTaskLimits(taskId);
   if (!result.success || !result.data) {
@@ -31,7 +31,7 @@ export const getTaskLimits = query(v.number(), async (taskId) => {
 export const updateTaskLimits = form(UpdateTaskLimitsSchema, async (data) => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const taskService = new TaskService(apiClient, event.locals.user!.role);
 
   const result = await taskService.updateTaskLimits(data.taskId, {
     limits: data.limits

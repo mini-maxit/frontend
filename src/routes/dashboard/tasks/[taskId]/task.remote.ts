@@ -8,7 +8,7 @@ import { error } from '@sveltejs/kit';
 export const getTask = query(v.number(), async (id: number) => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const taskService = new TaskService(apiClient, event.locals.user!.role);
 
   const result = await taskService.getTaskById(id);
   if (!result.success || !result.data) {
@@ -44,7 +44,7 @@ export const getTask = query(v.number(), async (id: number) => {
 export const getLanguages = query(async () => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const submissionService = new SubmissionService(apiClient);
+  const submissionService = new SubmissionService(apiClient, event.locals.user!.role);
 
   const result = await submissionService.getAvailableLanguages();
   if (!result.success) {

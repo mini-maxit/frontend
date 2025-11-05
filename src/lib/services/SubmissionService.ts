@@ -1,9 +1,14 @@
 import { ApiError, type ApiService } from './ApiService';
 import type { ApiResponse } from '../dto/response';
 import type { Language, SubmitSolutionDto, Submission } from '../dto/submission';
+import { UserRole } from '../dto/jwt';
 
 export class SubmissionService {
-  constructor(private apiClient: ApiService) {}
+  private userRole: UserRole;
+
+  constructor(private apiClient: ApiService, userRole: UserRole) {
+    this.userRole = userRole;
+  }
 
   async submitSolution(body: SubmitSolutionDto): Promise<{
     success: boolean;
@@ -20,6 +25,9 @@ export class SubmissionService {
     }
 
     try {
+      // Note: The submit endpoint is not documented in the swagger file.
+      // Keeping the original path until clarified with backend team.
+      // This might need to be updated to a role-based endpoint later.
       const response = await this.apiClient.post<ApiResponse<null>>({
         url: '/submissions/submit',
         body: formData
@@ -44,6 +52,9 @@ export class SubmissionService {
     error?: string;
   }> {
     try {
+      // Note: The languages endpoint is not documented in the swagger file.
+      // Keeping the original path until clarified with backend team.
+      // This might need to be updated to a role-based endpoint later.
       const response = await this.apiClient.get<ApiResponse<Language[]>>({
         url: '/submissions/languages'
       });
@@ -71,7 +82,7 @@ export class SubmissionService {
       if (params?.limit) queryParams.append('limit', params.limit.toString());
       if (params?.offset) queryParams.append('offset', params.offset.toString());
 
-      const url = `/submissions/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+      const url = `/student/submissions${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
       const response = await this.apiClient.get<ApiResponse<Submission[]>>({
         url

@@ -6,10 +6,10 @@ import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 
 export const getOngoingContests = query(async (): Promise<Contest[]> => {
-  const { cookies } = getRequestEvent();
+  const { cookies, locals } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
+    const contestService = createContestService(cookies, locals.user!.role);
     const contests = await contestService.getOngoing();
 
     return contests;
@@ -25,10 +25,10 @@ export const getOngoingContests = query(async (): Promise<Contest[]> => {
 });
 
 export const getUpcomingContests = query(async (): Promise<Contest[]> => {
-  const { cookies } = getRequestEvent();
+  const { cookies, locals } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
+    const contestService = createContestService(cookies, locals.user!.role);
     const contests = await contestService.getUpcoming();
 
     return contests;
@@ -43,10 +43,10 @@ export const getUpcomingContests = query(async (): Promise<Contest[]> => {
 });
 
 export const getPastContests = query(async (): Promise<Contest[]> => {
-  const { cookies } = getRequestEvent();
+  const { cookies, locals } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
+    const contestService = createContestService(cookies, locals.user!.role);
     const contests = await contestService.getPast();
 
     return contests;
@@ -61,10 +61,10 @@ export const getPastContests = query(async (): Promise<Contest[]> => {
 });
 
 export const registerForContest = command(v.number(), async (contestId: number) => {
-  const { cookies } = getRequestEvent();
+  const { cookies, locals } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
+    const contestService = createContestService(cookies, locals.user!.role);
     await contestService.registerForContest(contestId);
 
     return { success: true };

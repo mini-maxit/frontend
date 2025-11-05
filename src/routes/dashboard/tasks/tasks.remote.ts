@@ -7,7 +7,7 @@ import type { Task } from '$lib/dto/task';
 export const getTasks = query(async (): Promise<Task[]> => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const taskService = new TaskService(apiClient, event.locals.user!.role);
 
   const result = await taskService.getAllTasks();
   if (!result.success || !result.data) {

@@ -19,7 +19,7 @@ export const submitContestSolution = form(
   async (data: SubmitContestSolutionData) => {
     const event = getRequestEvent();
     const apiClient = createApiClient(event.cookies);
-    const submissionService = new SubmissionService(apiClient);
+    const submissionService = new SubmissionService(apiClient, event.locals.user!.role);
 
     const result = await submissionService.submitSolution({
       taskID: data.taskId,

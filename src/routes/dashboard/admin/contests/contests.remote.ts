@@ -6,10 +6,10 @@ import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 
 export const getAllContests = query(async (): Promise<Contest[]> => {
-  const { cookies } = getRequestEvent();
+  const { cookies, locals } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
+    const contestService = createContestService(cookies, locals.user!.role);
     const contests = await contestService.getAllContests();
 
     return contests;
@@ -35,10 +35,10 @@ export const createContest = form(
     isVisible: v.optional(v.boolean(), true)
   }),
   async (data) => {
-    const { cookies } = getRequestEvent();
+    const { cookies, locals } = getRequestEvent();
 
     try {
-      const contestService = createContestService(cookies);
+      const contestService = createContestService(cookies, locals.user!.role);
       const contest = await contestService.createContest({
         ...data,
         endAt: data.endAt ?? null

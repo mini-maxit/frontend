@@ -14,7 +14,7 @@ type GetContestTaskInput = v.InferOutput<typeof GetContestTaskSchema>;
 
 export const getContestTask = query(GetContestTaskSchema, async (input: GetContestTaskInput) => {
   const event = getRequestEvent();
-  const contestService = createContestService(event.cookies);
+  const contestService = createContestService(event.cookies, event.locals.user!.role);
 
   const task = await contestService.getContestTask(input.contestId, input.taskId);
 
@@ -45,7 +45,7 @@ export const getContestTask = query(GetContestTaskSchema, async (input: GetConte
 export const getLanguages = query(async () => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const submissionService = new SubmissionService(apiClient);
+  const submissionService = new SubmissionService(apiClient, event.locals.user!.role);
 
   const result = await submissionService.getAvailableLanguages();
   if (!result.success) {

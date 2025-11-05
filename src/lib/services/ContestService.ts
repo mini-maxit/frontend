@@ -11,65 +11,106 @@ import type { Task, UserContestTask, ContestTaskWithStatistics } from '$lib/dto/
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
 import { toRFC3339 } from '$lib/utils';
+import { UserRole } from '$lib/dto/jwt';
 
 export class ContestService {
   private apiClient;
+  private userRole: UserRole;
 
-  constructor(cookies: Cookies) {
+  constructor(cookies: Cookies, userRole: UserRole) {
     this.apiClient = createApiClient(cookies);
+    this.userRole = userRole;
   }
 
+  /**
+   * Get all contests accessible to the user based on their role
+   * For students: returns contests they can see/register for
+   * For teachers/admins: returns contests they manage
+   */
+  async getAllContests(): Promise<Contest[]> {
+    try {
+      const baseUrl = this.userRole === UserRole.Student ? '/student/contests' : '/teacher/contests';
+      const response = await this.apiClient.get<ApiResponse<Contest[]>>({
+        url: baseUrl
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contests:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Get contests filtered by status (only for students)
+   * For teachers, use getAllContests() instead
+   */
+  async getContestsByStatus(status?: 'ongoing' | 'upcoming' | 'past'): Promise<Contest[]> {
+    try {
+      if (this.userRole !== UserRole.Student) {
+        console.warn('getContestsByStatus should only be used for students. Use getAllContests() for teachers.');
+        return this.getAllContests();
+      }
+
+      const url = status ? `/student/contests?sort=${status}` : '/student/contests';
+      const response = await this.apiClient.get<ApiResponse<Contest[]>>({
+        url
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contests by status:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * @deprecated Use getContestsByStatus('ongoing') instead
+   */
   async getOngoing(): Promise<Contest[]> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contests/ongoing'
-      });
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get ongoing contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
+    return this.getContestsByStatus('ongoing');
   }
 
+  /**
+   * @deprecated Use getContestsByStatus('upcoming') instead
+   */
   async getUpcoming(): Promise<Contest[]> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contests/upcoming'
-      });
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get upcoming contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
+    return this.getContestsByStatus('upcoming');
   }
 
+  /**
+   * @deprecated Use getContestsByStatus('past') instead
+   */
   async getPast(): Promise<Contest[]> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<Contest[]>>({
-        url: '/contests/past'
-      });
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get past contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
+    return this.getContestsByStatus('past');
   }
 
+  /**
+   * @deprecated Use getAllContests() or getContestsByStatus() instead
+   * Note: The new API does not provide solvedTaskCount, so this will return 0 for that field
+   */
   async getUserContests(userId: number): Promise<UserContestsResponse> {
     try {
-      const response = await this.apiClient.get<ApiResponse<UserContestsResponse>>({
-        url: `/users/${userId}/contests`
+      // For backward compatibility, fetch all contests and group by status
+      // Note: This is inefficient and should be replaced with proper usage of new endpoints
+      const contests = await this.getAllContests();
+      
+      // Group contests by status and map to UserContest format
+      // Note: solvedTaskCount is not available in the new API, defaulting to 0
+      const mapToUserContest = (contest: Contest): any => ({
+        ...contest,
+        solvedTaskCount: 0 // Not available in new API
       });
-      return response.data;
+
+      const ongoing = contests.filter(c => c.status === 'ongoing').map(mapToUserContest);
+      const upcoming = contests.filter(c => c.status === 'upcoming').map(mapToUserContest);
+      const past = contests.filter(c => c.status === 'past').map(mapToUserContest);
+
+      return { ongoing, upcoming, past };
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get user contests:', error.toJSON());
@@ -82,29 +123,11 @@ export class ContestService {
   async registerForContest(contestId: number): Promise<void> {
     try {
       await this.apiClient.post<ApiResponse<void>>({
-        url: `/contests/${contestId}/register`
+        url: `/student/contests/${contestId}/register`
       });
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to register for contest:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
-  }
-
-  async getAllContests(): Promise<Contest[]> {
-    try {
-      const [ongoing, upcoming, past] = await Promise.all([
-        this.getOngoing(),
-        this.getUpcoming(),
-        this.getPast()
-      ]);
-
-      return [...ongoing, ...upcoming, ...past];
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get all contests:', error.toJSON());
         throw error;
       }
       throw error;
@@ -120,7 +143,7 @@ export class ContestService {
       };
 
       const response = await this.apiClient.post<ApiResponse<Contest>>({
-        url: '/contests/',
+        url: '/teacher/contests',
         body: JSON.stringify(requestData)
       });
       return response.data;
@@ -139,7 +162,7 @@ export class ContestService {
   ): Promise<RegistrationRequest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<RegistrationRequest[]>>({
-        url: `/contests/${contestId}/registration-requests?status=${status}`
+        url: `/teacher/contests/${contestId}/registration-requests?status=${status}`
       });
       return response.data;
     } catch (error) {
@@ -154,7 +177,7 @@ export class ContestService {
   async approveRegistrationRequest(contestId: number, userId: number): Promise<void> {
     try {
       await this.apiClient.post<ApiResponse<{ message: string }>>({
-        url: `/contests/${contestId}/registration-requests/${userId}/approve`
+        url: `/teacher/contests/${contestId}/registration-requests/${userId}/approve`
       });
     } catch (error) {
       if (error instanceof ApiError) {
@@ -168,7 +191,7 @@ export class ContestService {
   async rejectRegistrationRequest(contestId: number, userId: number): Promise<void> {
     try {
       await this.apiClient.post<ApiResponse<{ message: string }>>({
-        url: `/contests/${contestId}/registration-requests/${userId}/reject`
+        url: `/teacher/contests/${contestId}/registration-requests/${userId}/reject`
       });
     } catch (error) {
       if (error instanceof ApiError) {
@@ -182,7 +205,7 @@ export class ContestService {
   async getAssignableTasks(contestId: number): Promise<Task[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<Task[]>>({
-        url: `/contests/${contestId}/tasks/assignable-tasks`
+        url: `/teacher/contests/${contestId}/tasks/assignable-tasks`
       });
       return response.data;
     } catch (error) {
@@ -203,7 +226,7 @@ export class ContestService {
       };
 
       const response = await this.apiClient.post<ApiResponse<ContestTask>>({
-        url: `/contests/${contestId}/tasks`,
+        url: `/teacher/contests/${contestId}/tasks`,
         body: JSON.stringify(requestData)
       });
       return response.data;
@@ -218,8 +241,12 @@ export class ContestService {
 
   async getContestTasks(contestId: number): Promise<UserContestTask[]> {
     try {
+      const baseUrl = this.userRole === UserRole.Student 
+        ? `/student/contests/${contestId}/tasks`
+        : `/teacher/contests/${contestId}/tasks`;
+      
       const response = await this.apiClient.get<ApiResponse<UserContestTask[]>>({
-        url: `/contests/${contestId}/tasks`
+        url: baseUrl
       });
       return response.data;
     } catch (error) {
@@ -234,7 +261,7 @@ export class ContestService {
   async getContestTasksWithStatistics(contestId: number): Promise<ContestTaskWithStatistics[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<ContestTaskWithStatistics[]>>({
-        url: `/contests/${contestId}/tasks/user-statistics`
+        url: `/student/contests/${contestId}/task-progress`
       });
       return response.data;
     } catch (error) {
@@ -251,15 +278,18 @@ export class ContestService {
    * and filtering for the requested task ID.
    *
    * Note: This implementation fetches all tasks which may be inefficient for contests
-   * with many tasks. Consider adding a dedicated API endpoint `/contests/{contestId}/tasks/{taskId}`
-   * for better performance.
+   * with many tasks. Consider adding a dedicated API endpoint `/student/contests/{contestId}/tasks/{taskId}`
+   * or `/teacher/contests/{contestId}/tasks/{taskId}` for better performance.
    */
   async getContestTask(contestId: number, taskId: number): Promise<UserContestTask> {
     try {
       const tasks = await this.getContestTasks(contestId);
       const task = tasks.find((t) => t.id === taskId);
       if (!task) {
-        throw new ApiError(404, 'Not Found', `/contests/${contestId}/tasks`, 'GET', {
+        const baseUrl = this.userRole === UserRole.Student 
+          ? `/student/contests/${contestId}/tasks`
+          : `/teacher/contests/${contestId}/tasks`;
+        throw new ApiError(404, 'Not Found', baseUrl, 'GET', {
           data: { code: 'NOT_FOUND', message: 'Task not found in contest' }
         });
       }
@@ -274,6 +304,6 @@ export class ContestService {
   }
 }
 
-export function createContestService(cookies: Cookies): ContestService {
-  return new ContestService(cookies);
+export function createContestService(cookies: Cookies, userRole: UserRole): ContestService {
+  return new ContestService(cookies, userRole);
 }

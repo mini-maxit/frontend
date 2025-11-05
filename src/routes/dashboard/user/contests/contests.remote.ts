@@ -8,7 +8,7 @@ export const getUserContests = query(async (): Promise<UserContestsResponse> => 
   const { cookies, locals } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
+    const contestService = createContestService(cookies, locals.user!.role);
     const contests = await contestService.getUserContests(locals.user!.userId);
 
     return {

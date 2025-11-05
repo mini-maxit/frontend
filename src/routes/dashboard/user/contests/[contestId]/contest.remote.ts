@@ -8,10 +8,10 @@ import type { ContestTaskWithStatistics } from '$lib/dto/task';
 export const getContestTasksWithStatistics = query(
   v.number(),
   async (contestId: number): Promise<ContestTaskWithStatistics[]> => {
-    const { cookies } = getRequestEvent();
+    const { cookies, locals } = getRequestEvent();
 
     try {
-      const contestService = createContestService(cookies);
+      const contestService = createContestService(cookies, locals.user!.role);
       const tasks = await contestService.getContestTasksWithStatistics(contestId);
 
       return tasks;

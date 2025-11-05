@@ -15,7 +15,7 @@ type UploadTaskData = v.InferOutput<typeof UploadTaskSchema>;
 export const uploadTask = form(UploadTaskSchema, async (data: UploadTaskData) => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const taskService = new TaskService(apiClient, event.locals.user!.role);
 
   const result = await taskService.uploadTask({
     title: data.title,

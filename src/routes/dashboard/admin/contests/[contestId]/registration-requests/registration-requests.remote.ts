@@ -6,10 +6,10 @@ import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 
 export const getRegistrationRequests = query(v.number(), async (contestId: number) => {
-  const { cookies } = getRequestEvent();
+  const { cookies, locals } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
+    const contestService = createContestService(cookies, locals.user!.role);
     const requests = await contestService.getRegistrationRequests(
       contestId,
       RegistrationRequestStatus.Pending
@@ -33,10 +33,10 @@ export const approveRequest = command(
     userId: v.pipe(v.number(), v.integer())
   }),
   async (data) => {
-    const { cookies } = getRequestEvent();
+    const { cookies, locals } = getRequestEvent();
 
     try {
-      const contestService = createContestService(cookies);
+      const contestService = createContestService(cookies, locals.user!.role);
       await contestService.approveRegistrationRequest(data.contestId, data.userId);
       getRegistrationRequests(data.contestId).refresh();
       return { success: true };
@@ -58,10 +58,10 @@ export const rejectRequest = command(
     userId: v.pipe(v.number(), v.integer())
   }),
   async (data) => {
-    const { cookies } = getRequestEvent();
+    const { cookies, locals } = getRequestEvent();
 
     try {
-      const contestService = createContestService(cookies);
+      const contestService = createContestService(cookies, locals.user!.role);
       await contestService.rejectRegistrationRequest(data.contestId, data.userId);
       getRegistrationRequests(data.contestId).refresh();
       return { success: true };

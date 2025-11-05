@@ -6,7 +6,7 @@ import { error } from '@sveltejs/kit';
 export const getTasks = query(async () => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const taskService = new TaskService(apiClient, event.locals.user!.role);
 
   const result = await taskService.getAllTasks();
   if (!result.success || !result.data) {
