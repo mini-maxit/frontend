@@ -7,6 +7,7 @@
   import ChevronRight from '@lucide/svelte/icons/chevron-right';
   import { getContestTasks } from './contest.remote';
   import { AppRoutes } from '$lib/routes';
+  import { localizeHref } from '$lib/paraglide/runtime';
 
   interface Props {
     data: {
@@ -56,7 +57,7 @@
             <Card.Content class="space-y-4">
               <div class="pt-2">
                 <Button
-                  href={`${AppRoutes.AdminTasks}/${task.id}`}
+                  href={localizeHref(`${AppRoutes.AdminTasks}/${task.id}`)}
                   class="w-full"
                   variant="default"
                 >

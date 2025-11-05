@@ -12,6 +12,7 @@
   import * as m from '$lib/paraglide/messages';
   import { localizeHref } from '$lib/paraglide/runtime';
   import { formatDate } from '$lib/utils';
+  import { AppRoutes } from '$lib/routes';
 
   interface AdminContestCardProps {
     contest: Contest;
@@ -26,7 +27,7 @@
   };
 
   const statusColor = $derived(statusColors[contest.status] || statusColors.past);
-  const contestDetailsUrl = $derived(localizeHref(`/dashboard/admin/contests/${contest.id}`));
+  const contestDetailsUrl = $derived(localizeHref(`${AppRoutes.AdminContests}/${contest.id}`));
 </script>
 
 <Card.Root
@@ -124,7 +125,7 @@
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`/dashboard/admin/contests/${contest.id}/tasks`)}
+        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/tasks`)}
       >
         <ListTodo class="mr-2 h-4 w-4" />
         {m.admin_contests_card_manage_tasks()}
@@ -132,7 +133,7 @@
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`/dashboard/admin/contests/${contest.id}/registration-requests`)}
+        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/registration-requests`)}
       >
         <UserCheck class="mr-2 h-4 w-4" />
         {m.admin_contests_card_view_requests()}
