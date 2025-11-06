@@ -5,13 +5,6 @@ import type { ApiService } from './ApiService';
 export class UserService {
   constructor(private apiService: ApiService) {}
 
-  async getUserById(id: number): Promise<User> {
-    const response: ApiResponse<User> = await this.apiService.get({
-      url: `/users/${id}`
-    });
-    return response.data;
-  }
-
   async getCurrentUser(): Promise<User> {
     const response: ApiResponse<User> = await this.apiService.get({
       url: '/users/me'
