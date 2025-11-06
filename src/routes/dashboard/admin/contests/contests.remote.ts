@@ -1,5 +1,5 @@
 import { query, form, getRequestEvent } from '$app/server';
-import { createContestService } from '$lib/services/ContestService';
+import { createContestsManagementService } from '$lib/services/ContestsManagementService';
 import { ApiError } from '$lib/services/ApiService';
 import type { Contest } from '$lib/dto/contest';
 import { error } from '@sveltejs/kit';
@@ -9,8 +9,8 @@ export const getAllContests = query(async (): Promise<Contest[]> => {
   const { cookies } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
-    const contests = await contestService.getCreatedContests();
+    const contestsManagementService = createContestsManagementService(cookies);
+    const contests = await contestsManagementService.getCreatedContests();
 
     return contests;
   } catch (err) {
@@ -38,8 +38,8 @@ export const createContest = form(
     const { cookies } = getRequestEvent();
 
     try {
-      const contestService = createContestService(cookies);
-      const contest = await contestService.createContest({
+      const contestsManagementService = createContestsManagementService(cookies);
+      const contest = await contestsManagementService.createContest({
         ...data,
         endAt: data.endAt ?? null
       });

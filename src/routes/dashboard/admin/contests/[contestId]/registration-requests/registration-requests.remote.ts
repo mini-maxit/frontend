@@ -1,5 +1,5 @@
 import { query, command, getRequestEvent } from '$app/server';
-import { createContestService } from '$lib/services/ContestService';
+import { createContestsManagementService } from '$lib/services/ContestsManagementService';
 import { ApiError } from '$lib/services/ApiService';
 import { RegistrationRequestStatus, type RegistrationRequest } from '$lib/dto/contest';
 import { error } from '@sveltejs/kit';
@@ -9,8 +9,8 @@ export const getRegistrationRequests = query(v.number(), async (contestId: numbe
   const { cookies } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
-    const requests = await contestService.getRegistrationRequests(
+    const contestsManagementService = createContestsManagementService(cookies);
+    const requests = await contestsManagementService.getRegistrationRequests(
       contestId,
       RegistrationRequestStatus.Pending
     );
@@ -36,8 +36,8 @@ export const approveRequest = command(
     const { cookies } = getRequestEvent();
 
     try {
-      const contestService = createContestService(cookies);
-      await contestService.approveRegistrationRequest(data.contestId, data.userId);
+      const contestsManagementService = createContestsManagementService(cookies);
+      await contestsManagementService.approveRegistrationRequest(data.contestId, data.userId);
       getRegistrationRequests(data.contestId).refresh();
       return { success: true };
     } catch (err) {
@@ -61,8 +61,8 @@ export const rejectRequest = command(
     const { cookies } = getRequestEvent();
 
     try {
-      const contestService = createContestService(cookies);
-      await contestService.rejectRegistrationRequest(data.contestId, data.userId);
+      const contestsManagementService = createContestsManagementService(cookies);
+      await contestsManagementService.rejectRegistrationRequest(data.contestId, data.userId);
       getRegistrationRequests(data.contestId).refresh();
       return { success: true };
     } catch (err) {

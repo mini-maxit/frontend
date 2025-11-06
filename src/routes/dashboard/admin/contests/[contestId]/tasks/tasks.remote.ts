@@ -1,5 +1,5 @@
 import { query, form, getRequestEvent } from '$app/server';
-import { createContestService } from '$lib/services/ContestService';
+import { createContestsManagementService } from '$lib/services/ContestsManagementService';
 import { ApiError } from '$lib/services/ApiService';
 import type { Task } from '$lib/dto/task';
 import { error } from '@sveltejs/kit';
@@ -9,8 +9,8 @@ export const getAssignableTasks = query(v.number(), async (contestId): Promise<T
   const { cookies } = getRequestEvent();
 
   try {
-    const contestService = createContestService(cookies);
-    const tasks = await contestService.getAssignableTasks(contestId);
+    const contestsManagementService = createContestsManagementService(cookies);
+    const tasks = await contestsManagementService.getAssignableTasks(contestId);
 
     return tasks;
   } catch (err) {
@@ -35,8 +35,8 @@ export const addTaskToContest = form(
     const { cookies } = getRequestEvent();
 
     try {
-      const contestService = createContestService(cookies);
-      const contestTask = await contestService.addTaskToContest(data.contestId, {
+      const contestsManagementService = createContestsManagementService(cookies);
+      const contestTask = await contestsManagementService.addTaskToContest(data.contestId, {
         taskId: data.taskId,
         startAt: data.startAt,
         endAt: data.endAt ?? null
