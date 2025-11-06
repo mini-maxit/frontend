@@ -21,7 +21,7 @@ export class TasksManagementService {
 
     try {
       const response = await this.apiClient.post<ApiResponse<UploadTaskResponse>>({
-        url: '/tasks-management/tasks/',
+        url: '/tasks-management/tasks',
         body: formData
       });
       return { success: true, data: response.data, status: 200 };
