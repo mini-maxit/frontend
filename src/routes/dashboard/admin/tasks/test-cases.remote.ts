@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { query, form, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
-import { TaskService } from '$lib/services/TaskService';
+import { TasksManagementService } from '$lib/services/TasksManagementService';
 import { error } from '@sveltejs/kit';
 
 const TaskLimitSchema = v.object({
@@ -18,9 +18,9 @@ const UpdateTaskLimitsSchema = v.object({
 export const getTaskLimits = query(v.number(), async (taskId) => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const tasksManagementService = new TasksManagementService(apiClient);
 
-  const result = await taskService.getTaskLimits(taskId);
+  const result = await tasksManagementService.getTaskLimits(taskId);
   if (!result.success || !result.data) {
     error(result.status, { message: result.error || 'Failed to fetch task limits.' });
   }
@@ -31,9 +31,9 @@ export const getTaskLimits = query(v.number(), async (taskId) => {
 export const updateTaskLimits = form(UpdateTaskLimitsSchema, async (data) => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const tasksManagementService = new TasksManagementService(apiClient);
 
-  const result = await taskService.updateTaskLimits(data.taskId, {
+  const result = await tasksManagementService.updateTaskLimits(data.taskId, {
     limits: data.limits
   });
 

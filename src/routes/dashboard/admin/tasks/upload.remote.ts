@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { form, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
-import { TaskService } from '$lib/services/TaskService';
+import { TasksManagementService } from '$lib/services/TasksManagementService';
 import { error } from '@sveltejs/kit';
 import { getTasks } from './tasks.remote';
 
@@ -15,9 +15,9 @@ type UploadTaskData = v.InferOutput<typeof UploadTaskSchema>;
 export const uploadTask = form(UploadTaskSchema, async (data: UploadTaskData) => {
   const event = getRequestEvent();
   const apiClient = createApiClient(event.cookies);
-  const taskService = new TaskService(apiClient);
+  const tasksManagementService = new TasksManagementService(apiClient);
 
-  const result = await taskService.uploadTask({
+  const result = await tasksManagementService.uploadTask({
     title: data.title,
     archive: data.archive
   });
