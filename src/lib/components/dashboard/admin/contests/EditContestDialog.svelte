@@ -6,55 +6,60 @@
   import { Checkbox } from '$lib/components/ui/checkbox';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Popover from '$lib/components/ui/popover';
-  import Plus from '@lucide/svelte/icons/plus';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { toast } from 'svelte-sonner';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
+  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
-  import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
+  import {
+    DateFormatter,
+    type DateValue,
+    getLocalTimeZone,
+    parseDate
+  } from '@internationalized/date';
+  import { updateContest } from '$routes/dashboard/admin/contests/contests.remote';
   import { cn } from '$lib/utils';
-  import type { CreateContestForm } from '$routes/dashboard/admin/contests/contests.remote';
+  import type { CreatedContest } from '$lib/dto/contest';
 
   interface Props {
-    createContest: CreateContestForm;
+    contest: CreatedContest;
+    dialogOpen: boolean;
   }
 
-  let { createContest }: Props = $props();
-
-  let dialogOpen = $state(false);
+  let { contest, dialogOpen = $bindable() }: Props = $props();
 
   // Date formatters
   const df = new DateFormatter('en-US', {
     dateStyle: 'long'
   });
 
-  // Get default date/time values
-  function getDefaultStartDateTime() {
-    const now = new Date();
-    const date = today(getLocalTimeZone());
-    const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    return { date, time };
+  // Parse existing contest dates
+  function parseDateTime(dateString: string | null): { date: DateValue | undefined; time: string } {
+    if (!dateString) {
+      const now = new Date();
+      return {
+        date: undefined,
+        time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+      };
+    }
+
+    const date = new Date(dateString);
+    return {
+      date: parseDate(dateString.split('T')[0]),
+      time: `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
+    };
   }
 
-  function getDefaultEndDateTime() {
-    const tomorrow = new Date();
-    tomorrow.setHours(tomorrow.getHours() + 24);
-    const date = today(getLocalTimeZone()).add({ days: 1 });
-    const time = `${String(tomorrow.getHours()).padStart(2, '0')}:${String(tomorrow.getMinutes()).padStart(2, '0')}`;
-    return { date, time };
-  }
+  // Initialize state with contest values
+  const startDateTime = parseDateTime(contest.startAt);
+  const endDateTime = parseDateTime(contest.endAt);
 
-  // Date and time states
-  let startDate = $state<DateValue | undefined>(getDefaultStartDateTime().date);
-  let startTime = $state<string>(getDefaultStartDateTime().time);
-  let endDate = $state<DateValue | undefined>(getDefaultEndDateTime().date);
-  let endTime = $state<string | null>(getDefaultEndDateTime().time);
+  let startDate = $state<DateValue | undefined>(startDateTime.date);
+  let startTime = $state<string>(startDateTime.time);
+  let endDate = $state<DateValue | undefined>(endDateTime.date);
+  let endTime = $state<string | null>(endDateTime.time);
 
-  // Checkbox states
-  let isRegistrationOpen = $state(true);
-  let isSubmissionOpen = $state(true);
-  let isVisible = $state(true);
-  let hasEndTime = $state(false);
+  // Checkbox states - need to get from the contest data
+  let hasEndTime = $state(!!contest.endAt);
 
   function getDateTimeString(date: DateValue | undefined, time: string | null): string {
     if (!date) return '';
@@ -78,75 +83,52 @@
 </script>
 
 <Dialog.Root bind:open={dialogOpen}>
-  <button
-    onclick={() => (dialogOpen = true)}
-    class="group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-  >
-    <div
-      class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-    ></div>
-
-    <div class="relative flex flex-col items-center gap-4 text-center">
-      <div
-        class="flex h-16 w-16 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
-      >
-        <Plus class="h-8 w-8 text-primary-foreground" />
-      </div>
-      <div>
-        <h3 class="text-lg font-bold text-primary-foreground">
-          {m.admin_contests_create_title()}
-        </h3>
-        <p class="mt-1 text-sm text-primary-foreground/80">
-          {m.admin_contests_create_description()}
-        </p>
-      </div>
-    </div>
-  </button>
-
   <Dialog.Content class="max-w-2xl">
     <Dialog.Header>
-      <Dialog.Title>{m.admin_contests_dialog_title()}</Dialog.Title>
+      <Dialog.Title>{m.admin_contests_edit_dialog_title()}</Dialog.Title>
       <Dialog.Description>
-        {m.admin_contests_dialog_description()}
+        {m.admin_contests_edit_dialog_description()}
       </Dialog.Description>
     </Dialog.Header>
 
     <form
-      {...createContest.enhance(async ({ submit }) => {
+      {...updateContest.enhance(async ({ submit }) => {
         try {
           await submit();
-          toast.success(m.admin_contests_create_success());
+          toast.success(m.admin_contests_edit_success());
           dialogOpen = false;
-        } catch (error: HttpError | unknown) {
+        } catch (error: unknown) {
           if (isHttpError(error)) {
             toast.error(error.body.message);
           } else {
-            toast.error(m.admin_contests_create_error());
+            toast.error(m.admin_contests_edit_error());
           }
         }
       })}
       class="space-y-6"
     >
       <!-- Hidden inputs for form submission -->
+      <input {...updateContest.fields.id.as('number')} type="hidden" value={contest.id} />
       <input
-        {...createContest.fields.startAt.as('datetime-local')}
+        {...updateContest.fields.startAt.as('datetime-local')}
         bind:value={startAtValue}
         hidden
       />
-      <input {...createContest.fields.endAt.as('datetime-local')} bind:value={endAtValue} hidden />
+      <input {...updateContest.fields.endAt.as('datetime-local')} bind:value={endAtValue} hidden />
 
       <div class="space-y-2">
         <Label for="name">{m.admin_contests_form_name_label()}</Label>
         <Input
-          {...createContest.fields.name.as('text')}
+          {...updateContest.fields.name.as('text')}
           id="name"
           name="name"
+          value={contest.name}
           autocomplete="off"
           placeholder={m.admin_contests_form_name_placeholder()}
           required
           class="transition-all duration-200 focus:ring-2 focus:ring-primary"
         />
-        {#each createContest.fields.name.issues() as issue (issue.message)}
+        {#each updateContest.fields.name.issues() ?? [] as issue (issue.message)}
           <p class="text-sm text-destructive">{issue.message}</p>
         {/each}
       </div>
@@ -154,16 +136,17 @@
       <div class="space-y-2">
         <Label for="description">{m.admin_contests_form_description_label()}</Label>
         <textarea
-          {...createContest.fields.description.as('text')}
+          {...updateContest.fields.description.as('text')}
           id="description"
           name="description"
+          value={contest.description}
           autocomplete="off"
           placeholder={m.admin_contests_form_description_placeholder()}
           required
           rows="4"
           class="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
         ></textarea>
-        {#each createContest.fields.description.issues() as issue (issue.message)}
+        {#each updateContest.fields.description.issues() ?? [] as issue (issue.message)}
           <p class="text-sm text-destructive">{issue.message}</p>
         {/each}
       </div>
@@ -213,7 +196,7 @@
             />
           </div>
 
-          {#each createContest.fields.startAt.issues() as issue (issue.message)}
+          {#each updateContest.fields.startAt.issues() ?? [] as issue (issue.message)}
             <p class="text-sm text-destructive">{issue.message}</p>
           {/each}
         </div>
@@ -268,7 +251,7 @@
               />
             </div>
 
-            {#each createContest.fields.endAt.issues() as issue (issue.message)}
+            {#each updateContest.fields.endAt.issues() ?? [] as issue (issue.message)}
               <p class="text-sm text-destructive">{issue.message}</p>
             {/each}
           {/if}
@@ -281,7 +264,8 @@
         <div class="flex items-center gap-3">
           <Checkbox
             id="isRegistrationOpen"
-            {...createContest.fields.isRegistrationOpen.as('checkbox')}
+            {...updateContest.fields.isRegistrationOpen.as('checkbox')}
+            checked={contest.isRegistrationOpen}
           />
           <Label for="isRegistrationOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_registration_open()}
@@ -291,7 +275,8 @@
         <div class="flex items-center gap-3">
           <Checkbox
             id="isSubmissionOpen"
-            {...createContest.fields.isSubmissionOpen.as('checkbox')}
+            {...updateContest.fields.isSubmissionOpen.as('checkbox')}
+            checked={contest.isSubmissionOpen}
           />
           <Label for="isSubmissionOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_submission_open()}
@@ -299,7 +284,11 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isVisible" {...createContest.fields.isVisible.as('checkbox')} />
+          <Checkbox
+            id="isVisible"
+            {...updateContest.fields.isVisible.as('checkbox')}
+            checked={contest.isVisible}
+          />
           <Label for="isVisible" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_visible()}
           </Label>
@@ -320,7 +309,7 @@
           type="submit"
           class="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
         >
-          {m.admin_contests_form_create()}
+          {m.admin_contests_form_update()}
         </Button>
       </Dialog.Footer>
     </form>
