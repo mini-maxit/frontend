@@ -6,10 +6,9 @@
   import * as m from '$lib/paraglide/messages';
   import ArrowLeft from '@lucide/svelte/icons/arrow-left';
   import Info from '@lucide/svelte/icons/info';
-  import { dev } from '$app/environment';
 
   // Define mocked pages
-  const MOCKED_PAGES = [AppRoutes.UserTasks, AppRoutes.UserGroups, AppRoutes.AdminGroups];
+  const MOCKED_PAGES = [AppRoutes.UserTasks];
 
   // Check if current page is mocked
   const isMockedPage = $derived.by(() => {

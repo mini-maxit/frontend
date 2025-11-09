@@ -30,12 +30,6 @@
       href: localizeHref(AppRoutes.UserSubmissions)
     },
     {
-      icon: Users,
-      title: m.quick_actions_my_groups(),
-      description: m.quick_actions_my_groups_description(),
-      href: localizeHref(AppRoutes.UserGroups)
-    },
-    {
       icon: BarChart,
       title: m.quick_actions_my_contests(),
       description: m.quick_actions_my_contests_description(),

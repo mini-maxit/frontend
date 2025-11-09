@@ -11,7 +11,6 @@ export enum AppRoutes {
   CTA = '/#cta',
 
   Dashboard = '/dashboard',
-  UserGroups = '/dashboard/user/groups',
   UserSubmissions = '/dashboard/user/submissions',
   UserContests = '/dashboard/user/contests',
   UserTasks = '/dashboard/user/tasks',
@@ -23,7 +22,6 @@ export enum AppRoutes {
   Admin = '/dashboard/admin',
   AdminContests = '/dashboard/admin/contests',
   AdminContestsRegistrationRequests = '/dashboard/admin/contests/',
-  AdminGroups = '/dashboard/admin/groups',
   AdminTasks = '/dashboard/admin/tasks',
 
   Error = '/error'

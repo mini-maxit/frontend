@@ -8,7 +8,6 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
   // Map dashboard routes to their translation keys
   const routeTitleMap: Record<string, () => string> = {
     [AppRoutes.Dashboard]: () => m.header_dashboard(),
-    [AppRoutes.UserGroups]: () => m.sidebar_your_groups(),
     [AppRoutes.UserSubmissions]: () => m.sidebar_your_submissions(),
     [AppRoutes.UserContests]: () => m.sidebar_your_contests(),
     [AppRoutes.UserTasks]: () => m.sidebar_your_tasks(),
@@ -17,7 +16,6 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.AvailableTasks]: () => m.sidebar_available_tasks(),
     [AppRoutes.Admin]: () => m.sidebar_admin(),
     [AppRoutes.AdminContests]: () => m.sidebar_admin_contests(),
-    [AppRoutes.AdminGroups]: () => m.sidebar_admin_groups(),
     [AppRoutes.AdminTasks]: () => m.sidebar_admin_tasks()
   };
 

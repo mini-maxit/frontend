@@ -11,7 +11,6 @@ export const getAllContests = query(async (): Promise<CreatedContest[]> => {
   try {
     const contestsManagementService = createContestsManagementService(cookies);
     const contests = await contestsManagementService.getCreatedContests();
-    console.log('Fetched contests:', contests);
 
     return contests;
   } catch (err) {
@@ -76,7 +75,6 @@ export const updateContest = form(
   }),
   async (data) => {
     const { cookies } = getRequestEvent();
-    console.log('Updating contest with data:', data);
 
     try {
       const contestsManagementService = createContestsManagementService(cookies);

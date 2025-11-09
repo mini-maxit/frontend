@@ -36,20 +36,4 @@
       </div>
     </div>
   {/if}
-
-  <!-- Stats Overview -->
-  <!-- TODO IMPLEMENT THIS -->
-  <!-- <div class="w-full">
-    <StatsOverview />
-  </div> -->
-
-  <!-- Bottom Section: Recent Activity + Groups -->
-  <!-- <div class="grid gap-6 lg:grid-cols-2">
-    <div>
-      <RecentActivity />
-    </div>
-    <div>
-      <UserGroups />
-    </div>
-  </div> -->
 </div>

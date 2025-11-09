@@ -37,11 +37,6 @@
   let { user }: Props = $props();
   const userMenuItems = [
     {
-      title: () => m.sidebar_your_groups(),
-      href: localizeHref(AppRoutes.UserGroups),
-      icon: Users
-    },
-    {
       title: () => m.sidebar_your_submissions(),
       href: localizeHref(AppRoutes.UserSubmissions),
       icon: FileText
@@ -76,11 +71,6 @@
       title: () => m.sidebar_admin_contests(),
       href: localizeHref(AppRoutes.AdminContests),
       icon: Trophy
-    },
-    {
-      title: () => m.sidebar_admin_groups(),
-      href: localizeHref(AppRoutes.AdminGroups),
-      icon: Users
     },
     {
       title: () => m.sidebar_admin_tasks(),
