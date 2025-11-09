@@ -384,5 +384,18 @@
   "user_contest_tasks_no_tasks_description": "Obecnie w tym konkursie nie ma żadnych zadań.",
   "user_contest_tasks_loading": "Ładowanie zadań...",
   "user_contest_tasks_view_task": "Zobacz Zadanie",
-  "user_contest_tasks_load_error": "Nie udało się załadować zadań konkursu"
+  "user_contest_tasks_load_error": "Nie udało się załadować zadań konkursu",
+  "admin_dashboard_title": "Panel Administracyjny",
+  "admin_dashboard_worker_status": "Status Workerów",
+  "admin_dashboard_total_workers": "Wszystkie Workery",
+  "admin_dashboard_busy_workers": "Zajęte Workery",
+  "admin_dashboard_available_workers": "Dostępne Workery",
+  "admin_dashboard_last_updated": "Ostatnia Aktualizacja",
+  "admin_dashboard_worker_details": "Szczegóły Workerów",
+  "admin_dashboard_worker_status_error": "Nie udało się załadować statusu workerów",
+  "admin_dashboard_loading": "Ładowanie...",
+  "admin_dashboard_system_monitoring": "Monitoring Systemu",
+  "admin_dashboard_total_workers_description": "Wszystkie zarejestrowane workery",
+  "admin_dashboard_busy_workers_description": "Obecnie przetwarzane",
+  "admin_dashboard_available_workers_description": "Gotowe do zadań"
 }

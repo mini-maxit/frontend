@@ -9,12 +9,7 @@
   import { dev } from '$app/environment';
 
   // Define mocked pages
-  const MOCKED_PAGES = [
-    AppRoutes.UserTasks,
-    AppRoutes.UserGroups,
-    AppRoutes.AdminGroups,
-    AppRoutes.Admin
-  ];
+  const MOCKED_PAGES = [AppRoutes.UserTasks, AppRoutes.UserGroups, AppRoutes.AdminGroups];
 
   // Check if current page is mocked
   const isMockedPage = $derived.by(() => {

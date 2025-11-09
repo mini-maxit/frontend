@@ -29,20 +29,21 @@ const passwordChangeSchema = v.pipe(
 );
 
 export const changePassword = form(passwordChangeSchema, async (data) => {
-  try {
-    const { cookies } = getRequestEvent();
-    const apiClient = createApiClient(cookies);
-    const userService = new UserService(apiClient);
+  const { cookies } = getRequestEvent();
+  const apiClient = createApiClient(cookies);
+  const userService = new UserService(apiClient);
 
-    // Get current user to get their ID
-    const currentUser = await userService.getCurrentUser();
-
-    // Change password
-    await userService.changePassword(currentUser.id, data);
-
-    return { success: true };
-  } catch (err: unknown) {
-    console.error('Password change failed:', err);
-    error(500, 'Password change failed');
+  // Get current user to get their ID
+  const userResult = await userService.getCurrentUser();
+  if (!userResult.success || !userResult.data) {
+    error(userResult.status, { message: userResult.error || 'Failed to get current user.' });
   }
+
+  // Change password
+  const passwordResult = await userService.changePassword(userResult.data!.id, data);
+  if (!passwordResult.success) {
+    error(passwordResult.status, { message: passwordResult.error || 'Failed to change password' });
+  }
+
+  return { success: true };
 });
