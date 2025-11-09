@@ -394,5 +394,8 @@
   "admin_dashboard_worker_details": "Worker Details",
   "admin_dashboard_worker_status_error": "Failed to load worker status",
   "admin_dashboard_loading": "Loading...",
-  "admin_dashboard_system_monitoring": "System Monitoring"
+  "admin_dashboard_system_monitoring": "System Monitoring",
+  "admin_dashboard_total_workers_description": "All registered workers",
+  "admin_dashboard_busy_workers_description": "Currently processing",
+  "admin_dashboard_available_workers_description": "Ready for tasks"
 }

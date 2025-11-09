@@ -394,5 +394,8 @@
   "admin_dashboard_worker_details": "Szczegóły Workerów",
   "admin_dashboard_worker_status_error": "Nie udało się załadować statusu workerów",
   "admin_dashboard_loading": "Ładowanie...",
-  "admin_dashboard_system_monitoring": "Monitoring Systemu"
+  "admin_dashboard_system_monitoring": "Monitoring Systemu",
+  "admin_dashboard_total_workers_description": "Wszystkie zarejestrowane workery",
+  "admin_dashboard_busy_workers_description": "Obecnie przetwarzane",
+  "admin_dashboard_available_workers_description": "Gotowe do zadań"
 }

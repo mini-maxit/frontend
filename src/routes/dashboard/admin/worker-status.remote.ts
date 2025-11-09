@@ -8,10 +8,9 @@ export const getWorkerStatus = query(async () => {
   const apiClient = createApiClient(event.cookies);
   const workerService = new WorkerService(apiClient);
 
-  try {
-    return await workerService.getWorkerStatus();
-  } catch (err) {
-    console.error('Failed to fetch worker status:', err);
-    error(500, { message: 'Failed to fetch worker status.' });
+  const result = await workerService.getWorkerStatus();
+  if (!result.success || !result.data) {
+    error(result.status, { message: result.error || 'Failed to fetch worker status.' });
   }
+  return result.data;
 });
