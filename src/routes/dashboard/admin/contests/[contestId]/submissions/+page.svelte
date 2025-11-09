@@ -3,17 +3,15 @@
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
-  import * as Select from '$lib/components/ui/select';
   import * as Card from '$lib/components/ui/card';
   import FileText from '@lucide/svelte/icons/file-text';
-  import FileJson from '@lucide/svelte/icons/file-json';
   import X from '@lucide/svelte/icons/x';
   import User from '@lucide/svelte/icons/user';
   import ListTodo from '@lucide/svelte/icons/list-todo';
-  import { toast } from 'svelte-sonner';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
   import { SubmissionStatus } from '$lib/dto/submission';
+  import Label from '$lib/components/ui/label/label.svelte';
 
   interface Props {
     data: {
@@ -26,7 +24,6 @@
   // Filters
   let userFilter = $state('');
   let taskFilter = $state('');
-  let statusFilter = $state<string>('');
 
   // Query submissions - using fixed limit for now
   const submissionsQuery = getContestSubmissions({
@@ -51,102 +48,38 @@
         submission.task.title.toLowerCase().includes(taskFilter.toLowerCase()) ||
         submission.task.id.toString().includes(taskFilter);
 
-      const matchesStatus = !statusFilter || submission.status === statusFilter;
-
-      return matchesUser && matchesTask && matchesStatus;
+      return matchesUser && matchesTask;
     });
   });
 
   function clearFilters() {
     userFilter = '';
     taskFilter = '';
-    statusFilter = '';
-  }
-
-  function exportAsCSV() {
-    if (!filteredSubmissions.length) {
-      toast.error('No submissions to export');
-      return;
-    }
-
-    const headers = [
-      'ID',
-      'User',
-      'User Email',
-      'Task',
-      'Status',
-      'Language',
-      'Submitted At',
-      'Result Code',
-      'Result Message'
-    ];
-
-    const rows = filteredSubmissions.map((s) => [
-      s.id,
-      `${s.user.name} ${s.user.surname} (${s.user.username})`,
-      s.user.email,
-      s.task.title,
-      s.status,
-      `${s.language.language} ${s.language.version}`,
-      s.submittedAt,
-      s.result?.code || '',
-      s.result?.message || ''
-    ]);
-
-    const csv = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
-
-    downloadFile(csv, 'submissions.csv', 'text/csv');
-    toast.success(m.admin_contest_submissions_export_success());
-  }
-
-  function exportAsJSON() {
-    if (!filteredSubmissions.length) {
-      toast.error('No submissions to export');
-      return;
-    }
-
-    const json = JSON.stringify(filteredSubmissions, null, 2);
-    downloadFile(json, 'submissions.json', 'application/json');
-    toast.success(m.admin_contest_submissions_export_success());
-  }
-
-  function downloadFile(content: string, filename: string, mimeType: string) {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   }
 
   function getStatusColor(status: string): string {
     switch (status) {
       case SubmissionStatus.Evaluated:
-        return 'text-green-600 bg-green-50 dark:bg-green-950 dark:text-green-400';
+        return 'bg-primary/10 text-primary';
       case SubmissionStatus.SentForEvaluation:
-        return 'text-blue-600 bg-blue-50 dark:bg-blue-950 dark:text-blue-400';
+        return 'bg-secondary/10 text-secondary-foreground';
       case SubmissionStatus.Received:
-        return 'text-yellow-600 bg-yellow-50 dark:bg-yellow-950 dark:text-yellow-400';
+        return 'bg-accent/10 text-accent-foreground';
       case SubmissionStatus.Lost:
-        return 'text-red-600 bg-red-50 dark:bg-red-950 dark:text-red-400';
+        return 'bg-muted text-muted-foreground';
       default:
-        return 'text-gray-600 bg-gray-50 dark:bg-gray-950 dark:text-gray-400';
+        return 'bg-muted text-muted-foreground';
     }
   }
 
   function getResultBadgeColor(code: string): string {
     if (code.toLowerCase().includes('success') || code.toLowerCase().includes('accepted')) {
-      return 'text-green-600 bg-green-50 dark:bg-green-950 dark:text-green-400';
+      return 'bg-primary/10 text-primary';
     }
     if (code.toLowerCase().includes('error') || code.toLowerCase().includes('failed')) {
-      return 'text-red-600 bg-red-50 dark:bg-red-950 dark:text-red-400';
+      return 'bg-muted text-muted-foreground';
     }
-    return 'text-gray-600 bg-gray-50 dark:bg-gray-950 dark:text-gray-400';
+    return 'bg-muted text-muted-foreground';
   }
 </script>
 
@@ -168,73 +101,35 @@
       <div class="flex flex-wrap items-end gap-4">
         <!-- User Filter -->
         <div class="min-w-[200px] flex-1">
-          <label for="userFilter" class="mb-2 block text-sm font-medium">
+          <Label for="userFilter" class="mb-2 block text-sm font-medium">
             {m.admin_contest_submissions_filter_by_user()}
-          </label>
+          </Label>
           <Input
             id="userFilter"
             type="text"
-            placeholder="Search by username, name..."
+            placeholder={m.admin_contest_submissions_placeholder_user()}
             bind:value={userFilter}
           />
         </div>
 
         <!-- Task Filter -->
         <div class="min-w-[200px] flex-1">
-          <label for="taskFilter" class="mb-2 block text-sm font-medium">
+          <Label for="taskFilter" class="mb-2 block text-sm font-medium">
             {m.admin_contest_submissions_filter_by_task()}
-          </label>
+          </Label>
           <Input
             id="taskFilter"
             type="text"
-            placeholder="Search by task name or ID..."
+            placeholder={m.admin_contest_submissions_placeholder_task()}
             bind:value={taskFilter}
           />
         </div>
 
-        <!-- Status Filter -->
-        <div class="min-w-[200px] flex-1">
-          <label for="statusFilter" class="mb-2 block text-sm font-medium">
-            {m.admin_contest_submissions_filter_by_status()}
-          </label>
-          <Select.Root
-            selected={{ value: statusFilter, label: statusFilter || 'All' }}
-            onSelectedChange={(v) => (statusFilter = v?.value || '')}
-          >
-            <Select.Trigger id="statusFilter">
-              <Select.Value placeholder="All statuses" />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value="">All</Select.Item>
-              <Select.Item value={SubmissionStatus.Received}
-                >{SubmissionStatus.Received}</Select.Item
-              >
-              <Select.Item value={SubmissionStatus.SentForEvaluation}
-                >{SubmissionStatus.SentForEvaluation}</Select.Item
-              >
-              <Select.Item value={SubmissionStatus.Evaluated}
-                >{SubmissionStatus.Evaluated}</Select.Item
-              >
-              <Select.Item value={SubmissionStatus.Lost}>{SubmissionStatus.Lost}</Select.Item>
-            </Select.Content>
-          </Select.Root>
-        </div>
-
-        <!-- Clear & Export -->
+        <!-- Clear Filters -->
         <div class="flex gap-2">
           <Button variant="outline" onclick={clearFilters}>
             <X class="mr-2 h-4 w-4" />
             {m.admin_contest_submissions_clear_filters()}
-          </Button>
-
-          <Button variant="default" onclick={exportAsCSV}>
-            <FileText class="mr-2 h-4 w-4" />
-            {m.admin_contest_submissions_export_csv()}
-          </Button>
-
-          <Button variant="default" onclick={exportAsJSON}>
-            <FileJson class="mr-2 h-4 w-4" />
-            {m.admin_contest_submissions_export_json()}
           </Button>
         </div>
       </div>
@@ -265,7 +160,9 @@
               <!-- Submission ID & Status -->
               <div class="space-y-2">
                 <div class="flex items-center gap-2">
-                  <span class="text-sm font-medium text-muted-foreground">ID:</span>
+                  <span class="text-sm font-medium text-muted-foreground"
+                    >{m.admin_contest_submissions_id_label()}</span
+                  >
                   <span class="font-bold text-foreground">#{submission.id}</span>
                 </div>
                 <span
@@ -300,7 +197,9 @@
                 </div>
                 <div class="flex flex-col">
                   <span class="font-medium text-foreground">{submission.task.title}</span>
-                  <span class="text-sm text-muted-foreground">ID: {submission.task.id}</span>
+                  <span class="text-sm text-muted-foreground"
+                    >{m.admin_contest_submissions_task_id_label()} {submission.task.id}</span
+                  >
                 </div>
               </div>
 
@@ -340,8 +239,10 @@
                   </span>
                   {#if submission.result.testResults}
                     <span class="text-sm text-muted-foreground">
-                      {submission.result.testResults.filter((t) => t.passed).length}/{submission
-                        .result.testResults.length} tests passed
+                      {m.admin_contest_submissions_tests_passed({
+                        passed: submission.result.testResults.filter((t) => t.passed).length,
+                        total: submission.result.testResults.length
+                      })}
                     </span>
                   {/if}
                 </div>
@@ -356,7 +257,9 @@
 
       <!-- Results count -->
       <div class="text-center text-sm text-muted-foreground">
-        Showing {filteredSubmissions.length} submission{filteredSubmissions.length !== 1 ? 's' : ''}
+        {filteredSubmissions.length === 1
+          ? m.admin_contest_submissions_showing_count({ count: filteredSubmissions.length })
+          : m.admin_contest_submissions_showing_count_plural({ count: filteredSubmissions.length })}
       </div>
     </div>
   {/if}
