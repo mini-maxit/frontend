@@ -1,38 +1,106 @@
-# sv
+# Mini-Maxit Frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Frontend application for the Mini-Maxit programming contest platform, built with Svelte 5 + SvelteKit.
 
-## Creating a project
+## 📋 Documentation
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **[API_COVERAGE.md](./API_COVERAGE.md)** - Comprehensive mapping of backend API endpoints to frontend implementation
+- **[PRIORITY_TODO.md](./PRIORITY_TODO.md)** - Prioritized roadmap of features to implement
+- **[REMOTE_FUNCTIONS_EXPLANATION.md](./REMOTE_FUNCTIONS_EXPLANATION.md)** - Guide to SvelteKit remote functions
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+ 
+- pnpm 10.15.1+ (required - do not use npm or yarn)
+
+### Installation
 
 ```sh
-# create a new project in the current directory
-npx sv create
+# Install dependencies
+pnpm install
 
-# create a new project in my-app
-npx sv create my-app
+# Compile i18n messages (required before first run)
+npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide
 ```
 
-## Developing
+### Development
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Start the development server:
 
 ```sh
-npm run dev
+pnpm dev
 
 # or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm dev -- --open
 ```
 
-## Building
+### Building
 
-To create a production version of your app:
+To create a production version:
 
 ```sh
-npm run build
+pnpm build
 ```
 
-You can preview the production build with `npm run preview`.
+Preview the production build:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```sh
+pnpm preview
+```
+
+### Code Quality
+
+```sh
+# Type checking
+pnpm check
+
+# Linting
+pnpm lint
+
+# Formatting
+pnpm format
+```
+
+## 🏗️ Tech Stack
+
+- **Svelte 5** - UI framework with runes and async components
+- **SvelteKit** - Full-stack framework with remote functions
+- **TypeScript** - Type safety (strict mode)
+- **Tailwind CSS 4** - Styling
+- **Paraglide** - Internationalization (English and Polish)
+- **Valibot** - Schema validation
+- **pnpm** - Package manager
+
+## 📊 Current Status
+
+**API Coverage: ~33%** (20 of 60 endpoints fully integrated)
+
+### ✅ Working Features
+- Authentication (login, register, logout)
+- Contest browsing and registration
+- Task viewing and submission
+- Basic admin contest management
+- User profile management
+
+### 🚧 In Progress / Missing
+- Groups management (0% - shows mock data)
+- User management (admin)
+- Detailed submission results viewing
+- Contest/task editing and deletion
+- Advanced submission filtering and monitoring
+
+See [API_COVERAGE.md](./API_COVERAGE.md) for detailed status and [PRIORITY_TODO.md](./PRIORITY_TODO.md) for the implementation roadmap.
+
+## 🤝 Contributing
+
+1. Check [PRIORITY_TODO.md](./PRIORITY_TODO.md) for high-priority tasks
+2. Review the development guidelines in the priority doc
+3. Follow the existing code patterns and service layer structure
+4. Use TypeScript strict mode and Svelte 5 runes conventions
+5. Add appropriate error handling and loading states
+
+## 📝 License
+
+See LICENSE file for details.
