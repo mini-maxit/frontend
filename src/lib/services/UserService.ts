@@ -54,11 +54,7 @@ export class UserService {
     }
   }
 
-  async listUsers(params?: {
-    limit?: number;
-    offset?: number;
-    sort?: string;
-  }): Promise<{
+  async listUsers(params?: { limit?: number; offset?: number; sort?: string }): Promise<{
     success: boolean;
     status: number;
     data?: User[];

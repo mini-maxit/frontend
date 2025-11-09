@@ -19,32 +19,11 @@
 
   let { open = $bindable(), user, onSuccess }: UserEditDialogProps = $props();
 
-  let formData = $state({
-    email: '',
-    name: '',
-    surname: '',
-    username: '',
-    role: UserRole.Student
-  });
-
-  let selectedRole = $state<{ value: string; label: string }>({
-    value: UserRole.Student,
-    label: 'Student'
-  });
+  let selectedRoleValue = $state<string>(UserRole.Student);
 
   $effect(() => {
     if (user) {
-      formData = {
-        email: user.email,
-        name: user.name,
-        surname: user.surname,
-        username: user.username,
-        role: user.role
-      };
-      selectedRole = {
-        value: user.role,
-        label: user.role.charAt(0).toUpperCase() + user.role.slice(1)
-      };
+      selectedRoleValue = user.role;
     }
   });
 
@@ -54,32 +33,19 @@
     { value: UserRole.Admin, label: 'Admin' }
   ];
 
+  const selectedRoleLabel = $derived.by(() => {
+    const option = roleOptions.find((opt) => opt.value === selectedRoleValue);
+    return option?.label || 'Select a role';
+  });
+
   function handleCancel() {
     open = false;
   }
 
-  async function handleSubmit() {
-    if (!user) return;
-
-    try {
-      await updateUser(user.id, {
-        email: formData.email,
-        name: formData.name,
-        surname: formData.surname,
-        username: formData.username,
-        role: selectedRole.value as UserRole
-      });
-
-      toast.success('User updated successfully');
-      open = false;
-      onSuccess();
-    } catch (error: HttpError | unknown) {
-      if (isHttpError(error)) {
-        toast.error(error.body.message || 'Failed to update user');
-      } else {
-        toast.error('Failed to update user');
-      }
-    }
+  async function handleSuccess() {
+    toast.success('User updated successfully');
+    open = false;
+    onSuccess();
   }
 </script>
 
@@ -94,19 +60,31 @@
 
     {#if user}
       <form
-        onsubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
+        {...updateUser.enhance(async ({ submit }) => {
+          try {
+            await submit();
+            await handleSuccess();
+          } catch (error: HttpError | unknown) {
+            if (isHttpError(error)) {
+              toast.error(error.body.message || 'Failed to update user');
+            } else {
+              toast.error('Failed to update user');
+            }
+          }
+        })}
         class="space-y-4"
       >
+        <input type="hidden" name="userId" value={user.id} />
+
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
             <Label for="name">First Name</Label>
             <Input
+              {...updateUser.fields.name.as('text')}
               id="name"
+              name="name"
               type="text"
-              bind:value={formData.name}
+              value={user.name}
               required
               placeholder="First name"
             />
@@ -115,9 +93,11 @@
           <div class="space-y-2">
             <Label for="surname">Last Name</Label>
             <Input
+              {...updateUser.fields.surname.as('text')}
               id="surname"
+              name="surname"
               type="text"
-              bind:value={formData.surname}
+              value={user.surname}
               required
               placeholder="Last name"
             />
@@ -127,9 +107,11 @@
         <div class="space-y-2">
           <Label for="username">Username</Label>
           <Input
+            {...updateUser.fields.username.as('text')}
             id="username"
+            name="username"
             type="text"
-            bind:value={formData.username}
+            value={user.username}
             required
             placeholder="Username"
           />
@@ -138,9 +120,11 @@
         <div class="space-y-2">
           <Label for="email">Email</Label>
           <Input
+            {...updateUser.fields.email.as('text')}
             id="email"
+            name="email"
             type="email"
-            bind:value={formData.email}
+            value={user.email}
             required
             placeholder="email@example.com"
           />
@@ -149,19 +133,21 @@
         <div class="space-y-2">
           <Label for="role">Role</Label>
           <Select.Root
-            selected={selectedRole}
-            onSelectedChange={(v) => {
-              if (v) {
-                selectedRole = v;
+            type="single"
+            name="role"
+            value={selectedRoleValue}
+            onValueChange={(value) => {
+              if (value) {
+                selectedRoleValue = value;
               }
             }}
           >
             <Select.Trigger id="role" class="w-full">
-              <Select.Value placeholder="Select a role" />
+              {selectedRoleLabel}
             </Select.Trigger>
             <Select.Content>
               {#each roleOptions as role}
-                <Select.Item value={role.value} label={role.label}>
+                <Select.Item value={role.value}>
                   {role.label}
                 </Select.Item>
               {/each}
@@ -170,9 +156,7 @@
         </div>
 
         <Dialog.Footer>
-          <Button type="button" variant="outline" onclick={handleCancel}>
-            Cancel
-          </Button>
+          <Button type="button" variant="outline" onclick={handleCancel}>Cancel</Button>
           <Button type="submit">Save Changes</Button>
         </Dialog.Footer>
       </form>

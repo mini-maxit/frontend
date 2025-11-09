@@ -35,9 +35,7 @@
       <Card.Header>
         <div class="flex items-start justify-between">
           <div class="flex items-center gap-3">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10"
-            >
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
               <UserIcon class="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -49,9 +47,7 @@
             </div>
           </div>
           <span
-            class="{getRoleBadgeClass(
-              user.role
-            )} rounded-full px-2.5 py-0.5 text-xs font-semibold"
+            class="{getRoleBadgeClass(user.role)} rounded-full px-2.5 py-0.5 text-xs font-semibold"
           >
             {user.role}
           </span>
@@ -75,12 +71,7 @@
       </Card.Content>
 
       <Card.Footer>
-        <Button
-          variant="outline"
-          size="sm"
-          class="w-full"
-          onclick={() => onEdit(user)}
-        >
+        <Button variant="outline" size="sm" class="w-full" onclick={() => onEdit(user)}>
           <Edit class="mr-2 h-4 w-4" />
           Edit User
         </Button>

@@ -15,7 +15,7 @@
   let editDialogOpen = $state(false);
   let selectedUser = $state<User | null>(null);
   let searchQuery = $state('');
-  let roleFilter = $state<{ value: string; label: string } | undefined>(undefined);
+  let roleFilterValue = $state<string>('all');
 
   const roleFilterOptions = [
     { value: 'all', label: 'All Roles' },
@@ -23,6 +23,11 @@
     { value: UserRole.Teacher, label: 'Teacher' },
     { value: UserRole.Admin, label: 'Admin' }
   ];
+
+  const roleFilterLabel = $derived.by(() => {
+    const option = roleFilterOptions.find((opt) => opt.value === roleFilterValue);
+    return option?.label || 'Filter by role';
+  });
 
   function handleEditUser(user: User) {
     selectedUser = user;
@@ -51,8 +56,8 @@
     }
 
     // Apply role filter
-    if (roleFilter && roleFilter.value !== 'all') {
-      filtered = filtered.filter((user) => user.role === roleFilter.value);
+    if (roleFilterValue !== 'all') {
+      filtered = filtered.filter((user) => user.role === roleFilterValue);
     }
 
     return filtered;
@@ -71,7 +76,7 @@
     <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <!-- Search Input -->
       <div class="relative">
-        <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           type="text"
           placeholder="Search by name, username, or email..."
@@ -82,17 +87,20 @@
 
       <!-- Role Filter -->
       <Select.Root
-        selected={roleFilter}
-        onSelectedChange={(v) => {
-          roleFilter = v;
+        type="single"
+        value={roleFilterValue}
+        onValueChange={(value) => {
+          if (value) {
+            roleFilterValue = value;
+          }
         }}
       >
         <Select.Trigger class="w-full">
-          <Select.Value placeholder="Filter by role" />
+          {roleFilterLabel}
         </Select.Trigger>
         <Select.Content>
           {#each roleFilterOptions as option}
-            <Select.Item value={option.value} label={option.label}>
+            <Select.Item value={option.value}>
               {option.label}
             </Select.Item>
           {/each}
@@ -138,8 +146,4 @@
   </div>
 </div>
 
-<UserEditDialog
-  bind:open={editDialogOpen}
-  user={selectedUser}
-  onSuccess={handleEditSuccess}
-/>
+<UserEditDialog bind:open={editDialogOpen} user={selectedUser} onSuccess={handleEditSuccess} />
