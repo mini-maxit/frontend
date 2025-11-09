@@ -378,5 +378,15 @@
   "user_contest_tasks_no_tasks_description": "There are currently no tasks in this contest.",
   "user_contest_tasks_loading": "Loading tasks...",
   "user_contest_tasks_view_task": "View Task",
-  "user_contest_tasks_load_error": "Failed to load contest tasks"
+  "user_contest_tasks_load_error": "Failed to load contest tasks",
+  "admin_dashboard_title": "Admin Dashboard",
+  "admin_dashboard_worker_status": "Worker Status",
+  "admin_dashboard_total_workers": "Total Workers",
+  "admin_dashboard_busy_workers": "Busy Workers",
+  "admin_dashboard_available_workers": "Available Workers",
+  "admin_dashboard_last_updated": "Last Updated",
+  "admin_dashboard_worker_details": "Worker Details",
+  "admin_dashboard_worker_status_error": "Failed to load worker status",
+  "admin_dashboard_loading": "Loading...",
+  "admin_dashboard_system_monitoring": "System Monitoring"
 }
