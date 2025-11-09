@@ -61,3 +61,43 @@ export const createContest = form(
 );
 
 export type CreateContestForm = typeof createContest;
+
+export const updateContest = form(
+  v.object({
+    id: v.pipe(v.number(), v.integer()),
+    name: v.pipe(v.string(), v.nonEmpty('Contest name is required')),
+    description: v.pipe(v.string(), v.nonEmpty('Description is required')),
+    startAt: v.pipe(v.string(), v.nonEmpty('Start date is required')),
+    endAt: v.optional(v.string()),
+    isRegistrationOpen: v.optional(v.boolean(), true),
+    isSubmissionOpen: v.optional(v.boolean(), true),
+    isVisible: v.optional(v.boolean(), true)
+  }),
+  async (data) => {
+    const { cookies } = getRequestEvent();
+
+    try {
+      const contestsManagementService = createContestsManagementService(cookies);
+      const { id, ...contestData } = data;
+      const contest = await contestsManagementService.updateContest(id, {
+        ...contestData,
+        endAt: contestData.endAt ?? null
+      });
+
+      // Refresh the contests list
+      await getAllContests().refresh();
+
+      return { success: true, contest };
+    } catch (err) {
+      console.error('Failed to update contest:', err);
+
+      if (err instanceof ApiError) {
+        throw error(err.getStatus(), err.getApiMessage());
+      }
+
+      throw error(500, 'Failed to update contest');
+    }
+  }
+);
+
+export type UpdateContestForm = typeof updateContest;

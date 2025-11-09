@@ -2,6 +2,7 @@ import { ApiError, createApiClient } from './ApiService';
 import type {
   Contest,
   CreateContestDto,
+  EditContestDto,
   RegistrationRequest,
   AddContestTaskDto,
   ContestTask
@@ -50,6 +51,28 @@ export class ContestsManagementService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to create contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async updateContest(id: number, data: EditContestDto): Promise<Contest> {
+    try {
+      const requestData = {
+        ...data,
+        startAt: toRFC3339(data.startAt),
+        endAt: data.endAt ? toRFC3339(data.endAt) : null
+      };
+
+      const response = await this.apiClient.put<ApiResponse<Contest>>({
+        url: `/contests-management/contests/${id}`,
+        body: JSON.stringify(requestData)
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to update contest:', error.toJSON());
         throw error;
       }
       throw error;

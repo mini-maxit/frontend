@@ -56,6 +56,16 @@ export interface CreateContestDto {
   isVisible: boolean;
 }
 
+export interface EditContestDto {
+  name: string;
+  description: string;
+  startAt: string;
+  endAt: string | null;
+  isRegistrationOpen: boolean;
+  isSubmissionOpen: boolean;
+  isVisible: boolean;
+}
+
 export enum RegistrationRequestStatus {
   Approved = 'approved',
   Pending = 'pending',
