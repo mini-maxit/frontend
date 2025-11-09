@@ -9,17 +9,21 @@
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import UserCheck from '@lucide/svelte/icons/user-check';
   import FileText from '@lucide/svelte/icons/file-text';
-  import type { Contest } from '$lib/dto/contest';
+  import Edit from '@lucide/svelte/icons/pencil';
+  import type { CreatedContest } from '$lib/dto/contest';
   import * as m from '$lib/paraglide/messages';
   import { localizeHref } from '$lib/paraglide/runtime';
   import { formatDate } from '$lib/utils';
   import { AppRoutes } from '$lib/routes';
+  import EditContestDialog from '$lib/components/dashboard/admin/contests/EditContestDialog.svelte';
 
   interface AdminContestCardProps {
-    contest: Contest;
+    contest: CreatedContest;
   }
 
   let { contest }: AdminContestCardProps = $props();
+
+  let editDialogOpen = $state(false);
 
   const statusColors = {
     ongoing: 'bg-primary/10 text-primary',
@@ -126,6 +130,14 @@
         {m.admin_contests_card_view_details()}
       </Button>
       <Button
+        variant="outline"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        onclick={() => (editDialogOpen = true)}
+      >
+        <Edit class="mr-2 h-4 w-4" />
+        {m.admin_contests_edit_button()}
+      </Button>
+      <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
         href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/tasks`)}
@@ -152,3 +164,5 @@
     </div>
   </Card.Content>
 </Card.Root>
+
+<EditContestDialog {contest} bind:dialogOpen={editDialogOpen} />

@@ -9,3 +9,4 @@ export { SubmissionService } from './SubmissionService';
 export { TaskService } from './TaskService';
 export { TasksManagementService } from './TasksManagementService';
 export { UserService } from './UserService';
+export { WorkerService } from './WorkerService';
