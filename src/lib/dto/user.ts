@@ -29,3 +29,11 @@ export interface UserChangePasswordDto {
   newPassword: string;
   newPasswordConfirm: string;
 }
+
+export interface UserEditDto {
+  email?: string;
+  name?: string;
+  surname?: string;
+  username?: string;
+  role?: UserRole;
+}
