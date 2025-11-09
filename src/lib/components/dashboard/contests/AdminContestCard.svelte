@@ -8,6 +8,7 @@
   import Users from '@lucide/svelte/icons/users';
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import UserCheck from '@lucide/svelte/icons/user-check';
+  import FileText from '@lucide/svelte/icons/file-text';
   import Edit from '@lucide/svelte/icons/pencil';
   import type { CreatedContest } from '$lib/dto/contest';
   import * as m from '$lib/paraglide/messages';
@@ -151,6 +152,14 @@
       >
         <UserCheck class="mr-2 h-4 w-4" />
         {m.admin_contests_card_view_requests()}
+      </Button>
+      <Button
+        variant="default"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/submissions`)}
+      >
+        <FileText class="mr-2 h-4 w-4" />
+        {m.admin_contests_card_view_submissions()}
       </Button>
     </div>
   </Card.Content>
