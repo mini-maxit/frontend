@@ -5,11 +5,11 @@
   import { Input } from '$lib/components/ui/input';
   import * as Select from '$lib/components/ui/select';
   import * as Card from '$lib/components/ui/card';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import * as Table from '$lib/components/ui/table';
   import FileText from '@lucide/svelte/icons/file-text';
-  import Download from '@lucide/svelte/icons/download';
+  import FileJson from '@lucide/svelte/icons/file-json';
   import X from '@lucide/svelte/icons/x';
+  import User from '@lucide/svelte/icons/user';
+  import ListTodo from '@lucide/svelte/icons/list-todo';
   import { toast } from 'svelte-sonner';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
@@ -23,22 +23,16 @@
 
   let { data }: Props = $props();
 
-  // Query parameters
-  let limit = $state(50);
-  let offset = $state(0);
-  let sort = $state<string | undefined>(undefined);
-
   // Filters
   let userFilter = $state('');
   let taskFilter = $state('');
   let statusFilter = $state<string>('');
 
-  // Query submissions
+  // Query submissions - using fixed limit for now
   const submissionsQuery = getContestSubmissions({
     contestId: data.contestId,
-    limit,
-    offset,
-    sort
+    limit: 1000,
+    offset: 0
   });
 
   // Filtered submissions
@@ -233,141 +227,137 @@
             {m.admin_contest_submissions_clear_filters()}
           </Button>
 
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild let:builder>
-              <Button builders={[builder]} variant="default">
-                <Download class="mr-2 h-4 w-4" />
-                {m.admin_contest_submissions_export()}
-              </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-              <DropdownMenu.Item on:click={exportAsCSV}>
-                {m.admin_contest_submissions_export_csv()}
-              </DropdownMenu.Item>
-              <DropdownMenu.Item on:click={exportAsJSON}>
-                {m.admin_contest_submissions_export_json()}
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+          <Button variant="default" onclick={exportAsCSV}>
+            <FileText class="mr-2 h-4 w-4" />
+            {m.admin_contest_submissions_export_csv()}
+          </Button>
+
+          <Button variant="default" onclick={exportAsJSON}>
+            <FileJson class="mr-2 h-4 w-4" />
+            {m.admin_contest_submissions_export_json()}
+          </Button>
         </div>
       </div>
     </Card.Content>
   </Card.Root>
 
-  <!-- Submissions Table -->
-  <Card.Root>
-    <Card.Content class="p-0">
-      {#if submissionsQuery.error}
-        <div class="p-6">
-          <ErrorCard
-            title={m.admin_contest_submissions_load_error()}
-            error={submissionsQuery.error}
-            onRetry={() => submissionsQuery.refresh()}
-          />
-        </div>
-      {:else if submissionsQuery.loading}
-        <div class="p-6">
-          <LoadingSpinner message={m.admin_contest_submissions_loading()} />
-        </div>
-      {:else if !filteredSubmissions.length}
-        <div class="p-6">
-          <EmptyState
-            title={m.admin_contest_submissions_no_submissions_title()}
-            description={m.admin_contest_submissions_no_submissions_description()}
-            icon={FileText}
-          />
-        </div>
-      {:else}
-        <div class="overflow-x-auto">
-          <Table.Root>
-            <Table.Header>
-              <Table.Row>
-                <Table.Head>ID</Table.Head>
-                <Table.Head>{m.admin_contest_submissions_user()}</Table.Head>
-                <Table.Head>{m.admin_contest_submissions_task()}</Table.Head>
-                <Table.Head>{m.admin_contest_submissions_status()}</Table.Head>
-                <Table.Head>{m.admin_contest_submissions_language()}</Table.Head>
-                <Table.Head>{m.admin_contest_submissions_submitted_at()}</Table.Head>
-                <Table.Head>{m.admin_contest_submissions_result()}</Table.Head>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {#each filteredSubmissions as submission (submission.id)}
-                <Table.Row>
-                  <Table.Cell class="font-medium">#{submission.id}</Table.Cell>
-                  <Table.Cell>
-                    <div class="flex flex-col">
-                      <span class="font-medium">{submission.user.username}</span>
-                      <span class="text-sm text-muted-foreground">
-                        {submission.user.name}
-                        {submission.user.surname}
-                      </span>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div class="flex flex-col">
-                      <span class="font-medium">{submission.task.title}</span>
-                      <span class="text-sm text-muted-foreground">ID: {submission.task.id}</span>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <span
-                      class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {getStatusColor(
-                        submission.status
-                      )}"
-                    >
-                      {submission.status}
-                    </span>
-                  </Table.Cell>
-                  <Table.Cell>
+  <!-- Submissions List -->
+  {#if submissionsQuery.error}
+    <ErrorCard
+      title={m.admin_contest_submissions_load_error()}
+      error={submissionsQuery.error}
+      onRetry={() => submissionsQuery.refresh()}
+    />
+  {:else if submissionsQuery.loading}
+    <LoadingSpinner message={m.admin_contest_submissions_loading()} />
+  {:else if !filteredSubmissions.length}
+    <EmptyState
+      title={m.admin_contest_submissions_no_submissions_title()}
+      description={m.admin_contest_submissions_no_submissions_description()}
+      icon={FileText}
+    />
+  {:else}
+    <div class="space-y-4">
+      {#each filteredSubmissions as submission (submission.id)}
+        <Card.Root class="transition-shadow hover:shadow-md">
+          <Card.Content class="pt-6">
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <!-- Submission ID & Status -->
+              <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-medium text-muted-foreground">ID:</span>
+                  <span class="font-bold text-foreground">#{submission.id}</span>
+                </div>
+                <span
+                  class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {getStatusColor(
+                    submission.status
+                  )}"
+                >
+                  {submission.status}
+                </span>
+              </div>
+
+              <!-- User Info -->
+              <div class="space-y-1">
+                <div class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                  <User class="h-4 w-4" />
+                  <span>{m.admin_contest_submissions_user()}</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-medium text-foreground">{submission.user.username}</span>
+                  <span class="text-sm text-muted-foreground">
+                    {submission.user.name}
+                    {submission.user.surname}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Task Info -->
+              <div class="space-y-1">
+                <div class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                  <ListTodo class="h-4 w-4" />
+                  <span>{m.admin_contest_submissions_task()}</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-medium text-foreground">{submission.task.title}</span>
+                  <span class="text-sm text-muted-foreground">ID: {submission.task.id}</span>
+                </div>
+              </div>
+
+              <!-- Language & Submission Time -->
+              <div class="space-y-2">
+                <div>
+                  <div class="text-sm font-medium text-muted-foreground">
+                    {m.admin_contest_submissions_language()}
+                  </div>
+                  <div class="text-foreground">
                     {submission.language.language}
                     {submission.language.version}
-                  </Table.Cell>
-                  <Table.Cell class="whitespace-nowrap">
-                    {formatDate(submission.submittedAt)}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {#if submission.result}
-                      <div class="flex flex-col gap-1">
-                        <span
-                          class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {getResultBadgeColor(
-                            submission.result.code
-                          )}"
-                        >
-                          {submission.result.code}
-                        </span>
-                        {#if submission.result.message}
-                          <span
-                            class="max-w-xs truncate text-xs text-muted-foreground"
-                            title={submission.result.message}
-                          >
-                            {submission.result.message}
-                          </span>
-                        {/if}
-                        {#if submission.result.testResults}
-                          <span class="text-xs text-muted-foreground">
-                            {submission.result.testResults.filter((t) => t.passed)
-                              .length}/{submission.result.testResults.length} passed
-                          </span>
-                        {/if}
-                      </div>
-                    {:else}
-                      <span class="text-muted-foreground">-</span>
-                    {/if}
-                  </Table.Cell>
-                </Table.Row>
-              {/each}
-            </Table.Body>
-          </Table.Root>
-        </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-muted-foreground">
+                    {m.admin_contest_submissions_submitted_at()}
+                  </div>
+                  <div class="text-foreground">{formatDate(submission.submittedAt)}</div>
+                </div>
+              </div>
+            </div>
 
-        <!-- Results count -->
-        <div class="border-t px-6 py-4 text-sm text-muted-foreground">
-          Showing {filteredSubmissions.length} submission{filteredSubmissions.length !== 1
-            ? 's'
-            : ''}
-        </div>
-      {/if}
-    </Card.Content>
-  </Card.Root>
+            <!-- Result Section -->
+            {#if submission.result}
+              <div class="mt-4 border-t pt-4">
+                <div class="text-sm font-medium text-muted-foreground">
+                  {m.admin_contest_submissions_result()}
+                </div>
+                <div class="mt-2 flex flex-wrap items-center gap-2">
+                  <span
+                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {getResultBadgeColor(
+                      submission.result.code
+                    )}"
+                  >
+                    {submission.result.code}
+                  </span>
+                  {#if submission.result.testResults}
+                    <span class="text-sm text-muted-foreground">
+                      {submission.result.testResults.filter((t) => t.passed).length}/{submission
+                        .result.testResults.length} tests passed
+                    </span>
+                  {/if}
+                </div>
+                {#if submission.result.message}
+                  <p class="mt-2 text-sm text-muted-foreground">{submission.result.message}</p>
+                {/if}
+              </div>
+            {/if}
+          </Card.Content>
+        </Card.Root>
+      {/each}
+
+      <!-- Results count -->
+      <div class="text-center text-sm text-muted-foreground">
+        Showing {filteredSubmissions.length} submission{filteredSubmissions.length !== 1 ? 's' : ''}
+      </div>
+    </div>
+  {/if}
 </div>
