@@ -158,4 +158,3 @@
 </Card.Root>
 
 <EditContestDialog {contest} {updateContest} bind:dialogOpen={editDialogOpen} />
-

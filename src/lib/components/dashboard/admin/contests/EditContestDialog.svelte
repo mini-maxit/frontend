@@ -8,9 +8,14 @@
   import * as Popover from '$lib/components/ui/popover';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { toast } from 'svelte-sonner';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
+  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
-  import { DateFormatter, type DateValue, getLocalTimeZone, parseDate } from '@internationalized/date';
+  import {
+    DateFormatter,
+    type DateValue,
+    getLocalTimeZone,
+    parseDate
+  } from '@internationalized/date';
   import { cn } from '$lib/utils';
   import type { Contest } from '$lib/dto/contest';
   import type { UpdateContestForm } from '$routes/dashboard/admin/contests/contests.remote';
@@ -37,7 +42,7 @@
         time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
       };
     }
-    
+
     const date = new Date(dateString);
     return {
       date: parseDate(dateString.split('T')[0]),
@@ -98,7 +103,7 @@
           await submit();
           toast.success(m.admin_contests_edit_success());
           dialogOpen = false;
-        } catch (error: HttpError | unknown) {
+        } catch (error: unknown) {
           if (isHttpError(error)) {
             toast.error(error.body.message);
           } else {
@@ -109,11 +114,7 @@
       class="space-y-6"
     >
       <!-- Hidden inputs for form submission -->
-      <input
-        {...updateContest.fields.id.as('number')}
-        type="hidden"
-        value={contest.id}
-      />
+      <input {...updateContest.fields.id.as('number')} type="hidden" value={contest.id} />
       <input
         {...updateContest.fields.startAt.as('datetime-local')}
         bind:value={startAtValue}
@@ -326,4 +327,3 @@
     </form>
   </Dialog.Content>
 </Dialog.Root>
-
