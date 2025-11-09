@@ -16,17 +16,16 @@
     getLocalTimeZone,
     parseDate
   } from '@internationalized/date';
+  import { updateContest } from '$routes/dashboard/admin/contests/contests.remote';
   import { cn } from '$lib/utils';
   import type { Contest } from '$lib/dto/contest';
-  import type { UpdateContestForm } from '$routes/dashboard/admin/contests/contests.remote';
 
   interface Props {
     contest: Contest;
-    updateContest: UpdateContestForm;
     dialogOpen: boolean;
   }
 
-  let { contest, updateContest, dialogOpen = $bindable() }: Props = $props();
+  let { contest, dialogOpen = $bindable() }: Props = $props();
 
   // Date formatters
   const df = new DateFormatter('en-US', {
@@ -62,9 +61,6 @@
   // Checkbox states - need to get from the contest data
   // Since the Contest interface doesn't have these fields in the response,
   // we'll default them to true for now
-  let isRegistrationOpen = $state(true);
-  let isSubmissionOpen = $state(true);
-  let isVisible = $state(true);
   let hasEndTime = $state(!!contest.endAt);
 
   function getDateTimeString(date: DateValue | undefined, time: string | null): string {
@@ -121,24 +117,6 @@
         hidden
       />
       <input {...updateContest.fields.endAt.as('datetime-local')} bind:value={endAtValue} hidden />
-      <input
-        {...updateContest.fields.isRegistrationOpen.as('checkbox')}
-        type="checkbox"
-        bind:checked={isRegistrationOpen}
-        hidden
-      />
-      <input
-        {...updateContest.fields.isSubmissionOpen.as('checkbox')}
-        type="checkbox"
-        bind:checked={isSubmissionOpen}
-        hidden
-      />
-      <input
-        {...updateContest.fields.isVisible.as('checkbox')}
-        type="checkbox"
-        bind:checked={isVisible}
-        hidden
-      />
 
       <div class="space-y-2">
         <Label for="name">{m.admin_contests_form_name_label()}</Label>
@@ -286,21 +264,27 @@
         <Label>{m.admin_contests_form_options_label()}</Label>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isRegistrationOpen" bind:checked={isRegistrationOpen} />
+          <Checkbox
+            id="isRegistrationOpen"
+            {...updateContest.fields.isRegistrationOpen.as('checkbox')}
+          />
           <Label for="isRegistrationOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_registration_open()}
           </Label>
         </div>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isSubmissionOpen" bind:checked={isSubmissionOpen} />
+          <Checkbox
+            id="isSubmissionOpen"
+            {...updateContest.fields.isSubmissionOpen.as('checkbox')}
+          />
           <Label for="isSubmissionOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_submission_open()}
           </Label>
         </div>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isVisible" bind:checked={isVisible} />
+          <Checkbox id="isVisible" {...updateContest.fields.isVisible.as('checkbox')} />
           <Label for="isVisible" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_visible()}
           </Label>

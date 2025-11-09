@@ -15,7 +15,6 @@
   import { formatDate } from '$lib/utils';
   import { AppRoutes } from '$lib/routes';
   import EditContestDialog from '$lib/components/dashboard/admin/contests/EditContestDialog.svelte';
-  import { updateContest } from '$routes/dashboard/admin/contests/contests.remote';
 
   interface AdminContestCardProps {
     contest: Contest;
@@ -123,19 +122,19 @@
     <!-- Action Buttons -->
     <div class="space-y-2">
       <Button
-        variant="secondary"
-        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        onclick={() => (editDialogOpen = true)}
-      >
-        <Edit class="mr-2 h-4 w-4" />
-        {m.admin_contests_edit_button()}
-      </Button>
-      <Button
         variant="outline"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
         href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}`)}
       >
         {m.admin_contests_card_view_details()}
+      </Button>
+      <Button
+        variant="outline"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        onclick={() => (editDialogOpen = true)}
+      >
+        <Edit class="mr-2 h-4 w-4" />
+        {m.admin_contests_edit_button()}
       </Button>
       <Button
         variant="default"
@@ -157,4 +156,4 @@
   </Card.Content>
 </Card.Root>
 
-<EditContestDialog {contest} {updateContest} bind:dialogOpen={editDialogOpen} />
+<EditContestDialog {contest} bind:dialogOpen={editDialogOpen} />

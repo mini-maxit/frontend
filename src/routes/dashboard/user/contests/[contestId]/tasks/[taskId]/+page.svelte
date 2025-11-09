@@ -1,12 +1,12 @@
 <script lang="ts">
   import { getContestTask, getLanguages } from './task.remote';
   import { submitContestSolution } from './submit.remote';
-  import ContestTaskHeader from '$lib/components/dashboard/tasks/task-page/tasks/ContestTaskHeader.svelte';
   import TaskPdfViewer from '$lib/components/dashboard/tasks/task-page/tasks/TaskPdfViewer.svelte';
   import ContestTaskSubmissionForm from '$lib/components/dashboard/tasks/task-page/tasks/ContestTaskSubmissionForm.svelte';
   import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as m from '$lib/paraglide/messages';
+  import TaskHeader from '$lib/components/dashboard/tasks/task-page/tasks/TaskHeader.svelte';
 
   interface Props {
     data: {
@@ -34,14 +34,11 @@
   {:else if taskQuery.loading}
     <LoadingSpinner />
   {:else if taskQuery.current}
-    <ContestTaskHeader
+    <TaskHeader
       id={taskQuery.current.id}
       title={taskQuery.current.title}
       createdByName={taskQuery.current.createdByName}
       createdAt={taskQuery.current.createdAt}
-      attemptCount={taskQuery.current.attemptCount}
-      bestScore={taskQuery.current.bestScore}
-      maxScore={taskQuery.current.maxScore}
     />
 
     <div class="grid h-screen gap-6 lg:grid-cols-2">

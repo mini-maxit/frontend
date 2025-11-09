@@ -30,9 +30,9 @@ export const createContest = form(
     description: v.pipe(v.string(), v.nonEmpty('Description is required')),
     startAt: v.pipe(v.string(), v.nonEmpty('Start date is required')),
     endAt: v.optional(v.string()),
-    isRegistrationOpen: v.optional(v.boolean(), true),
-    isSubmissionOpen: v.optional(v.boolean(), true),
-    isVisible: v.optional(v.boolean(), true)
+    isRegistrationOpen: v.optional(v.boolean(), false),
+    isSubmissionOpen: v.optional(v.boolean(), false),
+    isVisible: v.optional(v.boolean(), false)
   }),
   async (data) => {
     const { cookies } = getRequestEvent();
@@ -69,12 +69,13 @@ export const updateContest = form(
     description: v.pipe(v.string(), v.nonEmpty('Description is required')),
     startAt: v.pipe(v.string(), v.nonEmpty('Start date is required')),
     endAt: v.optional(v.string()),
-    isRegistrationOpen: v.optional(v.boolean(), true),
-    isSubmissionOpen: v.optional(v.boolean(), true),
-    isVisible: v.optional(v.boolean(), true)
+    isRegistrationOpen: v.optional(v.boolean(), false),
+    isSubmissionOpen: v.optional(v.boolean(), false),
+    isVisible: v.optional(v.boolean(), false)
   }),
   async (data) => {
     const { cookies } = getRequestEvent();
+    console.log('Updating contest with data:', data);
 
     try {
       const contestsManagementService = createContestsManagementService(cookies);

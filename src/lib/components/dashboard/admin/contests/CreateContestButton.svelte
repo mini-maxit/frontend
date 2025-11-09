@@ -134,24 +134,6 @@
         hidden
       />
       <input {...createContest.fields.endAt.as('datetime-local')} bind:value={endAtValue} hidden />
-      <input
-        {...createContest.fields.isRegistrationOpen.as('checkbox')}
-        type="checkbox"
-        bind:checked={isRegistrationOpen}
-        hidden
-      />
-      <input
-        {...createContest.fields.isSubmissionOpen.as('checkbox')}
-        type="checkbox"
-        bind:checked={isSubmissionOpen}
-        hidden
-      />
-      <input
-        {...createContest.fields.isVisible.as('checkbox')}
-        type="checkbox"
-        bind:checked={isVisible}
-        hidden
-      />
 
       <div class="space-y-2">
         <Label for="name">{m.admin_contests_form_name_label()}</Label>
@@ -297,21 +279,27 @@
         <Label>{m.admin_contests_form_options_label()}</Label>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isRegistrationOpen" bind:checked={isRegistrationOpen} />
+          <Checkbox
+            id="isRegistrationOpen"
+            {...createContest.fields.isRegistrationOpen.as('checkbox')}
+          />
           <Label for="isRegistrationOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_registration_open()}
           </Label>
         </div>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isSubmissionOpen" bind:checked={isSubmissionOpen} />
+          <Checkbox
+            id="isSubmissionOpen"
+            {...createContest.fields.isSubmissionOpen.as('checkbox')}
+          />
           <Label for="isSubmissionOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_submission_open()}
           </Label>
         </div>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isVisible" bind:checked={isVisible} />
+          <Checkbox id="isVisible" {...createContest.fields.isVisible.as('checkbox')} />
           <Label for="isVisible" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_visible()}
           </Label>
