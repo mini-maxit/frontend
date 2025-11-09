@@ -1,6 +1,7 @@
 import { ApiError, createApiClient } from './ApiService';
 import type {
   Contest,
+  CreatedContest,
   CreateContestDto,
   EditContestDto,
   RegistrationRequest,
@@ -19,9 +20,9 @@ export class ContestsManagementService {
     this.apiClient = createApiClient(cookies);
   }
 
-  async getCreatedContests(): Promise<Contest[]> {
+  async getCreatedContests(): Promise<CreatedContest[]> {
     try {
-      const contests = await this.apiClient.get<ApiResponse<Contest[]>>({
+      const contests = await this.apiClient.get<ApiResponse<CreatedContest[]>>({
         url: '/contests-management/contests/created'
       });
 
@@ -35,7 +36,7 @@ export class ContestsManagementService {
     }
   }
 
-  async createContest(data: CreateContestDto): Promise<Contest> {
+  async createContest(data: CreateContestDto): Promise<{ id: number }> {
     try {
       const requestData = {
         ...data,
@@ -43,7 +44,7 @@ export class ContestsManagementService {
         endAt: data.endAt ? toRFC3339(data.endAt) : null
       };
 
-      const response = await this.apiClient.post<ApiResponse<Contest>>({
+      const response = await this.apiClient.post<ApiResponse<{ id: number }>>({
         url: '/contests-management/contests',
         body: JSON.stringify(requestData)
       });
@@ -57,7 +58,7 @@ export class ContestsManagementService {
     }
   }
 
-  async updateContest(id: number, data: EditContestDto): Promise<Contest> {
+  async updateContest(id: number, data: EditContestDto): Promise<CreatedContest> {
     try {
       const requestData = {
         ...data,
@@ -65,7 +66,7 @@ export class ContestsManagementService {
         endAt: data.endAt ? toRFC3339(data.endAt) : null
       };
 
-      const response = await this.apiClient.put<ApiResponse<Contest>>({
+      const response = await this.apiClient.put<ApiResponse<CreatedContest>>({
         url: `/contests-management/contests/${id}`,
         body: JSON.stringify(requestData)
       });

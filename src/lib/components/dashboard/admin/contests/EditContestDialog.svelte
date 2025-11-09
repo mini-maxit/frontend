@@ -18,10 +18,10 @@
   } from '@internationalized/date';
   import { updateContest } from '$routes/dashboard/admin/contests/contests.remote';
   import { cn } from '$lib/utils';
-  import type { Contest } from '$lib/dto/contest';
+  import type { CreatedContest } from '$lib/dto/contest';
 
   interface Props {
-    contest: Contest;
+    contest: CreatedContest;
     dialogOpen: boolean;
   }
 
@@ -59,8 +59,6 @@
   let endTime = $state<string | null>(endDateTime.time);
 
   // Checkbox states - need to get from the contest data
-  // Since the Contest interface doesn't have these fields in the response,
-  // we'll default them to true for now
   let hasEndTime = $state(!!contest.endAt);
 
   function getDateTimeString(date: DateValue | undefined, time: string | null): string {
@@ -267,6 +265,7 @@
           <Checkbox
             id="isRegistrationOpen"
             {...updateContest.fields.isRegistrationOpen.as('checkbox')}
+            checked={contest.isRegistrationOpen}
           />
           <Label for="isRegistrationOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_registration_open()}
@@ -277,6 +276,7 @@
           <Checkbox
             id="isSubmissionOpen"
             {...updateContest.fields.isSubmissionOpen.as('checkbox')}
+            checked={contest.isSubmissionOpen}
           />
           <Label for="isSubmissionOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_submission_open()}
@@ -284,7 +284,11 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isVisible" {...updateContest.fields.isVisible.as('checkbox')} />
+          <Checkbox
+            id="isVisible"
+            {...updateContest.fields.isVisible.as('checkbox')}
+            checked={contest.isVisible}
+          />
           <Label for="isVisible" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_visible()}
           </Label>

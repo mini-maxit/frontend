@@ -9,7 +9,7 @@
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import UserCheck from '@lucide/svelte/icons/user-check';
   import Edit from '@lucide/svelte/icons/pencil';
-  import type { Contest } from '$lib/dto/contest';
+  import type { CreatedContest } from '$lib/dto/contest';
   import * as m from '$lib/paraglide/messages';
   import { localizeHref } from '$lib/paraglide/runtime';
   import { formatDate } from '$lib/utils';
@@ -17,7 +17,7 @@
   import EditContestDialog from '$lib/components/dashboard/admin/contests/EditContestDialog.svelte';
 
   interface AdminContestCardProps {
-    contest: Contest;
+    contest: CreatedContest;
   }
 
   let { contest }: AdminContestCardProps = $props();

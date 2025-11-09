@@ -1,16 +1,17 @@
 import { query, form, getRequestEvent } from '$app/server';
 import { createContestsManagementService } from '$lib/services/ContestsManagementService';
 import { ApiError } from '$lib/services/ApiService';
-import type { Contest } from '$lib/dto/contest';
+import type { CreatedContest } from '$lib/dto/contest';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 
-export const getAllContests = query(async (): Promise<Contest[]> => {
+export const getAllContests = query(async (): Promise<CreatedContest[]> => {
   const { cookies } = getRequestEvent();
 
   try {
     const contestsManagementService = createContestsManagementService(cookies);
     const contests = await contestsManagementService.getCreatedContests();
+    console.log('Fetched contests:', contests);
 
     return contests;
   } catch (err) {

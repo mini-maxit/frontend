@@ -4,6 +4,7 @@ export enum ContestRegistrationStatus {
   RegistrationClosed = 'registrationClosed',
   CanRegister = 'canRegister'
 }
+
 export interface Contest {
   id: number;
   name: string;
@@ -17,6 +18,24 @@ export interface Contest {
   taskCount: number;
   status: ContestStatus;
   registrationStatus: ContestRegistrationStatus;
+}
+
+// Contest data for creators/teachers (without registrationStatus)
+export interface CreatedContest {
+  id: number;
+  name: string;
+  description: string;
+  startAt: string | null;
+  endAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: number;
+  participantCount: number;
+  taskCount: number;
+  status: ContestStatus;
+  isRegistrationOpen: boolean;
+  isSubmissionOpen: boolean;
+  isVisible: boolean;
 }
 
 export enum ContestStatus {
