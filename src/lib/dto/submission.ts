@@ -56,6 +56,7 @@ export interface SubmissionUser {
 
 export interface Submission {
   checkedAt: string;
+  contestId?: number;
   id: number;
   language: Language;
   languageId: number;
@@ -67,4 +68,10 @@ export interface Submission {
   taskId: number;
   user: SubmissionUser;
   userId: number;
+}
+
+export interface GetContestSubmissionsParams {
+  limit?: number;
+  offset?: number;
+  sort?: string;
 }

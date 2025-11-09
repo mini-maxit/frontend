@@ -9,6 +9,7 @@ import type {
 import type { Task } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse } from '$lib/dto/response';
+import type { Submission, GetContestSubmissionsParams } from '$lib/dto/submission';
 import { toRFC3339 } from '$lib/utils';
 
 export class ContestsManagementService {
@@ -148,6 +149,33 @@ export class ContestsManagementService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get contest tasks:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestSubmissions(
+    contestId: number,
+    params?: GetContestSubmissionsParams
+  ): Promise<Submission[]> {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+      if (params?.sort) queryParams.append('sort', params.sort);
+
+      const url = `/contests-management/contests/${contestId}/submissions${
+        queryParams.toString() ? `?${queryParams.toString()}` : ''
+      }`;
+
+      const response = await this.apiClient.get<ApiResponse<Submission[]>>({
+        url
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest submissions:', error.toJSON());
         throw error;
       }
       throw error;
