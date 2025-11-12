@@ -1,5 +1,5 @@
 import { ApiError, type ApiService } from './ApiService';
-import type { ApiResponse } from '../dto/response';
+import type { ApiResponse, PaginatedData } from '../dto/response';
 import type { Language, SubmitSolutionDto, Submission } from '../dto/submission';
 
 export class SubmissionService {
@@ -73,10 +73,115 @@ export class SubmissionService {
 
       const url = `/submissions/my${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
-      const response = await this.apiClient.get<ApiResponse<Submission[]>>({
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
         url
       });
-      return { success: true, data: response.data, status: 200 };
+      return { success: true, data: response.data.items, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async getAllSubmissions(params?: {
+    userId?: number;
+    contestId?: number;
+    taskId?: number;
+    limit?: number;
+    offset?: number;
+    sort?: string;
+  }): Promise<{
+    success: boolean;
+    status: number;
+    data?: Submission[];
+    error?: string;
+  }> {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params?.userId) queryParams.append('userId', params.userId.toString());
+      if (params?.contestId) queryParams.append('contestId', params.contestId.toString());
+      if (params?.taskId) queryParams.append('taskId', params.taskId.toString());
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+      if (params?.sort) queryParams.append('sort', params.sort);
+
+      const url = `/submissions${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
+        url
+      });
+      return { success: true, data: response.data.items, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async getSubmissionsByTask(
+    taskId: number,
+    params?: { limit?: number; offset?: number }
+  ): Promise<{
+    success: boolean;
+    status: number;
+    data?: Submission[];
+    error?: string;
+  }> {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+
+      const url = `/submissions/tasks/${taskId}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
+        url
+      });
+      return { success: true, data: response.data.items, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async getSubmissionsByUser(
+    userId: number,
+    params?: { limit?: number; offset?: number; sort?: string }
+  ): Promise<{
+    success: boolean;
+    status: number;
+    data?: Submission[];
+    error?: string;
+  }> {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+      if (params?.sort) queryParams.append('sort', params.sort);
+
+      const url = `/submissions/users/${userId}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
+        url
+      });
+      return { success: true, data: response.data.items, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {
