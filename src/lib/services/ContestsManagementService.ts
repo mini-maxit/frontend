@@ -1,6 +1,5 @@
 import { ApiError, createApiClient } from './ApiService';
 import type {
-  Contest,
   CreatedContest,
   CreateContestDto,
   EditContestDto,
@@ -10,7 +9,7 @@ import type {
 } from '$lib/dto/contest';
 import type { Task } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
-import type { ApiResponse } from '$lib/dto/response';
+import type { ApiResponse, PaginatedData } from '$lib/dto/response';
 import type { Submission, GetContestSubmissionsParams } from '$lib/dto/submission';
 import { toRFC3339 } from '$lib/utils';
 
@@ -23,11 +22,11 @@ export class ContestsManagementService {
 
   async getCreatedContests(): Promise<CreatedContest[]> {
     try {
-      const contests = await this.apiClient.get<ApiResponse<CreatedContest[]>>({
+      const contests = await this.apiClient.get<ApiResponse<PaginatedData<CreatedContest>>>({
         url: '/contests-management/contests/created'
       });
 
-      return contests.data;
+      return contests.data.items;
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get created contests:', error.toJSON());
@@ -193,10 +192,10 @@ export class ContestsManagementService {
         queryParams.toString() ? `?${queryParams.toString()}` : ''
       }`;
 
-      const response = await this.apiClient.get<ApiResponse<Submission[]>>({
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
         url
       });
-      return response.data;
+      return response.data.items;
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get contest submissions:', error.toJSON());

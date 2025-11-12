@@ -2,7 +2,7 @@ import { ApiError, createApiClient } from './ApiService';
 import type { Contest, UserContestsResponse } from '$lib/dto/contest';
 import type { ContestTaskWithStatistics, TaskDetail } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
-import type { ApiResponse } from '$lib/dto/response';
+import type { ApiResponse, PaginatedData } from '$lib/dto/response';
 
 export class ContestService {
   private apiClient;
@@ -13,10 +13,10 @@ export class ContestService {
 
   async getOngoing(): Promise<Contest[]> {
     try {
-      const response = await this.apiClient.get<ApiResponse<Contest[]>>({
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Contest>>>({
         url: '/contests?status=ongoing'
       });
-      return response.data;
+      return response.data.items;
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get ongoing contests:', error.toJSON());
@@ -28,10 +28,10 @@ export class ContestService {
 
   async getUpcoming(): Promise<Contest[]> {
     try {
-      const response = await this.apiClient.get<ApiResponse<Contest[]>>({
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Contest>>>({
         url: '/contests?status=upcoming'
       });
-      return response.data;
+      return response.data.items;
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get upcoming contests:', error.toJSON());
@@ -43,10 +43,10 @@ export class ContestService {
 
   async getPast(): Promise<Contest[]> {
     try {
-      const response = await this.apiClient.get<ApiResponse<Contest[]>>({
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Contest>>>({
         url: '/contests?status=past'
       });
-      return response.data;
+      return response.data.items;
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get past contests:', error.toJSON());
