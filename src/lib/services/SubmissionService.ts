@@ -1,5 +1,5 @@
 import { ApiError, type ApiService } from './ApiService';
-import type { ApiResponse } from '../dto/response';
+import type { ApiResponse, PaginatedData } from '../dto/response';
 import type { Language, SubmitSolutionDto, Submission } from '../dto/submission';
 
 export class SubmissionService {
@@ -73,10 +73,10 @@ export class SubmissionService {
 
       const url = `/submissions/my${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
-      const response = await this.apiClient.get<ApiResponse<Submission[]>>({
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
         url
       });
-      return { success: true, data: response.data, status: 200 };
+      return { success: true, data: response.data.items, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {
