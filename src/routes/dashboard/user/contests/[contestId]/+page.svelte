@@ -48,7 +48,7 @@
       />
     {:else}
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {#each tasksQuery.current as task}
+        {#each tasksQuery.current as task (task.id)}
           <Card.Root class="group transition-colors hover:border-primary/50">
             <Card.Header>
               <Card.Title class="text-xl">
@@ -66,7 +66,7 @@
                     </span>
                   </div>
                   <p class="mt-1 text-lg font-bold text-foreground">
-                    {task.bestScore ?? '-'}
+                    {task.attemptsSummary.bestScore ?? '-'}
                   </p>
                 </div>
 
@@ -79,7 +79,7 @@
                     </span>
                   </div>
                   <p class="mt-1 text-lg font-bold text-foreground">
-                    {task.attemptCount}
+                    {task.attemptsSummary.attemptCount}
                   </p>
                 </div>
               </div>

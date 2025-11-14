@@ -52,12 +52,16 @@ export interface UserContestTask {
   maxScore: number;
 }
 
+export interface AttemptsSummary {
+  bestScore: number;
+  attemptCount: number;
+}
+
 export interface ContestTaskWithStatistics {
   id: number;
   title: string;
   createdAt: string;
   updatedAt: string;
   createdBy: number;
-  attemptCount: number;
-  bestScore: number | null;
+  attemptsSummary: AttemptsSummary;
 }
