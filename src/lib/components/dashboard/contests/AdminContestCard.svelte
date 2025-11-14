@@ -40,7 +40,7 @@
 >
   <!-- Gradient Background Overlay -->
   <div
-    class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-[var(--secondary)]/5 to-[var(--primary)]/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
+    class="absolute inset-0 bg-linear-to-br from-primary/5 via-secondary/5 to-primary/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
   ></div>
 
   <Card.Header class="relative">
@@ -59,10 +59,10 @@
     <Card.Title
       class="mt-3 flex items-start gap-2 text-lg transition-colors group-hover:text-primary"
     >
-      <Trophy class="mt-0.5 h-5 w-5 flex-shrink-0" />
+      <Trophy class="mt-0.5 h-5 w-5 shrink-0" />
       <a
         href={localizeHref(`${AppRoutes.UserContests}/${contest.id}`)}
-        class="break-words hover:underline">{contest.name}</a
+        class="wrap-break-word hover:underline">{contest.name}</a
       >
     </Card.Title>
     <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">{contest.description}</p>
@@ -134,7 +134,7 @@
       <Button
         variant="outline"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}`)}
+        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/tasks`)}
       >
         <ListTodo class="mr-2 h-4 w-4" />
         {m.admin_contests_card_view_tasks()}
@@ -142,7 +142,7 @@
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/tasks`)}
+        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/assignable-tasks`)}
       >
         <Plus class="mr-2 h-4 w-4" />
         {m.admin_contests_card_add_tasks()}
