@@ -61,3 +61,10 @@ export interface ContestTaskWithStatistics {
   attemptCount: number;
   bestScore: number | null;
 }
+
+export interface ContestTask extends Task {
+  creatorName: string;
+  startAt: string;
+  endAt: string | null;
+  isSubmissionOpen: boolean;
+}

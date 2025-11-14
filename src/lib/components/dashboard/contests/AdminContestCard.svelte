@@ -10,6 +10,7 @@
   import UserCheck from '@lucide/svelte/icons/user-check';
   import FileText from '@lucide/svelte/icons/file-text';
   import Edit from '@lucide/svelte/icons/pencil';
+  import Plus from '@lucide/svelte/icons/plus';
   import type { CreatedContest } from '$lib/dto/contest';
   import * as m from '$lib/paraglide/messages';
   import { localizeHref } from '$lib/paraglide/runtime';
@@ -125,25 +126,26 @@
       <Button
         variant="outline"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}`)}
-      >
-        {m.admin_contests_card_view_details()}
-      </Button>
-      <Button
-        variant="outline"
-        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
         onclick={() => (editDialogOpen = true)}
       >
         <Edit class="mr-2 h-4 w-4" />
         {m.admin_contests_edit_button()}
       </Button>
       <Button
+        variant="outline"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}`)}
+      >
+        <ListTodo class="mr-2 h-4 w-4" />
+        {m.admin_contests_card_view_tasks()}
+      </Button>
+      <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
         href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/tasks`)}
       >
-        <ListTodo class="mr-2 h-4 w-4" />
-        {m.admin_contests_card_manage_tasks()}
+        <Plus class="mr-2 h-4 w-4" />
+        {m.admin_contests_card_add_tasks()}
       </Button>
       <Button
         variant="default"
