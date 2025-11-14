@@ -77,7 +77,7 @@
       <!-- Not Started Placeholder -->
       <div class="rounded-lg border-2 border-dashed border-border bg-muted/30 p-6 text-center">
         <Code class="mx-auto h-8 w-8 text-muted-foreground" />
-        <p class="mt-2 text-sm text-muted-foreground">No attempts yet</p>
+        <p class="mt-2 text-sm text-muted-foreground">{m.user_tasks_no_attempts()}</p>
       </div>
     {/if}
 
