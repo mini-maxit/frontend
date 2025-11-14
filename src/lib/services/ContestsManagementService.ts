@@ -5,9 +5,9 @@ import type {
   EditContestDto,
   RegistrationRequest,
   AddContestTaskDto,
-  ContestTask
+  ContestTask as ContestTaskRelation
 } from '$lib/dto/contest';
-import type { Task } from '$lib/dto/task';
+import type { Task, ContestTask } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse, PaginatedData } from '$lib/dto/response';
 import type { Submission, GetContestSubmissionsParams } from '$lib/dto/submission';
@@ -141,7 +141,7 @@ export class ContestsManagementService {
     }
   }
 
-  async addTaskToContest(contestId: number, data: AddContestTaskDto): Promise<ContestTask> {
+  async addTaskToContest(contestId: number, data: AddContestTaskDto): Promise<ContestTaskRelation> {
     try {
       const requestData = {
         taskId: data.taskId,
@@ -149,7 +149,7 @@ export class ContestsManagementService {
         endAt: data.endAt ? toRFC3339(data.endAt) : null
       };
 
-      const response = await this.apiClient.post<ApiResponse<ContestTask>>({
+      const response = await this.apiClient.post<ApiResponse<ContestTaskRelation>>({
         url: `/contests-management/contests/${contestId}/tasks`,
         body: JSON.stringify(requestData)
       });
@@ -163,9 +163,9 @@ export class ContestsManagementService {
     }
   }
 
-  async getContestTasks(contestId: number): Promise<Task[]> {
+  async getContestTasks(contestId: number): Promise<ContestTask[]> {
     try {
-      const response = await this.apiClient.get<ApiResponse<Task[]>>({
+      const response = await this.apiClient.get<ApiResponse<ContestTask[]>>({
         url: `/contests-management/contests/${contestId}/tasks`
       });
       return response.data;
