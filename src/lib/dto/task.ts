@@ -72,3 +72,15 @@ export interface ContestTask extends Task {
   endAt: string | null;
   isSubmissionOpen: boolean;
 }
+
+export interface MyTasksContest {
+  contestId: number;
+  contestName: string;
+  startAt: string;
+  endAt: string;
+  tasks: ContestTaskWithStatistics[];
+}
+
+export interface MyTasksResponse {
+  contests: MyTasksContest[];
+}

@@ -58,14 +58,14 @@
                 <div class="flex items-center gap-2">
                   {#if task.isSubmissionOpen}
                     <span
-                      class="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600 dark:text-green-400"
+                      class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
                     >
                       <CheckCircle class="h-3.5 w-3.5" />
                       {m.admin_contest_tasks_submission_open_yes()}
                     </span>
                   {:else}
                     <span
-                      class="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-600 dark:text-red-400"
+                      class="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground"
                     >
                       <XCircle class="h-3.5 w-3.5" />
                       {m.admin_contest_tasks_submission_open_no()}
