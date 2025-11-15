@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { Button } from '$lib/components/ui/button';
   import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
   import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
@@ -9,8 +9,8 @@
   import { m } from '$lib/paraglide/messages.js';
   import { AppRoutes } from '$lib/routes';
 
-  const status = $page.status;
-  const message = $page.error?.message || m.error_default_message();
+  const status = page.status;
+  const message = page.error?.message || m.error_default_message();
 
   const errorMessages = {
     404: {
