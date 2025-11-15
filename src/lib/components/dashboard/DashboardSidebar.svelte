@@ -85,7 +85,7 @@
   const currentLang = $derived(getLocale());
 </script>
 
-<Sidebar data-sveltekit-preload-data="tap">
+<Sidebar>
   <SidebarHeader>
     <div class="flex items-center justify-center px-2 py-4">
       <MaxitLogo width={120} height={120} primaryColor={false} />
