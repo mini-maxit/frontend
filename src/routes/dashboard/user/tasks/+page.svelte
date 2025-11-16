@@ -1,95 +1,87 @@
 <script lang="ts">
-  import TasksStats from '$lib/components/dashboard/tasks/TasksStats.svelte';
-  import TaskCard from '$lib/components/dashboard/tasks/TaskCard.svelte';
-  import Trophy from '@lucide/svelte/icons/trophy';
+  import UserTaskCard from '$lib/components/dashboard/tasks/UserTaskCard.svelte';
+  import { getMyTasks } from './tasks.remote';
+  import * as m from '$lib/paraglide/messages';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import ListTodo from '@lucide/svelte/icons/list-todo';
+  import { formatDate } from '$lib/utils';
 
-  const contestTasks = [
-    {
-      contestName: 'Spring Code Sprint 2025',
-      tasks: [
-        {
-          name: 'Array Manipulation Challenge',
-          difficulty: 'easy' as const,
-          status: 'completed' as const,
-          bestScore: 100,
-          maxScore: 100,
-          attempts: 1
-        },
-        {
-          name: 'String Parsing Problem',
-          difficulty: 'medium' as const,
-          status: 'in-progress' as const,
-          bestScore: 80,
-          maxScore: 100,
-          attempts: 3
-        },
-        {
-          name: 'Advanced Algorithm Task',
-          difficulty: 'hard' as const,
-          status: 'not-started' as const,
-          bestScore: 0,
-          maxScore: 100,
-          attempts: 0
-        }
-      ]
-    },
-    {
-      contestName: 'Weekly Algorithm Challenge',
-      tasks: [
-        {
-          name: 'Two Pointer Technique',
-          difficulty: 'easy' as const,
-          status: 'completed' as const,
-          bestScore: 90,
-          maxScore: 100,
-          attempts: 2
-        },
-        {
-          name: 'Sliding Window Problem',
-          difficulty: 'medium' as const,
-          status: 'completed' as const,
-          bestScore: 85,
-          maxScore: 100,
-          attempts: 3
-        }
-      ]
-    }
-  ];
+  const tasksQuery = getMyTasks();
 </script>
 
-<div class="space-y-8 p-4 sm:p-6 lg:p-8">
-  <!-- Page Header -->
-  <div class="space-y-2">
-    <h1 class="text-4xl font-bold tracking-tight text-foreground">Your Tasks</h1>
-    <p class="text-lg text-muted-foreground">Complete tasks from your and active contests</p>
-  </div>
-
-  <!-- Stats Banner -->
-  <TasksStats />
-
-  <!-- Tasks from Contests -->
-  <div class="space-y-6">
-    <div class="flex items-center gap-2">
-      <Trophy class="h-6 w-6 text-primary" />
-      <h2 class="text-2xl font-bold text-foreground">Tasks from Contests</h2>
+<svelte:boundary onerror={(error) => console.error('User tasks page error:', error)}>
+  <div class="space-y-8 p-4 sm:p-6 lg:p-8">
+    <!-- Page Header -->
+    <div class="space-y-2">
+      <h1 class="text-4xl font-bold tracking-tight text-foreground">
+        {m.user_tasks_page_title()}
+      </h1>
+      <p class="text-lg text-muted-foreground">
+        {m.user_tasks_page_description()}
+      </p>
     </div>
 
-    {#each contestTasks as contest}
-      <div class="space-y-4">
-        <h3 class="text-lg font-semibold text-foreground">{contest.contestName}</h3>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {#each contest.tasks as task}
-            <TaskCard
-              name={task.name}
-              difficulty={task.difficulty}
-              status={task.status}
-              bestScore={task.bestScore}
-              maxScore={task.maxScore}
-              attempts={task.attempts}
-            />
-          {/each}
-        </div>
-      </div>
-    {/each}
+    <!-- Error State -->
+    {#if tasksQuery.error}
+      <ErrorCard
+        title={m.user_tasks_load_error()}
+        error={tasksQuery.error}
+        onRetry={() => tasksQuery.refresh()}
+      />
+    {:else if tasksQuery.loading}
+      <!-- Loading State -->
+      <LoadingSpinner message={m.user_tasks_loading()} />
+    {:else if tasksQuery.current}
+      {@const { contests } = tasksQuery.current}
+
+      {#if contests.length === 0}
+        <!-- Empty State -->
+        <EmptyState
+          title={m.user_tasks_no_tasks_title()}
+          description={m.user_tasks_no_tasks_description()}
+          icon={ListTodo}
+        />
+      {:else}
+        <!-- Tasks by Contest -->
+        {#each contests as contest (contest.contestId)}
+          <div class="space-y-4">
+            <!-- Contest Header -->
+            <div class="space-y-2">
+              <h2 class="text-2xl font-bold text-foreground">
+                {m.user_tasks_contest_section({ contestName: contest.contestName })}
+              </h2>
+              <p class="text-sm text-muted-foreground">
+                {m.user_tasks_contest_period({
+                  startDate: formatDate(contest.startAt),
+                  endDate: formatDate(contest.endAt)
+                })}
+              </p>
+            </div>
+
+            <!-- Tasks Grid -->
+            {#if contest.tasks.length === 0}
+              <div
+                class="flex items-center justify-center rounded-lg border border-dashed border-muted-foreground/25 p-8"
+              >
+                <p class="text-muted-foreground">{m.user_contest_tasks_no_tasks_description()}</p>
+              </div>
+            {:else}
+              <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {#each contest.tasks as task (task.id)}
+                  <UserTaskCard
+                    contestId={contest.contestId}
+                    id={task.id}
+                    title={task.title}
+                    createdAt={task.createdAt}
+                    attemptCount={task.attemptsSummary.attemptCount}
+                    bestScore={task.attemptsSummary.bestScore}
+                  />
+                {/each}
+              </div>
+            {/if}
+          </div>
+        {/each}
+      {/if}
+    {/if}
   </div>
-</div>
+</svelte:boundary>

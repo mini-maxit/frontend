@@ -18,7 +18,6 @@
   import { UserRole } from '$lib/dto/jwt';
 
   // Lucide icons
-  import Users from '@lucide/svelte/icons/users';
   import FileText from '@lucide/svelte/icons/file-text';
   import Trophy from '@lucide/svelte/icons/trophy';
   import ListTodo from '@lucide/svelte/icons/list-todo';
@@ -91,8 +90,7 @@
     <div class="flex items-center justify-center px-2 py-4">
       <MaxitLogo width={120} height={120} primaryColor={false} />
     </div>
-    <SidebarTrigger class={`absolute right-4`} />
-
+    <SidebarTrigger class="absolute right-4" />
     <div class="flex items-center justify-between border-t px-2 py-2">
       <div class="flex items-center gap-2">
         <Languages class="h-4 w-4" />
@@ -152,7 +150,7 @@
               </SidebarMenuButton>
             </SidebarMenuItem>
           {/if}
-          {#each adminMenuItems as item}
+          {#each adminMenuItems as item (item.href)}
             <SidebarMenuItem>
               <SidebarMenuButton isActive={isActive(item.href)}>
                 {#snippet child({ props })}
@@ -172,7 +170,7 @@
     <SidebarGroup>
       <SidebarGroupLabel>{m.sidebar_your_section()}</SidebarGroupLabel>
       <SidebarMenu>
-        {#each userMenuItems as item}
+        {#each userMenuItems as item (item.href)}
           <SidebarMenuItem>
             <SidebarMenuButton isActive={isActive(item.href)}>
               {#snippet child({ props })}
@@ -191,7 +189,7 @@
     <SidebarGroup>
       <SidebarGroupLabel>{m.sidebar_public_section()}</SidebarGroupLabel>
       <SidebarMenu>
-        {#each publicMenuItems as item}
+        {#each publicMenuItems as item (item.href)}
           <SidebarMenuItem>
             <SidebarMenuButton isActive={isActive(item.href)}>
               {#snippet child({ props })}
