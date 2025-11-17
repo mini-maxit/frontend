@@ -11,19 +11,22 @@ export enum AppRoutes {
   CTA = '/#cta',
 
   Dashboard = '/dashboard',
-  UserSubmissions = '/dashboard/user/submissions',
-  UserContests = '/dashboard/user/contests',
-  UserContestTask = '/dashboard/user/contests/',
-  UserTasks = '/dashboard/user/tasks',
-  UserProfile = '/dashboard/user/profile',
-  AvailableContests = '/dashboard/contests',
-  AvailableTasks = '/dashboard/tasks',
-  TaskDetails = '/dashboard/tasks/',
+  UserSubmissions = `${AppRoutes.Dashboard}/user/submissions`,
+  UserContests = `${AppRoutes.Dashboard}/user/contests`,
+  UserContestTask = `${AppRoutes.Dashboard}/user/contests/`,
+  UserTasks = `${AppRoutes.Dashboard}/user/tasks`,
+  UserProfile = `${AppRoutes.Dashboard}/user/profile`,
+  AvailableContests = `${AppRoutes.Dashboard}/contests`,
+  AvailableTasks = `${AppRoutes.Dashboard}/tasks`,
+  TaskDetails = `${AppRoutes.Dashboard}/tasks/`,
 
-  Admin = '/dashboard/admin',
-  AdminContests = '/dashboard/admin/contests',
-  AdminContestsRegistrationRequests = '/dashboard/admin/contests/',
-  AdminTasks = '/dashboard/admin/tasks',
+  Teacher = `${AppRoutes.Dashboard}/teacher`,
+  TeacherContests = `${AppRoutes.Teacher}/contests`,
+  TeacherContestsRegistrationRequests = `${AppRoutes.Teacher}/contests/`,
+  TeacherTasks = `${AppRoutes.Teacher}/tasks`,
+
+  Admin = `${AppRoutes.Dashboard}/admin`,
+  AdminUsers = `${AppRoutes.Admin}/users`,
 
   Error = '/error'
 }

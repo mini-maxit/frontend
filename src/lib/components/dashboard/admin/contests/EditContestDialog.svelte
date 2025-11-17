@@ -16,7 +16,7 @@
     getLocalTimeZone,
     parseDate
   } from '@internationalized/date';
-  import { updateContest } from '$routes/dashboard/admin/contests/contests.remote';
+  import { updateContest } from '$routes/dashboard/teacher/contests/contests.remote';
   import { cn } from '$lib/utils';
   import type { CreatedContest } from '$lib/dto/contest';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { uploadTask } from '$lib/../routes/dashboard/admin/tasks/upload.remote';
+  import { uploadTask } from '$routes/dashboard/teacher/tasks/upload.remote';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';

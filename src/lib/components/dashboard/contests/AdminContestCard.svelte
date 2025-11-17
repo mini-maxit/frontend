@@ -134,7 +134,7 @@
       <Button
         variant="outline"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/tasks`)}
+        href={localizeHref(`${AppRoutes.TeacherContests}/${contest.id}/tasks`)}
       >
         <ListTodo class="mr-2 h-4 w-4" />
         {m.admin_contests_card_view_tasks()}
@@ -142,7 +142,7 @@
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/assignable-tasks`)}
+        href={localizeHref(`${AppRoutes.TeacherContests}/${contest.id}/assignable-tasks`)}
       >
         <Plus class="mr-2 h-4 w-4" />
         {m.admin_contests_card_add_tasks()}
@@ -150,7 +150,7 @@
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/registration-requests`)}
+        href={localizeHref(`${AppRoutes.TeacherContests}/${contest.id}/registration-requests`)}
       >
         <UserCheck class="mr-2 h-4 w-4" />
         {m.admin_contests_card_view_requests()}
@@ -158,7 +158,7 @@
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        href={localizeHref(`${AppRoutes.AdminContests}/${contest.id}/submissions`)}
+        href={localizeHref(`${AppRoutes.TeacherContests}/${contest.id}/submissions`)}
       >
         <FileText class="mr-2 h-4 w-4" />
         {m.admin_contests_card_view_submissions()}
