@@ -62,7 +62,6 @@
       <form
         {...updateUser.enhance(async ({ submit, data }) => {
           try {
-            console.log('Submitting form to update user..., form:', data);
             await submit();
             await handleSuccess();
           } catch (error: HttpError | unknown) {
