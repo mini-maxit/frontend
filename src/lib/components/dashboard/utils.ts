@@ -15,8 +15,9 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.AvailableContests]: () => m.sidebar_available_contests(),
     [AppRoutes.AvailableTasks]: () => m.sidebar_available_tasks(),
     [AppRoutes.Admin]: () => m.sidebar_admin(),
-    [AppRoutes.AdminContests]: () => m.sidebar_admin_contests(),
-    [AppRoutes.AdminTasks]: () => m.sidebar_admin_tasks()
+    [AppRoutes.TeacherContests]: () => m.sidebar_admin_contests(),
+    [AppRoutes.TeacherTasks]: () => m.sidebar_admin_tasks(),
+    [AppRoutes.AdminUsers]: () => m.admin_users_title()
   };
 
   // Check for dynamic routes (e.g., /dashboard/tasks/[taskId])

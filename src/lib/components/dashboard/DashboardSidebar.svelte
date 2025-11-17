@@ -23,8 +23,10 @@
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import Globe from '@lucide/svelte/icons/globe';
   import UserCircle from '@lucide/svelte/icons/user-circle';
+  import Users from '@lucide/svelte/icons/users';
   import Languages from '@lucide/svelte/icons/languages';
   import LayoutDashboard from '@lucide/svelte/icons/layout-dashboard';
+  import Activity from '@lucide/svelte/icons/activity';
   import LogOut from '@lucide/svelte/icons/log-out';
   import SidebarTrigger from '../ui/sidebar/sidebar-trigger.svelte';
   import { logout } from '$routes/dashboard/logout.remote';
@@ -65,16 +67,29 @@
     }
   ];
 
-  const adminMenuItems = [
+  const teacherMenuItems = [
     {
       title: () => m.sidebar_admin_contests(),
-      href: localizeHref(AppRoutes.AdminContests),
+      href: localizeHref(AppRoutes.TeacherContests),
       icon: Trophy
     },
     {
       title: () => m.sidebar_admin_tasks(),
-      href: localizeHref(AppRoutes.AdminTasks),
+      href: localizeHref(AppRoutes.TeacherTasks),
       icon: ListTodo
+    }
+  ];
+
+  const adminMenuItems = [
+    {
+      title: () => m.sidebar_admin_monitoring(),
+      href: localizeHref(AppRoutes.Admin),
+      icon: Activity
+    },
+    {
+      title: () => m.sidebar_admin_users(),
+      href: localizeHref(AppRoutes.AdminUsers),
+      icon: Users
     }
   ];
 
@@ -131,26 +146,32 @@
   </SidebarHeader>
 
   <SidebarContent>
-    <!-- Admin Section -->
-    {#if user.role === UserRole.Teacher || user.role === UserRole.Admin}
+    <!-- Admin Dashboard Section -->
+    {#if user.role === UserRole.Admin}
       <SidebarGroup>
-        {@const sidebarTitle =
-          user.role === UserRole.Admin ? m.sidebar_admin() : m.sidebar_teacher()}
-        <SidebarGroupLabel>{sidebarTitle}</SidebarGroupLabel>
+        <SidebarGroupLabel>{m.sidebar_admin()}</SidebarGroupLabel>
         <SidebarMenu>
-          {#if user.role === UserRole.Admin}
+          {#each adminMenuItems as item (item.href)}
             <SidebarMenuItem>
-              <SidebarMenuButton isActive={isActive(localizeHref(AppRoutes.Admin))}>
+              <SidebarMenuButton isActive={isActive(item.href)}>
                 {#snippet child({ props })}
-                  <a href={localizeHref(AppRoutes.Admin)} {...props}>
-                    <LayoutDashboard />
-                    <span>{m.sidebar_admin()}</span>
+                  <a href={item.href} {...props}>
+                    <item.icon />
+                    <span>{item.title()}</span>
                   </a>
                 {/snippet}
               </SidebarMenuButton>
             </SidebarMenuItem>
-          {/if}
-          {#each adminMenuItems as item (item.href)}
+          {/each}
+        </SidebarMenu>
+      </SidebarGroup>
+    {/if}
+
+    {#if user.role === UserRole.Teacher || user.role === UserRole.Admin}
+      <SidebarGroup>
+        <SidebarGroupLabel>{m.sidebar_teacher()}</SidebarGroupLabel>
+        <SidebarMenu>
+          {#each teacherMenuItems as item (item.href)}
             <SidebarMenuItem>
               <SidebarMenuButton isActive={isActive(item.href)}>
                 {#snippet child({ props })}

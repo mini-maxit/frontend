@@ -18,15 +18,15 @@
   let roleFilterValue = $state<string>('all');
 
   const roleFilterOptions = [
-    { value: 'all', label: 'All Roles' },
-    { value: UserRole.Student, label: 'Student' },
-    { value: UserRole.Teacher, label: 'Teacher' },
-    { value: UserRole.Admin, label: 'Admin' }
+    { value: 'all', label: m.admin_users_filter_all_roles() },
+    { value: UserRole.Student, label: m.admin_users_role_student() },
+    { value: UserRole.Teacher, label: m.admin_users_role_teacher() },
+    { value: UserRole.Admin, label: m.admin_users_role_admin() }
   ];
 
   const roleFilterLabel = $derived.by(() => {
     const option = roleFilterOptions.find((opt) => opt.value === roleFilterValue);
-    return option?.label || 'Filter by role';
+    return option?.label || m.admin_users_filter_role_label();
   });
 
   function handleEditUser(user: User) {
@@ -66,12 +66,12 @@
 
 <div class="space-y-6">
   <div class="flex items-center justify-between">
-    <h1 class="text-3xl font-bold text-foreground">User Management</h1>
+    <h1 class="text-3xl font-bold text-foreground">{m.admin_users_title()}</h1>
   </div>
 
   <!-- Filters Section -->
   <div class="space-y-4">
-    <h2 class="text-2xl font-bold text-foreground">Search & Filter</h2>
+    <h2 class="text-2xl font-bold text-foreground">{m.admin_users_search_filter()}</h2>
 
     <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <!-- Search Input -->
@@ -79,7 +79,7 @@
         <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Search by name, username, or email..."
+          placeholder={m.admin_users_search_placeholder()}
           bind:value={searchQuery}
           class="pl-9"
         />
@@ -112,17 +112,20 @@
   <!-- Users List Section -->
   <div class="space-y-4">
     <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-foreground">All Users</h2>
+      <h2 class="text-2xl font-bold text-foreground">{m.admin_users_all_users()}</h2>
       {#if usersQuery.current}
         <p class="text-sm text-muted-foreground">
-          Showing {filteredUsers.length} of {usersQuery.current.length} users
+          {m.admin_users_showing_count({
+            count: filteredUsers.length,
+            total: usersQuery.current.length
+          })}
         </p>
       {/if}
     </div>
 
     {#if usersQuery.error}
       <ErrorCard
-        title="Failed to load users"
+        title={m.admin_users_load_error()}
         error={usersQuery.error}
         onRetry={() => usersQuery.refresh()}
       />
@@ -130,14 +133,14 @@
       <LoadingSpinner />
     {:else if usersQuery.current && usersQuery.current.length === 0}
       <EmptyState
-        title="No users found"
-        description="There are no users in the system yet."
+        title={m.admin_users_no_users_title()}
+        description={m.admin_users_no_users_description()}
         icon={Users}
       />
     {:else if filteredUsers.length === 0}
       <EmptyState
-        title="No matching users"
-        description="No users match your search criteria. Try adjusting your filters."
+        title={m.admin_users_no_matching_title()}
+        description={m.admin_users_no_matching_description()}
         icon={Users}
       />
     {:else}

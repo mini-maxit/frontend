@@ -7,6 +7,7 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import Edit from '@lucide/svelte/icons/edit';
   import { formatDistanceToNow } from 'date-fns';
+  import * as m from '$lib/paraglide/messages';
 
   interface UsersListProps {
     users: User[];
@@ -18,13 +19,26 @@
   function getRoleBadgeClass(role: string): string {
     switch (role) {
       case 'admin':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+        return 'bg-primary/10 text-primary border border-primary/20';
       case 'teacher':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+        return 'bg-secondary/10 text-secondary border border-secondary/20';
       case 'student':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+        return 'bg-muted text-muted-foreground border border-border';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+        return 'bg-muted text-muted-foreground border border-border';
+    }
+  }
+
+  function getRoleBadgeLabel(role: string): string {
+    switch (role) {
+      case 'admin':
+        return m.admin_users_role_admin();
+      case 'teacher':
+        return m.admin_users_role_teacher();
+      case 'student':
+        return m.admin_users_role_student();
+      default:
+        return role;
     }
   }
 </script>
@@ -49,7 +63,7 @@
           <span
             class="{getRoleBadgeClass(user.role)} rounded-full px-2.5 py-0.5 text-xs font-semibold"
           >
-            {user.role}
+            {getRoleBadgeLabel(user.role)}
           </span>
         </div>
       </Card.Header>
@@ -63,7 +77,8 @@
         <div class="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar class="h-4 w-4" />
           <span>
-            Created {formatDistanceToNow(new Date(user.createdAt), {
+            {m.admin_users_created()}
+            {formatDistanceToNow(new Date(user.createdAt), {
               addSuffix: true
             })}
           </span>
@@ -73,7 +88,7 @@
       <Card.Footer>
         <Button variant="outline" size="sm" class="w-full" onclick={() => onEdit(user)}>
           <Edit class="mr-2 h-4 w-4" />
-          Edit User
+          {m.admin_users_edit_user()}
         </Button>
       </Card.Footer>
     </Card.Root>

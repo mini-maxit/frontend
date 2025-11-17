@@ -28,14 +28,14 @@
   });
 
   const roleOptions = [
-    { value: UserRole.Student, label: 'Student' },
-    { value: UserRole.Teacher, label: 'Teacher' },
-    { value: UserRole.Admin, label: 'Admin' }
+    { value: UserRole.Student, label: m.admin_users_role_student() },
+    { value: UserRole.Teacher, label: m.admin_users_role_teacher() },
+    { value: UserRole.Admin, label: m.admin_users_role_admin() }
   ];
 
   const selectedRoleLabel = $derived.by(() => {
     const option = roleOptions.find((opt) => opt.value === selectedRoleValue);
-    return option?.label || 'Select a role';
+    return option?.label || m.admin_users_filter_role_label();
   });
 
   function handleCancel() {
@@ -43,7 +43,7 @@
   }
 
   async function handleSuccess() {
-    toast.success('User updated successfully');
+    toast.success(m.admin_users_edit_success());
     open = false;
     onSuccess();
   }
@@ -52,33 +52,34 @@
 <Dialog.Root bind:open>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Edit User</Dialog.Title>
+      <Dialog.Title>{m.admin_users_edit_dialog_title()}</Dialog.Title>
       <Dialog.Description>
-        Update user information and role. Changes will be saved immediately.
+        {m.admin_users_edit_dialog_description()}
       </Dialog.Description>
     </Dialog.Header>
 
     {#if user}
       <form
-        {...updateUser.enhance(async ({ submit }) => {
+        {...updateUser.enhance(async ({ submit, data }) => {
           try {
+            console.log('Submitting form to update user..., form:', data);
             await submit();
             await handleSuccess();
           } catch (error: HttpError | unknown) {
             if (isHttpError(error)) {
-              toast.error(error.body.message || 'Failed to update user');
+              toast.error(error.body.message || m.admin_users_edit_error());
             } else {
-              toast.error('Failed to update user');
+              toast.error(m.admin_users_edit_error());
             }
           }
         })}
         class="space-y-4"
       >
-        <input type="hidden" name="userId" value={user.id} />
+        <input hidden {...updateUser.fields.userId.as('number')} value={user.id} />
 
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <Label for="name">First Name</Label>
+            <Label for="name">{m.register_name_label()}</Label>
             <Input
               {...updateUser.fields.name.as('text')}
               id="name"
@@ -86,12 +87,12 @@
               type="text"
               value={user.name}
               required
-              placeholder="First name"
+              placeholder={m.register_name_placeholder()}
             />
           </div>
 
           <div class="space-y-2">
-            <Label for="surname">Last Name</Label>
+            <Label for="surname">{m.register_surname_label()}</Label>
             <Input
               {...updateUser.fields.surname.as('text')}
               id="surname"
@@ -99,13 +100,13 @@
               type="text"
               value={user.surname}
               required
-              placeholder="Last name"
+              placeholder={m.register_surname_placeholder()}
             />
           </div>
         </div>
 
         <div class="space-y-2">
-          <Label for="username">Username</Label>
+          <Label for="username">{m.register_username_label()}</Label>
           <Input
             {...updateUser.fields.username.as('text')}
             id="username"
@@ -113,12 +114,12 @@
             type="text"
             value={user.username}
             required
-            placeholder="Username"
+            placeholder={m.register_username_placeholder()}
           />
         </div>
 
         <div class="space-y-2">
-          <Label for="email">Email</Label>
+          <Label for="email">{m.register_email_label()}</Label>
           <Input
             {...updateUser.fields.email.as('text')}
             id="email"
@@ -126,15 +127,15 @@
             type="email"
             value={user.email}
             required
-            placeholder="email@example.com"
+            placeholder={m.register_email_placeholder()}
           />
         </div>
 
         <div class="space-y-2">
-          <Label for="role">Role</Label>
+          <Label for="role">{m.admin_registration_requests_role()}</Label>
           <Select.Root
+            {...updateUser.fields.role.as('select')}
             type="single"
-            name="role"
             value={selectedRoleValue}
             onValueChange={(value) => {
               if (value) {
@@ -156,8 +157,10 @@
         </div>
 
         <Dialog.Footer>
-          <Button type="button" variant="outline" onclick={handleCancel}>Cancel</Button>
-          <Button type="submit">Save Changes</Button>
+          <Button type="button" variant="outline" onclick={handleCancel}
+            >{m.admin_contests_form_cancel()}</Button
+          >
+          <Button type="submit">{m.admin_tasks_save_changes()}</Button>
         </Dialog.Footer>
       </form>
     {/if}

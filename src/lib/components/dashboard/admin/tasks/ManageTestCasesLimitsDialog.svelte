@@ -2,7 +2,7 @@
   import {
     getTaskLimits,
     updateTaskLimits
-  } from '$lib/../routes/dashboard/admin/tasks/test-cases.remote';
+  } from '$routes/dashboard/teacher/tasks/test-cases.remote';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
