@@ -465,7 +465,7 @@
   "admin_users_role_admin": "Admin",
   "admin_users_role_teacher": "Teacher",
   "admin_users_role_student": "Student",
-  "admin_users_edit_dialog_title": "Edit User",
+  "admin_users_edit_dialog_title": "Edit",
   "admin_users_edit_dialog_description": "Update user information and role. Changes will be saved immediately.",
   "admin_users_edit_success": "User updated successfully",
   "admin_users_edit_error": "Failed to update user"
