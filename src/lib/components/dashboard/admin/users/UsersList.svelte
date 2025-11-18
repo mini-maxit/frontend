@@ -74,7 +74,7 @@
           </div>
 
           <!-- Middle Section: Details -->
-          <div class="grid grid-cols-2 gap-3 lg:grid-cols-2">
+          <div class="grid grid-cols-2 gap-3">
             <!-- Email -->
             <div class="flex items-center gap-2 text-sm text-muted-foreground">
               <Mail class="h-4 w-4 flex-shrink-0" />
