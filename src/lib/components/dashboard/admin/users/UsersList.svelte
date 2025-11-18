@@ -43,54 +43,65 @@
   }
 </script>
 
-<div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+<div class="space-y-3">
   {#each users as user (user.id)}
     <Card.Root class="transition-all duration-200 hover:shadow-lg">
-      <Card.Header>
-        <div class="flex items-start justify-between">
-          <div class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+      <Card.Content class="p-4">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <!-- Left Section: User Info -->
+          <div class="flex flex-1 items-center gap-3">
+            <div
+              class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10"
+            >
               <UserIcon class="h-5 w-5 text-primary" />
             </div>
-            <div>
-              <Card.Title class="text-lg">
-                {user.name}
-                {user.surname}
-              </Card.Title>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <h3 class="font-semibold text-foreground">
+                  {user.name}
+                  {user.surname}
+                </h3>
+                <span
+                  class="{getRoleBadgeClass(
+                    user.role
+                  )} rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                >
+                  {getRoleBadgeLabel(user.role)}
+                </span>
+              </div>
               <p class="text-sm text-muted-foreground">@{user.username}</p>
             </div>
           </div>
-          <span
-            class="{getRoleBadgeClass(user.role)} rounded-full px-2.5 py-0.5 text-xs font-semibold"
-          >
-            {getRoleBadgeLabel(user.role)}
-          </span>
-        </div>
-      </Card.Header>
 
-      <Card.Content class="space-y-3">
-        <div class="flex items-center gap-2 text-sm text-muted-foreground">
-          <Mail class="h-4 w-4" />
-          <span class="truncate">{user.email}</span>
-        </div>
+          <!-- Middle Section: Details -->
+          <div class="grid grid-cols-2 gap-3 lg:grid-cols-2">
+            <!-- Email -->
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+              <Mail class="h-4 w-4 flex-shrink-0" />
+              <span class="truncate">{user.email}</span>
+            </div>
 
-        <div class="flex items-center gap-2 text-sm text-muted-foreground">
-          <Calendar class="h-4 w-4" />
-          <span>
-            {m.admin_users_created()}
-            {formatDistanceToNow(new Date(user.createdAt), {
-              addSuffix: true
-            })}
-          </span>
+            <!-- Created Date -->
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+              <Calendar class="h-4 w-4 flex-shrink-0" />
+              <span>
+                {m.admin_users_created()}
+                {formatDistanceToNow(new Date(user.createdAt), {
+                  addSuffix: true
+                })}
+              </span>
+            </div>
+          </div>
+
+          <!-- Right Section: Action -->
+          <div class="lg:w-auto">
+            <Button variant="outline" size="sm" onclick={() => onEdit(user)}>
+              <Edit class="mr-2 h-4 w-4" />
+              {m.admin_users_edit_user()}
+            </Button>
+          </div>
         </div>
       </Card.Content>
-
-      <Card.Footer>
-        <Button variant="outline" size="sm" class="w-full" onclick={() => onEdit(user)}>
-          <Edit class="mr-2 h-4 w-4" />
-          {m.admin_users_edit_user()}
-        </Button>
-      </Card.Footer>
     </Card.Root>
   {/each}
 </div>
