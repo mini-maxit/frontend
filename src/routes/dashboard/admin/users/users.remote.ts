@@ -6,18 +6,42 @@ import type { UserEditDto } from '$lib/dto/user';
 import * as v from 'valibot';
 import { UserRole } from '$lib/dto/jwt';
 
-export const getUsers = query(async () => {
-  const event = getRequestEvent();
-  const apiClient = createApiClient(event.cookies);
-  const userService = new UserService(apiClient);
+/**
+ * getUsers now accepts an OPTIONAL params object.
+ * This allows calling getUsers() with no arguments (undefined),
+ * avoiding schema validation errors when no paging/sorting is desired.
+ */
+export const getUsers = query(
+  v.optional(
+    v.object({
+      limit: v.optional(v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(1000))),
+      offset: v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
+      // Format: "field:asc" or "field:desc"
+      sort: v.optional(v.pipe(v.string(), v.regex(/^[a-zA-Z_]+:(asc|desc)$/)))
+    })
+  ),
+  async (params) => {
+    const event = getRequestEvent();
+    const apiClient = createApiClient(event.cookies);
+    const userService = new UserService(apiClient);
 
-  const result = await userService.listUsers();
-  if (!result.success || !result.data) {
-    error(result.status, { message: result.error || 'Failed to fetch users.' });
+    const result = await userService.listUsers({
+      limit: params?.limit,
+      offset: params?.offset,
+      sort: params?.sort
+    });
+
+    if (!result.success || !result.data) {
+      error(result.status, { message: result.error || 'Failed to fetch users.' });
+    }
+
+    // Return full paginated structure so consumers can access both items and pagination metadata
+    return {
+      items: result.data.items,
+      pagination: result.data.pagination
+    };
   }
-
-  return result.data;
-});
+);
 
 const UpdateUserSchema = v.object({
   userId: v.pipe(v.number(), v.integer()),
@@ -45,9 +69,6 @@ export const updateUser = form(UpdateUserSchema, async (data) => {
   if (!result.success) {
     error(result.status, { message: result.error || 'Failed to update user.' });
   }
-
-  // Refresh the users list
-  await getUsers().refresh();
 
   return { success: true };
 });

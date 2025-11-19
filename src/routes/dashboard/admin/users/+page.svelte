@@ -10,7 +10,21 @@
   import Search from '@lucide/svelte/icons/search';
   import * as m from '$lib/paraglide/messages';
 
-  const usersQuery = getUsers();
+  type SortKey = 'id' | 'name' | 'username' | 'email' | 'role' | 'createdAt';
+
+  let limit = $state(20);
+  let offset = $state(0);
+  let sortKey = $state<SortKey>('id');
+  let sortDir = $state<'asc' | 'desc'>('asc');
+
+  // Remote query reacts to pagination/sort changes via $derived (no manual $effect needed)
+  let usersQuery = $derived(
+    getUsers({
+      limit,
+      offset,
+      sort: `${sortKey}:${sortDir}`
+    })
+  );
 
   let editDialogOpen = $state(false);
   let selectedUser = $state<User | null>(null);
@@ -38,12 +52,26 @@
     usersQuery.refresh();
   }
 
-  let filteredUsers = $derived.by(() => {
+  function handleChangePage(page: number) {
+    offset = (page - 1) * limit;
+  }
+
+  function handleChangeSort({ key, dir }: { key: SortKey; dir: 'asc' | 'desc' }) {
+    sortKey = key;
+    sortDir = dir;
+    offset = 0;
+  }
+
+  function handleChangeLimit(newLimit: number) {
+    limit = newLimit;
+    offset = 0;
+  }
+
+  let filteredUsers: User[] = $derived.by(() => {
     if (!usersQuery.current) return [];
 
-    let filtered = usersQuery.current;
+    let filtered = usersQuery.current.items;
 
-    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -55,7 +83,6 @@
       );
     }
 
-    // Apply role filter
     if (roleFilterValue !== 'all') {
       filtered = filtered.filter((user) => user.role === roleFilterValue);
     }
@@ -69,12 +96,10 @@
     <h1 class="text-3xl font-bold text-foreground">{m.admin_users_title()}</h1>
   </div>
 
-  <!-- Filters Section -->
   <div class="space-y-4">
     <h2 class="text-2xl font-bold text-foreground">{m.admin_users_search_filter()}</h2>
 
     <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      <!-- Search Input -->
       <div class="relative">
         <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -85,7 +110,6 @@
         />
       </div>
 
-      <!-- Role Filter -->
       <Select.Root
         type="single"
         value={roleFilterValue}
@@ -99,7 +123,7 @@
           {roleFilterLabel}
         </Select.Trigger>
         <Select.Content>
-          {#each roleFilterOptions as option}
+          {#each roleFilterOptions as option (option.value)}
             <Select.Item value={option.value}>
               {option.label}
             </Select.Item>
@@ -109,7 +133,6 @@
     </div>
   </div>
 
-  <!-- Users List Section -->
   <div class="space-y-4">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold text-foreground">{m.admin_users_all_users()}</h2>
@@ -117,7 +140,7 @@
         <p class="text-sm text-muted-foreground">
           {m.admin_users_showing_count({
             count: filteredUsers.length,
-            total: usersQuery.current.length
+            total: usersQuery.current.pagination.totalItems
           })}
         </p>
       {/if}
@@ -131,7 +154,7 @@
       />
     {:else if usersQuery.loading}
       <LoadingSpinner />
-    {:else if usersQuery.current && usersQuery.current.length === 0}
+    {:else if usersQuery.current && usersQuery.current.items.length === 0}
       <EmptyState
         title={m.admin_users_no_users_title()}
         description={m.admin_users_no_users_description()}
@@ -144,7 +167,18 @@
         icon={Users}
       />
     {:else}
-      <UsersList users={filteredUsers} onEdit={handleEditUser} />
+      <UsersList
+        users={filteredUsers}
+        total={usersQuery.current ? usersQuery.current.pagination.totalItems : 0}
+        {limit}
+        {offset}
+        {sortKey}
+        {sortDir}
+        onEdit={handleEditUser}
+        onChangePage={handleChangePage}
+        onChangeSort={handleChangeSort}
+        onChangeLimit={handleChangeLimit}
+      />
     {/if}
   </div>
 </div>

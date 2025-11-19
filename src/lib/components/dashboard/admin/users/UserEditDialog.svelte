@@ -8,7 +8,7 @@
   import * as Select from '$lib/components/ui/select';
   import { toast } from 'svelte-sonner';
   import { updateUser } from '$lib/../routes/dashboard/admin/users/users.remote';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
+  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
 
   interface UserEditDialogProps {
@@ -60,11 +60,11 @@
 
     {#if user}
       <form
-        {...updateUser.enhance(async ({ submit, data }) => {
+        {...updateUser.enhance(async ({ submit }) => {
           try {
             await submit();
             await handleSuccess();
-          } catch (error: HttpError | unknown) {
+          } catch (error) {
             if (isHttpError(error)) {
               toast.error(error.body.message || m.admin_users_edit_error());
             } else {
@@ -146,7 +146,7 @@
               {selectedRoleLabel}
             </Select.Trigger>
             <Select.Content>
-              {#each roleOptions as role}
+              {#each roleOptions as role (role.value)}
                 <Select.Item value={role.value}>
                   {role.label}
                 </Select.Item>
