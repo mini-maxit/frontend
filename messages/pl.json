@@ -460,7 +460,7 @@
   "admin_users_no_users_description": "W systemie nie ma jeszcze żadnych użytkowników.",
   "admin_users_no_matching_title": "Brak pasujących użytkowników",
   "admin_users_no_matching_description": "Żaden użytkownik nie pasuje do Twoich kryteriów wyszukiwania. Spróbuj dostosować filtry.",
-  "admin_users_edit_user": "Edytuj",
+  "admin_users_action_edit": "Edytuj",
   "admin_users_created": "Utworzony",
   "admin_users_role_admin": "Administrator",
   "admin_users_role_teacher": "Nauczyciel",

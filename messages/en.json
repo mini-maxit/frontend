@@ -460,7 +460,7 @@
   "admin_users_no_users_description": "There are no users in the system yet.",
   "admin_users_no_matching_title": "No matching users",
   "admin_users_no_matching_description": "No users match your search criteria. Try adjusting your filters.",
-  "admin_users_edit_user": "Edit",
+  "admin_users_action_edit": "Edit",
   "admin_users_created": "Created",
   "admin_users_role_admin": "Admin",
   "admin_users_role_teacher": "Teacher",

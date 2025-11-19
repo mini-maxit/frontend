@@ -5,19 +5,19 @@ import { error } from '@sveltejs/kit';
 import type { UserEditDto } from '$lib/dto/user';
 import * as v from 'valibot';
 import { UserRole } from '$lib/dto/jwt';
+import { SortDirection } from '$lib/dto/pagination';
 
-/**
- * getUsers now accepts an OPTIONAL params object.
- * This allows calling getUsers() with no arguments (undefined),
- * avoiding schema validation errors when no paging/sorting is desired.
- */
 export const getUsers = query(
   v.optional(
     v.object({
       limit: v.optional(v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(1000))),
       offset: v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
-      // Format: "field:asc" or "field:desc"
-      sort: v.optional(v.pipe(v.string(), v.regex(/^[a-zA-Z_]+:(asc|desc)$/)))
+      sort: v.optional(
+        v.pipe(
+          v.string(),
+          v.regex(new RegExp(`^[a-zA-Z_]+:(${SortDirection.Asc}|${SortDirection.Desc})$`))
+        )
+      )
     })
   ),
   async (params) => {
@@ -35,7 +35,6 @@ export const getUsers = query(
       error(result.status, { message: result.error || 'Failed to fetch users.' });
     }
 
-    // Return full paginated structure so consumers can access both items and pagination metadata
     return {
       items: result.data.items,
       pagination: result.data.pagination

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { User } from '$lib/dto/user';
+  import { SortDirection, UserSortKey } from '$lib/dto/pagination';
   import * as Table from '$lib/components/ui/table';
   import { Button } from '$lib/components/ui/button';
   import * as Tooltip from '$lib/components/ui/tooltip';
@@ -13,20 +14,16 @@
   import { formatDistanceToNow, format, isSameDay } from 'date-fns';
   import * as m from '$lib/paraglide/messages';
 
-  // Backend-driven sorting/pagination:
-  // Parent must call remote getUsers({ limit, offset, sort }) and pass results + meta.
-
-  type SortKey = 'id' | 'name' | 'username' | 'email' | 'role' | 'createdAt';
   interface UsersListProps {
-    users: User[]; // current page items
-    total: number; // total number of users in backend
-    limit: number; // page size used in remote query
-    offset: number; // offset used in remote query
-    sortKey: SortKey; // current backend sort field
-    sortDir: 'asc' | 'desc'; // current backend sort direction
+    users: User[];
+    total: number;
+    limit: number;
+    offset: number;
+    sortKey: UserSortKey;
+    sortDir: SortDirection;
     onEdit: (user: User) => void;
     onChangePage: (page: number) => void;
-    onChangeSort: (sort: { key: SortKey; dir: 'asc' | 'desc' }) => void;
+    onChangeSort: (sort: { key: UserSortKey; dir: SortDirection }) => void;
     onChangeLimit?: (limit: number) => void;
   }
 
@@ -43,13 +40,17 @@
     onChangeLimit
   }: UsersListProps = $props();
 
-  // Derive page metrics
   let currentPage = $derived(Math.floor(offset / limit) + 1);
   let totalPages = $derived(Math.max(1, Math.ceil(total / limit)));
   let pages = $derived(Array.from({ length: totalPages }, (_, i) => i + 1));
 
-  function handleHeaderSort(key: SortKey) {
-    const dir = sortKey === key ? (sortDir === 'asc' ? 'desc' : 'asc') : 'asc';
+  function handleHeaderSort(key: UserSortKey) {
+    const dir =
+      sortKey === key
+        ? sortDir === SortDirection.Asc
+          ? SortDirection.Desc
+          : SortDirection.Asc
+        : SortDirection.Asc;
     onChangeSort({ key, dir });
   }
 
@@ -83,14 +84,13 @@
     }
   }
 
-  // Format createdAt: if today show relative delta, else absolute DD/Mon/YYYY
   function formatCreatedAt(createdAt: string): string {
     const date = new Date(createdAt);
     const now = new Date();
     if (isSameDay(date, now)) {
       return formatDistanceToNow(date, { addSuffix: true });
     }
-    return format(date, 'dd/LLL/yyyy');
+    return format(date, 'dd/MMM/yyyy');
   }
 
   const perPageOptions = [10, 20, 50, 100];
@@ -137,10 +137,10 @@
           <button
             class="flex items-center gap-1"
             type="button"
-            onclick={() => handleHeaderSort('id')}
+            onclick={() => handleHeaderSort(UserSortKey.Id)}
           >
             {m.admin_users_column_id()}
-            {#if sortKey === 'id'}{#if sortDir === 'asc'}<ArrowUp
+            {#if sortKey === UserSortKey.Id}{#if sortDir === SortDirection.Asc}<ArrowUp
                   class="h-3 w-3 text-muted-foreground"
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
@@ -149,10 +149,10 @@
           <button
             class="flex items-center gap-1"
             type="button"
-            onclick={() => handleHeaderSort('name')}
+            onclick={() => handleHeaderSort(UserSortKey.Name)}
           >
             {m.admin_users_column_name()}
-            {#if sortKey === 'name'}{#if sortDir === 'asc'}<ArrowUp
+            {#if sortKey === UserSortKey.Name}{#if sortDir === SortDirection.Asc}<ArrowUp
                   class="h-3 w-3 text-muted-foreground"
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
@@ -161,10 +161,10 @@
           <button
             class="flex items-center gap-1"
             type="button"
-            onclick={() => handleHeaderSort('username')}
+            onclick={() => handleHeaderSort(UserSortKey.Username)}
           >
             {m.admin_users_column_username()}
-            {#if sortKey === 'username'}{#if sortDir === 'asc'}<ArrowUp
+            {#if sortKey === UserSortKey.Username}{#if sortDir === SortDirection.Asc}<ArrowUp
                   class="h-3 w-3 text-muted-foreground"
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
@@ -173,10 +173,10 @@
           <button
             class="flex items-center gap-1"
             type="button"
-            onclick={() => handleHeaderSort('email')}
+            onclick={() => handleHeaderSort(UserSortKey.Email)}
           >
             {m.admin_users_column_email()}
-            {#if sortKey === 'email'}{#if sortDir === 'asc'}<ArrowUp
+            {#if sortKey === UserSortKey.Email}{#if sortDir === SortDirection.Asc}<ArrowUp
                   class="h-3 w-3 text-muted-foreground"
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
@@ -185,10 +185,10 @@
           <button
             class="flex items-center gap-1"
             type="button"
-            onclick={() => handleHeaderSort('role')}
+            onclick={() => handleHeaderSort(UserSortKey.Role)}
           >
             {m.admin_users_column_role()}
-            {#if sortKey === 'role'}{#if sortDir === 'asc'}<ArrowUp
+            {#if sortKey === UserSortKey.Role}{#if sortDir === SortDirection.Asc}<ArrowUp
                   class="h-3 w-3 text-muted-foreground"
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
@@ -197,10 +197,10 @@
           <button
             class="flex items-center gap-1"
             type="button"
-            onclick={() => handleHeaderSort('createdAt')}
+            onclick={() => handleHeaderSort(UserSortKey.CreatedAt)}
           >
             {m.admin_users_column_created_at()}
-            {#if sortKey === 'createdAt'}{#if sortDir === 'asc'}<ArrowUp
+            {#if sortKey === UserSortKey.CreatedAt}{#if sortDir === SortDirection.Asc}<ArrowUp
                   class="h-3 w-3 text-muted-foreground"
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
@@ -257,7 +257,7 @@
                   <Edit class="h-4 w-4" />
                 </Button>
               </Tooltip.Trigger>
-              <Tooltip.Content side="top">{m.admin_users_edit_user()}</Tooltip.Content>
+              <Tooltip.Content side="top">{m.admin_users_action_edit()}</Tooltip.Content>
             </Tooltip.Root>
           </Table.Cell>
         </Table.Row>
@@ -265,7 +265,6 @@
     </Table.Body>
   </Table.Root>
 
-  <!-- Library pagination -->
   <div class="flex flex-col items-center gap-2 pt-2">
     <Pagination.Root
       count={total}

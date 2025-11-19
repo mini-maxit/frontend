@@ -6,25 +6,21 @@
   import * as Select from '$lib/components/ui/select';
   import type { User } from '$lib/dto/user';
   import { UserRole } from '$lib/dto/jwt';
+  import { SortDirection, UserSortKey } from '$lib/dto/pagination';
   import Users from '@lucide/svelte/icons/users';
   import Search from '@lucide/svelte/icons/search';
   import * as m from '$lib/paraglide/messages';
 
-  type SortKey = 'id' | 'name' | 'username' | 'email' | 'role' | 'createdAt';
-
   let limit = $state(20);
   let offset = $state(0);
-  let sortKey = $state<SortKey>('id');
-  let sortDir = $state<'asc' | 'desc'>('asc');
+  let sortKey = $state<UserSortKey>(UserSortKey.Id);
+  let sortDir = $state<SortDirection>(SortDirection.Asc);
 
-  // Remote query reacts to pagination/sort changes via $derived (no manual $effect needed)
-  let usersQuery = $derived(
-    getUsers({
-      limit,
-      offset,
-      sort: `${sortKey}:${sortDir}`
-    })
-  );
+  let usersQuery = getUsers({
+    limit,
+    offset,
+    sort: `${sortKey}:${sortDir}`
+  });
 
   let editDialogOpen = $state(false);
   let selectedUser = $state<User | null>(null);
@@ -54,17 +50,32 @@
 
   function handleChangePage(page: number) {
     offset = (page - 1) * limit;
+    usersQuery = getUsers({
+      limit,
+      offset,
+      sort: `${sortKey}:${sortDir}`
+    });
   }
 
-  function handleChangeSort({ key, dir }: { key: SortKey; dir: 'asc' | 'desc' }) {
+  function handleChangeSort({ key, dir }: { key: UserSortKey; dir: SortDirection }) {
     sortKey = key;
     sortDir = dir;
     offset = 0;
+    usersQuery = getUsers({
+      limit,
+      offset,
+      sort: `${sortKey}:${sortDir}`
+    });
   }
 
   function handleChangeLimit(newLimit: number) {
     limit = newLimit;
     offset = 0;
+    usersQuery = getUsers({
+      limit,
+      offset,
+      sort: `${sortKey}:${sortDir}`
+    });
   }
 
   let filteredUsers: User[] = $derived.by(() => {
