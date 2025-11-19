@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit';
 import type { UserEditDto } from '$lib/dto/user';
 import * as v from 'valibot';
 import { UserRole } from '$lib/dto/jwt';
-import { SortDirection } from '$lib/dto/pagination';
+import { SortDirection, UserSortKey } from '$lib/dto/pagination';
 
 export const getUsers = query(
   v.optional(
@@ -13,10 +13,20 @@ export const getUsers = query(
       limit: v.optional(v.pipe(v.number(), v.integer(), v.minValue(1), v.maxValue(1000))),
       offset: v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
       sort: v.optional(
-        v.pipe(
-          v.string(),
-          v.regex(new RegExp(`^[a-zA-Z_]+:(${SortDirection.Asc}|${SortDirection.Desc})$`))
-        )
+        v.picklist([
+          `${UserSortKey.Id}:${SortDirection.Asc}`,
+          `${UserSortKey.Id}:${SortDirection.Desc}`,
+          `${UserSortKey.Name}:${SortDirection.Asc}`,
+          `${UserSortKey.Name}:${SortDirection.Desc}`,
+          `${UserSortKey.Username}:${SortDirection.Asc}`,
+          `${UserSortKey.Username}:${SortDirection.Desc}`,
+          `${UserSortKey.Email}:${SortDirection.Asc}`,
+          `${UserSortKey.Email}:${SortDirection.Desc}`,
+          `${UserSortKey.Role}:${SortDirection.Asc}`,
+          `${UserSortKey.Role}:${SortDirection.Desc}`,
+          `${UserSortKey.CreatedAt}:${SortDirection.Asc}`,
+          `${UserSortKey.CreatedAt}:${SortDirection.Desc}`
+        ])
       )
     })
   ),

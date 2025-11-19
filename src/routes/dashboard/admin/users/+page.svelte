@@ -16,11 +16,13 @@
   let sortKey = $state<UserSortKey>(UserSortKey.Id);
   let sortDir = $state<SortDirection>(SortDirection.Asc);
 
-  let usersQuery = getUsers({
-    limit,
-    offset,
-    sort: `${sortKey}:${sortDir}`
-  });
+  let usersQuery = $derived(
+    getUsers({
+      limit,
+      offset,
+      sort: `${sortKey}:${sortDir}`
+    })
+  );
 
   let editDialogOpen = $state(false);
   let selectedUser = $state<User | null>(null);
@@ -50,32 +52,17 @@
 
   function handleChangePage(page: number) {
     offset = (page - 1) * limit;
-    usersQuery = getUsers({
-      limit,
-      offset,
-      sort: `${sortKey}:${sortDir}`
-    });
   }
 
   function handleChangeSort({ key, dir }: { key: UserSortKey; dir: SortDirection }) {
     sortKey = key;
     sortDir = dir;
     offset = 0;
-    usersQuery = getUsers({
-      limit,
-      offset,
-      sort: `${sortKey}:${sortDir}`
-    });
   }
 
   function handleChangeLimit(newLimit: number) {
     limit = newLimit;
     offset = 0;
-    usersQuery = getUsers({
-      limit,
-      offset,
-      sort: `${sortKey}:${sortDir}`
-    });
   }
 
   let filteredUsers: User[] = $derived.by(() => {
@@ -151,7 +138,7 @@
         <p class="text-sm text-muted-foreground">
           {m.admin_users_showing_count({
             count: filteredUsers.length,
-            total: usersQuery.current.pagination.totalItems
+            total: filteredUsers.length
           })}
         </p>
       {/if}

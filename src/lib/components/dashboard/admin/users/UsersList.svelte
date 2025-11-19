@@ -42,7 +42,47 @@
 
   let currentPage = $derived(Math.floor(offset / limit) + 1);
   let totalPages = $derived(Math.max(1, Math.ceil(total / limit)));
-  let pages = $derived(Array.from({ length: totalPages }, (_, i) => i + 1));
+
+  let paginationPages = $derived.by(() => {
+    const pages: Array<number | 'ellipsis'> = [];
+    const maxVisible = 7;
+
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+
+    pages.push(1);
+
+    const leftSiblingIndex = Math.max(currentPage - 1, 2);
+    const rightSiblingIndex = Math.min(currentPage + 1, totalPages - 1);
+
+    const shouldShowLeftEllipsis = leftSiblingIndex > 2;
+    const shouldShowRightEllipsis = rightSiblingIndex < totalPages - 1;
+
+    if (!shouldShowLeftEllipsis && shouldShowRightEllipsis) {
+      for (let i = 2; i < Math.min(6, totalPages); i++) {
+        pages.push(i);
+      }
+      pages.push('ellipsis');
+    } else if (shouldShowLeftEllipsis && !shouldShowRightEllipsis) {
+      pages.push('ellipsis');
+      for (let i = Math.max(totalPages - 4, 2); i < totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push('ellipsis');
+      for (let i = leftSiblingIndex; i <= rightSiblingIndex; i++) {
+        pages.push(i);
+      }
+      pages.push('ellipsis');
+    }
+
+    pages.push(totalPages);
+    return pages;
+  });
 
   function handleHeaderSort(key: UserSortKey) {
     const dir =
@@ -93,6 +133,11 @@
     return format(date, 'dd/MMM/yyyy');
   }
 
+  function getAriaSortValue(key: UserSortKey): 'ascending' | 'descending' | 'none' {
+    if (sortKey !== key) return 'none';
+    return sortDir === SortDirection.Asc ? 'ascending' : 'descending';
+  }
+
   const perPageOptions = [10, 20, 50, 100];
 </script>
 
@@ -116,7 +161,7 @@
           onchange={(e) => handleLimitChange(Number((e.target as HTMLSelectElement).value))}
         >
           {#each perPageOptions as opt (opt)}
-            <option value={opt} selected={opt === limit}>{opt}</option>
+            <option value={opt}>{opt}</option>
           {/each}
         </select>
       </div>
@@ -137,6 +182,7 @@
           <button
             class="flex items-center gap-1"
             type="button"
+            aria-sort={getAriaSortValue(UserSortKey.Id)}
             onclick={() => handleHeaderSort(UserSortKey.Id)}
           >
             {m.admin_users_column_id()}
@@ -149,6 +195,7 @@
           <button
             class="flex items-center gap-1"
             type="button"
+            aria-sort={getAriaSortValue(UserSortKey.Name)}
             onclick={() => handleHeaderSort(UserSortKey.Name)}
           >
             {m.admin_users_column_name()}
@@ -161,6 +208,7 @@
           <button
             class="flex items-center gap-1"
             type="button"
+            aria-sort={getAriaSortValue(UserSortKey.Username)}
             onclick={() => handleHeaderSort(UserSortKey.Username)}
           >
             {m.admin_users_column_username()}
@@ -173,6 +221,7 @@
           <button
             class="flex items-center gap-1"
             type="button"
+            aria-sort={getAriaSortValue(UserSortKey.Email)}
             onclick={() => handleHeaderSort(UserSortKey.Email)}
           >
             {m.admin_users_column_email()}
@@ -185,6 +234,7 @@
           <button
             class="flex items-center gap-1"
             type="button"
+            aria-sort={getAriaSortValue(UserSortKey.Role)}
             onclick={() => handleHeaderSort(UserSortKey.Role)}
           >
             {m.admin_users_column_role()}
@@ -197,6 +247,7 @@
           <button
             class="flex items-center gap-1"
             type="button"
+            aria-sort={getAriaSortValue(UserSortKey.CreatedAt)}
             onclick={() => handleHeaderSort(UserSortKey.CreatedAt)}
           >
             {m.admin_users_column_created_at()}
@@ -253,7 +304,12 @@
           <Table.Cell class="text-right">
             <Tooltip.Root>
               <Tooltip.Trigger>
-                <Button variant="ghost" size="icon" onclick={() => onEdit(user)}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={m.admin_users_action_edit()}
+                  onclick={() => onEdit(user)}
+                >
                   <Edit class="h-4 w-4" />
                 </Button>
               </Tooltip.Trigger>
@@ -276,27 +332,23 @@
       }}
     >
       <Pagination.Content>
-        <Pagination.PrevButton
-          disabled={currentPage === 1}
-          onclick={() => currentPage > 1 && onChangePage(currentPage - 1)}
-        >
+        <Pagination.PrevButton disabled={currentPage === 1}>
           {m.admin_users_pagination_prev()}
         </Pagination.PrevButton>
 
-        {#each pages as p (p)}
-          <Pagination.Item>
-            <Pagination.Link
-              page={{ type: 'page', value: p }}
-              isActive={p === currentPage}
-              onclick={() => onChangePage(p)}
-            />
-          </Pagination.Item>
+        {#each paginationPages as p}
+          {#if p === 'ellipsis'}
+            <Pagination.Item>
+              <Pagination.Ellipsis />
+            </Pagination.Item>
+          {:else}
+            <Pagination.Item>
+              <Pagination.Link page={{ type: 'page', value: p }} isActive={p === currentPage} />
+            </Pagination.Item>
+          {/if}
         {/each}
 
-        <Pagination.NextButton
-          disabled={currentPage === totalPages}
-          onclick={() => currentPage < totalPages && onChangePage(currentPage + 1)}
-        >
+        <Pagination.NextButton disabled={currentPage === totalPages}>
           {m.admin_users_pagination_next()}
         </Pagination.NextButton>
       </Pagination.Content>
