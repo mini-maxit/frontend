@@ -13,6 +13,7 @@
   import ArrowDown from '@lucide/svelte/icons/arrow-down';
   import { formatDistanceToNow, format, isSameDay } from 'date-fns';
   import * as m from '$lib/paraglide/messages';
+  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '$lib/utils';
 
   interface UsersListProps {
     users: User[];
@@ -22,67 +23,22 @@
     sortKey: UserSortKey;
     sortDir: SortDirection;
     onEdit: (user: User) => void;
-    onChangePage: (page: number) => void;
-    onChangeSort: (sort: { key: UserSortKey; dir: SortDirection }) => void;
-    onChangeLimit?: (limit: number) => void;
   }
 
   let {
     users,
     total,
-    limit,
-    offset,
-    sortKey,
-    sortDir,
-    onEdit,
-    onChangePage,
-    onChangeSort,
-    onChangeLimit
+    limit = $bindable(),
+    offset = $bindable(),
+    sortKey = $bindable(),
+    sortDir = $bindable(),
+    onEdit
   }: UsersListProps = $props();
 
-  let currentPage = $derived(Math.floor(offset / limit) + 1);
-  let totalPages = $derived(Math.max(1, Math.ceil(total / limit)));
+  let currentPage = $derived(getCurrentPage(offset, limit));
+  let totalPages = $derived(getTotalPages(total, limit));
 
-  let paginationPages = $derived.by(() => {
-    const pages: Array<number | 'ellipsis'> = [];
-    const maxVisible = 7;
-
-    if (totalPages <= maxVisible) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-      return pages;
-    }
-
-    pages.push(1);
-
-    const leftSiblingIndex = Math.max(currentPage - 1, 2);
-    const rightSiblingIndex = Math.min(currentPage + 1, totalPages - 1);
-
-    const shouldShowLeftEllipsis = leftSiblingIndex > 2;
-    const shouldShowRightEllipsis = rightSiblingIndex < totalPages - 1;
-
-    if (!shouldShowLeftEllipsis && shouldShowRightEllipsis) {
-      for (let i = 2; i < Math.min(6, totalPages); i++) {
-        pages.push(i);
-      }
-      pages.push('ellipsis');
-    } else if (shouldShowLeftEllipsis && !shouldShowRightEllipsis) {
-      pages.push('ellipsis');
-      for (let i = Math.max(totalPages - 4, 2); i < totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      pages.push('ellipsis');
-      for (let i = leftSiblingIndex; i <= rightSiblingIndex; i++) {
-        pages.push(i);
-      }
-      pages.push('ellipsis');
-    }
-
-    pages.push(totalPages);
-    return pages;
-  });
+  let paginationPages = $derived(getPaginationPages(currentPage, totalPages));
 
   function handleHeaderSort(key: UserSortKey) {
     const dir =
@@ -91,11 +47,15 @@
           ? SortDirection.Desc
           : SortDirection.Asc
         : SortDirection.Asc;
-    onChangeSort({ key, dir });
+
+    sortKey = key;
+    sortDir = dir;
+    offset = 0;
   }
 
   function handleLimitChange(newLimit: number) {
-    if (onChangeLimit) onChangeLimit(newLimit);
+    limit = newLimit;
+    offset = 0;
   }
 
   function getRoleBadgeClass(role: string): string {
@@ -178,11 +138,10 @@
   <Table.Root class="mt-1">
     <Table.Header>
       <Table.Row>
-        <Table.Head class="w-14">
+        <Table.Head class="w-14" aria-sort={getAriaSortValue(UserSortKey.Id)}>
           <button
             class="flex items-center gap-1"
             type="button"
-            aria-sort={getAriaSortValue(UserSortKey.Id)}
             onclick={() => handleHeaderSort(UserSortKey.Id)}
           >
             {m.admin_users_column_id()}
@@ -191,11 +150,10 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head>
+        <Table.Head aria-sort={getAriaSortValue(UserSortKey.Name)}>
           <button
             class="flex items-center gap-1"
             type="button"
-            aria-sort={getAriaSortValue(UserSortKey.Name)}
             onclick={() => handleHeaderSort(UserSortKey.Name)}
           >
             {m.admin_users_column_name()}
@@ -204,11 +162,10 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head class="hidden sm:table-cell">
+        <Table.Head class="hidden sm:table-cell" aria-sort={getAriaSortValue(UserSortKey.Username)}>
           <button
             class="flex items-center gap-1"
             type="button"
-            aria-sort={getAriaSortValue(UserSortKey.Username)}
             onclick={() => handleHeaderSort(UserSortKey.Username)}
           >
             {m.admin_users_column_username()}
@@ -217,11 +174,10 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head class="hidden md:table-cell">
+        <Table.Head class="hidden lg:table-cell" aria-sort={getAriaSortValue(UserSortKey.Email)}>
           <button
             class="flex items-center gap-1"
             type="button"
-            aria-sort={getAriaSortValue(UserSortKey.Email)}
             onclick={() => handleHeaderSort(UserSortKey.Email)}
           >
             {m.admin_users_column_email()}
@@ -230,11 +186,10 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head class="hidden lg:table-cell">
+        <Table.Head class="hidden xl:table-cell" aria-sort={getAriaSortValue(UserSortKey.Role)}>
           <button
             class="flex items-center gap-1"
             type="button"
-            aria-sort={getAriaSortValue(UserSortKey.Role)}
             onclick={() => handleHeaderSort(UserSortKey.Role)}
           >
             {m.admin_users_column_role()}
@@ -243,11 +198,13 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head class="hidden md:table-cell">
+        <Table.Head
+          class="hidden 2xl:table-cell"
+          aria-sort={getAriaSortValue(UserSortKey.CreatedAt)}
+        >
           <button
             class="flex items-center gap-1"
             type="button"
-            aria-sort={getAriaSortValue(UserSortKey.CreatedAt)}
             onclick={() => handleHeaderSort(UserSortKey.CreatedAt)}
           >
             {m.admin_users_column_created_at()}
@@ -278,7 +235,7 @@
           <Table.Cell class="hidden text-muted-foreground sm:table-cell"
             >@{user.username}</Table.Cell
           >
-          <Table.Cell class="hidden md:table-cell">
+          <Table.Cell class="hidden xl:table-cell">
             <div class="flex items-center gap-2">
               <Mail class="h-4 w-4 shrink-0 text-muted-foreground" />
               <span class="max-w-[180px] truncate">{user.email}</span>
@@ -293,7 +250,7 @@
               {getRoleBadgeLabel(user.role)}
             </span>
           </Table.Cell>
-          <Table.Cell class="hidden md:table-cell">
+          <Table.Cell class="hidden 2xl:table-cell">
             <div class="flex items-center gap-2 text-muted-foreground">
               <Calendar class="h-4 w-4" />
               <span class="whitespace-nowrap">
@@ -328,7 +285,7 @@
       page={currentPage}
       siblingCount={1}
       onPageChange={(p) => {
-        if (p && p !== currentPage) onChangePage(p);
+        if (p && p !== currentPage) offset = getOffset(p, limit);
       }}
     >
       <Pagination.Content>

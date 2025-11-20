@@ -50,21 +50,6 @@
     usersQuery.refresh();
   }
 
-  function handleChangePage(page: number) {
-    offset = (page - 1) * limit;
-  }
-
-  function handleChangeSort({ key, dir }: { key: UserSortKey; dir: SortDirection }) {
-    sortKey = key;
-    sortDir = dir;
-    offset = 0;
-  }
-
-  function handleChangeLimit(newLimit: number) {
-    limit = newLimit;
-    offset = 0;
-  }
-
   let filteredUsers: User[] = $derived.by(() => {
     if (!usersQuery.current) return [];
 
@@ -168,14 +153,11 @@
       <UsersList
         users={filteredUsers}
         total={usersQuery.current ? usersQuery.current.pagination.totalItems : 0}
-        {limit}
-        {offset}
-        {sortKey}
-        {sortDir}
+        bind:limit
+        bind:offset
+        bind:sortKey
+        bind:sortDir
         onEdit={handleEditUser}
-        onChangePage={handleChangePage}
-        onChangeSort={handleChangeSort}
-        onChangeLimit={handleChangeLimit}
       />
     {/if}
   </div>
