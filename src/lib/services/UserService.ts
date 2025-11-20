@@ -1,5 +1,5 @@
 import { ApiError, type ApiService } from './ApiService';
-import type { ApiResponse } from '../dto/response';
+import type { ApiResponse, PaginatedData } from '../dto/response';
 import type { User, UserChangePasswordDto, UserEditDto } from '../dto/user';
 
 export class UserService {
@@ -57,7 +57,7 @@ export class UserService {
   async listUsers(params?: { limit?: number; offset?: number; sort?: string }): Promise<{
     success: boolean;
     status: number;
-    data?: User[];
+    data?: PaginatedData<User>;
     error?: string;
   }> {
     try {
@@ -73,7 +73,7 @@ export class UserService {
       }
 
       const url = `/users/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-      const response: ApiResponse<User[]> = await this.apiService.get({ url });
+      const response: ApiResponse<PaginatedData<User>> = await this.apiService.get({ url });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {

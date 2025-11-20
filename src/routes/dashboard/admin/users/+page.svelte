@@ -6,11 +6,23 @@
   import * as Select from '$lib/components/ui/select';
   import type { User } from '$lib/dto/user';
   import { UserRole } from '$lib/dto/jwt';
+  import { SortDirection, UserSortKey } from '$lib/dto/pagination';
   import Users from '@lucide/svelte/icons/users';
   import Search from '@lucide/svelte/icons/search';
   import * as m from '$lib/paraglide/messages';
 
-  const usersQuery = getUsers();
+  let limit = $state(20);
+  let offset = $state(0);
+  let sortKey = $state<UserSortKey>(UserSortKey.Id);
+  let sortDir = $state<SortDirection>(SortDirection.Asc);
+
+  let usersQuery = $derived(
+    getUsers({
+      limit,
+      offset,
+      sort: `${sortKey}:${sortDir}`
+    })
+  );
 
   let editDialogOpen = $state(false);
   let selectedUser = $state<User | null>(null);
@@ -38,12 +50,11 @@
     usersQuery.refresh();
   }
 
-  let filteredUsers = $derived.by(() => {
+  let filteredUsers: User[] = $derived.by(() => {
     if (!usersQuery.current) return [];
 
-    let filtered = usersQuery.current;
+    let filtered = usersQuery.current.items;
 
-    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -55,7 +66,6 @@
       );
     }
 
-    // Apply role filter
     if (roleFilterValue !== 'all') {
       filtered = filtered.filter((user) => user.role === roleFilterValue);
     }
@@ -69,12 +79,10 @@
     <h1 class="text-3xl font-bold text-foreground">{m.admin_users_title()}</h1>
   </div>
 
-  <!-- Filters Section -->
   <div class="space-y-4">
     <h2 class="text-2xl font-bold text-foreground">{m.admin_users_search_filter()}</h2>
 
     <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      <!-- Search Input -->
       <div class="relative">
         <Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -85,7 +93,6 @@
         />
       </div>
 
-      <!-- Role Filter -->
       <Select.Root
         type="single"
         value={roleFilterValue}
@@ -99,7 +106,7 @@
           {roleFilterLabel}
         </Select.Trigger>
         <Select.Content>
-          {#each roleFilterOptions as option}
+          {#each roleFilterOptions as option (option.value)}
             <Select.Item value={option.value}>
               {option.label}
             </Select.Item>
@@ -109,7 +116,6 @@
     </div>
   </div>
 
-  <!-- Users List Section -->
   <div class="space-y-4">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold text-foreground">{m.admin_users_all_users()}</h2>
@@ -117,7 +123,7 @@
         <p class="text-sm text-muted-foreground">
           {m.admin_users_showing_count({
             count: filteredUsers.length,
-            total: usersQuery.current.length
+            total: filteredUsers.length
           })}
         </p>
       {/if}
@@ -131,7 +137,7 @@
       />
     {:else if usersQuery.loading}
       <LoadingSpinner />
-    {:else if usersQuery.current && usersQuery.current.length === 0}
+    {:else if usersQuery.current && usersQuery.current.items.length === 0}
       <EmptyState
         title={m.admin_users_no_users_title()}
         description={m.admin_users_no_users_description()}
@@ -144,7 +150,15 @@
         icon={Users}
       />
     {:else}
-      <UsersList users={filteredUsers} onEdit={handleEditUser} />
+      <UsersList
+        users={filteredUsers}
+        total={usersQuery.current ? usersQuery.current.pagination.totalItems : 0}
+        bind:limit
+        bind:offset
+        bind:sortKey
+        bind:sortDir
+        onEdit={handleEditUser}
+      />
     {/if}
   </div>
 </div>
