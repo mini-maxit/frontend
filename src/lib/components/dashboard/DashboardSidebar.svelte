@@ -24,6 +24,7 @@
   import Globe from '@lucide/svelte/icons/globe';
   import UserCircle from '@lucide/svelte/icons/user-circle';
   import Users from '@lucide/svelte/icons/users';
+  import FolderOpen from '@lucide/svelte/icons/folder-open';
   import Languages from '@lucide/svelte/icons/languages';
   import LayoutDashboard from '@lucide/svelte/icons/layout-dashboard';
   import Activity from '@lucide/svelte/icons/activity';
@@ -90,6 +91,11 @@
       title: () => m.sidebar_admin_users(),
       href: localizeHref(AppRoutes.AdminUsers),
       icon: Users
+    },
+    {
+      title: () => m.sidebar_admin_groups(),
+      href: localizeHref(AppRoutes.AdminGroups),
+      icon: FolderOpen
     }
   ];
 

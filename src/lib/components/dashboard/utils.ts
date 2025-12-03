@@ -17,7 +17,8 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.Admin]: () => m.sidebar_admin(),
     [AppRoutes.TeacherContests]: () => m.sidebar_admin_contests(),
     [AppRoutes.TeacherTasks]: () => m.sidebar_admin_tasks(),
-    [AppRoutes.AdminUsers]: () => m.admin_users_title()
+    [AppRoutes.AdminUsers]: () => m.admin_users_title(),
+    [AppRoutes.AdminGroups]: () => m.admin_groups_title()
   };
 
   // Check for dynamic routes (e.g., /dashboard/tasks/[taskId])

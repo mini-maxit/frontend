@@ -490,5 +490,22 @@
   "admin_users_pagination_total": "{total} użytkowników łącznie",
   "admin_users_pagination_prev": "Poprzednia",
   "admin_users_pagination_next": "Następna",
-  "admin_users_pagination_showing_range": "Wyświetlanie {from}-{to} z {total} użytkowników"
+  "admin_users_pagination_showing_range": "Wyświetlanie {from}-{to} z {total} użytkowników",
+  "admin_groups_title": "Zarządzanie Grupami",
+  "admin_groups_search_filter": "Szukaj i Filtruj",
+  "admin_groups_search_placeholder": "Szukaj po nazwie grupy...",
+  "admin_groups_all_groups": "Wszystkie Grupy",
+  "admin_groups_showing_count": "Wyświetlanie {count} z {total} grup",
+  "admin_groups_load_error": "Nie udało się załadować grup",
+  "admin_groups_no_groups_title": "Nie znaleziono grup",
+  "admin_groups_no_groups_description": "W systemie nie ma jeszcze żadnych grup.",
+  "admin_groups_no_matching_title": "Brak pasujących grup",
+  "admin_groups_no_matching_description": "Żadne grupy nie pasują do kryteriów wyszukiwania. Spróbuj dostosować filtry.",
+  "admin_groups_column_id": "ID",
+  "admin_groups_column_name": "Nazwa",
+  "admin_groups_column_created_by": "Utworzony przez",
+  "admin_groups_column_created_at": "Utworzono",
+  "admin_groups_column_updated_at": "Zaktualizowano",
+  "admin_groups_created_by_prefix": "Użytkownik #",
+  "sidebar_admin_groups": "Grupy"
 }
