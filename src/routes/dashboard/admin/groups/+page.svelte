@@ -54,7 +54,7 @@
         <p class="text-sm text-muted-foreground">
           {m.admin_groups_showing_count({
             count: filteredGroups.length,
-            total: filteredGroups.length
+            total: groupsQuery.current.items.length
           })}
         </p>
       {/if}
@@ -81,7 +81,7 @@
         icon={FolderOpen}
       />
     {:else}
-      <GroupsList groups={filteredGroups} />
+      <GroupsList groups={filteredGroups} total={groupsQuery.current?.items.length ?? 0} />
     {/if}
   </div>
 </div>

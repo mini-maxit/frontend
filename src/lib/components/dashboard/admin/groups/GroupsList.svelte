@@ -9,9 +9,10 @@
 
   interface GroupsListProps {
     groups: Group[];
+    total: number;
   }
 
-  let { groups }: GroupsListProps = $props();
+  let { groups, total }: GroupsListProps = $props();
 
   function formatCreatedAt(createdAt: string): string {
     const date = new Date(createdAt);
@@ -29,7 +30,7 @@
     <div class="text-xs text-muted-foreground">
       {m.admin_groups_showing_count({
         count: groups.length,
-        total: groups.length
+        total: total
       })}
     </div>
   </div>
