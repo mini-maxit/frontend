@@ -469,20 +469,14 @@
               "$ref": "#/definitions/Permission"
             }
           ],
-          "enum": [
-            "edit",
-            "manage"
-          ]
+          "enum": ["edit", "manage"]
         },
         "user_id": {
           "minimum": 1,
           "type": "integer"
         }
       },
-      "required": [
-        "permission",
-        "user_id"
-      ],
+      "required": ["permission", "user_id"],
       "type": "object"
     },
     "AddTaskToContest": {
@@ -497,9 +491,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "taskId"
-      ],
+      "required": ["taskId"],
       "type": "object"
     },
     "AttemptsSummary": {
@@ -674,17 +666,9 @@
       "type": "object"
     },
     "ContestStatus": {
-      "enum": [
-        "upcoming",
-        "ongoing",
-        "past"
-      ],
+      "enum": ["upcoming", "ongoing", "past"],
       "type": "string",
-      "x-enum-varnames": [
-        "ContestStatusUpcoming",
-        "ContestStatusOngoing",
-        "ContestStatusPast"
-      ]
+      "x-enum-varnames": ["ContestStatusUpcoming", "ContestStatusOngoing", "ContestStatusPast"]
     },
     "ContestTask": {
       "properties": {
@@ -827,11 +811,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "description",
-        "name",
-        "startAt"
-      ],
+      "required": ["description", "name", "startAt"],
       "type": "object"
     },
     "CreateGroup": {
@@ -842,9 +822,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "type": "object"
     },
     "CreatedContest": {
@@ -1215,11 +1193,7 @@
       "type": "object"
     },
     "Permission": {
-      "enum": [
-        "edit",
-        "manage",
-        "owner"
-      ],
+      "enum": ["edit", "manage", "owner"],
       "type": "string",
       "x-enum-comments": {
         "PermissionEdit": "PermissionEdit represents edit access.",
@@ -1231,11 +1205,7 @@
         "PermissionManage represents full access (edit + manage collaborators).",
         "PermissionOwner represents immutable ownership (highest level)."
       ],
-      "x-enum-varnames": [
-        "PermissionEdit",
-        "PermissionManage",
-        "PermissionOwner"
-      ]
+      "x-enum-varnames": ["PermissionEdit", "PermissionManage", "PermissionOwner"]
     },
     "PutTestCase": {
       "properties": {
@@ -1300,11 +1270,7 @@
       "type": "object"
     },
     "RegistrationRequestStatus": {
-      "enum": [
-        "approved",
-        "rejected",
-        "pending"
-      ],
+      "enum": ["approved", "rejected", "pending"],
       "type": "string",
       "x-enum-varnames": [
         "RegistrationRequestStatusApproved",
@@ -1383,12 +1349,7 @@
       "type": "object"
     },
     "SubmissionStatus": {
-      "enum": [
-        "received",
-        "sent for evaluation",
-        "evaluated",
-        "lost"
-      ],
+      "enum": ["received", "sent for evaluation", "evaluated", "lost"],
       "type": "string",
       "x-enum-varnames": [
         "SubmissionStatusReceived",
@@ -1590,15 +1551,10 @@
               "$ref": "#/definitions/Permission"
             }
           ],
-          "enum": [
-            "edit",
-            "manage"
-          ]
+          "enum": ["edit", "manage"]
         }
       },
-      "required": [
-        "permission"
-      ],
+      "required": ["permission"],
       "type": "object"
     },
     "User": {
@@ -1643,10 +1599,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "newPassword",
-        "newPasswordConfirm"
-      ],
+      "required": ["newPassword", "newPasswordConfirm"],
       "type": "object"
     },
     "UserContestStats": {
@@ -1752,10 +1705,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "email",
-        "password"
-      ],
+      "required": ["email", "password"],
       "type": "object"
     },
     "UserRegisterRequest": {
@@ -1787,22 +1737,11 @@
           "type": "string"
         }
       },
-      "required": [
-        "confirmPassword",
-        "email",
-        "name",
-        "password",
-        "surname",
-        "username"
-      ],
+      "required": ["confirmPassword", "email", "name", "password", "surname", "username"],
       "type": "object"
     },
     "UserRole": {
-      "enum": [
-        "student",
-        "teacher",
-        "admin"
-      ],
+      "enum": ["student", "teacher", "admin"],
       "type": "string",
       "x-enum-comments": {
         "UserRoleAdmin": "UserRoleAdmin represents the admin role.",
@@ -1814,11 +1753,7 @@
         "UserRoleTeacher represents the teacher role.",
         "UserRoleAdmin represents the admin role."
       ],
-      "x-enum-varnames": [
-        "UserRoleStudent",
-        "UserRoleTeacher",
-        "UserRoleAdmin"
-      ]
+      "x-enum-varnames": ["UserRoleStudent", "UserRoleTeacher", "UserRoleAdmin"]
     },
     "UserTaskPerformance": {
       "properties": {
@@ -1907,9 +1842,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -1943,14 +1876,10 @@
           }
         },
         "summary": "Get collaborators for a contest",
-        "tags": [
-          "access-control"
-        ]
+        "tags": ["access-control"]
       },
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Add a user as a collaborator to a contest with specified permissions (edit or manage). Only users with manage permission can add collaborators.",
         "parameters": [
           {
@@ -1970,9 +1899,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2006,9 +1933,7 @@
           }
         },
         "summary": "Add a collaborator to a contest",
-        "tags": [
-          "access-control"
-        ]
+        "tags": ["access-control"]
       }
     },
     "/access-control/contests/{resource_id}/collaborators/{user_id}": {
@@ -2030,9 +1955,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2066,14 +1989,10 @@
           }
         },
         "summary": "Remove a collaborator from a contest",
-        "tags": [
-          "access-control"
-        ]
+        "tags": ["access-control"]
       },
       "put": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Update the permission level of a collaborator for a contest. Only users with manage permission can update collaborators.",
         "parameters": [
           {
@@ -2100,9 +2019,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2136,9 +2053,7 @@
           }
         },
         "summary": "Update a contest collaborator's permission",
-        "tags": [
-          "access-control"
-        ]
+        "tags": ["access-control"]
       }
     },
     "/access-control/tasks/{resource_id}/collaborators": {
@@ -2153,9 +2068,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2189,14 +2102,10 @@
           }
         },
         "summary": "Get collaborators for a task",
-        "tags": [
-          "access-control"
-        ]
+        "tags": ["access-control"]
       },
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Add a user as a collaborator to a task with specified permissions (edit or manage). Only users with manage permission can add collaborators.",
         "parameters": [
           {
@@ -2216,9 +2125,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2252,9 +2159,7 @@
           }
         },
         "summary": "Add a collaborator to a task",
-        "tags": [
-          "access-control"
-        ]
+        "tags": ["access-control"]
       }
     },
     "/access-control/tasks/{resource_id}/collaborators/{user_id}": {
@@ -2276,9 +2181,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2312,14 +2215,10 @@
           }
         },
         "summary": "Remove a collaborator from a task",
-        "tags": [
-          "access-control"
-        ]
+        "tags": ["access-control"]
       },
       "put": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Update the permission level of a collaborator for a task. Only users with manage permission can update collaborators.",
         "parameters": [
           {
@@ -2346,9 +2245,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2382,16 +2279,12 @@
           }
         },
         "summary": "Update a task collaborator's permission",
-        "tags": [
-          "access-control"
-        ]
+        "tags": ["access-control"]
       }
     },
     "/auth/login": {
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Logs in a user with email and password, returns JWT tokens",
         "parameters": [
           {
@@ -2404,9 +2297,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2434,17 +2325,13 @@
           }
         },
         "summary": "Login a user",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/auth/logout": {
       "post": {
         "description": "Logs out a user by clearing the refresh token cookie",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2460,17 +2347,13 @@
           }
         },
         "summary": "Logout a user",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/auth/refresh": {
       "post": {
         "description": "Refreshes JWT tokens using a valid refresh token from cookie",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2504,16 +2387,12 @@
           }
         },
         "summary": "Refresh JWT tokens",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/auth/register": {
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Registers a user with name, surname, email, username and password, returns JWT tokens",
         "parameters": [
           {
@@ -2526,9 +2405,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": "Created",
@@ -2562,9 +2439,7 @@
           }
         },
         "summary": "Register a user",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/contests": {
@@ -2591,20 +2466,14 @@
           },
           {
             "description": "Contest status",
-            "enum": [
-              "ongoing",
-              "upcoming",
-              "past"
-            ],
+            "enum": ["ongoing", "upcoming", "past"],
             "in": "query",
             "name": "status",
             "required": true,
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2626,9 +2495,7 @@
           }
         },
         "summary": "Get global contests",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests-management/contests": {
@@ -2654,9 +2521,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2684,14 +2549,10 @@
           }
         },
         "summary": "Get contests manageable by the current user",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       },
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Create a new contest",
         "parameters": [
           {
@@ -2704,9 +2565,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2740,9 +2599,7 @@
           }
         },
         "summary": "Create a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}": {
@@ -2757,9 +2614,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2799,14 +2654,10 @@
           }
         },
         "summary": "Delete a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       },
       "put": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Edit contest details",
         "parameters": [
           {
@@ -2826,9 +2677,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2868,9 +2717,7 @@
           }
         },
         "summary": "Edit a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}/registration-requests": {
@@ -2892,9 +2739,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -2934,16 +2779,12 @@
           }
         },
         "summary": "Get registration requests for a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}/submissions": {
       "get": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Get all submissions for a specific contest. Only accessible by teachers (contest creators) and admins.",
         "parameters": [
           {
@@ -2972,9 +2813,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3008,9 +2847,7 @@
           }
         },
         "summary": "Get submissions for a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}/task-stats": {
@@ -3025,9 +2862,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3055,9 +2890,7 @@
           }
         },
         "summary": "Get task statistics for a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}/tasks": {
@@ -3072,9 +2905,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3114,14 +2945,10 @@
           }
         },
         "summary": "Get tasks for a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       },
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Add an existing task to a specific contest",
         "parameters": [
           {
@@ -3141,9 +2968,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3183,9 +3008,7 @@
           }
         },
         "summary": "Add a task to a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}/tasks/{taskId}/user-stats": {
@@ -3207,9 +3030,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3237,9 +3058,7 @@
           }
         },
         "summary": "Get user statistics for a specific task in a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}/tasks/{taskId}/users/{userId}/submissions": {
@@ -3292,9 +3111,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3322,9 +3139,7 @@
           }
         },
         "summary": "Get submissions for a specific user, task, and contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}/tasks/assignable-tasks": {
@@ -3339,9 +3154,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3381,9 +3194,7 @@
           }
         },
         "summary": "Get available tasks for a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/{id}/user-stats": {
@@ -3404,9 +3215,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3434,9 +3243,7 @@
           }
         },
         "summary": "Get overall user statistics for a contest",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests-management/contests/created": {
@@ -3463,9 +3270,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3493,9 +3298,7 @@
           }
         },
         "summary": "This endpoint is deprecated and will be removed in future versions. Please use the /contests-management/contests endpoint instead.",
-        "tags": [
-          "contests-management"
-        ]
+        "tags": ["contests-management"]
       }
     },
     "/contests/{id}": {
@@ -3510,9 +3313,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3552,9 +3353,7 @@
           }
         },
         "summary": "Get a contest",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests/{id}/register": {
@@ -3569,9 +3368,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3617,9 +3414,7 @@
           }
         },
         "summary": "Register for a contest",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests/{id}/results/my": {
@@ -3634,9 +3429,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3676,9 +3469,7 @@
           }
         },
         "summary": "Get user's results for a contest",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests/{id}/tasks": {
@@ -3694,19 +3485,13 @@
           },
           {
             "description": "Task status filter",
-            "enum": [
-              "past",
-              "ongoing",
-              "upcoming"
-            ],
+            "enum": ["past", "ongoing", "upcoming"],
             "in": "query",
             "name": "status",
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3746,9 +3531,7 @@
           }
         },
         "summary": "Get contest tasks with optional status filter",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests/{id}/tasks/{task_id}": {
@@ -3770,9 +3553,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3812,9 +3593,7 @@
           }
         },
         "summary": "Get a specific task from a contest",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests/{id}/tasks/user-statistics": {
@@ -3829,9 +3608,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3871,18 +3648,14 @@
           }
         },
         "summary": "Get tasks for a contest with submission statistics",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests/my": {
       "get": {
         "deprecated": true,
         "description": "Get contests for a user (returns ongoing, past, upcoming)",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3916,17 +3689,13 @@
           }
         },
         "summary": "Get contests for a user (combined - deprecated; use /contests/my/active or /contests/my/past)",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests/my/active": {
       "get": {
         "description": "Active contests = started AND not finished (ongoing)",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3954,17 +3723,13 @@
           }
         },
         "summary": "Get active contests for the current user",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/contests/my/past": {
       "get": {
         "description": "Past contests = contests whose end time has elapsed",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -3992,17 +3757,13 @@
           }
         },
         "summary": "Get past contests for the current user",
-        "tags": [
-          "contests"
-        ]
+        "tags": ["contests"]
       }
     },
     "/groups/": {
       "get": {
         "description": "Get all groups",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4036,14 +3797,10 @@
           }
         },
         "summary": "Get all groups",
-        "tags": [
-          "group"
-        ]
+        "tags": ["group"]
       },
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Create a group",
         "parameters": [
           {
@@ -4056,9 +3813,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4092,9 +3847,7 @@
           }
         },
         "summary": "Create a group",
-        "tags": [
-          "group"
-        ]
+        "tags": ["group"]
       }
     },
     "/groups/{id}": {
@@ -4109,9 +3862,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4145,14 +3896,10 @@
           }
         },
         "summary": "Get a group",
-        "tags": [
-          "group"
-        ]
+        "tags": ["group"]
       },
       "put": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Edit a group",
         "parameters": [
           {
@@ -4172,9 +3919,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4208,16 +3953,12 @@
           }
         },
         "summary": "Edit a group",
-        "tags": [
-          "group"
-        ]
+        "tags": ["group"]
       }
     },
     "/groups/{id}/users": {
       "delete": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Delete users from a group",
         "parameters": [
           {
@@ -4237,9 +3978,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4273,9 +4012,7 @@
           }
         },
         "summary": "Delete users from a group",
-        "tags": [
-          "group"
-        ]
+        "tags": ["group"]
       },
       "get": {
         "description": "Get users in a group",
@@ -4288,9 +4025,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4324,14 +4059,10 @@
           }
         },
         "summary": "Get users in a group",
-        "tags": [
-          "group"
-        ]
+        "tags": ["group"]
       },
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "Add users to a group",
         "parameters": [
           {
@@ -4351,9 +4082,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4387,9 +4116,7 @@
           }
         },
         "summary": "Add users to a group",
-        "tags": [
-          "group"
-        ]
+        "tags": ["group"]
       }
     },
     "/submissions": {
@@ -4433,9 +4160,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4463,9 +4188,7 @@
           }
         },
         "summary": "Get all submissions with optional filtering",
-        "tags": [
-          "submission"
-        ]
+        "tags": ["submission"]
       }
     },
     "/submissions/{id}": {
@@ -4480,9 +4203,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4504,17 +4225,13 @@
           }
         },
         "summary": "Get a submission by ID",
-        "tags": [
-          "submission"
-        ]
+        "tags": ["submission"]
       }
     },
     "/submissions/languages": {
       "get": {
         "description": "Get all available languages for submitting solutions.",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4530,9 +4247,7 @@
           }
         },
         "summary": "Get all available languages",
-        "tags": [
-          "submission"
-        ]
+        "tags": ["submission"]
       }
     },
     "/submissions/my": {
@@ -4558,9 +4273,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4588,16 +4301,12 @@
           }
         },
         "summary": "Get all submissions for a user",
-        "tags": [
-          "submission"
-        ]
+        "tags": ["submission"]
       }
     },
     "/submissions/submit": {
       "post": {
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "consumes": ["multipart/form-data"],
         "description": "The solution is uploaded to the FileStorage service and a submission is created in the database.",
         "parameters": [
           {
@@ -4628,9 +4337,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4662,9 +4369,7 @@
           }
         },
         "summary": "Submit a solution",
-        "tags": [
-          "submission"
-        ]
+        "tags": ["submission"]
       }
     },
     "/submissions/tasks/{id}": {
@@ -4691,9 +4396,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4721,9 +4424,7 @@
           }
         },
         "summary": "Get all submissions for a task",
-        "tags": [
-          "submission"
-        ]
+        "tags": ["submission"]
       }
     },
     "/submissions/users/{id}": {
@@ -4756,9 +4457,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4786,17 +4485,13 @@
           }
         },
         "summary": "Get all submissions for a user",
-        "tags": [
-          "submission"
-        ]
+        "tags": ["submission"]
       }
     },
     "/tasks": {
       "get": {
         "description": "Returns all tasks",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4818,16 +4513,12 @@
           }
         },
         "summary": "Get all globally available tasks",
-        "tags": [
-          "tasks"
-        ]
+        "tags": ["tasks"]
       }
     },
     "/tasks-management/tasks/": {
       "post": {
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "consumes": ["multipart/form-data"],
         "description": "Uploads a task to the FileStorage service",
         "parameters": [
           {
@@ -4845,9 +4536,7 @@
             "type": "file"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4875,9 +4564,7 @@
           }
         },
         "summary": "Upload a task",
-        "tags": [
-          "tasks-management"
-        ]
+        "tags": ["tasks-management"]
       }
     },
     "/tasks-management/tasks/{id}": {
@@ -4892,9 +4579,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4928,9 +4613,7 @@
           }
         },
         "summary": "Delete a task",
-        "tags": [
-          "tasks-management"
-        ]
+        "tags": ["tasks-management"]
       },
       "patch": {
         "description": "Updates a task by ID",
@@ -4955,9 +4638,7 @@
             "type": "file"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -4991,9 +4672,7 @@
           }
         },
         "summary": "Update a task",
-        "tags": [
-          "tasks-management"
-        ]
+        "tags": ["tasks-management"]
       }
     },
     "/tasks-management/tasks/{id}/limits": {
@@ -5008,9 +4687,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5038,9 +4715,7 @@
           }
         },
         "summary": "Gets task limits",
-        "tags": [
-          "tasks-management"
-        ]
+        "tags": ["tasks-management"]
       },
       "put": {
         "description": "Updates task limits by task ID",
@@ -5062,9 +4737,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5092,9 +4765,7 @@
           }
         },
         "summary": "Updates task limits",
-        "tags": [
-          "tasks-management"
-        ]
+        "tags": ["tasks-management"]
       }
     },
     "/tasks-management/tasks/created": {
@@ -5120,9 +4791,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5150,9 +4819,7 @@
           }
         },
         "summary": "Get all created tasks",
-        "tags": [
-          "tasks-management"
-        ]
+        "tags": ["tasks-management"]
       }
     },
     "/tasks/{id}": {
@@ -5167,9 +4834,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5203,9 +4868,7 @@
           }
         },
         "summary": "Get a task",
-        "tags": [
-          "tasks"
-        ]
+        "tags": ["tasks"]
       }
     },
     "/tasks/my": {
@@ -5225,9 +4888,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5243,9 +4904,7 @@
           }
         },
         "summary": "Get my assigned tasks",
-        "tags": [
-          "tasks"
-        ]
+        "tags": ["tasks"]
       }
     },
     "/users/": {
@@ -5271,9 +4930,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5295,9 +4952,7 @@
           }
         },
         "summary": "Get all users",
-        "tags": [
-          "user"
-        ]
+        "tags": ["user"]
       }
     },
     "/users/{id}": {
@@ -5312,9 +4967,7 @@
             "type": "integer"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5348,9 +5001,7 @@
           }
         },
         "summary": "Get user by ID",
-        "tags": [
-          "user"
-        ]
+        "tags": ["user"]
       },
       "patch": {
         "description": "Edit user",
@@ -5372,9 +5023,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5414,9 +5063,7 @@
           }
         },
         "summary": "Edit user",
-        "tags": [
-          "user"
-        ]
+        "tags": ["user"]
       }
     },
     "/users/{id}/password": {
@@ -5440,9 +5087,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5476,17 +5121,13 @@
           }
         },
         "summary": "Change user password",
-        "tags": [
-          "user"
-        ]
+        "tags": ["user"]
       }
     },
     "/users/me": {
       "get": {
         "description": "Get current user",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5502,17 +5143,13 @@
           }
         },
         "summary": "Get current user",
-        "tags": [
-          "user"
-        ]
+        "tags": ["user"]
       }
     },
     "/workers/queue/reconnect": {
       "post": {
         "description": "Triggers queue reconnection and processes pending submissions (admin only)",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "message",
@@ -5534,17 +5171,13 @@
           }
         },
         "summary": "Reconnect to queue",
-        "tags": [
-          "worker"
-        ]
+        "tags": ["worker"]
       }
     },
     "/workers/queue/status": {
       "get": {
         "description": "Returns the current status of the queue connection and pending submissions",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5566,17 +5199,13 @@
           }
         },
         "summary": "Get queue status",
-        "tags": [
-          "worker"
-        ]
+        "tags": ["worker"]
       }
     },
     "/workers/status": {
       "get": {
         "description": "Returns the current status of all worker nodes",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "OK",
@@ -5604,9 +5233,7 @@
           }
         },
         "summary": "Get worker status",
-        "tags": [
-          "worker"
-        ]
+        "tags": ["worker"]
       }
     }
   },

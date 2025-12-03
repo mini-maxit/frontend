@@ -5,6 +5,7 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import User from '@lucide/svelte/icons/user';
   import Clock from '@lucide/svelte/icons/clock';
+  import Users from '@lucide/svelte/icons/users';
   import type { Task } from '$lib/dto/task';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
@@ -70,20 +71,30 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="flex gap-2">
+    <div class="flex flex-col gap-2">
+      <div class="flex gap-2">
+        <Button
+          variant="outline"
+          href={localizeHref(`${AppRoutes.TaskDetails}${task.id}`)}
+          class="w-full flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        >
+          {m.admin_tasks_card_view_details()}
+        </Button>
+        <Button
+          variant="default"
+          class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+          onclick={() => (manageDialogOpen = true)}
+        >
+          {m.admin_tasks_card_manage()}
+        </Button>
+      </div>
       <Button
         variant="outline"
-        href={localizeHref(`${AppRoutes.TaskDetails}${task.id}`)}
-        class="w-full flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        href={localizeHref(`${AppRoutes.TeacherTaskCollaborators}${task.id}/collaborators`)}
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
       >
-        {m.admin_tasks_card_view_details()}
-      </Button>
-      <Button
-        variant="default"
-        class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        onclick={() => (manageDialogOpen = true)}
-      >
-        {m.admin_tasks_card_manage()}
+        <Users class="mr-2 h-4 w-4" />
+        {m.admin_tasks_card_view_collaborators()}
       </Button>
     </div>
   </Card.Content>
