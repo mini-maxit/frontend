@@ -5,6 +5,7 @@ export {
   ContestsManagementService,
   createContestsManagementService
 } from './ContestsManagementService';
+export { GroupService } from './GroupService';
 export { SubmissionService } from './SubmissionService';
 export { TaskService, createTaskService } from './TaskService';
 export { TasksManagementService } from './TasksManagementService';

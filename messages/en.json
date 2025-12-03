@@ -490,5 +490,22 @@
   "admin_users_pagination_total": "{total} total users",
   "admin_users_pagination_prev": "Previous",
   "admin_users_pagination_next": "Next",
-  "admin_users_pagination_showing_range": "Showing {from}-{to} of {total} users"
+  "admin_users_pagination_showing_range": "Showing {from}-{to} of {total} users",
+  "admin_groups_title": "Group Management",
+  "admin_groups_search_filter": "Search & Filter",
+  "admin_groups_search_placeholder": "Search by group name...",
+  "admin_groups_all_groups": "All Groups",
+  "admin_groups_showing_count": "Showing {count} of {total} groups",
+  "admin_groups_load_error": "Failed to load groups",
+  "admin_groups_no_groups_title": "No groups found",
+  "admin_groups_no_groups_description": "There are no groups in the system yet.",
+  "admin_groups_no_matching_title": "No matching groups",
+  "admin_groups_no_matching_description": "No groups match your search criteria. Try adjusting your filters.",
+  "admin_groups_column_id": "ID",
+  "admin_groups_column_name": "Name",
+  "admin_groups_column_created_by": "Created By",
+  "admin_groups_column_created_at": "Created",
+  "admin_groups_column_updated_at": "Updated",
+  "admin_groups_created_by_prefix": "User #",
+  "sidebar_admin_groups": "Groups"
 }

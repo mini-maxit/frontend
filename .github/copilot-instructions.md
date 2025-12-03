@@ -335,6 +335,87 @@ const taskService = new TaskService(apiClient);
 - Services handle all error states - check `result.success` before accessing data
 - Services return consistent response format: `{ success, status, data?, error? }`
 
+## Using Swagger MCP for Backend API
+
+This project has access to the **Swagger MCP server** for exploring the backend API definition. The Swagger definition is automatically downloaded and converted from YAML to JSON during the Copilot setup steps.
+
+### Pre-configured Files
+
+The setup creates:
+- `swagger.json` - The converted Swagger/OpenAPI definition
+- `.swagger-mcp` - Configuration file with the path to swagger.json
+
+### Available Swagger MCP Tools
+
+#### 1. listEndpoints
+
+Lists all available API endpoints with their HTTP methods and descriptions:
+
+```
+swagger-listEndpoints(swaggerFilePath: "/path/to/swagger.json")
+```
+
+#### 2. listEndpointModels
+
+Shows the request/response models for a specific endpoint:
+
+```
+swagger-listEndpointModels(
+  swaggerFilePath: "/path/to/swagger.json",
+  path: "/groups/",
+  method: "GET"
+)
+```
+
+#### 3. generateModelCode
+
+Generates TypeScript interfaces from Swagger model definitions:
+
+```
+swagger-generateModelCode(
+  swaggerFilePath: "/path/to/swagger.json",
+  modelName: "Group"
+)
+```
+
+#### 4. generateEndpointToolCode
+
+Generates TypeScript code for calling an API endpoint:
+
+```
+swagger-generateEndpointToolCode(
+  swaggerFilePath: "/path/to/swagger.json",
+  path: "/groups/",
+  method: "GET"
+)
+```
+
+### When to Use Swagger MCP
+
+- **Exploring new API endpoints**: Use `listEndpoints` to discover available APIs
+- **Understanding request/response formats**: Use `listEndpointModels` and `generateModelCode`
+- **Creating new services**: Reference the generated TypeScript interfaces for DTOs
+- **Verifying API contracts**: Ensure your service implementations match the backend API
+
+### Example Workflow
+
+1. List all endpoints to find the one you need:
+   ```
+   swagger-listEndpoints(swaggerFilePath: "swagger.json")
+   ```
+
+2. Get the models for that endpoint:
+   ```
+   swagger-listEndpointModels(swaggerFilePath: "swagger.json", path: "/groups/", method: "GET")
+   ```
+
+3. Generate TypeScript interface for the model:
+   ```
+   swagger-generateModelCode(swaggerFilePath: "swagger.json", modelName: "Group")
+   ```
+
+4. Use the generated interface to create your DTO in `/src/lib/dto/`
+
 ## Internationalization (i18n)
 
 This project uses **Paraglide** for internationalization with support for **English (en)** and **Polish (pl)**.
