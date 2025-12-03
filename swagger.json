@@ -1,0 +1,5614 @@
+{
+  "basePath": "/api/v1",
+  "definitions": {
+    "APIError": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/errorStruct"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-AuthResponse": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/AuthResponse"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-Collaborator": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/Collaborator"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-ContestDetailed": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ContestDetailed"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-ContestResults": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/ContestResults"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-ContestTask": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/ContestTask"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-ContestTaskStats": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/ContestTaskStats"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-CreatedContest": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/CreatedContest"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-Group": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/Group"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-IDResponse": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/IDResponse"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-MessageResponse": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/MessageResponse"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-MyTasksResponse": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/MyTasksResponse"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-PaginatedResult-AvailableContest": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/PaginatedResult-AvailableContest"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-PaginatedResult-ManagedContest": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/PaginatedResult-ManagedContest"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-PaginatedResult-Submission": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/PaginatedResult-Submission"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-PaginatedResult-array_CreatedContest": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/PaginatedResult-array_CreatedContest"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-PaginatedResult-array_Task": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/PaginatedResult-array_Task"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-PaginatedResult-array_User": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/PaginatedResult-array_User"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-QueueStatus": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/QueueStatus"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-RegistrationRequest": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/RegistrationRequest"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-Submission": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/Submission"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-Task": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/Task"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-Task]": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/PaginatedResult-array_Task"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-TaskCreateResponse": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/TaskCreateResponse"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-TaskDetailed": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/TaskDetailed"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-TaskUserStats": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/TaskUserStats"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-TaskWithContestStats": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/TaskWithContestStats"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-TestCase": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/TestCase"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-User": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/User"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-UserContestStats": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/UserContestStats"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-UserContestsWithStats": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/UserContestsWithStats"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-WorkersStatus": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/WorkersStatus"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-array_ContestWithStats": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/ContestWithStats"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-array_Group": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/Group"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-array_LanguageConfig": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/LanguageConfig"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-array_PastContestWithStats": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/PastContestWithStats"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-array_User": {
+      "properties": {
+        "data": {
+          "items": {
+            "$ref": "#/definitions/User"
+          },
+          "type": "array"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "APIResponse-string": {
+      "properties": {
+        "data": {
+          "type": "string"
+        },
+        "ok": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "AddCollaborator": {
+      "properties": {
+        "permission": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Permission"
+            }
+          ],
+          "enum": [
+            "edit",
+            "manage"
+          ]
+        },
+        "user_id": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "permission",
+        "user_id"
+      ],
+      "type": "object"
+    },
+    "AddTaskToContest": {
+      "properties": {
+        "endAt": {
+          "type": "string"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "taskId": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "taskId"
+      ],
+      "type": "object"
+    },
+    "AttemptsSummary": {
+      "properties": {
+        "attemptCount": {
+          "description": "Number of submission attempts by the user",
+          "type": "integer"
+        },
+        "bestScore": {
+          "description": "Best score achieved by the user (percentage of passed tests)",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "AuthResponse": {
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AvailableContest": {
+      "properties": {
+        "createdBy": {
+          "type": "integer"
+        },
+        "creatorName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "participantCount": {
+          "type": "integer"
+        },
+        "registrationStatus": {
+          "description": "\"registered\", \"canRegister\", \"awaitingApproval\", \"registrationClosed\"",
+          "type": "string"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ContestStatus"
+            }
+          ],
+          "description": "\"upcoming\", \"ongoing\", \"past\""
+        },
+        "taskCount": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "BaseContest": {
+      "properties": {
+        "createdBy": {
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "startAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Collaborator": {
+      "properties": {
+        "added_at": {
+          "type": "string"
+        },
+        "permission": {
+          "$ref": "#/definitions/Permission"
+        },
+        "user_email": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "user_name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ContestDetailed": {
+      "properties": {
+        "createdBy": {
+          "type": "integer"
+        },
+        "creatorName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "participantCount": {
+          "type": "integer"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ContestStatus"
+            }
+          ],
+          "description": "\"upcoming\", \"ongoing\", \"past\""
+        },
+        "taskCount": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ContestResults": {
+      "properties": {
+        "contest": {
+          "$ref": "#/definitions/BaseContest"
+        },
+        "taskResults": {
+          "items": {
+            "$ref": "#/definitions/TaskResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ContestStatus": {
+      "enum": [
+        "upcoming",
+        "ongoing",
+        "past"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "ContestStatusUpcoming",
+        "ContestStatusOngoing",
+        "ContestStatusPast"
+      ]
+    },
+    "ContestTask": {
+      "properties": {
+        "creatorName": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "task": {
+          "$ref": "#/definitions/TaskInfo"
+        }
+      },
+      "type": "object"
+    },
+    "ContestTaskStats": {
+      "properties": {
+        "averageScore": {
+          "type": "number"
+        },
+        "fullySolvedCount": {
+          "type": "integer"
+        },
+        "partiallySolvedCount": {
+          "type": "integer"
+        },
+        "submittedCount": {
+          "type": "integer"
+        },
+        "successRate": {
+          "type": "number"
+        },
+        "task": {
+          "$ref": "#/definitions/TaskInfo"
+        },
+        "totalParticipants": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ContestWithStats": {
+      "properties": {
+        "createdBy": {
+          "type": "integer"
+        },
+        "creatorName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "participantCount": {
+          "type": "integer"
+        },
+        "solvedTaskCount": {
+          "type": "integer"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ContestStatus"
+            }
+          ],
+          "description": "\"upcoming\", \"ongoing\", \"past\""
+        },
+        "taskCount": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ContestWithTasks": {
+      "properties": {
+        "contestId": {
+          "type": "integer"
+        },
+        "contestName": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "tasks": {
+          "items": {
+            "$ref": "#/definitions/TaskWithAttempts"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "CreateContest": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "isRegistrationOpen": {
+          "type": "boolean"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "isVisible": {
+          "type": "boolean"
+        },
+        "name": {
+          "maxLength": 100,
+          "minLength": 3,
+          "type": "string"
+        },
+        "startAt": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "name",
+        "startAt"
+      ],
+      "type": "object"
+    },
+    "CreateGroup": {
+      "properties": {
+        "name": {
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "CreatedContest": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "integer"
+        },
+        "creatorName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "isRegistrationOpen": {
+          "type": "boolean"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "isVisible": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "participantCount": {
+          "type": "integer"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ContestStatus"
+            }
+          ],
+          "description": "\"upcoming\", \"ongoing\", \"past\""
+        },
+        "taskCount": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "EditContest": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "isRegistrationOpen": {
+          "type": "boolean"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "isVisible": {
+          "type": "boolean"
+        },
+        "name": {
+          "maxLength": 100,
+          "minLength": 3,
+          "type": "string"
+        },
+        "startAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "EditGroup": {
+      "properties": {
+        "name": {
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Group": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "IDResponse": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "LanguageConfig": {
+      "properties": {
+        "fileExtension": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "language": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ManagedContest": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "integer"
+        },
+        "creatorName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "isRegistrationOpen": {
+          "type": "boolean"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "isVisible": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "participantCount": {
+          "type": "integer"
+        },
+        "permissionType": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Permission"
+            }
+          ],
+          "description": "\"view\", \"edit\", \"manage\", \"owner\""
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ContestStatus"
+            }
+          ],
+          "description": "\"upcoming\", \"ongoing\", \"past\""
+        },
+        "taskCount": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "MessageResponse": {
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MyTasksResponse": {
+      "properties": {
+        "contests": {
+          "items": {
+            "$ref": "#/definitions/ContestWithTasks"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "PaginatedResult-AvailableContest": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/AvailableContest"
+          },
+          "type": "array"
+        },
+        "pagination": {
+          "$ref": "#/definitions/PaginationMetadata"
+        }
+      },
+      "type": "object"
+    },
+    "PaginatedResult-ManagedContest": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/ManagedContest"
+          },
+          "type": "array"
+        },
+        "pagination": {
+          "$ref": "#/definitions/PaginationMetadata"
+        }
+      },
+      "type": "object"
+    },
+    "PaginatedResult-Submission": {
+      "properties": {
+        "items": {
+          "$ref": "#/definitions/Submission"
+        },
+        "pagination": {
+          "$ref": "#/definitions/PaginationMetadata"
+        }
+      },
+      "type": "object"
+    },
+    "PaginatedResult-array_CreatedContest": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/CreatedContest"
+          },
+          "type": "array"
+        },
+        "pagination": {
+          "$ref": "#/definitions/PaginationMetadata"
+        }
+      },
+      "type": "object"
+    },
+    "PaginatedResult-array_Task": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/Task"
+          },
+          "type": "array"
+        },
+        "pagination": {
+          "$ref": "#/definitions/PaginationMetadata"
+        }
+      },
+      "type": "object"
+    },
+    "PaginatedResult-array_User": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/User"
+          },
+          "type": "array"
+        },
+        "pagination": {
+          "$ref": "#/definitions/PaginationMetadata"
+        }
+      },
+      "type": "object"
+    },
+    "PaginationMetadata": {
+      "properties": {
+        "currentPage": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "totalItems": {
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "PastContestWithStats": {
+      "properties": {
+        "createdBy": {
+          "type": "integer"
+        },
+        "creatorName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "endAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "isSubmissionOpen": {
+          "type": "boolean"
+        },
+        "maximumScore": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "participantCount": {
+          "type": "integer"
+        },
+        "rank": {
+          "type": "integer"
+        },
+        "score": {
+          "type": "integer"
+        },
+        "solvedPercentage": {
+          "type": "number"
+        },
+        "startAt": {
+          "type": "string"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ContestStatus"
+            }
+          ],
+          "description": "\"upcoming\", \"ongoing\", \"past\""
+        },
+        "taskCount": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Permission": {
+      "enum": [
+        "edit",
+        "manage",
+        "owner"
+      ],
+      "type": "string",
+      "x-enum-comments": {
+        "PermissionEdit": "PermissionEdit represents edit access.",
+        "PermissionManage": "PermissionManage represents full access (edit + manage collaborators).",
+        "PermissionOwner": "PermissionOwner represents immutable ownership (highest level)."
+      },
+      "x-enum-descriptions": [
+        "PermissionEdit represents edit access.",
+        "PermissionManage represents full access (edit + manage collaborators).",
+        "PermissionOwner represents immutable ownership (highest level)."
+      ],
+      "x-enum-varnames": [
+        "PermissionEdit",
+        "PermissionManage",
+        "PermissionOwner"
+      ]
+    },
+    "PutTestCase": {
+      "properties": {
+        "memoryLimit": {
+          "type": "integer"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "timeLimit": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "PutTestCaseLimitsRequest": {
+      "properties": {
+        "limits": {
+          "items": {
+            "$ref": "#/definitions/PutTestCase"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "QueueStatus": {
+      "properties": {
+        "connected": {
+          "type": "boolean"
+        },
+        "lastChecked": {
+          "type": "string"
+        },
+        "pendingSubmissions": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "RegistrationRequest": {
+      "properties": {
+        "contestId": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/definitions/RegistrationRequestStatus"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "userId": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "RegistrationRequestStatus": {
+      "enum": [
+        "approved",
+        "rejected",
+        "pending"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "RegistrationRequestStatusApproved",
+        "RegistrationRequestStatusRejected",
+        "RegistrationRequestStatusPending"
+      ]
+    },
+    "Submission": {
+      "properties": {
+        "checkedAt": {
+          "type": "string"
+        },
+        "contestId": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "language": {
+          "$ref": "#/definitions/LanguageConfig"
+        },
+        "languageId": {
+          "type": "integer"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "result": {
+          "$ref": "#/definitions/SubmissionResult"
+        },
+        "status": {
+          "$ref": "#/definitions/SubmissionStatus"
+        },
+        "submittedAt": {
+          "type": "string"
+        },
+        "task": {
+          "$ref": "#/definitions/Task"
+        },
+        "taskId": {
+          "type": "integer"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "userId": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SubmissionResult": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "submissionId": {
+          "type": "integer"
+        },
+        "testResults": {
+          "items": {
+            "$ref": "#/definitions/TestResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SubmissionStatus": {
+      "enum": [
+        "received",
+        "sent for evaluation",
+        "evaluated",
+        "lost"
+      ],
+      "type": "string",
+      "x-enum-varnames": [
+        "SubmissionStatusReceived",
+        "SubmissionStatusSentForEvaluation",
+        "SubmissionStatusEvaluated",
+        "SubmissionStatusLost"
+      ]
+    },
+    "Task": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "isVisible": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TaskCreateResponse": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TaskDetailed": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "integer"
+        },
+        "createdByName": {
+          "type": "string"
+        },
+        "descriptionUrl": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TaskInfo": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TaskResult": {
+      "properties": {
+        "bestScore": {
+          "type": "number"
+        },
+        "bestSubmissionId": {
+          "type": "integer"
+        },
+        "submissionCount": {
+          "type": "integer"
+        },
+        "task": {
+          "$ref": "#/definitions/TaskInfo"
+        }
+      },
+      "type": "object"
+    },
+    "TaskUserStats": {
+      "properties": {
+        "bestScore": {
+          "type": "number"
+        },
+        "bestSubmissionId": {
+          "type": "integer"
+        },
+        "submissionCount": {
+          "type": "integer"
+        },
+        "user": {
+          "$ref": "#/definitions/UserInfo"
+        }
+      },
+      "type": "object"
+    },
+    "TaskWithAttempts": {
+      "properties": {
+        "attemptsSummary": {
+          "$ref": "#/definitions/AttemptsSummary"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "isVisible": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TaskWithContestStats": {
+      "properties": {
+        "attemptsSummary": {
+          "$ref": "#/definitions/AttemptsSummary"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TestCase": {
+      "properties": {
+        "memoryLimit": {
+          "type": "integer"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "timeLimit": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TestResult": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "errorMessage": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "submissionResultId": {
+          "type": "integer"
+        },
+        "testCaseId": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "UpdateCollaborator": {
+      "properties": {
+        "permission": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/Permission"
+            }
+          ],
+          "enum": [
+            "edit",
+            "manage"
+          ]
+        }
+      },
+      "required": [
+        "permission"
+      ],
+      "type": "object"
+    },
+    "User": {
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/UserRole"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserChangePassword": {
+      "properties": {
+        "newPassword": {
+          "maxLength": 50,
+          "minLength": 8,
+          "type": "string"
+        },
+        "newPasswordConfirm": {
+          "maxLength": 50,
+          "minLength": 8,
+          "type": "string"
+        },
+        "oldPassword": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "newPassword",
+        "newPasswordConfirm"
+      ],
+      "type": "object"
+    },
+    "UserContestStats": {
+      "properties": {
+        "taskBreakdown": {
+          "items": {
+            "$ref": "#/definitions/UserTaskPerformance"
+          },
+          "type": "array"
+        },
+        "tasksAttempted": {
+          "type": "integer"
+        },
+        "tasksPartiallySolved": {
+          "type": "integer"
+        },
+        "tasksSolved": {
+          "type": "integer"
+        },
+        "user": {
+          "$ref": "#/definitions/UserInfo"
+        }
+      },
+      "type": "object"
+    },
+    "UserContestsWithStats": {
+      "properties": {
+        "ongoing": {
+          "items": {
+            "$ref": "#/definitions/ContestWithStats"
+          },
+          "type": "array"
+        },
+        "past": {
+          "items": {
+            "$ref": "#/definitions/PastContestWithStats"
+          },
+          "type": "array"
+        },
+        "upcoming": {
+          "items": {
+            "$ref": "#/definitions/ContestWithStats"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "UserEdit": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/UserRole"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserIDs": {
+      "properties": {
+        "userIDs": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "UserInfo": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserLoginRequest": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ],
+      "type": "object"
+    },
+    "UserRegisterRequest": {
+      "properties": {
+        "confirmPassword": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "password": {
+          "maxLength": 50,
+          "minLength": 8,
+          "type": "string"
+        },
+        "surname": {
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "username": {
+          "maxLength": 30,
+          "minLength": 3,
+          "type": "string"
+        }
+      },
+      "required": [
+        "confirmPassword",
+        "email",
+        "name",
+        "password",
+        "surname",
+        "username"
+      ],
+      "type": "object"
+    },
+    "UserRole": {
+      "enum": [
+        "student",
+        "teacher",
+        "admin"
+      ],
+      "type": "string",
+      "x-enum-comments": {
+        "UserRoleAdmin": "UserRoleAdmin represents the admin role.",
+        "UserRoleStudent": "UserRoleStudent represents the student role.",
+        "UserRoleTeacher": "UserRoleTeacher represents the teacher role."
+      },
+      "x-enum-descriptions": [
+        "UserRoleStudent represents the student role.",
+        "UserRoleTeacher represents the teacher role.",
+        "UserRoleAdmin represents the admin role."
+      ],
+      "x-enum-varnames": [
+        "UserRoleStudent",
+        "UserRoleTeacher",
+        "UserRoleAdmin"
+      ]
+    },
+    "UserTaskPerformance": {
+      "properties": {
+        "attemptCount": {
+          "type": "integer"
+        },
+        "bestScore": {
+          "type": "number"
+        },
+        "isSolved": {
+          "type": "boolean"
+        },
+        "taskId": {
+          "type": "integer"
+        },
+        "taskTitle": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ValidationErrorResponse": {
+      "type": "object"
+    },
+    "WorkerStatus": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "processingMessageId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WorkersStatus": {
+      "properties": {
+        "busyWorkers": {
+          "type": "integer"
+        },
+        "statusTime": {
+          "type": "string"
+        },
+        "totalWorkers": {
+          "type": "integer"
+        },
+        "workerStatus": {
+          "items": {
+            "$ref": "#/definitions/WorkerStatus"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "errorStruct": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "info": {
+    "contact": {},
+    "title": "Mini-Maxit API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/access-control/contests/{resource_id}/collaborators": {
+      "get": {
+        "description": "Get all collaborators for a specific contest. Users with edit permission or higher can see collaborators.",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-Collaborator"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get collaborators for a contest",
+        "tags": [
+          "access-control"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Add a user as a collaborator to a contest with specified permissions (edit or manage). Only users with manage permission can add collaborators.",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Collaborator details",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddCollaborator"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Add a collaborator to a contest",
+        "tags": [
+          "access-control"
+        ]
+      }
+    },
+    "/access-control/contests/{resource_id}/collaborators/{user_id}": {
+      "delete": {
+        "description": "Remove a user's collaborator access to a contest. Only users with manage permission can remove collaborators. Cannot remove the creator.",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Remove a collaborator from a contest",
+        "tags": [
+          "access-control"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Update the permission level of a collaborator for a contest. Only users with manage permission can update collaborators.",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "New permission",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCollaborator"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Update a contest collaborator's permission",
+        "tags": [
+          "access-control"
+        ]
+      }
+    },
+    "/access-control/tasks/{resource_id}/collaborators": {
+      "get": {
+        "description": "Get all collaborators for a specific task. Users with edit permission or higher can see collaborators.",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-Collaborator"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get collaborators for a task",
+        "tags": [
+          "access-control"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Add a user as a collaborator to a task with specified permissions (edit or manage). Only users with manage permission can add collaborators.",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Collaborator details",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddCollaborator"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Add a collaborator to a task",
+        "tags": [
+          "access-control"
+        ]
+      }
+    },
+    "/access-control/tasks/{resource_id}/collaborators/{user_id}": {
+      "delete": {
+        "description": "Remove a user's collaborator access to a task. Only users with manage permission can remove collaborators. Cannot remove the creator.",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Remove a collaborator from a task",
+        "tags": [
+          "access-control"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Update the permission level of a collaborator for a task. Only users with manage permission can update collaborators.",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "New permission",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCollaborator"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Update a task collaborator's permission",
+        "tags": [
+          "access-control"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Logs in a user with email and password, returns JWT tokens",
+        "parameters": [
+          {
+            "description": "User Login Request",
+            "in": "body",
+            "name": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLoginRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-AuthResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Login a user",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "description": "Logs out a user by clearing the refresh token cookie",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Logout a user",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "description": "Refreshes JWT tokens using a valid refresh token from cookie",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-AuthResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Refresh JWT tokens",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Registers a user with name, surname, email, username and password, returns JWT tokens",
+        "parameters": [
+          {
+            "description": "User Register Request",
+            "in": "body",
+            "name": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegisterRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-AuthResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Register a user",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/contests": {
+      "get": {
+        "description": "Get global contests accessible to the (ongoing, upcoming, past) with pagination metadata",
+        "parameters": [
+          {
+            "description": "Limit",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          },
+          {
+            "description": "Contest status",
+            "enum": [
+              "ongoing",
+              "upcoming",
+              "past"
+            ],
+            "in": "query",
+            "name": "status",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-AvailableContest"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get global contests",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests-management/contests": {
+      "get": {
+        "description": "Get all contests where the current user is the creator or has collaborator access (view, edit, or manage) with pagination metadata",
+        "parameters": [
+          {
+            "description": "Limit",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-ManagedContest"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get contests manageable by the current user",
+        "tags": [
+          "contests-management"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Create a new contest",
+        "parameters": [
+          {
+            "description": "Create Contest",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateContest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-IDResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Create a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}": {
+      "delete": {
+        "description": "Delete a contest by ID",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Delete a contest",
+        "tags": [
+          "contests-management"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Edit contest details",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Edit Contest",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EditContest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-CreatedContest"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Edit a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}/registration-requests": {
+      "get": {
+        "description": "Get all pending registration requests for a specific contest (only accessible by contest creator or admin)",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "default": "pending",
+            "description": "Filter by status (pending, approved, rejected)",
+            "in": "query",
+            "name": "status",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-RegistrationRequest"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get registration requests for a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}/submissions": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Get all submissions for a specific contest. Only accessible by teachers (contest creators) and admins.",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Limit",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-Submission"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get submissions for a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}/task-stats": {
+      "get": {
+        "description": "Get aggregated statistics for each task in a contest (for contest creators or admins)",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-ContestTaskStats"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get task statistics for a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}/tasks": {
+      "get": {
+        "description": "Get all tasks associated with a specific contest",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-ContestTask"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get tasks for a contest",
+        "tags": [
+          "contests-management"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Add an existing task to a specific contest",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Add Task to Contest",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddTaskToContest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Add a task to a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}/tasks/{taskId}/user-stats": {
+      "get": {
+        "description": "Get per-user statistics for a task in a contest (for contest/task creators or admins)",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "taskId",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-TaskUserStats"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get user statistics for a specific task in a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}/tasks/{taskId}/users/{userId}/submissions": {
+      "get": {
+        "description": "Get all submissions for a user on a task in a contest with filtering (for contest/task creators or admins)",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "taskId",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Filter by submission status",
+            "in": "query",
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "description": "Limit the number of returned submissions",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset the returned submissions",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort order",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-Submission"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get submissions for a specific user, task, and contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}/tasks/assignable-tasks": {
+      "get": {
+        "description": "Get all tasks that are NOT yet assigned to the specified contest (admin/teacher only)",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-Task"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get available tasks for a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/{id}/user-stats": {
+      "get": {
+        "description": "Get overall performance statistics for all users (or a specific user) in a contest (for contest creators or admins)",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Filter by specific user ID",
+            "in": "query",
+            "name": "userId",
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-UserContestStats"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get overall user statistics for a contest",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests-management/contests/created": {
+      "get": {
+        "deprecated": true,
+        "description": "Get all contests created by the currently authenticated user with pagination metadata",
+        "parameters": [
+          {
+            "description": "Limit",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-array_CreatedContest"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "This endpoint is deprecated and will be removed in future versions. Please use the /contests-management/contests endpoint instead.",
+        "tags": [
+          "contests-management"
+        ]
+      }
+    },
+    "/contests/{id}": {
+      "get": {
+        "description": "Get contest details by ID",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-ContestDetailed"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get a contest",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests/{id}/register": {
+      "post": {
+        "description": "Create a pending registration for a contest (requires contest creator approval)",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Register for a contest",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests/{id}/results/my": {
+      "get": {
+        "description": "Get results of the current user for a given contest, including attempt count, best result, and best submission ID for each task",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-ContestResults"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get user's results for a contest",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests/{id}/tasks": {
+      "get": {
+        "description": "Get visible tasks for a contest with optional status filter (past, ongoing, upcoming). Only accessible by participants or users with access policy.",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Task status filter",
+            "enum": [
+              "past",
+              "ongoing",
+              "upcoming"
+            ],
+            "in": "query",
+            "name": "status",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-ContestTask"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get contest tasks with optional status filter",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests/{id}/tasks/{task_id}": {
+      "get": {
+        "description": "Get detailed information about a specific task within a contest",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-TaskDetailed"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get a specific task from a contest",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests/{id}/tasks/user-statistics": {
+      "get": {
+        "description": "Get tasks associated with a specific contest including best score and attempt count for the current user",
+        "parameters": [
+          {
+            "description": "Contest ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-TaskWithContestStats"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get tasks for a contest with submission statistics",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests/my": {
+      "get": {
+        "deprecated": true,
+        "description": "Get contests for a user (returns ongoing, past, upcoming)",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-UserContestsWithStats"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get contests for a user (combined - deprecated; use /contests/my/active or /contests/my/past)",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests/my/active": {
+      "get": {
+        "description": "Active contests = started AND not finished (ongoing)",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-array_ContestWithStats"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get active contests for the current user",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/contests/my/past": {
+      "get": {
+        "description": "Past contests = contests whose end time has elapsed",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-array_PastContestWithStats"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get past contests for the current user",
+        "tags": [
+          "contests"
+        ]
+      }
+    },
+    "/groups/": {
+      "get": {
+        "description": "Get all groups",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-array_Group"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all groups",
+        "tags": [
+          "group"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Create a group",
+        "parameters": [
+          {
+            "description": "Create Group",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateGroup"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-IDResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Create a group",
+        "tags": [
+          "group"
+        ]
+      }
+    },
+    "/groups/{id}": {
+      "get": {
+        "description": "Get a group",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-Group"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get a group",
+        "tags": [
+          "group"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Edit a group",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Edit Group",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EditGroup"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-Group"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Edit a group",
+        "tags": [
+          "group"
+        ]
+      }
+    },
+    "/groups/{id}/users": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete users from a group",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User IDs",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserIDs"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Delete users from a group",
+        "tags": [
+          "group"
+        ]
+      },
+      "get": {
+        "description": "Get users in a group",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-array_User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get users in a group",
+        "tags": [
+          "group"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Add users to a group",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User IDs",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserIDs"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Add users to a group",
+        "tags": [
+          "group"
+        ]
+      }
+    },
+    "/submissions": {
+      "get": {
+        "description": "Get submissions with optional filters by userId, contestId, and/or taskId. Students can only view their own submissions. Teachers can view submissions for tasks/contests they created. Admins have full access.",
+        "parameters": [
+          {
+            "description": "User ID filter",
+            "in": "query",
+            "name": "userId",
+            "type": "integer"
+          },
+          {
+            "description": "Contest ID filter",
+            "in": "query",
+            "name": "contestId",
+            "type": "integer"
+          },
+          {
+            "description": "Task ID filter",
+            "in": "query",
+            "name": "taskId",
+            "type": "integer"
+          },
+          {
+            "description": "Limit the number of returned submissions",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset the returned submissions",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort order",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-Submission"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all submissions with optional filtering",
+        "tags": [
+          "submission"
+        ]
+      }
+    },
+    "/submissions/{id}": {
+      "get": {
+        "description": "If the user is a student, the submission must belong to the user.",
+        "parameters": [
+          {
+            "description": "Submission ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-Submission"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get a submission by ID",
+        "tags": [
+          "submission"
+        ]
+      }
+    },
+    "/submissions/languages": {
+      "get": {
+        "description": "Get all available languages for submitting solutions.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-array_LanguageConfig"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all available languages",
+        "tags": [
+          "submission"
+        ]
+      }
+    },
+    "/submissions/my": {
+      "get": {
+        "description": "If the user is a student, it fails with 403 Forbidden.",
+        "parameters": [
+          {
+            "description": "Limit the number of returned submissions",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset the returned submissions",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort order",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-Submission"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all submissions for a user",
+        "tags": [
+          "submission"
+        ]
+      }
+    },
+    "/submissions/submit": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "description": "The solution is uploaded to the FileStorage service and a submission is created in the database.",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "formData",
+            "name": "taskID",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Contest ID",
+            "in": "formData",
+            "name": "contestID",
+            "type": "integer"
+          },
+          {
+            "description": "Solution file",
+            "in": "formData",
+            "name": "solution",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "description": "Language ID",
+            "in": "formData",
+            "name": "languageID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "additionalProperties": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Submit a solution",
+        "tags": [
+          "submission"
+        ]
+      }
+    },
+    "/submissions/tasks/{id}": {
+      "get": {
+        "description": "If the user is a student and has no access to this task, it fails with 403 Forbidden.",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Limit the number of returned submissions",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset the returned submissions",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-Submission"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all submissions for a task",
+        "tags": [
+          "submission"
+        ]
+      }
+    },
+    "/submissions/users/{id}": {
+      "get": {
+        "description": "If the user is a student, it fails with 403 Forbidden.",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Limit the number of returned submissions",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset the returned submissions",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort order",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-Submission"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all submissions for a user",
+        "tags": [
+          "submission"
+        ]
+      }
+    },
+    "/tasks": {
+      "get": {
+        "description": "Returns all tasks",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-Task]"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all globally available tasks",
+        "tags": [
+          "tasks"
+        ]
+      }
+    },
+    "/tasks-management/tasks/": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "description": "Uploads a task to the FileStorage service",
+        "parameters": [
+          {
+            "description": "Name of the task",
+            "in": "formData",
+            "name": "title",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Task archive",
+            "in": "formData",
+            "name": "archive",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-TaskCreateResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Upload a task",
+        "tags": [
+          "tasks-management"
+        ]
+      }
+    },
+    "/tasks-management/tasks/{id}": {
+      "delete": {
+        "description": "Deletes a task by ID",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Delete a task",
+        "tags": [
+          "tasks-management"
+        ]
+      },
+      "patch": {
+        "description": "Updates a task by ID",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "New title for the task",
+            "in": "formData",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "description": "New archive for the task",
+            "in": "formData",
+            "name": "archive",
+            "type": "file"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Update a task",
+        "tags": [
+          "tasks-management"
+        ]
+      }
+    },
+    "/tasks-management/tasks/{id}/limits": {
+      "get": {
+        "description": "Gets task limits by task ID",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-TestCase"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Gets task limits",
+        "tags": [
+          "tasks-management"
+        ]
+      },
+      "put": {
+        "description": "Updates task limits by task ID",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Task limits",
+            "in": "body",
+            "name": "limits",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutTestCaseLimitsRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Updates task limits",
+        "tags": [
+          "tasks-management"
+        ]
+      }
+    },
+    "/tasks-management/tasks/created": {
+      "get": {
+        "description": "Gets all tasks created by the current user with pagination metadata",
+        "parameters": [
+          {
+            "description": "Offset for pagination",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Limit for pagination",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Field to sort by",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-array_Task"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all created tasks",
+        "tags": [
+          "tasks-management"
+        ]
+      }
+    },
+    "/tasks/{id}": {
+      "get": {
+        "description": "Returns a task by ID",
+        "parameters": [
+          {
+            "description": "Task ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-TaskDetailed"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get a task",
+        "tags": [
+          "tasks"
+        ]
+      }
+    },
+    "/tasks/my": {
+      "get": {
+        "description": "Returns all live tasks assigned to the current user, grouped by contests with submission statistics",
+        "parameters": [
+          {
+            "description": "Number of results to return (default: 100)",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Number of results to skip (default: 0)",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MyTasksResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get my assigned tasks",
+        "tags": [
+          "tasks"
+        ]
+      }
+    },
+    "/users/": {
+      "get": {
+        "description": "Get all users",
+        "parameters": [
+          {
+            "description": "Limit",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Offset",
+            "in": "query",
+            "name": "offset",
+            "type": "integer"
+          },
+          {
+            "description": "Sort",
+            "in": "query",
+            "name": "sort",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-PaginatedResult-array_User"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get all users",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "description": "Get user by ID",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-User"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get user by ID",
+        "tags": [
+          "user"
+        ]
+      },
+      "patch": {
+        "description": "Edit user",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User Edit Request",
+            "in": "body",
+            "name": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserEdit"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Edit user",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/users/{id}/password": {
+      "patch": {
+        "description": "Change user password",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "User Change Password Request",
+            "in": "body",
+            "name": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserChangePassword"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-MessageResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Change user password",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/users/me": {
+      "get": {
+        "description": "Get current user",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-User"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get current user",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/workers/queue/reconnect": {
+      "post": {
+        "description": "Triggers queue reconnection and processes pending submissions (admin only)",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "message",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-string"
+            }
+          },
+          "401": {
+            "description": "Not authorized - requires admin role",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Reconnect to queue",
+        "tags": [
+          "worker"
+        ]
+      }
+    },
+    "/workers/queue/status": {
+      "get": {
+        "description": "Returns the current status of the queue connection and pending submissions",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-QueueStatus"
+            }
+          },
+          "401": {
+            "description": "Not authorized - requires admin role",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get queue status",
+        "tags": [
+          "worker"
+        ]
+      }
+    },
+    "/workers/status": {
+      "get": {
+        "description": "Returns the current status of all worker nodes",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/APIResponse-WorkersStatus"
+            }
+          },
+          "401": {
+            "description": "Not authorized - requires teacher or admin role",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout - worker status request timed out",
+            "schema": {
+              "$ref": "#/definitions/APIError"
+            }
+          }
+        },
+        "summary": "Get worker status",
+        "tags": [
+          "worker"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0"
+}
