@@ -1,4 +1,4 @@
-name: "Copilot Setup Steps"
+name: 'Copilot Setup Steps'
 
 on:
   workflow_dispatch:
@@ -26,8 +26,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
-          cache: "pnpm"
+          node-version: '22'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -42,6 +42,20 @@ jobs:
           cp .env.example .env
           npm run build
           echo "Swagger MCP server built successfully"
+
+      - name: Download and convert Swagger definition
+        run: |
+          # Download YAML swagger definition from backend docs
+          curl -s "https://mini-maxit.github.io/backend/master/swagger.yaml" -o /tmp/swagger.yaml
+
+          # Convert YAML to JSON using Python (available on ubuntu-latest)
+          python3 -c "import yaml, json; print(json.dumps(yaml.safe_load(open('/tmp/swagger.yaml')), indent=2))" > swagger.json
+
+          # Create .swagger-mcp config file pointing to the JSON file
+          echo "SWAGGER_FILEPATH=$(pwd)/swagger.json" > .swagger-mcp
+
+          echo "Swagger definition downloaded and converted successfully"
+          echo "Config file created at .swagger-mcp"
 
       - name: Prepare project (sync, typecheck, lint)
         # Using || true to allow Copilot to start even with minor typecheck/lint issues
