@@ -32,6 +32,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Setup Swagger MCP server
+        run: |
+          git clone --depth 1 https://github.com/Vizioz/Swagger-MCP.git /tmp/swagger-mcp
+          cd /tmp/swagger-mcp
+          npm install
+          npm run build
+          echo "Swagger MCP server built successfully"
+
       - name: Prepare project (sync, typecheck, lint)
         # Using || true to allow Copilot to start even with minor typecheck/lint issues
         run: |
