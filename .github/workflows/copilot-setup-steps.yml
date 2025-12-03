@@ -1,0 +1,79 @@
+name: "Copilot Setup Steps"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm (pinned version)
+        run: |
+          npm install -g pnpm@10.15.1
+          pnpm -v
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Set up Swagger MCP server
+        run: |
+          git clone https://github.com/Vizioz/Swagger-MCP.git /tmp/swagger-mcp
+          cd /tmp/swagger-mcp
+          git checkout 41c28344ca09be8bc9d83fbc35b6aae75edfb762
+          npm install
+          # Create .env file required by the build script
+          cp .env.example .env
+          npm run build
+          echo "Swagger MCP server built successfully"
+
+      - name: Prepare project (sync, typecheck, lint)
+        # Using || true to allow Copilot to start even with minor typecheck/lint issues
+        run: |
+          pnpm run prepare
+          pnpm run check || true
+          pnpm run lint || true
+
+      - name: Build production frontend
+        run: pnpm run build
+
+      - name: Preview production build
+        run: |
+          pnpm run preview &
+          PREVIEW_PID=$!
+          trap "kill $PREVIEW_PID 2>/dev/null || true" EXIT
+          # Wait for server to start with retry logic
+          for i in {1..10}; do
+            if curl --fail --silent http://localhost:4173/ > /dev/null 2>&1; then
+              echo "Preview server is ready"
+              kill $PREVIEW_PID 2>/dev/null || true
+              exit 0
+            fi
+            echo "Waiting for preview server... (attempt $i/10)"
+            sleep 2
+          done
+          echo "Preview server failed to start"
+          kill $PREVIEW_PID 2>/dev/null || true
+          exit 1
+
+      - name: Save build artifacts (optional)
+        uses: actions/cache@v4
+        with:
+          path: build
+          key: build-output-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
