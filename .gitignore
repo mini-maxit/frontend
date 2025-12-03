@@ -31,3 +31,7 @@ src/lib/paraglide
 
 # Logs
 logs/
+
+# Swagger
+.swagger-mcp
+swagger.json
