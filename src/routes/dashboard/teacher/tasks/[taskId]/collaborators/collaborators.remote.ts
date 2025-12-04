@@ -35,13 +35,13 @@ export const getAllUsers = query(async () => {
     error(result.status, { message: result.error || 'Failed to load users' });
   }
 
-  return result.data.data;
+  return result.data;
 });
 
 export const addCollaborator = form(
   v.object({
-    taskId: v.pipe(v.number(), v.integer(), v.minValue(1)),
-    userId: v.pipe(v.number(), v.integer(), v.minValue(1)),
+    taskId: v.pipe(v.string(), v.transform(Number), v.integer(), v.minValue(1)),
+    userId: v.pipe(v.string(), v.transform(Number), v.integer(), v.minValue(1)),
     permission: v.picklist([Permission.Edit, Permission.Manage])
   }),
   async (data) => {

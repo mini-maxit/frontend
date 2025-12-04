@@ -14,11 +14,13 @@
   import type { Collaborator } from '$lib/dto/accessControl';
   import type { AddCollaboratorForm } from '$routes/dashboard/teacher/tasks/[taskId]/collaborators/collaborators.remote';
   import { LoadingSpinner } from '$lib/components/common';
+  import { UserRole } from '$lib/dto/jwt';
+  import type { PaginatedData } from '$lib/dto/response';
 
   interface Props {
     taskId: number;
     addCollaborator: AddCollaboratorForm;
-    users: User[] | undefined;
+    users: PaginatedData<User> | undefined;
     usersLoading: boolean;
     usersError: Error | null;
     existingCollaborators: Collaborator[] | undefined;
@@ -32,11 +34,13 @@
   let selectedUserId = $state<number | null>(null);
   let selectedPermission = $state<Permission | null>(null);
 
-  // Filter out users who are already collaborators
+  // Filter out users who are already collaborators and users with student role
   let availableUsers = $derived.by(() => {
     if (!users) return [];
     const collaboratorIds = new Set(existingCollaborators?.map((c) => c.user_id) ?? []);
-    return users.filter((user) => !collaboratorIds.has(user.id));
+    return users.items.filter(
+      (user) => !collaboratorIds.has(user.id) && user.role !== UserRole.Student
+    );
   });
 
   // Filter users by search query
@@ -52,7 +56,7 @@
     );
   });
 
-  let selectedUser = $derived(users?.find((u) => u.id === selectedUserId));
+  let selectedUser = $derived(users?.items.find((u) => u.id === selectedUserId));
 
   function resetForm() {
     searchQuery = '';
