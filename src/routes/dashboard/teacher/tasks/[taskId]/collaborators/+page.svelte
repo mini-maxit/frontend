@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getTaskCollaborators } from './collaborators.remote';
+  import { getTaskCollaborators, getAllUsers, addCollaborator } from './collaborators.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { AddCollaboratorButton } from '$lib/components/dashboard/admin/tasks';
   import {
     Card,
     CardHeader,
@@ -25,6 +26,7 @@
   let { data }: Props = $props();
 
   const collaboratorsQuery = getTaskCollaborators(data.taskId);
+  const usersQuery = getAllUsers();
 
   function getPermissionLabel(permission: Permission): string {
     switch (permission) {
@@ -60,7 +62,26 @@
     </h1>
   </div>
 
+  <!-- Quick Actions Section -->
   <div class="space-y-4">
+    <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_quick_actions()}</h2>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <AddCollaboratorButton
+        taskId={data.taskId}
+        {addCollaborator}
+        users={usersQuery.current}
+        usersLoading={usersQuery.loading}
+        usersError={usersQuery.error}
+        existingCollaborators={collaboratorsQuery.current}
+      />
+    </div>
+  </div>
+
+  <!-- Collaborators List Section -->
+  <div class="space-y-4">
+    <h2 class="text-2xl font-bold text-foreground">{m.task_collaborators_title()}</h2>
+
     {#if collaboratorsQuery.error}
       <ErrorCard
         title={m.task_collaborators_load_error()}

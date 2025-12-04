@@ -504,5 +504,19 @@
   "task_collaborators_permission_edit": "Edit",
   "task_collaborators_permission_manage": "Manage",
   "task_collaborators_permission_owner": "Owner",
-  "admin_tasks_card_view_collaborators": "View Collaborators"
+  "admin_tasks_card_view_collaborators": "View Collaborators",
+  "task_collaborators_add_title": "Add Collaborator",
+  "task_collaborators_add_description": "Add a new collaborator to this task",
+  "task_collaborators_add_dialog_title": "Add Collaborator",
+  "task_collaborators_add_dialog_description": "Select a user and assign a permission level.",
+  "task_collaborators_add_user_label": "Select User",
+  "task_collaborators_add_user_placeholder": "Search by username or email...",
+  "task_collaborators_add_permission_label": "Permission Level",
+  "task_collaborators_add_permission_placeholder": "Select permission",
+  "task_collaborators_add_cancel": "Cancel",
+  "task_collaborators_add_submit": "Add Collaborator",
+  "task_collaborators_add_success": "Collaborator added successfully!",
+  "task_collaborators_add_error": "Failed to add collaborator",
+  "task_collaborators_users_load_error": "Failed to load users",
+  "task_collaborators_no_users_found": "No users found"
 }
