@@ -55,7 +55,7 @@ export class AccessControlService {
         body: JSON.stringify(data)
       });
       return { success: true, status: 201 };
-          } catch (error) {
+    } catch (error) {
       if (error instanceof ApiError) {
         return {
           success: false,
@@ -66,6 +66,7 @@ export class AccessControlService {
       throw error;
     }
   }
+
   /**
    * Get collaborators for a specific contest.
    * Only users with edit permission or higher can see collaborators.
