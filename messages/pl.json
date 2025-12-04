@@ -504,5 +504,19 @@
   "task_collaborators_permission_edit": "Edycja",
   "task_collaborators_permission_manage": "Zarządzanie",
   "task_collaborators_permission_owner": "Właściciel",
-  "admin_tasks_card_view_collaborators": "Zobacz Współpracowników"
+  "admin_tasks_card_view_collaborators": "Zobacz Współpracowników",
+  "task_collaborators_add_title": "Dodaj Współpracownika",
+  "task_collaborators_add_description": "Dodaj nowego współpracownika do tego zadania",
+  "task_collaborators_add_dialog_title": "Dodaj Współpracownika",
+  "task_collaborators_add_dialog_description": "Wybierz użytkownika i przypisz poziom uprawnień.",
+  "task_collaborators_add_user_label": "Wybierz Użytkownika",
+  "task_collaborators_add_user_placeholder": "Szukaj według nazwy użytkownika lub emaila...",
+  "task_collaborators_add_permission_label": "Poziom Uprawnień",
+  "task_collaborators_add_permission_placeholder": "Wybierz uprawnienia",
+  "task_collaborators_add_cancel": "Anuluj",
+  "task_collaborators_add_submit": "Dodaj Współpracownika",
+  "task_collaborators_add_success": "Współpracownik został dodany pomyślnie!",
+  "task_collaborators_add_error": "Nie udało się dodać współpracownika",
+  "task_collaborators_users_load_error": "Nie udało się załadować użytkowników",
+  "task_collaborators_no_users_found": "Nie znaleziono użytkowników"
 }

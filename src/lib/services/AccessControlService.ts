@@ -1,6 +1,11 @@
 import { ApiError, type ApiService } from './ApiService';
 import type { ApiResponse } from '../dto/response';
-import type { Collaborator } from '../dto/accessControl';
+import type { Collaborator, Permission } from '../dto/accessControl';
+
+export interface AddCollaboratorRequest {
+  user_id: number;
+  permission: Permission;
+}
 
 export class AccessControlService {
   constructor(private apiClient: ApiService) {}
@@ -20,6 +25,36 @@ export class AccessControlService {
         url: `/access-control/tasks/${taskId}/collaborators`
       });
       return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Add a collaborator to a specific task.
+   * Only users with manage permission can add collaborators.
+   */
+  async addTaskCollaborator(
+    taskId: number,
+    data: AddCollaboratorRequest
+  ): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.post<ApiResponse<void>>({
+        url: `/access-control/tasks/${taskId}/collaborators`,
+        body: JSON.stringify(data)
+      });
+      return { success: true, status: 201 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {
