@@ -120,7 +120,7 @@
             toast.success(m.task_collaborators_add_success());
             dialogOpen = false;
             resetForm();
-          } catch (error: HttpError | unknown) {
+          } catch (error: unknown) {
             if (isHttpError(error)) {
               toast.error(error.body.message);
             } else {

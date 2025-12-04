@@ -27,7 +27,8 @@ export const getAllUsers = query(async () => {
   const apiClient = createApiClient(cookies);
   const userService = new UserService(apiClient);
 
-  // Fetch all users - using a high limit to get all users
+  // Fetch users with a high limit for client-side filtering.
+  // Client-side filtering is performed in the AddCollaboratorButton component.
   const result = await userService.listUsers({ limit: 1000 });
 
   if (!result.success || !result.data) {
