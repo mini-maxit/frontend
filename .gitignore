@@ -28,3 +28,10 @@ vite.config.ts.timestamp-*
 
 # Paraglide
 src/lib/paraglide
+
+# Logs
+logs/
+
+# Swagger
+.swagger-mcp
+swagger.json

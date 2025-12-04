@@ -1,4 +1,5 @@
 export { ApiService, ApiError, createApiClient } from './ApiService';
+export { AccessControlService } from './AccessControlService';
 export { AuthService } from './AuthService';
 export { ContestService, createContestService } from './ContestService';
 export {
