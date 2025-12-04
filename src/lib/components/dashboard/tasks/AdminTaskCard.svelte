@@ -72,24 +72,22 @@
 
     <!-- Action Buttons -->
     <div class="flex flex-col gap-2">
-      <div class="flex gap-2">
-        <Button
-          variant="outline"
-          href={localizeHref(`${AppRoutes.TaskDetails}${task.id}`)}
-          class="w-full flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        >
-          {m.admin_tasks_card_view_details()}
-        </Button>
-        <Button
-          variant="default"
-          class="flex-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-          onclick={() => (manageDialogOpen = true)}
-        >
-          {m.admin_tasks_card_manage()}
-        </Button>
-      </div>
       <Button
         variant="outline"
+        href={localizeHref(`${AppRoutes.TaskDetails}${task.id}`)}
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+      >
+        {m.admin_tasks_card_view_details()}
+      </Button>
+      <Button
+        variant="outline"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        onclick={() => (manageDialogOpen = true)}
+      >
+        {m.admin_tasks_card_manage()}
+      </Button>
+      <Button
+        variant="default"
         href={localizeHref(`${AppRoutes.TeacherTaskCollaborators}${task.id}/collaborators`)}
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
       >
