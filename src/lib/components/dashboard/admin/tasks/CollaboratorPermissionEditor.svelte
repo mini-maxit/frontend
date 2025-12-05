@@ -3,6 +3,8 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import { Button } from '$lib/components/ui/button';
   import Shield from '@lucide/svelte/icons/shield';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
+  import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import { toast } from 'svelte-sonner';
   import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
@@ -91,6 +93,11 @@
     >
       <Shield class="h-3 w-3" />
       {getPermissionLabel(currentPermission)}
+      {#if popoverOpen}
+        <ChevronUp class="h-3 w-3" />
+      {:else}
+        <ChevronDown class="h-3 w-3" />
+      {/if}
     </Popover.Trigger>
     <Popover.Content class="w-40 p-1">
       <div class="flex flex-col gap-1">
