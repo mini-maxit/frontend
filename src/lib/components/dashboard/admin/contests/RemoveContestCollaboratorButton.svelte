@@ -102,7 +102,7 @@
           <Button type="button" variant="outline" onclick={handleCancel} disabled={isRemoving}>
             {m.contest_collaborators_remove_cancel()}
           </Button>
-          <Button type="submit" variant="destructive" disabled={isRemoving}>
+          <Button type="submit" variant="default" disabled={isRemoving}>
             {m.contest_collaborators_remove_confirm()}
           </Button>
         </Dialog.Footer>
