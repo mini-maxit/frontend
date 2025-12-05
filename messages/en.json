@@ -518,5 +518,19 @@
   "task_collaborators_add_success": "Collaborator added successfully!",
   "task_collaborators_add_error": "Failed to add collaborator",
   "task_collaborators_users_load_error": "Failed to load users",
-  "task_collaborators_no_users_found": "No users found"
+  "task_collaborators_no_users_found": "No users found",
+  "contest_collaborators_title": "Contest Collaborators",
+  "contest_collaborators_page_title": "Collaborators for Contest #{contestId}",
+  "contest_collaborators_loading": "Loading collaborators...",
+  "contest_collaborators_load_error": "Failed to load collaborators",
+  "contest_collaborators_no_collaborators_title": "No collaborators",
+  "contest_collaborators_no_collaborators_description": "This contest has no collaborators yet",
+  "contest_collaborators_name": "Name",
+  "contest_collaborators_email": "Email",
+  "contest_collaborators_permission": "Permission",
+  "contest_collaborators_added": "Added",
+  "contest_collaborators_permission_edit": "Edit",
+  "contest_collaborators_permission_manage": "Manage",
+  "contest_collaborators_permission_owner": "Owner",
+  "admin_contests_card_view_collaborators": "View Collaborators"
 }
