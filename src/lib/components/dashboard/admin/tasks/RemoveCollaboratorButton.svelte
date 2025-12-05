@@ -47,11 +47,9 @@
     }
 
     // Managers and owners can remove editors and managers
-    if (currentUserPermission === Permission.Manage || currentUserPermission === Permission.Owner) {
-      return true;
-    }
-
-    return false;
+    return (
+      currentUserPermission === Permission.Manage || currentUserPermission === Permission.Owner
+    );
   });
 
   function handleCancel() {
