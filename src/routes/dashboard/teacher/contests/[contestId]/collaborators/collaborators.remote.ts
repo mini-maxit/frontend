@@ -51,7 +51,7 @@ export const addCollaborator = form(
     const accessControlService = new AccessControlService(apiClient);
 
     const result = await accessControlService.addContestCollaborator(data.contestId, {
-      user_id: data.userId,
+      userId: data.userId,
       permission: data.permission
     });
 

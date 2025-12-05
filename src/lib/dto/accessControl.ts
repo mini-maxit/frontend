@@ -11,9 +11,11 @@ export enum Permission {
  * Represents a collaborator on a task or contest.
  */
 export interface Collaborator {
-  user_id: number;
-  user_name: string;
-  user_email: string;
+  userId: number;
+  userName: string;
+  userEmail: string;
+  firstName: string;
+  lastName: string;
   permission: Permission;
-  added_at: string;
+  addedAt: string;
 }

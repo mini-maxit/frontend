@@ -3,7 +3,7 @@ import type { ApiResponse } from '../dto/response';
 import type { Collaborator, Permission } from '../dto/accessControl';
 
 export interface AddCollaboratorRequest {
-  user_id: number;
+  userId: number;
   permission: Permission;
 }
 
