@@ -67,3 +67,32 @@ export const addCollaborator = form(
 );
 
 export type AddCollaboratorForm = typeof addCollaborator;
+
+export const updateCollaborator = form(
+  v.object({
+    taskId: v.pipe(v.string(), v.transform(Number), v.integer(), v.minValue(1)),
+    userId: v.pipe(v.string(), v.transform(Number), v.integer(), v.minValue(1)),
+    permission: v.picklist([Permission.Edit, Permission.Manage])
+  }),
+  async (data) => {
+    const { cookies } = getRequestEvent();
+
+    const apiClient = createApiClient(cookies);
+    const accessControlService = new AccessControlService(apiClient);
+
+    const result = await accessControlService.updateTaskCollaborator(data.taskId, data.userId, {
+      permission: data.permission
+    });
+
+    if (!result.success) {
+      error(result.status, { message: result.error || 'Failed to update collaborator' });
+    }
+
+    // Refresh collaborators list
+    await getTaskCollaborators(data.taskId).refresh();
+
+    return { success: true };
+  }
+);
+
+export type UpdateCollaboratorForm = typeof updateCollaborator;
