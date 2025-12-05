@@ -163,7 +163,7 @@
         <Button type="button" variant="outline" onclick={handleCancel} disabled={isUpdating}>
           {m.task_collaborators_update_cancel()}
         </Button>
-        <Button type="submit" disabled={isUpdating}>
+        <Button type="submit" disabled={isUpdating || !selectedPermission}>
           {m.task_collaborators_update_confirm()}
         </Button>
       </Dialog.Footer>
