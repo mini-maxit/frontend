@@ -61,7 +61,7 @@
   <Button
     variant="ghost"
     size="icon"
-    class="h-6 w-6 text-muted-foreground hover:text-destructive"
+    class="h-6 w-6 text-muted-foreground hover:text-foreground"
     onclick={() => (dialogOpen = true)}
     title={m.task_collaborators_remove_title()}
   >
