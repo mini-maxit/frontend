@@ -97,7 +97,7 @@
     {:else if collaboratorsQuery.current}
       <div class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {#each collaboratorsQuery.current as collaborator (collaborator.user_id)}
-          <Card>
+          <Card class="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
             <CardHeader>
               <div class="flex items-center justify-between">
                 <CardTitle class="truncate">{collaborator.user_name}</CardTitle>

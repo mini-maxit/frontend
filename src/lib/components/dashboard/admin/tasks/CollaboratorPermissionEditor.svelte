@@ -99,14 +99,14 @@
         <ChevronDown class="h-3 w-3" />
       {/if}
     </Popover.Trigger>
-    <Popover.Content class="w-40 bg-muted p-1">
+    <Popover.Content class="w-40 p-1">
       <div class="flex flex-col gap-1">
         <button
           type="button"
           onclick={() => handlePermissionSelect(Permission.Edit)}
-          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-background {currentPermission ===
+          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent {currentPermission ===
           Permission.Edit
-            ? 'bg-background'
+            ? 'bg-accent'
             : ''}"
         >
           <Shield class="h-3.5 w-3.5" />
@@ -115,9 +115,9 @@
         <button
           type="button"
           onclick={() => handlePermissionSelect(Permission.Manage)}
-          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-background {currentPermission ===
+          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent {currentPermission ===
           Permission.Manage
-            ? 'bg-background'
+            ? 'bg-accent'
             : ''}"
         >
           <Shield class="h-3.5 w-3.5" />
