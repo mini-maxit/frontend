@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getContestCollaborators } from './collaborators.remote';
+  import { getContestCollaborators, getAllUsers, addCollaborator } from './collaborators.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { AddContestCollaboratorButton } from '$lib/components/dashboard/admin/contests';
   import {
     Card,
     CardHeader,
@@ -25,6 +26,7 @@
   let { data }: Props = $props();
 
   const collaboratorsQuery = getContestCollaborators(data.contestId);
+  const usersQuery = getAllUsers();
 
   function getPermissionLabel(permission: Permission): string {
     switch (permission) {
@@ -60,7 +62,26 @@
     </h1>
   </div>
 
+  <!-- Quick Actions Section -->
   <div class="space-y-4">
+    <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_quick_actions()}</h2>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <AddContestCollaboratorButton
+        contestId={data.contestId}
+        {addCollaborator}
+        users={usersQuery.current}
+        usersLoading={usersQuery.loading}
+        usersError={usersQuery.error}
+        existingCollaborators={collaboratorsQuery.current}
+      />
+    </div>
+  </div>
+
+  <!-- Collaborators List Section -->
+  <div class="space-y-4">
+    <h2 class="text-2xl font-bold text-foreground">{m.contest_collaborators_title()}</h2>
+
     {#if collaboratorsQuery.error}
       <ErrorCard
         title={m.contest_collaborators_load_error()}

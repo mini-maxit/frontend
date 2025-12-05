@@ -93,4 +93,34 @@ export class AccessControlService {
       throw error;
     }
   }
+
+  /**
+   * Add a collaborator to a specific contest.
+   * Only users with manage permission can add collaborators.
+   */
+  async addContestCollaborator(
+    contestId: number,
+    data: AddCollaboratorRequest
+  ): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.post<ApiResponse<void>>({
+        url: `/access-control/contests/${contestId}/collaborators`,
+        body: JSON.stringify(data)
+      });
+      return { success: true, status: 201 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
 }
