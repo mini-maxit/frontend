@@ -96,3 +96,29 @@ export const updateCollaborator = form(
 );
 
 export type UpdateCollaboratorForm = typeof updateCollaborator;
+
+export const removeCollaborator = form(
+  v.object({
+    taskId: v.pipe(v.string(), v.transform(Number), v.integer(), v.minValue(1)),
+    userId: v.pipe(v.string(), v.transform(Number), v.integer(), v.minValue(1))
+  }),
+  async (data) => {
+    const { cookies } = getRequestEvent();
+
+    const apiClient = createApiClient(cookies);
+    const accessControlService = new AccessControlService(apiClient);
+
+    const result = await accessControlService.deleteTaskCollaborator(data.taskId, data.userId);
+
+    if (!result.success) {
+      error(result.status, { message: result.error || 'Failed to remove collaborator' });
+    }
+
+    // Refresh collaborators list
+    await getTaskCollaborators(data.taskId).refresh();
+
+    return { success: true };
+  }
+);
+
+export type RemoveCollaboratorForm = typeof removeCollaborator;

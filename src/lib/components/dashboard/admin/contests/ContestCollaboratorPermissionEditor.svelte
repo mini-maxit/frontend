@@ -104,9 +104,9 @@
         <button
           type="button"
           onclick={() => handlePermissionSelect(Permission.Edit)}
-          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-muted {currentPermission ===
+          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent {currentPermission ===
           Permission.Edit
-            ? 'bg-muted'
+            ? 'bg-accent'
             : ''}"
         >
           <Shield class="h-3.5 w-3.5" />
@@ -115,9 +115,9 @@
         <button
           type="button"
           onclick={() => handlePermissionSelect(Permission.Manage)}
-          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-muted {currentPermission ===
+          class="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent {currentPermission ===
           Permission.Manage
-            ? 'bg-muted'
+            ? 'bg-accent'
             : ''}"
         >
           <Shield class="h-3.5 w-3.5" />

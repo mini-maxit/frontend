@@ -103,6 +103,36 @@ export class AccessControlService {
   }
 
   /**
+   * Remove a collaborator from a specific task.
+   * Only users with manage or owner permission can remove collaborators.
+   * Managers can only remove editors and managers, owners can remove everyone except other owners.
+   */
+  async deleteTaskCollaborator(
+    taskId: number,
+    userId: number
+  ): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.delete<ApiResponse<void>>({
+        url: `/access-control/tasks/${taskId}/collaborators/${userId}`
+      });
+      return { success: true, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  /**
    * Get collaborators for a specific contest.
    * Only users with edit permission or higher can see collaborators.
    */
