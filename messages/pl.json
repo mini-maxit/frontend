@@ -553,5 +553,12 @@
   "contest_collaborators_add_error": "Nie udało się dodać współpracownika",
   "contest_collaborators_users_load_error": "Nie udało się załadować użytkowników",
   "contest_collaborators_no_users_found": "Nie znaleziono użytkowników",
+  "contest_collaborators_update_title": "Zmień Uprawnienia",
+  "contest_collaborators_update_confirm_title": "Potwierdź Zmianę Uprawnień",
+  "contest_collaborators_update_confirm_description": "Czy na pewno chcesz zmienić uprawnienia dla {userName} z {currentPermission} na {newPermission}?",
+  "contest_collaborators_update_confirm": "Potwierdź",
+  "contest_collaborators_update_cancel": "Anuluj",
+  "contest_collaborators_update_success": "Uprawnienia zostały zaktualizowane pomyślnie!",
+  "contest_collaborators_update_error": "Nie udało się zaktualizować uprawnień",
   "admin_contests_card_view_collaborators": "Zobacz Współpracowników"
 }

@@ -553,5 +553,12 @@
   "contest_collaborators_add_error": "Failed to add collaborator",
   "contest_collaborators_users_load_error": "Failed to load users",
   "contest_collaborators_no_users_found": "No users found",
+  "contest_collaborators_update_title": "Change Permission",
+  "contest_collaborators_update_confirm_title": "Confirm Permission Change",
+  "contest_collaborators_update_confirm_description": "Are you sure you want to change the permission for {userName} from {currentPermission} to {newPermission}?",
+  "contest_collaborators_update_confirm": "Confirm",
+  "contest_collaborators_update_cancel": "Cancel",
+  "contest_collaborators_update_success": "Permission updated successfully!",
+  "contest_collaborators_update_error": "Failed to update permission",
   "admin_contests_card_view_collaborators": "View Collaborators"
 }

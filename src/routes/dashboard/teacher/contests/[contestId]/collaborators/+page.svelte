@@ -1,7 +1,15 @@
 <script lang="ts">
-  import { getContestCollaborators, getAllUsers, addCollaborator } from './collaborators.remote';
+  import {
+    getContestCollaborators,
+    getAllUsers,
+    addCollaborator,
+    updateCollaborator
+  } from './collaborators.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
-  import { AddContestCollaboratorButton } from '$lib/components/dashboard/admin/contests';
+  import {
+    AddContestCollaboratorButton,
+    ContestCollaboratorPermissionEditor
+  } from '$lib/components/dashboard/admin/contests';
   import {
     Card,
     CardHeader,
@@ -11,7 +19,6 @@
   } from '$lib/components/ui/card';
   import Users from '@lucide/svelte/icons/users';
   import Mail from '@lucide/svelte/icons/mail';
-  import Shield from '@lucide/svelte/icons/shield';
   import Calendar from '@lucide/svelte/icons/calendar';
   import * as m from '$lib/paraglide/messages';
   import { formatDistanceToNow } from 'date-fns';
@@ -20,6 +27,7 @@
   interface Props {
     data: {
       contestId: number;
+      currentUserId: number;
     };
   }
 
@@ -28,31 +36,17 @@
   const collaboratorsQuery = getContestCollaborators(data.contestId);
   const usersQuery = getAllUsers();
 
-  function getPermissionLabel(permission: Permission): string {
-    switch (permission) {
-      case Permission.Edit:
-        return m.contest_collaborators_permission_edit();
-      case Permission.Manage:
-        return m.contest_collaborators_permission_manage();
-      case Permission.Owner:
-        return m.contest_collaborators_permission_owner();
-      default:
-        return permission;
-    }
-  }
-
-  function getPermissionBadgeClass(permission: Permission): string {
-    switch (permission) {
-      case Permission.Owner:
-        return 'bg-primary/10 text-primary border border-primary/20';
-      case Permission.Manage:
-        return 'bg-secondary/10 text-secondary border border-secondary/20';
-      case Permission.Edit:
-        return 'bg-muted text-muted-foreground border border-border';
-      default:
-        return 'bg-muted text-muted-foreground border border-border';
-    }
-  }
+  // Check if current user has manage or owner permission (can edit other collaborators)
+  const canEditCollaborators = $derived.by(() => {
+    if (!collaboratorsQuery.current) return false;
+    const currentUserCollaborator = collaboratorsQuery.current.find(
+      (c) => c.user_id === data.currentUserId
+    );
+    return (
+      currentUserCollaborator?.permission === Permission.Manage ||
+      currentUserCollaborator?.permission === Permission.Owner
+    );
+  });
 </script>
 
 <div class="space-y-6">
@@ -103,14 +97,14 @@
             <CardHeader>
               <div class="flex items-center justify-between">
                 <CardTitle class="truncate">{collaborator.user_name}</CardTitle>
-                <span
-                  class="{getPermissionBadgeClass(
-                    collaborator.permission
-                  )} inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                >
-                  <Shield class="h-3 w-3" />
-                  {getPermissionLabel(collaborator.permission)}
-                </span>
+                <ContestCollaboratorPermissionEditor
+                  contestId={data.contestId}
+                  userId={collaborator.user_id}
+                  userName={collaborator.user_name}
+                  currentPermission={collaborator.permission}
+                  {updateCollaborator}
+                  canEdit={canEditCollaborators}
+                />
               </div>
               <CardDescription class="flex items-center gap-1.5">
                 <Mail class="h-3.5 w-3.5" />
