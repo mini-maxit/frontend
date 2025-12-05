@@ -43,7 +43,7 @@
   // Filter out users who are already collaborators and users with student role
   let availableUsers = $derived.by(() => {
     if (!users) return [];
-    const collaboratorIds = new Set(existingCollaborators?.map((c) => c.user_id) ?? []);
+    const collaboratorIds = new Set(existingCollaborators?.map((c) => c.userId) ?? []);
     return users.items.filter(
       (user) => !collaboratorIds.has(user.id) && user.role !== UserRole.Student
     );

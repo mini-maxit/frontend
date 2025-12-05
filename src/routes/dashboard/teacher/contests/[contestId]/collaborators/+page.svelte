@@ -42,7 +42,7 @@
   const currentUserPermission = $derived.by(() => {
     if (!collaboratorsQuery.current) return Permission.Edit;
     const currentUserCollaborator = collaboratorsQuery.current.find(
-      (c) => c.user_id === data.currentUserId
+      (c) => c.userId === data.currentUserId
     );
     return currentUserCollaborator?.permission ?? Permission.Edit;
   });
@@ -96,24 +96,24 @@
       />
     {:else if collaboratorsQuery.current}
       <div class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-        {#each collaboratorsQuery.current as collaborator (collaborator.user_id)}
+        {#each collaboratorsQuery.current as collaborator (collaborator.userId)}
           <Card class="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
             <CardHeader>
               <div class="flex items-center justify-between">
-                <CardTitle class="truncate">{collaborator.user_name}</CardTitle>
+                <CardTitle class="truncate">{collaborator.firstName} {collaborator.lastName}</CardTitle>
                 <div class="flex items-center gap-1">
                   <ContestCollaboratorPermissionEditor
                     contestId={data.contestId}
-                    userId={collaborator.user_id}
-                    userName={collaborator.user_name}
+                    userId={collaborator.userId}
+                    userName={`${collaborator.firstName} ${collaborator.lastName}`}
                     currentPermission={collaborator.permission}
                     {updateCollaborator}
                     canEdit={canEditCollaborators}
                   />
                   <RemoveContestCollaboratorButton
                     contestId={data.contestId}
-                    userId={collaborator.user_id}
-                    userName={collaborator.user_name}
+                    userId={collaborator.userId}
+                    userName={`${collaborator.firstName} ${collaborator.lastName}`}
                     targetPermission={collaborator.permission}
                     {currentUserPermission}
                     {removeCollaborator}
@@ -122,7 +122,7 @@
               </div>
               <CardDescription class="flex items-center gap-1.5">
                 <Mail class="h-3.5 w-3.5" />
-                {collaborator.user_email}
+                {collaborator.userEmail}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -130,7 +130,7 @@
                 <Calendar class="h-3.5 w-3.5" />
                 <span>{m.contest_collaborators_added()}:</span>
                 <span
-                  >{formatDistanceToNow(new Date(collaborator.added_at), { addSuffix: true })}</span
+                  >{formatDistanceToNow(new Date(collaborator.addedAt), { addSuffix: true })}</span
                 >
               </div>
             </CardContent>
