@@ -23,11 +23,11 @@
 </script>
 
 <Card.Root
-  class="group relative flex h-full flex-col overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+  class="group relative flex h-full flex-col overflow-hidden border-border shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
 >
   <!-- Gradient Background Overlay -->
   <div
-    class="absolute inset-0 bg-gradient-to-br from-primary to-secondary opacity-5 transition-opacity duration-300 group-hover:opacity-10"
+    class="absolute inset-0 bg-linear-to-br from-primary/5 via-secondary/5 to-primary/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
   ></div>
 
   <Card.Header class="relative">
