@@ -219,4 +219,34 @@ export class AccessControlService {
       throw error;
     }
   }
+
+  /**
+   * Remove a collaborator from a specific contest.
+   * Only users with manage or owner permission can remove collaborators.
+   * Managers can only remove editors and managers, owners can remove everyone except other owners.
+   */
+  async deleteContestCollaborator(
+    contestId: number,
+    userId: number
+  ): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.delete<ApiResponse<void>>({
+        url: `/access-control/contests/${contestId}/collaborators/${userId}`
+      });
+      return { success: true, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
 }

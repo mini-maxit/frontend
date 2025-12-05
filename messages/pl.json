@@ -567,5 +567,12 @@
   "contest_collaborators_update_cancel": "Anuluj",
   "contest_collaborators_update_success": "Uprawnienia zostały zaktualizowane pomyślnie!",
   "contest_collaborators_update_error": "Nie udało się zaktualizować uprawnień",
+  "contest_collaborators_remove_title": "Usuń Współpracownika",
+  "contest_collaborators_remove_confirm_title": "Potwierdź Usunięcie",
+  "contest_collaborators_remove_confirm_description": "Czy na pewno chcesz usunąć {userName} z tego konkursu? Ta akcja jest nieodwracalna.",
+  "contest_collaborators_remove_confirm": "Usuń",
+  "contest_collaborators_remove_cancel": "Anuluj",
+  "contest_collaborators_remove_success": "Współpracownik został usunięty pomyślnie!",
+  "contest_collaborators_remove_error": "Nie udało się usunąć współpracownika",
   "admin_contests_card_view_collaborators": "Zobacz Współpracowników"
 }
