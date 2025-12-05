@@ -158,4 +158,35 @@ export class AccessControlService {
       throw error;
     }
   }
+
+  /**
+   * Update a collaborator's permission on a specific contest.
+   * Only users with manage permission can update collaborators.
+   */
+  async updateContestCollaborator(
+    contestId: number,
+    userId: number,
+    data: UpdateCollaboratorRequest
+  ): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.put<ApiResponse<void>>({
+        url: `/access-control/contests/${contestId}/collaborators/${userId}`,
+        body: JSON.stringify(data)
+      });
+      return { success: true, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
 }
