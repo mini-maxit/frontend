@@ -3,12 +3,14 @@
     getTaskCollaborators,
     getAllUsers,
     addCollaborator,
-    updateCollaborator
+    updateCollaborator,
+    removeCollaborator
   } from './collaborators.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import {
     AddCollaboratorButton,
-    CollaboratorPermissionEditor
+    CollaboratorPermissionEditor,
+    RemoveCollaboratorButton
   } from '$lib/components/dashboard/admin/tasks';
   import {
     Card,
@@ -36,17 +38,19 @@
   const collaboratorsQuery = getTaskCollaborators(data.taskId);
   const usersQuery = getAllUsers();
 
-  // Check if current user has manage or owner permission (can edit other collaborators)
-  const canEditCollaborators = $derived.by(() => {
-    if (!collaboratorsQuery.current) return false;
+  // Get current user's permission level
+  const currentUserPermission = $derived.by(() => {
+    if (!collaboratorsQuery.current) return Permission.Edit;
     const currentUserCollaborator = collaboratorsQuery.current.find(
       (c) => c.user_id === data.currentUserId
     );
-    return (
-      currentUserCollaborator?.permission === Permission.Manage ||
-      currentUserCollaborator?.permission === Permission.Owner
-    );
+    return currentUserCollaborator?.permission ?? Permission.Edit;
   });
+
+  // Check if current user has manage or owner permission (can edit other collaborators)
+  const canEditCollaborators = $derived(
+    currentUserPermission === Permission.Manage || currentUserPermission === Permission.Owner
+  );
 </script>
 
 <div class="space-y-6">
@@ -97,14 +101,24 @@
             <CardHeader>
               <div class="flex items-center justify-between">
                 <CardTitle class="truncate">{collaborator.user_name}</CardTitle>
-                <CollaboratorPermissionEditor
-                  taskId={data.taskId}
-                  userId={collaborator.user_id}
-                  userName={collaborator.user_name}
-                  currentPermission={collaborator.permission}
-                  {updateCollaborator}
-                  canEdit={canEditCollaborators}
-                />
+                <div class="flex items-center gap-1">
+                  <CollaboratorPermissionEditor
+                    taskId={data.taskId}
+                    userId={collaborator.user_id}
+                    userName={collaborator.user_name}
+                    currentPermission={collaborator.permission}
+                    {updateCollaborator}
+                    canEdit={canEditCollaborators}
+                  />
+                  <RemoveCollaboratorButton
+                    taskId={data.taskId}
+                    userId={collaborator.user_id}
+                    userName={collaborator.user_name}
+                    targetPermission={collaborator.permission}
+                    {currentUserPermission}
+                    {removeCollaborator}
+                  />
+                </div>
               </div>
               <CardDescription class="flex items-center gap-1.5">
                 <Mail class="h-3.5 w-3.5" />
