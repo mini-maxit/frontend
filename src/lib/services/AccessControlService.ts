@@ -7,6 +7,10 @@ export interface AddCollaboratorRequest {
   permission: Permission;
 }
 
+export interface UpdateCollaboratorRequest {
+  permission: Permission;
+}
+
 export class AccessControlService {
   constructor(private apiClient: ApiService) {}
 
@@ -55,6 +59,37 @@ export class AccessControlService {
         body: JSON.stringify(data)
       });
       return { success: true, status: 201 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Update a collaborator's permission on a specific task.
+   * Only users with manage permission can update collaborators.
+   */
+  async updateTaskCollaborator(
+    taskId: number,
+    userId: number,
+    data: UpdateCollaboratorRequest
+  ): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.put<ApiResponse<void>>({
+        url: `/access-control/tasks/${taskId}/collaborators/${userId}`,
+        body: JSON.stringify(data)
+      });
+      return { success: true, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {
