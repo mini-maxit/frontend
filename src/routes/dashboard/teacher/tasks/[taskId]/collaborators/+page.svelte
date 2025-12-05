@@ -22,10 +22,12 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import * as m from '$lib/paraglide/messages';
   import { formatDistanceToNow } from 'date-fns';
+  import { Permission } from '$lib/dto/accessControl';
 
   interface Props {
     data: {
       taskId: number;
+      currentUserId: number;
     };
   }
 
@@ -33,6 +35,18 @@
 
   const collaboratorsQuery = getTaskCollaborators(data.taskId);
   const usersQuery = getAllUsers();
+
+  // Check if current user has manage or owner permission (can edit other collaborators)
+  const canEditCollaborators = $derived.by(() => {
+    if (!collaboratorsQuery.current) return false;
+    const currentUserCollaborator = collaboratorsQuery.current.find(
+      (c) => c.user_id === data.currentUserId
+    );
+    return (
+      currentUserCollaborator?.permission === Permission.Manage ||
+      currentUserCollaborator?.permission === Permission.Owner
+    );
+  });
 </script>
 
 <div class="space-y-6">
@@ -89,6 +103,7 @@
                   userName={collaborator.user_name}
                   currentPermission={collaborator.permission}
                   {updateCollaborator}
+                  canEdit={canEditCollaborators}
                 />
               </div>
               <CardDescription class="flex items-center gap-1.5">

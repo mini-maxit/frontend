@@ -15,17 +15,25 @@
     userName: string;
     currentPermission: Permission;
     updateCollaborator: UpdateCollaboratorForm;
+    canEdit?: boolean;
   }
 
-  let { taskId, userId, userName, currentPermission, updateCollaborator }: Props = $props();
+  let {
+    taskId,
+    userId,
+    userName,
+    currentPermission,
+    updateCollaborator,
+    canEdit = false
+  }: Props = $props();
 
   let popoverOpen = $state(false);
   let dialogOpen = $state(false);
   let selectedPermission = $state<Permission | null>(null);
   let isUpdating = $state(false);
 
-  // Owner permission cannot be changed
-  const isOwner = $derived(currentPermission === Permission.Owner);
+  // Owner permission cannot be changed, and user needs canEdit permission
+  const isEditable = $derived(canEdit && currentPermission !== Permission.Owner);
 
   function getPermissionLabel(permission: Permission): string {
     switch (permission) {
@@ -72,17 +80,7 @@
   }
 </script>
 
-{#if isOwner}
-  <!-- Owner permission badge - not clickable -->
-  <span
-    class="{getPermissionBadgeClass(
-      currentPermission
-    )} inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
-  >
-    <Shield class="h-3 w-3" />
-    {getPermissionLabel(currentPermission)}
-  </span>
-{:else}
+{#if isEditable}
   <!-- Editable permission badge with popover -->
   <Popover.Root bind:open={popoverOpen}>
     <Popover.Trigger
@@ -121,6 +119,16 @@
       </div>
     </Popover.Content>
   </Popover.Root>
+{:else}
+  <!-- Non-editable permission badge -->
+  <span
+    class="{getPermissionBadgeClass(
+      currentPermission
+    )} inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+  >
+    <Shield class="h-3 w-3" />
+    {getPermissionLabel(currentPermission)}
+  </span>
 {/if}
 
 <Dialog.Root bind:open={dialogOpen}>
