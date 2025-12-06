@@ -9,18 +9,14 @@
   import { getClientAuthInstance } from '$lib/services';
   import { browser } from '$app/environment';
   import * as v from 'valibot';
+  import { superForm } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
 
   interface Props {
     redirectTo?: string;
   }
 
   let { redirectTo = AppRoutes.Dashboard }: Props = $props();
-
-  // Client-side state
-  let email = $state('');
-  let password = $state('');
-  let isSubmitting = $state(false);
-  let errors = $state<{ email?: string; password?: string }>({});
 
   // Get singleton auth service instance
   const authService = browser ? getClientAuthInstance() : null;
@@ -38,86 +34,76 @@
     )
   });
 
-  async function handleSubmit(event: Event) {
-    event.preventDefault();
+  // Initialize superform for client-side usage
+  const { form, errors, enhance, submitting } = superForm(
+    {
+      email: '',
+      password: ''
+    },
+    {
+      validators: valibot(LoginSchema),
+      SPA: true,
+      dataType: 'json',
+      resetForm: false,
+      onSubmit: async ({ formData, cancel }) => {
+        // Cancel default form submission since we're doing client-side API call
+        cancel();
 
-    if (!authService) {
-      toast.error('Authentication service not available');
-      return;
-    }
-
-    // Reset errors
-    errors = {};
-
-    // Validate with Valibot - safeParse returns a result object
-    const result = v.safeParse(LoginSchema, {
-      email: email.trim(),
-      password: password
-    });
-
-    if (!result.success) {
-      // Use flatten to get type-safe field-level errors
-      // flatten() organizes issues into: root (schema-level), nested (field-level), other
-      const flatErrors = v.flatten<typeof LoginSchema>(result.issues);
-
-      // Extract field-level errors from nested property
-      // flatErrors.nested is a record of field paths to error message arrays
-      if (flatErrors.nested?.email) {
-        errors.email = flatErrors.nested.email[0];
-      }
-      if (flatErrors.nested?.password) {
-        errors.password = flatErrors.nested.password[0];
-      }
-      return;
-    }
-
-    isSubmitting = true;
-
-    try {
-      const loginResult = await authService.login({
-        email: result.output.email,
-        password: result.output.password
-      });
-
-      if (loginResult.success) {
-        toast.success(m.login_success());
-
-        // Sanitize redirectTo to prevent open redirect vulnerability
-        // Only allow relative paths starting with /
-        let safeRedirect: string = AppRoutes.Dashboard;
-        if (redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//')) {
-          safeRedirect = redirectTo;
+        if (!authService) {
+          toast.error('Authentication service not available');
+          return;
+        }
+      },
+      onUpdate: async ({ form }) => {
+        if (!authService || !form.valid) {
+          return;
         }
 
-        await goto(safeRedirect);
-      } else {
-        toast.error(loginResult.error || m.error_default_message());
+        try {
+          const loginResult = await authService.login({
+            email: form.data.email.trim(),
+            password: form.data.password
+          });
+
+          if (loginResult.success) {
+            toast.success(m.login_success());
+
+            // Sanitize redirectTo to prevent open redirect vulnerability
+            // Only allow relative paths starting with /
+            let safeRedirect: string = AppRoutes.Dashboard;
+            if (redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//')) {
+              safeRedirect = redirectTo;
+            }
+
+            await goto(safeRedirect);
+          } else {
+            toast.error(loginResult.error || m.error_default_message());
+          }
+        } catch (error) {
+          console.error('Login error:', error);
+          toast.error(m.error_default_message());
+        }
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      toast.error(m.error_default_message());
-    } finally {
-      isSubmitting = false;
     }
-  }
+  );
 </script>
 
-<form onsubmit={handleSubmit} class="space-y-6">
+<form method="POST" use:enhance class="space-y-6">
   <div class="space-y-2">
     <Label for="email">{m.login_email_label()}</Label>
     <Input
       id="email"
       name="email"
       type="email"
-      bind:value={email}
+      bind:value={$form.email}
       placeholder={m.login_email_placeholder()}
-      required
       autocomplete="email"
-      disabled={isSubmitting}
+      disabled={$submitting}
+      aria-invalid={$errors.email ? 'true' : undefined}
       class="transition-all duration-200 focus:ring-2 focus:ring-primary"
     />
-    {#if errors.email}
-      <p class="text-sm text-destructive">{errors.email}</p>
+    {#if $errors.email}
+      <p class="text-sm text-destructive">{$errors.email}</p>
     {/if}
   </div>
 
@@ -135,24 +121,24 @@
       id="password"
       name="password"
       type="password"
-      bind:value={password}
+      bind:value={$form.password}
       placeholder={m.login_password_placeholder()}
-      required
       autocomplete="current-password"
-      disabled={isSubmitting}
+      disabled={$submitting}
+      aria-invalid={$errors.password ? 'true' : undefined}
       class="transition-all duration-200 focus:ring-2 focus:ring-primary"
     />
-    {#if errors.password}
-      <p class="text-sm text-destructive">{errors.password}</p>
+    {#if $errors.password}
+      <p class="text-sm text-destructive">{$errors.password}</p>
     {/if}
   </div>
 
   <Button
     type="submit"
-    disabled={isSubmitting}
+    disabled={$submitting}
     class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
     size="lg"
   >
-    {isSubmitting ? 'Loading...' : m.login_submit()}
+    {$submitting ? 'Loading...' : m.login_submit()}
   </Button>
 </form>
