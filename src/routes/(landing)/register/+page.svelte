@@ -1,16 +1,11 @@
 <script lang="ts">
-  import { register } from './register.remote';
   import { m } from '$lib/paraglide/messages.js';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
   import * as Card from '$lib/components/ui/card';
   import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
   import { isMobile } from '$lib/hooks/is-mobile.svelte';
-  import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
   import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
+  import { ClientRegisterForm } from '$lib/components/auth';
 </script>
 
 <div
@@ -35,130 +30,7 @@
         </Card.Header>
 
         <Card.Content>
-          <form
-            {...register.enhance(async ({ submit }) => {
-              try {
-                await submit();
-              } catch (error: HttpError | unknown) {
-                if (isHttpError(error)) {
-                  toast.error(error.body.message);
-                } else {
-                  toast.error(m.error_default_message());
-                }
-              }
-            })}
-            class="space-y-4"
-          >
-            <div class="space-y-2">
-              <Label for="email">{m.register_email_label()}</Label>
-              <Input
-                {...register.fields.email.as('email')}
-                id="email"
-                name="email"
-                type="email"
-                placeholder={m.register_email_placeholder()}
-                required
-                autocomplete="email"
-                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
-              />
-              {#each register.fields.email.issues() as issue}
-                <p class="text-sm text-destructive">{issue.message}</p>
-              {/each}
-            </div>
-
-            <div class="space-y-2">
-              <Label for="name">{m.register_name_label()}</Label>
-              <Input
-                {...register.fields.name.as('text')}
-                id="name"
-                name="name"
-                type="text"
-                placeholder={m.register_name_placeholder()}
-                required
-                autocomplete="given-name"
-                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
-              />
-              {#each register.fields.name.issues() as issue}
-                <p class="text-sm text-destructive">{issue.message}</p>
-              {/each}
-            </div>
-
-            <div class="space-y-2">
-              <Label for="surname">{m.register_surname_label()}</Label>
-              <Input
-                {...register.fields.surname.as('text')}
-                id="surname"
-                name="surname"
-                type="text"
-                placeholder={m.register_surname_placeholder()}
-                required
-                autocomplete="family-name"
-                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
-              />
-              {#each register.fields.surname.issues() as issue}
-                <p class="text-sm text-destructive">{issue.message}</p>
-              {/each}
-            </div>
-
-            <div class="space-y-2">
-              <Label for="username">{m.register_username_label()}</Label>
-              <Input
-                {...register.fields.username.as('text')}
-                id="username"
-                name="username"
-                type="text"
-                placeholder={m.register_username_placeholder()}
-                required
-                autocomplete="username"
-                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
-              />
-              {#each register.fields.username.issues() as issue}
-                <p class="text-sm text-destructive">{issue.message}</p>
-              {/each}
-            </div>
-
-            <div class="space-y-2">
-              <Label for="_password">{m.register_password_label()}</Label>
-              <Input
-                {...register.fields._password.as('password')}
-                id="_password"
-                name="_password"
-                type="password"
-                placeholder={m.register_password_placeholder()}
-                required
-                autocomplete="new-password"
-                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
-              />
-              {#each register.fields._password.issues() as issue}
-                <p class="text-sm text-destructive">{issue.message}</p>
-              {/each}
-            </div>
-
-            <div class="space-y-2">
-              <Label for="_confirmPassword">{m.register_confirm_password_label()}</Label>
-              <Input
-                {...register.fields._confirmPassword.as('password')}
-                id="_confirmPassword"
-                name="_confirmPassword"
-                type="password"
-                placeholder={m.register_confirm_password_placeholder()}
-                required
-                autocomplete="new-password"
-                class="transition-all duration-200 focus:ring-2 focus:ring-primary"
-              />
-              {#each register.fields._confirmPassword.issues() as issue}
-                <p class="text-sm text-destructive">{issue.message}</p>
-              {/each}
-            </div>
-
-            <Button
-              type="submit"
-              class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-              size="lg"
-            >
-              {m.register_submit()}
-            </Button>
-          </form>
+          <ClientRegisterForm />
         </Card.Content>
 
         <Card.Footer>

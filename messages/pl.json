@@ -575,5 +575,6 @@
   "contest_collaborators_remove_success": "Współpracownik został usunięty pomyślnie!",
   "contest_collaborators_remove_error": "Nie udało się usunąć współpracownika",
   "admin_contests_card_view_collaborators": "Zobacz Współpracowników",
-  "login_success": "Logowanie pomyślne!"
+  "login_success": "Logowanie pomyślne!",
+  "register_success": "Rejestracja pomyślna! Witaj!"
 }
