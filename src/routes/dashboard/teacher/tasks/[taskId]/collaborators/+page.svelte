@@ -100,12 +100,15 @@
           <Card class="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
             <CardHeader>
               <div class="flex items-center justify-between">
-                <CardTitle class="truncate">{collaborator.firstName} {collaborator.lastName}</CardTitle>
+                <div class="min-w-0 flex-1">
+                  <CardTitle class="truncate">{collaborator.userName}</CardTitle>
+                  <p class="text-sm text-muted-foreground truncate">{collaborator.firstName} {collaborator.lastName}</p>
+                </div>
                 <div class="flex items-center gap-1">
                   <CollaboratorPermissionEditor
                     taskId={data.taskId}
                     userId={collaborator.userId}
-                    userName={`${collaborator.firstName} ${collaborator.lastName}`}
+                    userName={collaborator.userName}
                     currentPermission={collaborator.permission}
                     {updateCollaborator}
                     canEdit={canEditCollaborators}
@@ -113,7 +116,7 @@
                   <RemoveCollaboratorButton
                     taskId={data.taskId}
                     userId={collaborator.userId}
-                    userName={`${collaborator.firstName} ${collaborator.lastName}`}
+                    userName={collaborator.userName}
                     targetPermission={collaborator.permission}
                     {currentUserPermission}
                     {removeCollaborator}
