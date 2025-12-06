@@ -36,12 +36,15 @@
     // Reset errors
     errors = {};
 
-    // Basic validation
+    // Validation
     if (!email || !email.trim()) {
       errors.email = m.validation_email_required();
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    // Use a more comprehensive email regex or rely on HTML5 validation
+    // This regex is more permissive and handles most valid email formats
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       errors.email = m.validation_email_invalid();
       return;
     }

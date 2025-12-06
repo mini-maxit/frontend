@@ -1,6 +1,5 @@
 import { goto } from '$app/navigation';
 import { browser } from '$app/environment';
-import type { AuthTokenData } from '../dto/auth';
 import { RequestMethod, RequestContentType, type Request } from '../dto/request';
 import type { ApiResponse } from '../dto/response';
 import { isApiErrorResponse } from '../dto/error';
@@ -51,7 +50,6 @@ export class ClientApiService {
 
         // The backend will set the new access token as an HttpOnly cookie
         // We don't need to manually handle it - it's automatic
-        const data: ApiResponse<AuthTokenData> = await response.json();
         console.log('Token refreshed successfully');
       } finally {
         this.isRefreshing = false;
@@ -86,7 +84,12 @@ export class ClientApiService {
     });
 
     // Handle 401 Unauthorized - try to refresh token
-    if (response.status === 401 && !request.url.includes('/auth/login')) {
+    // Skip refresh for login and register to prevent infinite loops
+    if (
+      response.status === 401 &&
+      !request.url.includes('/auth/login') &&
+      !request.url.includes('/auth/register')
+    ) {
       try {
         await this.refreshToken();
 

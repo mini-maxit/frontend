@@ -64,8 +64,7 @@ export class ClientAuthService {
   async logout(): Promise<{ success: boolean; status: number; error?: string }> {
     try {
       await this.apiClient.post({
-        url: '/auth/logout',
-        body: ''
+        url: '/auth/logout'
       });
 
       // Backend clears HttpOnly cookies
@@ -89,8 +88,7 @@ export class ClientAuthService {
   async refreshToken(): Promise<{ success: boolean; status: number; error?: string }> {
     try {
       await this.apiClient.post({
-        url: '/auth/refresh',
-        body: ''
+        url: '/auth/refresh'
       });
 
       return { success: true, status: 200 };
