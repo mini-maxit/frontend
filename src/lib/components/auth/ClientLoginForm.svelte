@@ -1,13 +1,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { m } from '$lib/paraglide/messages.js';
+  import * as m from '$lib/paraglide/messages.js';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
-  import { createClientApiClient, ClientAuthService } from '$lib/services';
+  import { getClientApiInstance, ClientAuthService } from '$lib/services';
   import { browser } from '$app/environment';
+  import * as v from 'valibot';
 
   interface Props {
     redirectTo?: string;
@@ -21,9 +22,22 @@
   let isSubmitting = $state(false);
   let errors = $state<{ email?: string; password?: string }>({});
 
-  // Create client API instance
-  const apiClient = browser ? createClientApiClient() : null;
+  // Create client API instance using global singleton
+  const apiClient = browser ? getClientApiInstance() : null;
   const authService = apiClient ? new ClientAuthService(apiClient) : null;
+
+  // Valibot schema matching the remote function pattern
+  const LoginSchema = v.object({
+    email: v.pipe(
+      v.string(m.validation_email_required()),
+      v.nonEmpty(m.validation_email_required()),
+      v.email(m.validation_email_invalid())
+    ),
+    password: v.pipe(
+      v.string(m.validation_password_required()),
+      v.nonEmpty(m.validation_password_required())
+    )
+  });
 
   async function handleSubmit(event: Event) {
     event.preventDefault();
@@ -36,37 +50,46 @@
     // Reset errors
     errors = {};
 
-    // Validation
-    if (!email || !email.trim()) {
-      errors.email = m.validation_email_required();
-      return;
-    }
-    // Use a more comprehensive email regex or rely on HTML5 validation
-    // This regex is more permissive and handles most valid email formats
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      errors.email = m.validation_email_invalid();
-      return;
-    }
-    if (!password || !password.trim()) {
-      errors.password = m.validation_password_required();
+    // Validate with Valibot
+    const result = v.safeParse(LoginSchema, {
+      email: email.trim(),
+      password: password
+    });
+
+    if (!result.success) {
+      // Map Valibot issues to form errors
+      for (const issue of result.issues) {
+        if (issue.path) {
+          const field = issue.path[0]?.key as 'email' | 'password';
+          if (field) {
+            errors[field] = issue.message;
+          }
+        }
+      }
       return;
     }
 
     isSubmitting = true;
 
     try {
-      const result = await authService.login({
-        email: email.trim(),
-        password: password
+      const loginResult = await authService.login({
+        email: result.output.email,
+        password: result.output.password
       });
 
-      if (result.success) {
+      if (loginResult.success) {
         toast.success('Login successful!');
-        // Navigate to redirect target
-        await goto(redirectTo);
+
+        // Sanitize redirectTo to prevent open redirect vulnerability
+        // Only allow relative paths starting with /
+        let safeRedirect: string = AppRoutes.Dashboard;
+        if (redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//')) {
+          safeRedirect = redirectTo;
+        }
+
+        await goto(safeRedirect);
       } else {
-        toast.error(result.error || m.error_default_message());
+        toast.error(loginResult.error || m.error_default_message());
       }
     } catch (error) {
       console.error('Login error:', error);

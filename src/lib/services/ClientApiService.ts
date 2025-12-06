@@ -50,7 +50,6 @@ export class ClientApiService {
 
         // The backend will set the new access token as an HttpOnly cookie
         // We don't need to manually handle it - it's automatic
-        console.log('Token refreshed successfully');
       } finally {
         this.isRefreshing = false;
         this.refreshPromise = null;
@@ -84,11 +83,13 @@ export class ClientApiService {
     });
 
     // Handle 401 Unauthorized - try to refresh token
-    // Skip refresh for login and register to prevent infinite loops
+    // Skip refresh for auth endpoints to prevent infinite loops
     if (
       response.status === 401 &&
       !request.url.includes('/auth/login') &&
-      !request.url.includes('/auth/register')
+      !request.url.includes('/auth/register') &&
+      !request.url.includes('/auth/refresh') &&
+      !request.url.includes('/auth/logout')
     ) {
       try {
         await this.refreshToken();
@@ -254,19 +255,4 @@ export class ClientApiService {
 
     return response.json();
   }
-}
-
-/**
- * Create a client-side API client for browser use
- * Requires PUBLIC_BACKEND_API_URL environment variable
- */
-export function createClientApiClient(baseUrl?: string): ClientApiService {
-  if (!browser) {
-    throw new Error('createClientApiClient can only be used in browser context');
-  }
-
-  // Use provided URL or fall back to public env variable
-  const apiUrl =
-    baseUrl || import.meta.env.PUBLIC_BACKEND_API_URL || 'http://localhost:8000/api/v1';
-  return new ClientApiService(apiUrl);
 }

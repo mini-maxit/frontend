@@ -2,29 +2,28 @@
 
 Frontend application for the programming contest platform built with SvelteKit and Svelte 5.
 
-## Documentation
-
-- [Remote Functions Explanation](./REMOTE_FUNCTIONS_EXPLANATION.md) - Legacy server-side remote functions
-- [Client API Migration Guide](./CLIENT_API_MIGRATION.md) - **NEW**: Direct client-to-backend API integration
-- [Client API Usage Examples](./USAGE_EXAMPLES.md) - **NEW**: Practical examples for using the client API
-
 ## Architecture
 
-This application supports two architectural patterns:
+This application uses **SvelteKit with remote functions** for server-side operations and data fetching. Additionally, it provides a **client-side API** for scenarios requiring direct browser-to-backend communication.
 
-1. **Remote Functions (Legacy)**: Server-side form handling with SvelteKit's remote functions
-2. **Client API (New)**: Direct browser-to-backend communication with HttpOnly cookies
+### Client API
 
-### Client API (Recommended for New Features)
+For use cases requiring direct client-to-backend communication (e.g., real-time features, SPA-like interactions):
 
-The new client API provides:
-- Direct browser-to-backend communication
-- HttpOnly cookie security for tokens
-- Automatic token refresh with race condition protection
-- SPA-like user experience
-- Full TypeScript support
+- **Global Instance**: Use `getClientApiInstance()` for a singleton API client
+- **Authentication**: `ClientAuthService` for login, register, logout
+- **Security**: HttpOnly cookies, automatic token refresh, CSRF protection via SameSite=Strict
 
-See [CLIENT_API_MIGRATION.md](./CLIENT_API_MIGRATION.md) for details.
+Example usage:
+```typescript
+import { getClientApiInstance, ClientAuthService } from '$lib/services';
+
+const apiClient = getClientApiInstance();
+if (apiClient) {
+  const authService = new ClientAuthService(apiClient);
+  const result = await authService.login({ email, password });
+}
+```
 
 ## Quick Start
 
@@ -52,7 +51,7 @@ pnpm build
 # Server-side (private)
 BACKEND_API_URL=http://localhost:8000
 
-# Client-side (public)
+# Client-side (public) - for direct client API usage
 PUBLIC_BACKEND_API_URL=http://localhost:8000/api/v1
 ```
 
@@ -109,13 +108,14 @@ src/
 ├── lib/
 │   ├── auth/              # Client-side auth utilities
 │   ├── components/        # Reusable components
-│   │   └── auth/         # Auth-specific components (NEW)
+│   │   └── auth/         # Auth-specific components
 │   ├── dto/              # Data transfer objects
 │   ├── services/         # API services
 │   │   ├── ApiService.ts          # Server-side API client
-│   │   ├── ClientApiService.ts    # Browser-side API client (NEW)
+│   │   ├── ClientApiService.ts    # Browser-side API client
+│   │   ├── client-api-instance.ts # Global singleton instance
 │   │   ├── AuthService.ts         # Server-side auth
-│   │   └── ClientAuthService.ts   # Browser-side auth (NEW)
+│   │   └── ClientAuthService.ts   # Browser-side auth
 │   └── token.ts          # Token management
 └── routes/               # SvelteKit routes
 ```

@@ -1,10 +1,11 @@
 <script lang="ts">
   import { clientLogout } from '$lib/auth/client-logout';
   import { browser } from '$app/environment';
+  import type { Snippet } from 'svelte';
 
   interface Props {
     class?: string;
-    children?: any;
+    children?: Snippet;
   }
 
   let { class: className, children }: Props = $props();
