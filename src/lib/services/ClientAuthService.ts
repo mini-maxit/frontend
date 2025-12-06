@@ -23,7 +23,7 @@ export class ClientAuthService {
         contentType: RequestContentType.Json
       });
 
-      // Backend sets HttpOnly cookies for both access and refresh tokens
+      // Backend returns access token in response body and sets refresh token in HttpOnly cookie
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -47,7 +47,7 @@ export class ClientAuthService {
         contentType: RequestContentType.Json
       });
 
-      // Backend sets HttpOnly cookies for both access and refresh tokens
+      // Backend returns access token in response body and sets refresh token in HttpOnly cookie
       return { success: true, data: response.data, status: 201 };
     } catch (error) {
       if (error instanceof ApiError) {

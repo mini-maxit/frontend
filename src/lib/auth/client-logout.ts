@@ -1,7 +1,7 @@
 import { goto } from '$app/navigation';
 import { browser } from '$app/environment';
 import { AppRoutes } from '$lib/routes';
-import { getClientApiInstance, ClientAuthService } from '$lib/services';
+import { getClientAuthInstance } from '$lib/services';
 
 /**
  * Client-side logout function
@@ -14,13 +14,11 @@ export async function clientLogout(): Promise<void> {
   }
 
   try {
-    const apiClient = getClientApiInstance();
-    if (!apiClient) {
-      console.error('API client not available');
+    const authService = getClientAuthInstance();
+    if (!authService) {
+      console.error('Auth service not available');
       return;
     }
-
-    const authService = new ClientAuthService(apiClient);
 
     const result = await authService.logout();
 

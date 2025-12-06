@@ -6,7 +6,7 @@
   import { Label } from '$lib/components/ui/label';
   import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
-  import { getClientApiInstance, ClientAuthService } from '$lib/services';
+  import { getClientAuthInstance } from '$lib/services';
   import { browser } from '$app/environment';
   import * as v from 'valibot';
 
@@ -22,9 +22,8 @@
   let isSubmitting = $state(false);
   let errors = $state<{ email?: string; password?: string }>({});
 
-  // Create client API instance using global singleton
-  const apiClient = browser ? getClientApiInstance() : null;
-  const authService = apiClient ? new ClientAuthService(apiClient) : null;
+  // Get singleton auth service instance
+  const authService = browser ? getClientAuthInstance() : null;
 
   // Valibot schema matching the remote function pattern
   const LoginSchema = v.object({
@@ -57,13 +56,14 @@
     });
 
     if (!result.success) {
-      // Map Valibot issues to form errors
-      for (const issue of result.issues) {
-        if (issue.path) {
-          const field = issue.path[0]?.key as 'email' | 'password';
-          if (field) {
-            errors[field] = issue.message;
-          }
+      // Use flatten to get type-safe field-level errors
+      const flatErrors = v.flatten<typeof LoginSchema>(result.issues);
+      if (flatErrors.nested) {
+        if (flatErrors.nested.email) {
+          errors.email = flatErrors.nested.email[0];
+        }
+        if (flatErrors.nested.password) {
+          errors.password = flatErrors.nested.password[0];
         }
       }
       return;
@@ -78,7 +78,7 @@
       });
 
       if (loginResult.success) {
-        toast.success('Login successful!');
+        toast.success(m.login_success());
 
         // Sanitize redirectTo to prevent open redirect vulnerability
         // Only allow relative paths starting with /

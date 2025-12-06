@@ -574,5 +574,6 @@
   "contest_collaborators_remove_cancel": "Cancel",
   "contest_collaborators_remove_success": "Collaborator removed successfully!",
   "contest_collaborators_remove_error": "Failed to remove collaborator",
-  "admin_contests_card_view_collaborators": "View Collaborators"
+  "admin_contests_card_view_collaborators": "View Collaborators",
+  "login_success": "Login successful!"
 }
