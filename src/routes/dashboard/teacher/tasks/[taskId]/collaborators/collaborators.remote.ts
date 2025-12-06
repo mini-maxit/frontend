@@ -51,7 +51,7 @@ export const addCollaborator = form(
     const accessControlService = new AccessControlService(apiClient);
 
     const result = await accessControlService.addTaskCollaborator(data.taskId, {
-      userId: data.userId,
+      user_id: data.userId,
       permission: data.permission
     });
 
