@@ -49,7 +49,7 @@
     // Reset errors
     errors = {};
 
-    // Validate with Valibot
+    // Validate with Valibot - safeParse returns a result object
     const result = v.safeParse(LoginSchema, {
       email: email.trim(),
       password: password
@@ -57,14 +57,16 @@
 
     if (!result.success) {
       // Use flatten to get type-safe field-level errors
+      // flatten() organizes issues into: root (schema-level), nested (field-level), other
       const flatErrors = v.flatten<typeof LoginSchema>(result.issues);
-      if (flatErrors.nested) {
-        if (flatErrors.nested.email) {
-          errors.email = flatErrors.nested.email[0];
-        }
-        if (flatErrors.nested.password) {
-          errors.password = flatErrors.nested.password[0];
-        }
+
+      // Extract field-level errors from nested property
+      // flatErrors.nested is a record of field paths to error message arrays
+      if (flatErrors.nested?.email) {
+        errors.email = flatErrors.nested.email[0];
+      }
+      if (flatErrors.nested?.password) {
+        errors.password = flatErrors.nested.password[0];
       }
       return;
     }
