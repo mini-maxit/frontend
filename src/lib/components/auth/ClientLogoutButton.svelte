@@ -12,7 +12,7 @@
 
   async function handleLogout() {
     if (!browser) return;
-    
+
     isLoading = true;
     try {
       await clientLogout();
@@ -25,12 +25,7 @@
   }
 </script>
 
-<button
-  type="button"
-  onclick={handleLogout}
-  disabled={isLoading}
-  class={className}
->
+<button type="button" onclick={handleLogout} disabled={isLoading} class={className}>
   {#if children}
     {@render children()}
   {:else}

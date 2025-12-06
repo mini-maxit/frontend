@@ -27,7 +27,7 @@
 
   async function handleSubmit(event: Event) {
     event.preventDefault();
-    
+
     if (!authService) {
       toast.error('Authentication service not available');
       return;

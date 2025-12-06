@@ -263,6 +263,7 @@ export function createClientApiClient(baseUrl?: string): ClientApiService {
   }
 
   // Use provided URL or fall back to public env variable
-  const apiUrl = baseUrl || import.meta.env.PUBLIC_BACKEND_API_URL || 'http://localhost:8000/api/v1';
+  const apiUrl =
+    baseUrl || import.meta.env.PUBLIC_BACKEND_API_URL || 'http://localhost:8000/api/v1';
   return new ClientApiService(apiUrl);
 }
