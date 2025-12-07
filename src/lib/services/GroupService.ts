@@ -13,7 +13,7 @@ export class GroupService {
   }> {
     try {
       const response: ApiResponse<Group[]> = await this.apiService.get({
-        url: '/groups/'
+        url: '/groups-management/'
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -36,7 +36,7 @@ export class GroupService {
   }> {
     try {
       const response: ApiResponse<Group> = await this.apiService.get({
-        url: `/groups/${groupId}`
+        url: `/groups-management/${groupId}`
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
