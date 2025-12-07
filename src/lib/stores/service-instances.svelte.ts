@@ -2,6 +2,7 @@ import { browser } from '$app/environment';
 import { ClientApiService } from '../services/client/ClientApiService';
 import { ClientAuthService } from '../services/client/ClientAuthService';
 import { ClientUserService } from '../services/client/ClientUserService';
+import { env } from '$env/dynamic/public';
 
 /**
  * Global singleton instance of ClientApiService
@@ -31,7 +32,7 @@ export function getClientApiInstance(): ClientApiService | null {
   }
 
   if (!clientApiInstance) {
-    const apiUrl = import.meta.env.PUBLIC_BACKEND_API_URL;
+    const apiUrl = env.PUBLIC_BACKEND_API_URL;
     if (!apiUrl) {
       console.error('PUBLIC_BACKEND_API_URL is not defined');
       return null;
