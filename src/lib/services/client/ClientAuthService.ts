@@ -1,14 +1,17 @@
-import { ApiError } from './ApiService';
+import { ApiError } from '../ApiService';
 import type { ClientApiService } from './ClientApiService';
-import type { AuthTokenData } from '../dto/auth';
-import type { UserLoginDto, UserRegisterDto } from '../dto/user';
-import { RequestContentType } from '../dto/request';
-import type { ApiResponse } from '../dto/response';
+import type { AuthTokenData } from '../../dto/auth';
+import type { UserLoginDto, UserRegisterDto } from '../../dto/user';
+import { RequestContentType } from '../../dto/request';
+import type { ApiResponse } from '../../dto/response';
+import { tokenStore } from '$lib/stores/token-store.svelte';
+import { userStore } from '$lib/stores/user-store.svelte';
 
 /**
  * Client-side authentication service
- * Uses ClientApiService for browser-based authentication
- * All tokens are managed via HttpOnly cookies set by the backend
+ * Uses in-memory token storage with HttpOnly refresh token cookie
+ * - Access token: stored in memory (better security, cleared on refresh)
+ * - Refresh token: stored in HttpOnly cookie by backend (secure, persistent)
  */
 export class ClientAuthService {
   constructor(private apiClient: ClientApiService) {}
@@ -24,6 +27,10 @@ export class ClientAuthService {
       });
 
       // Backend returns access token in response body and sets refresh token in HttpOnly cookie
+      if (response.data?.accessToken) {
+        tokenStore.setAccessToken(response.data.accessToken);
+      }
+
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -48,6 +55,10 @@ export class ClientAuthService {
       });
 
       // Backend returns access token in response body and sets refresh token in HttpOnly cookie
+      if (response.data?.accessToken) {
+        tokenStore.setAccessToken(response.data.accessToken);
+      }
+
       return { success: true, data: response.data, status: 201 };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -67,7 +78,9 @@ export class ClientAuthService {
         url: '/auth/logout'
       });
 
-      // Backend clears HttpOnly cookies
+      // Clear in-memory token and user, backend clears HttpOnly refresh cookie
+      tokenStore.clearAccessToken();
+      userStore.clearUser();
       return { success: true, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {

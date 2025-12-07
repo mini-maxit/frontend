@@ -1,15 +1,19 @@
 import { goto } from '$app/navigation';
 import { browser } from '$app/environment';
-import { RequestMethod, RequestContentType, type Request } from '../dto/request';
-import type { ApiResponse } from '../dto/response';
-import { isApiErrorResponse } from '../dto/error';
+import { RequestMethod, RequestContentType, type Request } from '../../dto/request';
+import { isApiErrorResponse } from '../../dto/error';
 import { AppRoutes } from '$lib/routes';
-import { ApiError } from './ApiService';
+import { ApiError } from '../ApiService';
+import { tokenStore } from '$lib/stores/token-store.svelte';
+import type { ApiResponse } from '../../dto/response';
+import type { AuthTokenData } from '../../dto/auth';
 
 /**
  * Client-side API service for browser contexts
- * Uses HttpOnly cookies for secure token storage
- * Tokens are automatically sent with requests via credentials: 'include'
+ * Uses in-memory token storage with refresh token in HttpOnly cookie
+ * - Access token: stored in memory (cleared on page refresh)
+ * - Refresh token: stored in HttpOnly cookie by backend (secure, persistent)
+ * - Silent refresh: automatically fetches new access token on page load
  */
 export class ClientApiService {
   private baseUrl: string;
@@ -26,6 +30,7 @@ export class ClientApiService {
   /**
    * Refresh the access token using the refresh token cookie
    * Handles race conditions by queuing concurrent refresh attempts
+   * Returns the new access token
    */
   private async refreshToken(): Promise<void> {
     // If already refreshing, wait for the existing refresh to complete
@@ -38,18 +43,21 @@ export class ClientApiService {
       try {
         const response = await fetch(`${this.baseUrl}/auth/refresh`, {
           method: 'POST',
-          credentials: 'include' // Send refresh token cookie
+          credentials: 'include'
         });
 
         if (!response.ok) {
           console.warn('Token refresh failed, redirecting to login.');
-          // Clear any client state if needed
+          tokenStore.clearAccessToken();
           goto(AppRoutes.Login);
           throw new Error('Token refresh failed');
         }
 
-        // The backend will set the new access token as an HttpOnly cookie
-        // We don't need to manually handle it - it's automatic
+        // Backend returns new access token in response body
+        const data = (await response.json()) as ApiResponse<AuthTokenData>;
+        if (data.data?.accessToken) {
+          tokenStore.setAccessToken(data.data.accessToken);
+        }
       } finally {
         this.isRefreshing = false;
         this.refreshPromise = null;
@@ -60,8 +68,22 @@ export class ClientApiService {
   }
 
   /**
+   * Silent refresh - get new access token on app initialization
+   * Call this on page load to restore authentication state
+   */
+  async silentRefresh(): Promise<boolean> {
+    try {
+      await this.refreshToken();
+      return tokenStore.hasToken();
+    } catch (error) {
+      console.error('Silent refresh failed:', error);
+      return false;
+    }
+  }
+
+  /**
    * Make an HTTP request to the API
-   * Automatically includes credentials (cookies) and handles 401 errors
+   * Automatically includes access token from memory and handles 401 errors
    */
   private async request(request: Request): Promise<Response> {
     const headers = new Headers(request.options?.headers);
@@ -73,28 +95,33 @@ export class ClientApiService {
       headers.set('Content-Type', RequestContentType.Json);
     }
 
-    // Make the request with credentials to include HttpOnly cookies
+    // Add access token from memory if available
+    const token = tokenStore.getAccessToken();
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    // Make the request with credentials to include HttpOnly refresh token cookie
     let response = await fetch(`${this.baseUrl}${request.url}`, {
       method: request.method,
       body: request.body,
       ...request.options,
       headers,
-      credentials: 'include' // Critical: includes HttpOnly cookies
+      credentials: 'include'
     });
 
     // Handle 401 Unauthorized - try to refresh token
     // Skip refresh for auth endpoints to prevent infinite loops
-    if (
-      response.status === 401 &&
-      !request.url.includes('/auth/login') &&
-      !request.url.includes('/auth/register') &&
-      !request.url.includes('/auth/refresh') &&
-      !request.url.includes('/auth/logout')
-    ) {
+    if (response.status === 401 && !request.url.includes('/auth')) {
       try {
         await this.refreshToken();
 
-        // Retry the original request after refresh
+        // Retry the original request with new token
+        const newToken = tokenStore.getAccessToken();
+        if (newToken) {
+          headers.set('Authorization', `Bearer ${newToken}`);
+        }
+
         response = await fetch(`${this.baseUrl}${request.url}`, {
           method: request.method,
           body: request.body,

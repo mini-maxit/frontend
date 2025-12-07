@@ -1,5 +1,5 @@
 import { TokenManager } from '../token';
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 import { goto } from '$app/navigation';
 import type { AuthTokenData } from '../dto/auth';
 import { RequestMethod, RequestContentType, type Request } from '../dto/request';
@@ -74,7 +74,7 @@ export class ApiService {
   private refreshPromise: Promise<void> | null = null;
   private cookies: Cookies | null = null;
 
-  constructor(baseUrl: string = env.BACKEND_API_URL || 'http://localhost:8000/api/v1') {
+  constructor(baseUrl: string = env.PUBLIC_BACKEND_API_URL || 'http://localhost:8000/api/v1') {
     this.baseUrl = baseUrl;
   }
 

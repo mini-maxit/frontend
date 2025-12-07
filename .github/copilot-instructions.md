@@ -869,6 +869,7 @@ For scenarios requiring direct browser-to-backend communication:
 - **Use Cases**: Real-time features, SPA-like interactions, progressive enhancement
 
 Example:
+
 ```typescript
 import { getClientApiInstance, ClientAuthService } from '$lib/services';
 

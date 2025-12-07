@@ -6,10 +6,10 @@
   import { Label } from '$lib/components/ui/label';
   import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
-  import { getClientAuthInstance } from '$lib/services';
+  import { getClientAuthInstance, getClientUserInstance } from '$lib/services';
   import { browser } from '$app/environment';
   import { LoginSchema } from '$lib/schemas';
-  import { superForm } from 'sveltekit-superforms';
+  import { defaults, superForm } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
 
   interface Props {
@@ -22,49 +22,46 @@
   const authService = browser ? getClientAuthInstance() : null;
 
   // Initialize superform for SPA mode with client-side validation
-  const { form, errors, enhance, submitting } = superForm(
-    {
-      email: '',
-      password: ''
-    },
-    {
-      validators: valibot(LoginSchema),
-      SPA: true,
-      dataType: 'json',
-      resetForm: false,
-      // In SPA mode, onUpdate is called after successful client-side validation
-      async onUpdate({ form }) {
-        if (!authService || !form.valid) {
-          return;
-        }
+  const { form, errors, enhance, submitting } = superForm(defaults(valibot(LoginSchema)), {
+    validators: valibot(LoginSchema),
+    SPA: true,
+    dataType: 'json',
+    resetForm: false,
+    async onUpdate({ form }) {
+      if (!authService || !form.valid) {
+        return;
+      }
 
-        try {
-          const loginResult = await authService.login({
-            email: form.data.email.trim(),
-            password: form.data.password
-          });
+      try {
+        const loginResult = await authService.login({
+          email: form.data.email.trim(),
+          password: form.data.password
+        });
 
-          if (loginResult.success) {
-            toast.success(m.login_success());
-
-            // Sanitize redirectTo to prevent open redirect vulnerability
-            // Only allow relative paths starting with /
-            let safeRedirect: string = AppRoutes.Dashboard;
-            if (redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//')) {
-              safeRedirect = redirectTo;
-            }
-
-            await goto(safeRedirect);
-          } else {
-            toast.error(loginResult.error || m.error_default_message());
+        if (loginResult.success) {
+          // Fetch user data to populate userStore
+          const userService = browser ? getClientUserInstance() : null;
+          if (userService) {
+            await userService.getCurrentUser();
           }
-        } catch (error) {
-          console.error('Login error:', error);
-          toast.error(m.error_default_message());
+
+          toast.success(m.login_success());
+
+          let safeRedirect: string = AppRoutes.Dashboard;
+          if (redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//')) {
+            safeRedirect = redirectTo;
+          }
+
+          await goto(safeRedirect);
+        } else {
+          toast.error(loginResult.error || m.error_default_message());
         }
+      } catch (error) {
+        console.error('Login error:', error);
+        toast.error(m.error_default_message());
       }
     }
-  );
+  });
 </script>
 
 <form method="POST" use:enhance class="space-y-6">

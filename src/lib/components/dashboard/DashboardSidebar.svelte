@@ -29,13 +29,12 @@
   import Activity from '@lucide/svelte/icons/activity';
   import LogOut from '@lucide/svelte/icons/log-out';
   import SidebarTrigger from '../ui/sidebar/sidebar-trigger.svelte';
-  import { logout } from '$routes/dashboard/logout.remote';
+  import { userStore } from '$lib/stores/user-store.svelte';
+  import { getClientAuthInstance } from '$lib/services';
+  import { goto } from '$app/navigation';
+  import { browser } from '$app/environment';
 
-  interface Props {
-    user: { userId: number; role: UserRole };
-  }
-
-  let { user }: Props = $props();
+  const user = $derived(userStore.getUserUnsafe());
   const userMenuItems = [
     {
       title: () => m.sidebar_your_submissions(),
@@ -242,16 +241,21 @@
       <SidebarMenuItem>
         <SidebarMenuButton>
           {#snippet child({ props })}
-            <form
-              {...logout.enhance(async ({ submit }) => {
-                await submit();
-              })}
+            <button
+              type="button"
+              {...props}
+              onclick={async () => {
+                if (!browser) return;
+                const authService = getClientAuthInstance();
+                if (authService) {
+                  await authService.logout();
+                  goto(AppRoutes.Login);
+                }
+              }}
             >
-              <button type="submit" {...props}>
-                <LogOut />
-                <span>{m.sidebar_logout()}</span>
-              </button>
-            </form>
+              <LogOut />
+              <span>{m.sidebar_logout()}</span>
+            </button>
           {/snippet}
         </SidebarMenuButton>
       </SidebarMenuItem>

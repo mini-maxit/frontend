@@ -15,6 +15,7 @@ For use cases requiring direct client-to-backend communication (e.g., real-time 
 - **Security**: HttpOnly cookies, automatic token refresh, CSRF protection via SameSite=Strict
 
 Example usage:
+
 ```typescript
 import { getClientApiInstance, ClientAuthService } from '$lib/services';
 

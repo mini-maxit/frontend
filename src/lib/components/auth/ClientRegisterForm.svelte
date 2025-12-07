@@ -6,10 +6,10 @@
   import { Label } from '$lib/components/ui/label';
   import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
-  import { getClientAuthInstance } from '$lib/services';
+  import { getClientAuthInstance, getClientUserInstance } from '$lib/services';
   import { browser } from '$app/environment';
   import { RegisterSchema } from '$lib/schemas';
-  import { superForm } from 'sveltekit-superforms';
+  import { superForm, defaults } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
 
   interface Props {
@@ -22,56 +22,49 @@
   const authService = browser ? getClientAuthInstance() : null;
 
   // Initialize superform for SPA mode with client-side validation
-  const { form, errors, enhance, submitting } = superForm(
-    {
-      email: '',
-      name: '',
-      surname: '',
-      username: '',
-      password: '',
-      confirmPassword: ''
-    },
-    {
-      validators: valibot(RegisterSchema),
-      SPA: true,
-      dataType: 'json',
-      resetForm: false,
-      // In SPA mode, onUpdate is called after successful client-side validation
-      async onUpdate({ form }) {
-        if (!authService || !form.valid) {
-          return;
-        }
+  const { form, errors, enhance, submitting } = superForm(defaults(valibot(RegisterSchema)), {
+    validators: valibot(RegisterSchema),
+    SPA: true,
+    dataType: 'json',
+    resetForm: false,
+    async onUpdate({ form }) {
+      if (!authService || !form.valid) {
+        return;
+      }
 
-        try {
-          const registerResult = await authService.register({
-            email: form.data.email.trim(),
-            name: form.data.name.trim(),
-            surname: form.data.surname.trim(),
-            username: form.data.username.trim(),
-            password: form.data.password,
-            confirmPassword: form.data.confirmPassword
-          });
+      try {
+        const registerResult = await authService.register({
+          email: form.data.email.trim(),
+          name: form.data.name.trim(),
+          surname: form.data.surname.trim(),
+          username: form.data.username.trim(),
+          password: form.data.password,
+          confirmPassword: form.data.confirmPassword
+        });
 
-          if (registerResult.success) {
-            toast.success(m.register_success());
-
-            // Sanitize redirectTo to prevent open redirect vulnerability
-            let safeRedirect: string = AppRoutes.Dashboard;
-            if (redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//')) {
-              safeRedirect = redirectTo;
-            }
-
-            await goto(safeRedirect);
-          } else {
-            toast.error(registerResult.error || m.error_default_message());
+        if (registerResult.success) {
+          const userService = browser ? getClientUserInstance() : null;
+          if (userService) {
+            await userService.getCurrentUser();
           }
-        } catch (error) {
-          console.error('Register error:', error);
-          toast.error(m.error_default_message());
+
+          toast.success(m.register_success());
+
+          let safeRedirect: string = AppRoutes.Dashboard;
+          if (redirectTo && redirectTo.startsWith('/') && !redirectTo.startsWith('//')) {
+            safeRedirect = redirectTo;
+          }
+
+          await goto(safeRedirect);
+        } else {
+          toast.error(registerResult.error || m.error_default_message());
         }
+      } catch (error) {
+        console.error('Register error:', error);
+        toast.error(m.error_default_message());
       }
     }
-  );
+  });
 </script>
 
 <form method="POST" use:enhance class="space-y-4">
