@@ -8,7 +8,7 @@
   import { AppRoutes } from '$lib/routes';
   import { getClientAuthInstance } from '$lib/services';
   import { browser } from '$app/environment';
-  import * as v from 'valibot';
+  import { RegisterSchema } from '$lib/schemas';
   import { superForm } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
 
@@ -21,60 +21,7 @@
   // Get singleton auth service instance
   const authService = browser ? getClientAuthInstance() : null;
 
-  // Valibot schema matching the remote function pattern
-  const RegisterSchema = v.pipe(
-    v.object({
-      email: v.pipe(
-        v.string(m.validation_email_required()),
-        v.nonEmpty(m.validation_email_required()),
-        v.email(m.validation_email_invalid())
-      ),
-      name: v.pipe(
-        v.string(m.validation_name_required()),
-        v.nonEmpty(m.validation_name_required()),
-        v.minLength(3, m.validation_name_min()),
-        v.maxLength(50, m.validation_name_max())
-      ),
-      surname: v.pipe(
-        v.string(m.validation_surname_required()),
-        v.nonEmpty(m.validation_surname_required()),
-        v.minLength(3, m.validation_surname_min()),
-        v.maxLength(50, m.validation_surname_max())
-      ),
-      username: v.pipe(
-        v.string(m.validation_username_required()),
-        v.nonEmpty(m.validation_username_required()),
-        v.minLength(3, m.validation_username_min()),
-        v.maxLength(30, m.validation_username_max()),
-        v.regex(/^[a-zA-Z]/, m.validation_username_start()),
-        v.regex(/^[a-zA-Z][a-zA-Z0-9_]*$/, m.validation_username_pattern())
-      ),
-      password: v.pipe(
-        v.string(m.validation_password_required()),
-        v.nonEmpty(m.validation_password_required()),
-        v.minLength(8, m.validation_password_min()),
-        v.maxLength(50, m.validation_password_max()),
-        v.regex(/[A-Z]/, m.validation_password_uppercase()),
-        v.regex(/[a-z]/, m.validation_password_lowercase()),
-        v.regex(/[0-9]/, m.validation_password_digit()),
-        v.regex(/[!#?@$%^&*-]/, m.validation_password_special())
-      ),
-      confirmPassword: v.pipe(
-        v.string(m.validation_confirm_password_required()),
-        v.nonEmpty(m.validation_confirm_password_required())
-      )
-    }),
-    v.forward(
-      v.partialCheck(
-        [['password'], ['confirmPassword']],
-        (input) => input.password === input.confirmPassword,
-        m.validation_passwords_match()
-      ),
-      ['confirmPassword']
-    )
-  );
-
-  // Initialize superform for client-side usage
+  // Initialize superform for SPA mode with client-side validation
   const { form, errors, enhance, submitting } = superForm(
     {
       email: '',
@@ -89,15 +36,8 @@
       SPA: true,
       dataType: 'json',
       resetForm: false,
-      onSubmit: async ({ cancel }) => {
-        cancel();
-
-        if (!authService) {
-          toast.error('Authentication service not available');
-          return;
-        }
-      },
-      onUpdate: async ({ form }) => {
+      // In SPA mode, onUpdate is called after successful client-side validation
+      async onUpdate({ form }) {
         if (!authService || !form.valid) {
           return;
         }

@@ -8,7 +8,7 @@
   import { AppRoutes } from '$lib/routes';
   import { getClientAuthInstance } from '$lib/services';
   import { browser } from '$app/environment';
-  import * as v from 'valibot';
+  import { LoginSchema } from '$lib/schemas';
   import { superForm } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
 
@@ -21,20 +21,7 @@
   // Get singleton auth service instance
   const authService = browser ? getClientAuthInstance() : null;
 
-  // Valibot schema matching the remote function pattern
-  const LoginSchema = v.object({
-    email: v.pipe(
-      v.string(m.validation_email_required()),
-      v.nonEmpty(m.validation_email_required()),
-      v.email(m.validation_email_invalid())
-    ),
-    password: v.pipe(
-      v.string(m.validation_password_required()),
-      v.nonEmpty(m.validation_password_required())
-    )
-  });
-
-  // Initialize superform for client-side usage
+  // Initialize superform for SPA mode with client-side validation
   const { form, errors, enhance, submitting } = superForm(
     {
       email: '',
@@ -45,16 +32,8 @@
       SPA: true,
       dataType: 'json',
       resetForm: false,
-      onSubmit: async ({ formData, cancel }) => {
-        // Cancel default form submission since we're doing client-side API call
-        cancel();
-
-        if (!authService) {
-          toast.error('Authentication service not available');
-          return;
-        }
-      },
-      onUpdate: async ({ form }) => {
+      // In SPA mode, onUpdate is called after successful client-side validation
+      async onUpdate({ form }) {
         if (!authService || !form.valid) {
           return;
         }
