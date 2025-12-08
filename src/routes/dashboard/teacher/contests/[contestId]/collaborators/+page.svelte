@@ -102,7 +102,10 @@
               <div class="flex items-center justify-between">
                 <div class="min-w-0 flex-1">
                   <CardTitle class="truncate">{collaborator.userName}</CardTitle>
-                  <p class="text-sm text-muted-foreground truncate">{collaborator.firstName} {collaborator.lastName}</p>
+                  <p class="truncate text-sm text-muted-foreground">
+                    {collaborator.firstName}
+                    {collaborator.lastName}
+                  </p>
                 </div>
                 <div class="flex items-center gap-1">
                   <ContestCollaboratorPermissionEditor

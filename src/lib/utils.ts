@@ -31,11 +31,31 @@ export function formatDate(dateString: string | null): string {
 /**
  * Converts a datetime-local input value to RFC3339 format for API requests
  * @param datetimeLocal - String in format "YYYY-MM-DDTHH:mm" from datetime-local input
- * @returns RFC3339 formatted string (e.g., "2025-10-18T16:30:00Z")
+ * @returns RFC3339 formatted string with timezone offset (e.g., "2025-10-18T16:30:00+01:00")
  */
 export function toRFC3339(datetimeLocal: string): string {
   const date = new Date(datetimeLocal);
-  return date.toISOString();
+
+  // Get timezone offset in minutes (positive for west of UTC, negative for east)
+  // We need to negate it to get the standard offset format
+  const tzOffsetMinutes = -date.getTimezoneOffset();
+
+  // Calculate timezone offset sign, hours, and minutes
+  const sign = tzOffsetMinutes >= 0 ? '+' : '-';
+  const absOffset = Math.abs(tzOffsetMinutes);
+  const hours = String(Math.floor(absOffset / 60)).padStart(2, '0');
+  const minutes = String(absOffset % 60).padStart(2, '0');
+
+  // Format the date components
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+  const second = String(date.getSeconds()).padStart(2, '0');
+
+  // Return RFC3339 formatted string with timezone offset
+  return `${year}-${month}-${day}T${hour}:${minute}:${second}${sign}${hours}:${minutes}`;
 }
 
 /**
