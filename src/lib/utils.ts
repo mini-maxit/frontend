@@ -36,8 +36,9 @@ export function formatDate(dateString: string | null): string {
 export function toRFC3339(datetimeLocal: string): string {
   const date = new Date(datetimeLocal);
 
-  // Get timezone offset in minutes (positive for west of UTC, negative for east)
-  // We need to negate it to get the standard offset format
+  // Get timezone offset in minutes
+  // getTimezoneOffset() returns positive for west of UTC (behind UTC)
+  // RFC3339 uses positive for east of UTC (ahead of UTC), so we negate it
   const tzOffsetMinutes = -date.getTimezoneOffset();
 
   // Calculate timezone offset sign, hours, and minutes
