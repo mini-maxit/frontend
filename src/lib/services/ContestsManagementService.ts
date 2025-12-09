@@ -198,7 +198,7 @@ export class ContestsManagementService {
   async getContestSubmissions(
     contestId: number,
     params?: GetContestSubmissionsParams
-  ): Promise<Submission[]> {
+  ): Promise<PaginatedData<Submission>> {
     try {
       const queryParams = new URLSearchParams();
       if (params?.limit) queryParams.append('limit', params.limit.toString());
@@ -212,7 +212,7 @@ export class ContestsManagementService {
       const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
         url
       });
-      return response.data.items;
+      return response.data;
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get contest submissions:', error.toJSON());

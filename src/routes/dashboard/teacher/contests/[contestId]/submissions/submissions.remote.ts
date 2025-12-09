@@ -16,13 +16,16 @@ export const getContestSubmissions = query(
 
     try {
       const contestsManagementService = createContestsManagementService(cookies);
-      const submissions = await contestsManagementService.getContestSubmissions(params.contestId, {
-        limit: params.limit,
-        offset: params.offset,
-        sort: params.sort
-      });
+      const paginatedSubmissions = await contestsManagementService.getContestSubmissions(
+        params.contestId,
+        {
+          limit: params.limit,
+          offset: params.offset,
+          sort: params.sort
+        }
+      );
 
-      return submissions;
+      return paginatedSubmissions;
     } catch (err) {
       console.error('Failed to load contest submissions:', err);
 
