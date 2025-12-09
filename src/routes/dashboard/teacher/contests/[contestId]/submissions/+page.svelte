@@ -43,7 +43,9 @@
   // Pagination calculations
   let currentPage = $derived(getCurrentPage(offset, limit));
   let totalPages = $derived(
-    submissionsQuery.current ? getTotalPages(submissionsQuery.current.pagination.totalItems, limit) : 1
+    submissionsQuery.current
+      ? getTotalPages(submissionsQuery.current.pagination.totalItems, limit)
+      : 1
   );
   let paginationPages = $derived(getPaginationPages(currentPage, totalPages));
 
@@ -345,7 +347,10 @@
                   </Pagination.Item>
                 {:else}
                   <Pagination.Item>
-                    <Pagination.Link page={{ type: 'page', value: p }} isActive={p === currentPage} />
+                    <Pagination.Link
+                      page={{ type: 'page', value: p }}
+                      isActive={p === currentPage}
+                    />
                   </Pagination.Item>
                 {/if}
               {/each}
@@ -357,7 +362,9 @@
           </Pagination.Root>
 
           <div class="text-xs text-muted-foreground">
-            {m.admin_users_pagination_total({ total: submissionsQuery.current.pagination.totalItems })}
+            {m.admin_users_pagination_total({
+              total: submissionsQuery.current.pagination.totalItems
+            })}
           </div>
         </div>
       {/if}
