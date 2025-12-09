@@ -26,7 +26,7 @@ export class AccessControlService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<Collaborator[]>>({
-        url: `/access-control/tasks/${taskId}/collaborators`
+        url: `/access-control/resources/tasks/${taskId}/collaborators`
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -55,7 +55,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.post<ApiResponse<void>>({
-        url: `/access-control/tasks/${taskId}/collaborators`,
+        url: `/access-control/resources/tasks/${taskId}/collaborators`,
         body: JSON.stringify(data)
       });
       return { success: true, status: 201 };
@@ -86,7 +86,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.put<ApiResponse<void>>({
-        url: `/access-control/tasks/${taskId}/collaborators/${userId}`,
+        url: `/access-control/resources/tasks/${taskId}/collaborators/${userId}`,
         body: JSON.stringify(data)
       });
       return { success: true, status: 200 };
@@ -117,7 +117,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.delete<ApiResponse<void>>({
-        url: `/access-control/tasks/${taskId}/collaborators/${userId}`
+        url: `/access-control/resources/tasks/${taskId}/collaborators/${userId}`
       });
       return { success: true, status: 200 };
     } catch (error) {
@@ -144,7 +144,7 @@ export class AccessControlService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<Collaborator[]>>({
-        url: `/access-control/contests/${contestId}/collaborators`
+        url: `/access-control/resources/contests/${contestId}/collaborators`
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -173,7 +173,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.post<ApiResponse<void>>({
-        url: `/access-control/contests/${contestId}/collaborators`,
+        url: `/access-control/resources/contests/${contestId}/collaborators`,
         body: JSON.stringify(data)
       });
       return { success: true, status: 201 };
@@ -204,7 +204,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.put<ApiResponse<void>>({
-        url: `/access-control/contests/${contestId}/collaborators/${userId}`,
+        url: `/access-control/resources/contests/${contestId}/collaborators/${userId}`,
         body: JSON.stringify(data)
       });
       return { success: true, status: 200 };
@@ -235,7 +235,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.delete<ApiResponse<void>>({
-        url: `/access-control/contests/${contestId}/collaborators/${userId}`
+        url: `/access-control/resources/contests/${contestId}/collaborators/${userId}`
       });
       return { success: true, status: 200 };
     } catch (error) {
