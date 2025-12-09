@@ -3,7 +3,8 @@ import type {
   Contest,
   UserContestsResponse,
   ContestWithStats,
-  PastContestWithStats
+  PastContestWithStats,
+  ContestResults
 } from '$lib/dto/contest';
 import type { ContestTaskWithStatistics, TaskDetail } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
@@ -129,6 +130,21 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get contest task:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getMyResults(contestId: number): Promise<ContestResults> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<ContestResults>>({
+        url: `/contests/${contestId}/results/my`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest results:', error.toJSON());
         throw error;
       }
       throw error;
