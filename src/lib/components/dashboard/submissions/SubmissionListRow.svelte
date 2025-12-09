@@ -99,7 +99,7 @@
       </div>
 
       <!-- Middle Section: Stats Grid -->
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
+      <div class="grid w-full grid-cols-2 gap-3 lg:w-auto lg:min-w-[520px] lg:grid-cols-3">
         <!-- Language -->
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
