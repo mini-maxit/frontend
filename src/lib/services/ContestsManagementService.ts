@@ -40,7 +40,7 @@ export class ContestsManagementService {
   async getManagedContests(): Promise<CreatedContest[]> {
     try {
       const contests = await this.apiClient.get<ApiResponse<PaginatedData<ManagedContest>>>({
-        url: '/contests-management/contests'
+        url: '/contests-management/contests/managed'
       });
 
       return contests.data.items;
