@@ -213,3 +213,17 @@ export interface UserContestStats {
   tasksAttempted: number;
   taskBreakdown: UserTaskPerformance[];
 }
+
+export interface ContestDetailed {
+  id: number;
+  name: string;
+  description: string;
+  startAt: string;
+  endAt: string;
+  createdBy: number;
+  creatorName: string;
+  participantCount: number;
+  taskCount: number;
+  status: ContestStatus;
+  isSubmissionOpen: boolean;
+}

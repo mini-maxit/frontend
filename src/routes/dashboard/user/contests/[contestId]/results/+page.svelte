@@ -14,6 +14,7 @@
   interface Props {
     data: {
       contestId: number;
+      currentUserId: number;
     };
   }
 
@@ -38,9 +39,8 @@
 
   // Find current user's position
   let currentUserPosition = $derived.by(() => {
-    if (!resultsQuery.current?.myResults?.contest) return null;
-    const userId = resultsQuery.current.myResults.contest.createdBy; // This might not be the current user ID
-    return sortedLeaderboard.findIndex((user) => user.user.id === userId) + 1;
+    const position = sortedLeaderboard.findIndex((user) => user.user.id === data.currentUserId);
+    return position >= 0 ? position + 1 : null;
   });
 
   function getRankBadgeClass(rank: number): string {
@@ -78,11 +78,11 @@
     <h1 class="text-4xl font-bold tracking-tight text-foreground">
       Contest Results
     </h1>
-    {#if resultsQuery.current?.myResults?.contest}
+    {#if resultsQuery.current?.contest}
       <div class="flex flex-col gap-2 text-lg text-muted-foreground">
-        <p class="font-medium">{resultsQuery.current.myResults.contest.name}</p>
+        <p class="font-medium">{resultsQuery.current.contest.name}</p>
         <p class="text-sm">
-          {formatContestDate(resultsQuery.current.myResults.contest.startAt)} - {formatContestDate(resultsQuery.current.myResults.contest.endAt)}
+          {formatContestDate(resultsQuery.current.contest.startAt)} - {formatContestDate(resultsQuery.current.contest.endAt)}
         </p>
       </div>
     {/if}
