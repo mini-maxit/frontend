@@ -37,7 +37,7 @@ export class ContestsManagementService {
     }
   }
 
-  async getManagedContests(): Promise<CreatedContest[]> {
+  async getManagedContests(): Promise<ManagedContest[]> {
     try {
       const contests = await this.apiClient.get<ApiResponse<PaginatedData<ManagedContest>>>({
         url: '/contests-management/contests/managed'

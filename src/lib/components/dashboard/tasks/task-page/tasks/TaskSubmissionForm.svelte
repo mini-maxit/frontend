@@ -41,7 +41,7 @@
   let formElement = $state<HTMLFormElement | null>(null);
 
   function getFileExtension(filename: string): string {
-    return '.' + filename.split('.').pop()?.toLowerCase() || '';
+    return filename.split('.').pop()?.toLowerCase() || '';
   }
 
   function validateFileExtension(file: File, languageId: number): boolean {
