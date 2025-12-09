@@ -20,16 +20,10 @@
   interface AvailableContestCardProps {
     contest: Contest;
     onRegister?: (id: number) => void;
-    onViewContest?: (id: number) => void;
     isRegistering?: boolean;
   }
 
-  let {
-    contest,
-    onRegister,
-    onViewContest,
-    isRegistering = false
-  }: AvailableContestCardProps = $props();
+  let { contest, onRegister, isRegistering = false }: AvailableContestCardProps = $props();
 
   const startDate = $derived(getFormattedStartDate(contest));
   const endDate = $derived(getFormattedEndDate(contest));
@@ -217,11 +211,17 @@
         >
           {registrationConfig.buttonText}
         </Button>
+      {:else if contest.registrationStatus === ContestRegistrationStatus.Registered && contest.status === ContestStatus.Upcoming}
+        <div class="rounded-lg border border-border bg-secondary/10 p-3 text-center">
+          <p class="text-xs text-secondary-foreground">
+            {m.available_contest_wait_until_start()}
+          </p>
+        </div>
       {:else}
         <Button
+          href={`${AppRoutes.UserContests}/${contest.id}/results`}
           variant={registrationConfig.buttonVariant}
           class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-          onclick={() => onViewContest?.(contest.id)}
         >
           {#if registrationConfig.buttonText === m.available_contest_view_results()}
             <Eye class="mr-2 h-4 w-4" />

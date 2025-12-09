@@ -128,6 +128,7 @@
   "available_contests_stats_available": "Dostępne konkursy",
   "available_contests_stats_live": "Na żywo teraz",
   "available_contests_stats_upcoming": "Nadchodzące",
+  "available_contest_wait_until_start": "Zarejestrowany! Proszę czekać na rozpoczęcie konkursu.",
   "contest_already_started": "Już rozpoczęte",
   "contest_card_continue": "Kontynuuj konkurs",
   "contest_card_current_rank": "Aktualny ranking: #{rank}",

@@ -61,21 +61,6 @@ export class ContestService {
     }
   }
 
-  async getMyContests(): Promise<UserContestsResponse> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<UserContestsResponse>>({
-        url: `/contests/my`
-      });
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get user contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
-  }
-
   async getMyActiveContests(): Promise<ContestWithStats[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<ContestWithStats[]>>({

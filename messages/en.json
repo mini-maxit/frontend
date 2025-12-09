@@ -128,6 +128,7 @@
   "available_contests_stats_available": "Available Contests",
   "available_contests_stats_live": "Live Now",
   "available_contests_stats_upcoming": "Upcoming",
+  "available_contest_wait_until_start": "Registered! Please wait until the contest starts.",
   "contest_already_started": "Already started",
   "contest_card_continue": "Continue Contest",
   "contest_card_current_rank": "Current Rank: #{rank}",
