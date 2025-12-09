@@ -1,3 +1,5 @@
+import { Permission } from './accessControl';
+
 export enum ContestRegistrationStatus {
   Registered = 'registered',
   AwaitingApproval = 'awaitingApproval',
@@ -36,6 +38,10 @@ export interface CreatedContest {
   isRegistrationOpen: boolean;
   isSubmissionOpen: boolean;
   isVisible: boolean;
+}
+
+export interface ManagedContest extends CreatedContest {
+  permissionType: Permission;
 }
 
 export enum ContestStatus {

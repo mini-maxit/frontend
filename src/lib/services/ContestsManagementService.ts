@@ -5,7 +5,8 @@ import type {
   EditContestDto,
   RegistrationRequest,
   AddContestTaskDto,
-  ContestTask as ContestTaskRelation
+  ContestTask as ContestTaskRelation,
+  ManagedContest
 } from '$lib/dto/contest';
 import type { Task, ContestTask } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
@@ -24,6 +25,22 @@ export class ContestsManagementService {
     try {
       const contests = await this.apiClient.get<ApiResponse<PaginatedData<CreatedContest>>>({
         url: '/contests-management/contests/created'
+      });
+
+      return contests.data.items;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get created contests:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getManagedContests(): Promise<ManagedContest[]> {
+    try {
+      const contests = await this.apiClient.get<ApiResponse<PaginatedData<ManagedContest>>>({
+        url: '/contests-management/contests/managed'
       });
 
       return contests.data.items;

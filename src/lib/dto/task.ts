@@ -66,7 +66,8 @@ export interface ContestTaskWithStatistics {
   attemptsSummary: AttemptsSummary;
 }
 
-export interface ContestTask extends Task {
+export interface ContestTask {
+  task: Task;
   creatorName: string;
   startAt: string;
   endAt: string | null;

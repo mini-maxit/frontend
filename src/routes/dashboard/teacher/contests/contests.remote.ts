@@ -10,7 +10,7 @@ export const getAllContests = query(async (): Promise<CreatedContest[]> => {
 
   try {
     const contestsManagementService = createContestsManagementService(cookies);
-    const contests = await contestsManagementService.getCreatedContests();
+    const contests = await contestsManagementService.getManagedContests();
 
     return contests;
   } catch (err) {
