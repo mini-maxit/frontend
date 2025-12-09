@@ -200,6 +200,72 @@
       </Card.Root>
     {/if}
 
+    <!-- Top 3 Podium -->
+    {#if sortedLeaderboard.length >= 3}
+      <Card.Root class="bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-950/20 dark:to-amber-950/20">
+        <Card.Header>
+          <Card.Title class="flex items-center gap-2">
+            <Trophy class="h-5 w-5 text-yellow-600" />
+            Top 3 Champions
+          </Card.Title>
+        </Card.Header>
+        <Card.Content>
+          <div class="grid gap-4 md:grid-cols-3">
+            <!-- 2nd Place -->
+            {#if sortedLeaderboard[1]}
+              <div class="order-2 md:order-1 flex flex-col items-center rounded-lg border-2 border-slate-400/30 bg-white/50 p-4 dark:bg-slate-900/50">
+                <div class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-slate-300 to-slate-400 shadow-lg">
+                  <Medal class="h-8 w-8 text-slate-700" />
+                </div>
+                <div class="text-center">
+                  <p class="font-semibold text-lg">{sortedLeaderboard[1].user.name} {sortedLeaderboard[1].user.surname}</p>
+                  <p class="text-sm text-muted-foreground">@{sortedLeaderboard[1].user.username}</p>
+                  <p class="mt-2 text-2xl font-bold text-foreground">{sortedLeaderboard[1].totalScore.toFixed(1)}</p>
+                  <p class="text-xs text-muted-foreground">
+                    {sortedLeaderboard[1].tasksSolved} solved · {sortedLeaderboard[1].tasksPartiallySolved} partial
+                  </p>
+                </div>
+              </div>
+            {/if}
+
+            <!-- 1st Place -->
+            {#if sortedLeaderboard[0]}
+              <div class="order-1 md:order-2 flex flex-col items-center rounded-lg border-2 border-yellow-500/50 bg-white/50 p-6 dark:bg-slate-900/50 md:-translate-y-4">
+                <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-xl ring-4 ring-yellow-200 dark:ring-yellow-900">
+                  <Trophy class="h-10 w-10 text-yellow-50" />
+                </div>
+                <div class="text-center">
+                  <p class="font-bold text-xl">{sortedLeaderboard[0].user.name} {sortedLeaderboard[0].user.surname}</p>
+                  <p class="text-sm text-muted-foreground">@{sortedLeaderboard[0].user.username}</p>
+                  <p class="mt-3 text-3xl font-bold text-foreground">{sortedLeaderboard[0].totalScore.toFixed(1)}</p>
+                  <p class="text-xs text-muted-foreground">
+                    {sortedLeaderboard[0].tasksSolved} solved · {sortedLeaderboard[0].tasksPartiallySolved} partial
+                  </p>
+                </div>
+              </div>
+            {/if}
+
+            <!-- 3rd Place -->
+            {#if sortedLeaderboard[2]}
+              <div class="order-3 flex flex-col items-center rounded-lg border-2 border-amber-700/30 bg-white/50 p-4 dark:bg-slate-900/50">
+                <div class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-600 to-amber-800 shadow-lg">
+                  <Medal class="h-8 w-8 text-amber-100" />
+                </div>
+                <div class="text-center">
+                  <p class="font-semibold text-lg">{sortedLeaderboard[2].user.name} {sortedLeaderboard[2].user.surname}</p>
+                  <p class="text-sm text-muted-foreground">@{sortedLeaderboard[2].user.username}</p>
+                  <p class="mt-2 text-2xl font-bold text-foreground">{sortedLeaderboard[2].totalScore.toFixed(1)}</p>
+                  <p class="text-xs text-muted-foreground">
+                    {sortedLeaderboard[2].tasksSolved} solved · {sortedLeaderboard[2].tasksPartiallySolved} partial
+                  </p>
+                </div>
+              </div>
+            {/if}
+          </div>
+        </Card.Content>
+      </Card.Root>
+    {/if}
+
     <!-- Leaderboard -->
     {#if sortedLeaderboard.length > 0}
       <Card.Root>
@@ -231,7 +297,8 @@
                 {#each paginatedLeaderboard as userStats, index}
                   {@const rank = (currentPage - 1) * pageSize + index + 1}
                   {@const RankIcon = getRankIcon(rank)}
-                  <Table.Row>
+                  {@const isCurrentUser = userStats.user.id === data.currentUserId}
+                  <Table.Row class={isCurrentUser ? 'bg-primary/5 font-semibold' : ''}>
                     <Table.Cell>
                       <div class="flex items-center gap-2">
                         {#if RankIcon}
@@ -245,6 +312,9 @@
                     </Table.Cell>
                     <Table.Cell class="font-medium">
                       {userStats.user.name} {userStats.user.surname}
+                      {#if isCurrentUser}
+                        <span class="ml-2 text-xs text-primary">(You)</span>
+                      {/if}
                     </Table.Cell>
                     <Table.Cell class="hidden md:table-cell text-muted-foreground">
                       @{userStats.user.username}
