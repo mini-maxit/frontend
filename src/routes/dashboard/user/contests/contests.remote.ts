@@ -2,19 +2,28 @@ import { query, getRequestEvent } from '$app/server';
 import { createContestService } from '$lib/services/ContestService';
 import { ApiError } from '$lib/services/ApiService';
 import { error } from '@sveltejs/kit';
-import type { UserContestsResponse } from '$lib/dto/contest';
+import type { ContestWithStats, PastContestWithStats } from '$lib/dto/contest';
 
-export const getUserContests = query(async (): Promise<UserContestsResponse> => {
+export interface UserContestsData {
+  active: ContestWithStats[];
+  past: PastContestWithStats[];
+}
+
+export const getUserContests = query(async (): Promise<UserContestsData> => {
   const { cookies } = getRequestEvent();
 
   try {
     const contestService = createContestService(cookies);
-    const contests = await contestService.getMyContests();
+
+    // Call both endpoints in parallel
+    const [active, past] = await Promise.all([
+      contestService.getMyActiveContests(),
+      contestService.getMyPastContests()
+    ]);
 
     return {
-      ongoing: contests.ongoing,
-      upcoming: contests.upcoming,
-      past: contests.past
+      active,
+      past
     };
   } catch (err) {
     console.error('Failed to load user contests:', err);

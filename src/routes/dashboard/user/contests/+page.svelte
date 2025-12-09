@@ -37,7 +37,7 @@
           {#if contestsQuery.loading}
             {m.contests_live_count({ count: 0 })}
           {:else if contestsQuery.current}
-            {m.contests_live_count({ count: contestsQuery.current.ongoing.length })}
+            {m.contests_live_count({ count: contestsQuery.current.active.length })}
           {:else}
             {m.contests_live_count({ count: 0 })}
           {/if}
@@ -64,7 +64,7 @@
         </div>
       {:else if contestsQuery.current}
         <div class="grid gap-6 lg:grid-cols-3">
-          {#each [...contestsQuery.current.ongoing, ...contestsQuery.current.upcoming] as contest (contest.id)}
+          {#each contestsQuery.current.active as contest (contest.id)}
             <ActiveContestCard
               contestId={contest.id}
               name={contest.name}
@@ -76,7 +76,7 @@
               currentRank={undefined}
             />
           {/each}
-          {#if contestsQuery.current.ongoing.length + contestsQuery.current.upcoming.length === 0}
+          {#if contestsQuery.current.active.length === 0}
             <div
               class="col-span-full flex items-center justify-center rounded-lg border border-dashed border-muted-foreground/25 p-8"
             >
@@ -114,13 +114,9 @@
           {#each contestsQuery.current.past as contest (contest.id)}
             <PastContestCard
               name={contest.name}
-              score={contest.taskCount > 0
-                ? Math.round((contest.solvedTaskCount / contest.taskCount) * 100)
-                : 0}
-              maxScore={contest.taskCount * 100}
-              completionPercentage={contest.taskCount > 0
-                ? Math.round((contest.solvedTaskCount / contest.taskCount) * 100)
-                : 0}
+              score={contest.score}
+              maxScore={contest.maximumScore}
+              completionPercentage={Math.round(contest.solvedPercentage)}
               date={formatRelativeDate(contest.endAt)}
               participants={contest.participantCount}
             />
