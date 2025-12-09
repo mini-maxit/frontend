@@ -340,7 +340,7 @@
                 {m.admin_users_pagination_prev()}
               </Pagination.PrevButton>
 
-              {#each paginationPages as p, i (i)}
+              {#each paginationPages as p, i (p === 'ellipsis' ? `ellipsis-${i}` : p)}
                 {#if p === 'ellipsis'}
                   <Pagination.Item>
                     <Pagination.Ellipsis />
