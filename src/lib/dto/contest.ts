@@ -38,6 +38,16 @@ export interface CreatedContest {
   isVisible: boolean;
 }
 
+export enum PermissionType {
+  manage = 'manage',
+  edit = 'edit',
+  owner = 'owner'
+}
+
+export interface ManagedContest extends CreatedContest {
+  permissionType: PermissionType;
+}
+
 export enum ContestStatus {
   Ongoing = 'ongoing',
   Upcoming = 'upcoming',

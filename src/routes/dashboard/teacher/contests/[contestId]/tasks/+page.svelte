@@ -42,7 +42,7 @@
       />
     {:else if tasksQuery.current}
       <div class="space-y-3">
-        {#each tasksQuery.current as task (task.id)}
+        {#each tasksQuery.current as contestTask (contestTask.task.id)}
           <div
             class="rounded-2xl border bg-card p-6 text-card-foreground shadow-md transition-all hover:shadow-lg"
           >
@@ -50,13 +50,13 @@
               <!-- Task Header -->
               <div class="flex items-start justify-between">
                 <div>
-                  <div class="text-xl font-bold text-foreground">{task.title}</div>
+                  <div class="text-xl font-bold text-foreground">{contestTask.task.title}</div>
                   <div class="mt-1 text-sm text-muted-foreground">
-                    {m.admin_contest_tasks_task_id()}: {task.id}
+                    {m.admin_contest_tasks_task_id()}: {contestTask.task.id}
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
-                  {#if task.isSubmissionOpen}
+                  {#if contestTask.isSubmissionOpen}
                     <span
                       class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
                     >
@@ -83,7 +83,7 @@
                       {m.admin_contest_tasks_creator_name()}
                     </div>
                     <div class="text-sm font-semibold text-foreground">
-                      {task.creatorName}
+                      {contestTask.creatorName}
                     </div>
                   </div>
                 </div>
@@ -95,7 +95,7 @@
                       {m.admin_contest_tasks_created_at()}
                     </div>
                     <div class="text-sm text-foreground">
-                      {formatDate(task.createdAt)}
+                      {formatDate(contestTask.task.createdAt)}
                     </div>
                   </div>
                 </div>
@@ -107,7 +107,7 @@
                       {m.admin_contest_tasks_updated_at()}
                     </div>
                     <div class="text-sm text-foreground">
-                      {formatDate(task.updatedAt)}
+                      {formatDate(contestTask.task.updatedAt)}
                     </div>
                   </div>
                 </div>
@@ -119,7 +119,7 @@
                       {m.admin_contest_tasks_start_at()}
                     </div>
                     <div class="text-sm font-semibold text-foreground">
-                      {formatDate(task.startAt)}
+                      {formatDate(contestTask.startAt)}
                     </div>
                   </div>
                 </div>
@@ -131,8 +131,8 @@
                       {m.admin_contest_tasks_end_at()}
                     </div>
                     <div class="text-sm font-semibold text-foreground">
-                      {#if task.endAt}
-                        {formatDate(task.endAt)}
+                      {#if contestTask.endAt}
+                        {formatDate(contestTask.endAt)}
                       {:else}
                         <span class="text-muted-foreground"
                           >{m.admin_contest_tasks_no_end_date()}</span
@@ -149,7 +149,7 @@
                       {m.admin_contest_tasks_created_by_id()}
                     </div>
                     <div class="text-sm text-foreground">
-                      {task.createdBy}
+                      {contestTask.task.createdBy}
                     </div>
                   </div>
                 </div>
