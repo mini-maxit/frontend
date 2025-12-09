@@ -8,8 +8,19 @@
   import Activity from '@lucide/svelte/icons/activity';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import Clock from '@lucide/svelte/icons/clock';
+  import { WorkerStatusType } from '$lib/dto/worker';
 
   const workerStatusQuery = getWorkerStatus();
+
+  // Status styling configuration
+  const statusStyles = {
+    [WorkerStatusType.Idle]: 'bg-primary/10 text-primary',
+    [WorkerStatusType.Busy]: 'bg-secondary/10 text-secondary-foreground'
+  } as const;
+
+  function getStatusStyle(status: WorkerStatusType): string {
+    return statusStyles[status] || 'bg-muted/10 text-muted-foreground';
+  }
 </script>
 
 <div class="space-y-6">
@@ -176,25 +187,19 @@
                   <div class="relative space-y-2">
                     <div class="flex items-center justify-between">
                       <p class="font-mono text-sm font-medium text-foreground">
-                        Worker {worker.id}
+                        {m.admin_dashboard_worker_id({ id: worker.id })}
                       </p>
-                      {#if worker.status === 'idle'}
-                        <span
-                          class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary shadow-sm"
-                        >
-                          {worker.status}
-                        </span>
-                      {:else}
-                        <span
-                          class="inline-flex items-center rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary-foreground shadow-sm"
-                        >
-                          {worker.status}
-                        </span>
-                      {/if}
+                      <span
+                        class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shadow-sm {getStatusStyle(
+                          worker.status
+                        )}"
+                      >
+                        {worker.status}
+                      </span>
                     </div>
                     {#if worker.processingMessageId}
                       <div class="text-xs text-muted-foreground">
-                        <span class="font-medium">Processing:</span>
+                        <span class="font-medium">{m.admin_dashboard_worker_processing()}</span>
                         <span class="font-mono">{worker.processingMessageId}</span>
                       </div>
                     {/if}

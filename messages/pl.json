@@ -574,5 +574,7 @@
   "contest_collaborators_remove_cancel": "Anuluj",
   "contest_collaborators_remove_success": "Współpracownik został usunięty pomyślnie!",
   "contest_collaborators_remove_error": "Nie udało się usunąć współpracownika",
-  "admin_contests_card_view_collaborators": "Zobacz Współpracowników"
+  "admin_contests_card_view_collaborators": "Zobacz Współpracowników",
+  "admin_dashboard_worker_id": "Worker {id}",
+  "admin_dashboard_worker_processing": "Przetwarzanie:"
 }

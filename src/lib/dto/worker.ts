@@ -1,6 +1,11 @@
+export enum WorkerStatusType {
+  Idle = 'idle',
+  Busy = 'busy'
+}
+
 export interface WorkerStatusItem {
   id: number;
-  status: string;
+  status: WorkerStatusType;
   processingMessageId?: string;
 }
 
