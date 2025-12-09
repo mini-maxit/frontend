@@ -40,20 +40,15 @@
   });
 
   function getRankBadgeClass(rank: number): string {
-    if (rank === 1) return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
-    if (rank === 2) return 'bg-slate-400/10 text-slate-600 border-slate-400/20';
-    if (rank === 3) return 'bg-amber-700/10 text-amber-700 border-amber-700/20';
+    if (rank === 1) return 'bg-primary/10 text-primary border-primary/20';
+    if (rank === 2) return 'bg-secondary/10 text-secondary border-secondary/20';
+    if (rank === 3) return 'bg-accent/10 text-accent-foreground border-accent/20';
     return 'bg-muted text-muted-foreground border-border';
   }
 
   function getRankIcon(rank: number) {
-    if (rank <= 3) return Medal;
-    return null;
-  }
-
-  function formatContestDate(dateString: string): string {
-    const date = new Date(dateString);
-    return format(date, 'MMM dd, yyyy');
+    if (rank === 1 || rank === 2) return Medal;
+    return Medal; // Default to medal for 3rd place and above
   }
 
   // Pagination state
@@ -76,8 +71,9 @@
       <div class="flex flex-col gap-2 text-lg text-muted-foreground">
         <p class="font-medium">{resultsQuery.current.contest.name}</p>
         <p class="text-sm">
-          {formatContestDate(resultsQuery.current.contest.startAt)} - {formatContestDate(
-            resultsQuery.current.contest.endAt
+          {format(new Date(resultsQuery.current.contest.startAt), 'MMM dd, yyyy')} - {format(
+            new Date(resultsQuery.current.contest.endAt),
+            'MMM dd, yyyy'
           )}
         </p>
       </div>
@@ -212,12 +208,10 @@
 
     <!-- Top 3 Podium -->
     {#if sortedLeaderboard.length >= 3}
-      <Card.Root
-        class="bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-950/20 dark:to-amber-950/20"
-      >
+      <Card.Root class="bg-gradient-to-br from-primary/5 to-secondary/5">
         <Card.Header>
           <Card.Title class="flex items-center gap-2">
-            <Trophy class="h-5 w-5 text-yellow-600" />
+            <Trophy class="h-5 w-5 text-primary" />
             Top 3 Champions
           </Card.Title>
         </Card.Header>
@@ -226,12 +220,12 @@
             <!-- 2nd Place -->
             {#if sortedLeaderboard[1]}
               <div
-                class="order-2 flex flex-col items-center rounded-lg border-2 border-slate-400/30 bg-white/50 p-4 md:order-1 dark:bg-slate-900/50"
+                class="order-2 flex flex-col items-center rounded-lg border-2 border-secondary/30 bg-card/50 p-4 md:order-1"
               >
                 <div
-                  class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-slate-300 to-slate-400 shadow-lg"
+                  class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-secondary/80 to-secondary shadow-lg"
                 >
-                  <Medal class="h-8 w-8 text-slate-700" />
+                  <Medal class="h-8 w-8 text-secondary-foreground" />
                 </div>
                 <div class="text-center">
                   <p class="text-lg font-semibold">
@@ -253,12 +247,12 @@
             <!-- 1st Place -->
             {#if sortedLeaderboard[0]}
               <div
-                class="order-1 flex flex-col items-center rounded-lg border-2 border-yellow-500/50 bg-white/50 p-6 md:order-2 md:-translate-y-4 dark:bg-slate-900/50"
+                class="order-1 flex flex-col items-center rounded-lg border-2 border-primary/50 bg-card/50 p-6 md:order-2 md:-translate-y-4"
               >
                 <div
-                  class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-xl ring-4 ring-yellow-200 dark:ring-yellow-900"
+                  class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary/90 to-primary shadow-xl ring-4 ring-primary/20"
                 >
-                  <Trophy class="h-10 w-10 text-yellow-50" />
+                  <Trophy class="h-10 w-10 text-primary-foreground" />
                 </div>
                 <div class="text-center">
                   <p class="text-xl font-bold">
@@ -280,12 +274,12 @@
             <!-- 3rd Place -->
             {#if sortedLeaderboard[2]}
               <div
-                class="order-3 flex flex-col items-center rounded-lg border-2 border-amber-700/30 bg-white/50 p-4 dark:bg-slate-900/50"
+                class="order-3 flex flex-col items-center rounded-lg border-2 border-accent/30 bg-card/50 p-4"
               >
                 <div
-                  class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-600 to-amber-800 shadow-lg"
+                  class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-accent/80 to-accent shadow-lg"
                 >
-                  <Medal class="h-8 w-8 text-amber-100" />
+                  <Medal class="h-8 w-8 text-accent-foreground" />
                 </div>
                 <div class="text-center">
                   <p class="text-lg font-semibold">
