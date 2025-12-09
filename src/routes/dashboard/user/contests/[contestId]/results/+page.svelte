@@ -14,12 +14,16 @@
     data: {
       contestId: number;
       currentUserId: number;
+      contest: import('$lib/dto/contest').ContestDetailed;
     };
   }
 
   let { data }: Props = $props();
 
-  const resultsQuery = getContestResults(data.contestId);
+  const resultsQuery = getContestResults({
+    contestId: data.contestId,
+    contest: data.contest
+  });
 
   // Sort leaderboard by total score (sum of best scores across all tasks)
   let sortedLeaderboard = $derived.by(() => {
@@ -47,8 +51,9 @@
   }
 
   function getRankIcon(rank: number) {
-    if (rank === 1 || rank === 2) return Medal;
-    return Medal; // Default to medal for 3rd place and above
+    // Show medal for top 3, null for others
+    if (rank <= 3) return Medal;
+    return null;
   }
 
   // Pagination state

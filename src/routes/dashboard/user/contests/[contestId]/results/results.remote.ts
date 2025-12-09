@@ -6,11 +6,17 @@ import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 import type { UserContestStats, ContestResults, ContestDetailed } from '$lib/dto/contest';
 
+const contestResultsSchema = v.object({
+  contestId: v.number(),
+  contest: v.any()
+});
+
 export const getContestResults = query(
-  v.number(),
-  async (
-    contestId: number
-  ): Promise<{
+  contestResultsSchema,
+  async (params: {
+    contestId: number;
+    contest: ContestDetailed;
+  }): Promise<{
     contest: ContestDetailed;
     leaderboard: UserContestStats[];
     myResults: ContestResults;
@@ -21,14 +27,13 @@ export const getContestResults = query(
       const contestsManagementService = createContestsManagementService(cookies);
       const contestService = createContestService(cookies);
 
-      const [contest, leaderboard, myResults] = await Promise.all([
-        contestService.getContest(contestId),
-        contestsManagementService.getUserStats(contestId),
-        contestService.getMyResults(contestId)
+      const [leaderboard, myResults] = await Promise.all([
+        contestsManagementService.getUserStats(params.contestId),
+        contestService.getMyResults(params.contestId)
       ]);
 
       return {
-        contest,
+        contest: params.contest,
         leaderboard,
         myResults
       };

@@ -52,6 +52,7 @@ export const load = async ({
 
   return {
     contestId,
-    currentUserId: user.userId
+    currentUserId: user.userId,
+    contest
   };
 };
