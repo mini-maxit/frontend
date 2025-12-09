@@ -51,7 +51,7 @@
           class="group relative overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
         >
           <div
-            class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-[var(--secondary)]/5 to-[var(--primary)]/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
+            class="absolute inset-0 bg-linear-to-br from-(--primary)/5 via-(--secondary)/5 to-(--primary)/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
           ></div>
 
           <Card.Content class="relative p-6">
@@ -66,7 +66,7 @@
                 </p>
               </div>
               <div
-                class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] shadow-md transition-transform duration-300 group-hover:scale-110"
+                class="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary to-secondary shadow-md transition-transform duration-300 group-hover:scale-110"
               >
                 <Server class="h-6 w-6 text-primary-foreground" />
               </div>
@@ -75,7 +75,7 @@
             <!-- Progress bar -->
             <div class="mt-4 h-1 w-full overflow-hidden rounded-full bg-muted">
               <div
-                class="h-full origin-left scale-x-0 transform rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] transition-transform duration-500 group-hover:scale-x-100"
+                class="h-full origin-left scale-x-0 transform rounded-full bg-linear-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100"
               ></div>
             </div>
           </Card.Content>
@@ -86,7 +86,7 @@
           class="group relative overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
         >
           <div
-            class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-[var(--secondary)]/5 to-[var(--primary)]/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
+            class="absolute inset-0 bg-linear-to-br from-(--primary)/5 via-(--secondary)/5 to-(--primary)/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
           ></div>
 
           <Card.Content class="relative p-6">
@@ -101,7 +101,7 @@
                 </p>
               </div>
               <div
-                class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] shadow-md transition-transform duration-300 group-hover:scale-110"
+                class="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary to-secondary shadow-md transition-transform duration-300 group-hover:scale-110"
               >
                 <Activity class="h-6 w-6 text-primary-foreground" />
               </div>
@@ -110,7 +110,7 @@
             <!-- Progress bar -->
             <div class="mt-4 h-1 w-full overflow-hidden rounded-full bg-muted">
               <div
-                class="h-full origin-left scale-x-0 transform rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] transition-transform duration-500 group-hover:scale-x-100"
+                class="h-full origin-left scale-x-0 transform rounded-full bg-linear-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100"
               ></div>
             </div>
           </Card.Content>
@@ -121,7 +121,7 @@
           class="group relative overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
         >
           <div
-            class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-[var(--secondary)]/5 to-[var(--primary)]/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
+            class="absolute inset-0 bg-linear-to-br from-(--primary)/5 via-(--secondary)/5 to-(--primary)/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
           ></div>
 
           <Card.Content class="relative p-6">
@@ -136,7 +136,7 @@
                 </p>
               </div>
               <div
-                class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] shadow-md transition-transform duration-300 group-hover:scale-110"
+                class="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary to-secondary shadow-md transition-transform duration-300 group-hover:scale-110"
               >
                 <CheckCircle class="h-6 w-6 text-primary-foreground" />
               </div>
@@ -145,7 +145,7 @@
             <!-- Progress bar -->
             <div class="mt-4 h-1 w-full overflow-hidden rounded-full bg-muted">
               <div
-                class="h-full origin-left scale-x-0 transform rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] transition-transform duration-500 group-hover:scale-x-100"
+                class="h-full origin-left scale-x-0 transform rounded-full bg-linear-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100"
               ></div>
             </div>
           </Card.Content>
@@ -159,7 +159,7 @@
         >
           <!-- Gradient Background Overlay -->
           <div
-            class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-[var(--secondary)]/5 to-[var(--primary)]/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
+            class="absolute inset-0 bg-linear-to-br from-(--primary)/5 via-(--secondary)/5 to-(--primary)/10 opacity-30 transition-opacity duration-300 group-hover:opacity-50"
           ></div>
 
           <Card.Header class="relative">
@@ -181,7 +181,7 @@
                   class="group/item relative overflow-hidden rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                   <div
-                    class="absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] opacity-5 transition-opacity duration-300 group-hover/item:opacity-10"
+                    class="absolute inset-0 bg-linear-to-br from-primary to-secondary opacity-5 transition-opacity duration-300 group-hover/item:opacity-10"
                   ></div>
 
                   <div class="relative space-y-2">
