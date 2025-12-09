@@ -1,6 +1,14 @@
 export { ApiService, ApiError, createApiClient } from './ApiService';
+export { ClientApiService } from './client/ClientApiService';
+export {
+  getClientApiInstance,
+  getClientAuthInstance,
+  getClientUserInstance
+} from '../stores/service-instances.svelte';
 export { AccessControlService } from './AccessControlService';
 export { AuthService } from './AuthService';
+export { ClientAuthService } from './client/ClientAuthService';
+export { ClientUserService } from './client/ClientUserService';
 export { ContestService, createContestService } from './ContestService';
 export {
   ContestsManagementService,
