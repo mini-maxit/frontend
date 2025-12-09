@@ -1,6 +1,5 @@
 <script lang="ts">
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
-  import * as m from '$lib/paraglide/messages';
   import * as Table from '$lib/components/ui/table';
   import * as Card from '$lib/components/ui/card';
   import Trophy from '@lucide/svelte/icons/trophy';
@@ -9,7 +8,7 @@
   import Users from '@lucide/svelte/icons/users';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import { getContestResults } from './results.remote';
-  import { formatDistanceToNow, format } from 'date-fns';
+  import { format } from 'date-fns';
 
   interface Props {
     data: {
@@ -28,10 +27,7 @@
 
     return [...resultsQuery.current.leaderboard]
       .map((userStats) => {
-        const totalScore = userStats.taskBreakdown.reduce(
-          (sum, task) => sum + task.bestScore,
-          0
-        );
+        const totalScore = userStats.taskBreakdown.reduce((sum, task) => sum + task.bestScore, 0);
         return { ...userStats, totalScore };
       })
       .sort((a, b) => b.totalScore - a.totalScore);
@@ -75,14 +71,14 @@
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">
   <div class="space-y-2">
-    <h1 class="text-4xl font-bold tracking-tight text-foreground">
-      Contest Results
-    </h1>
+    <h1 class="text-4xl font-bold tracking-tight text-foreground">Contest Results</h1>
     {#if resultsQuery.current?.contest}
       <div class="flex flex-col gap-2 text-lg text-muted-foreground">
         <p class="font-medium">{resultsQuery.current.contest.name}</p>
         <p class="text-sm">
-          {formatContestDate(resultsQuery.current.contest.startAt)} - {formatContestDate(resultsQuery.current.contest.endAt)}
+          {formatContestDate(resultsQuery.current.contest.startAt)} - {formatContestDate(
+            resultsQuery.current.contest.endAt
+          )}
         </p>
       </div>
     {/if}
@@ -109,7 +105,9 @@
           </Card.Header>
           <Card.Content>
             <p class="text-2xl font-bold text-foreground">
-              {resultsQuery.current.myResults.taskResults.reduce((sum, task) => sum + task.bestScore, 0).toFixed(1)}
+              {resultsQuery.current.myResults.taskResults
+                .reduce((sum, task) => sum + task.bestScore, 0)
+                .toFixed(1)}
             </p>
           </Card.Content>
         </Card.Root>
@@ -123,7 +121,8 @@
           </Card.Header>
           <Card.Content>
             <p class="text-2xl font-bold text-foreground">
-              {resultsQuery.current.myResults.taskResults.filter(t => t.bestScore === 100).length} / {resultsQuery.current.myResults.taskResults.length}
+              {resultsQuery.current.myResults.taskResults.filter((t) => t.bestScore === 100).length}
+              / {resultsQuery.current.myResults.taskResults.length}
             </p>
           </Card.Content>
         </Card.Root>
@@ -137,7 +136,10 @@
           </Card.Header>
           <Card.Content>
             <p class="text-2xl font-bold text-foreground">
-              {resultsQuery.current.myResults.taskResults.reduce((sum, task) => sum + task.submissionCount, 0)}
+              {resultsQuery.current.myResults.taskResults.reduce(
+                (sum, task) => sum + task.submissionCount,
+                0
+              )}
             </p>
           </Card.Content>
         </Card.Root>
@@ -176,17 +178,25 @@
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {#each resultsQuery.current.myResults.taskResults as taskResult}
+                {#each resultsQuery.current.myResults.taskResults as taskResult (taskResult.task.id)}
                   <Table.Row>
                     <Table.Cell class="font-medium">{taskResult.task.title}</Table.Cell>
                     <Table.Cell class="hidden sm:table-cell">
-                      <span class="font-semibold" class:text-green-600={taskResult.bestScore === 100}>
+                      <span
+                        class="font-semibold"
+                        class:text-green-600={taskResult.bestScore === 100}
+                      >
                         {taskResult.bestScore.toFixed(1)}%
                       </span>
                     </Table.Cell>
-                    <Table.Cell class="hidden md:table-cell">{taskResult.submissionCount}</Table.Cell>
+                    <Table.Cell class="hidden md:table-cell"
+                      >{taskResult.submissionCount}</Table.Cell
+                    >
                     <Table.Cell class="sm:hidden">
-                      <span class="font-semibold" class:text-green-600={taskResult.bestScore === 100}>
+                      <span
+                        class="font-semibold"
+                        class:text-green-600={taskResult.bestScore === 100}
+                      >
                         {taskResult.bestScore.toFixed(1)}%
                       </span>
                       <span class="text-muted-foreground"> / {taskResult.submissionCount}</span>
@@ -202,7 +212,9 @@
 
     <!-- Top 3 Podium -->
     {#if sortedLeaderboard.length >= 3}
-      <Card.Root class="bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-950/20 dark:to-amber-950/20">
+      <Card.Root
+        class="bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-950/20 dark:to-amber-950/20"
+      >
         <Card.Header>
           <Card.Title class="flex items-center gap-2">
             <Trophy class="h-5 w-5 text-yellow-600" />
@@ -213,16 +225,26 @@
           <div class="grid gap-4 md:grid-cols-3">
             <!-- 2nd Place -->
             {#if sortedLeaderboard[1]}
-              <div class="order-2 md:order-1 flex flex-col items-center rounded-lg border-2 border-slate-400/30 bg-white/50 p-4 dark:bg-slate-900/50">
-                <div class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-slate-300 to-slate-400 shadow-lg">
+              <div
+                class="order-2 flex flex-col items-center rounded-lg border-2 border-slate-400/30 bg-white/50 p-4 md:order-1 dark:bg-slate-900/50"
+              >
+                <div
+                  class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-slate-300 to-slate-400 shadow-lg"
+                >
                   <Medal class="h-8 w-8 text-slate-700" />
                 </div>
                 <div class="text-center">
-                  <p class="font-semibold text-lg">{sortedLeaderboard[1].user.name} {sortedLeaderboard[1].user.surname}</p>
+                  <p class="text-lg font-semibold">
+                    {sortedLeaderboard[1].user.name}
+                    {sortedLeaderboard[1].user.surname}
+                  </p>
                   <p class="text-sm text-muted-foreground">@{sortedLeaderboard[1].user.username}</p>
-                  <p class="mt-2 text-2xl font-bold text-foreground">{sortedLeaderboard[1].totalScore.toFixed(1)}</p>
+                  <p class="mt-2 text-2xl font-bold text-foreground">
+                    {sortedLeaderboard[1].totalScore.toFixed(1)}
+                  </p>
                   <p class="text-xs text-muted-foreground">
-                    {sortedLeaderboard[1].tasksSolved} solved · {sortedLeaderboard[1].tasksPartiallySolved} partial
+                    {sortedLeaderboard[1].tasksSolved} solved · {sortedLeaderboard[1]
+                      .tasksPartiallySolved} partial
                   </p>
                 </div>
               </div>
@@ -230,16 +252,26 @@
 
             <!-- 1st Place -->
             {#if sortedLeaderboard[0]}
-              <div class="order-1 md:order-2 flex flex-col items-center rounded-lg border-2 border-yellow-500/50 bg-white/50 p-6 dark:bg-slate-900/50 md:-translate-y-4">
-                <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-xl ring-4 ring-yellow-200 dark:ring-yellow-900">
+              <div
+                class="order-1 flex flex-col items-center rounded-lg border-2 border-yellow-500/50 bg-white/50 p-6 md:order-2 md:-translate-y-4 dark:bg-slate-900/50"
+              >
+                <div
+                  class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-xl ring-4 ring-yellow-200 dark:ring-yellow-900"
+                >
                   <Trophy class="h-10 w-10 text-yellow-50" />
                 </div>
                 <div class="text-center">
-                  <p class="font-bold text-xl">{sortedLeaderboard[0].user.name} {sortedLeaderboard[0].user.surname}</p>
+                  <p class="text-xl font-bold">
+                    {sortedLeaderboard[0].user.name}
+                    {sortedLeaderboard[0].user.surname}
+                  </p>
                   <p class="text-sm text-muted-foreground">@{sortedLeaderboard[0].user.username}</p>
-                  <p class="mt-3 text-3xl font-bold text-foreground">{sortedLeaderboard[0].totalScore.toFixed(1)}</p>
+                  <p class="mt-3 text-3xl font-bold text-foreground">
+                    {sortedLeaderboard[0].totalScore.toFixed(1)}
+                  </p>
                   <p class="text-xs text-muted-foreground">
-                    {sortedLeaderboard[0].tasksSolved} solved · {sortedLeaderboard[0].tasksPartiallySolved} partial
+                    {sortedLeaderboard[0].tasksSolved} solved · {sortedLeaderboard[0]
+                      .tasksPartiallySolved} partial
                   </p>
                 </div>
               </div>
@@ -247,16 +279,26 @@
 
             <!-- 3rd Place -->
             {#if sortedLeaderboard[2]}
-              <div class="order-3 flex flex-col items-center rounded-lg border-2 border-amber-700/30 bg-white/50 p-4 dark:bg-slate-900/50">
-                <div class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-600 to-amber-800 shadow-lg">
+              <div
+                class="order-3 flex flex-col items-center rounded-lg border-2 border-amber-700/30 bg-white/50 p-4 dark:bg-slate-900/50"
+              >
+                <div
+                  class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-600 to-amber-800 shadow-lg"
+                >
                   <Medal class="h-8 w-8 text-amber-100" />
                 </div>
                 <div class="text-center">
-                  <p class="font-semibold text-lg">{sortedLeaderboard[2].user.name} {sortedLeaderboard[2].user.surname}</p>
+                  <p class="text-lg font-semibold">
+                    {sortedLeaderboard[2].user.name}
+                    {sortedLeaderboard[2].user.surname}
+                  </p>
                   <p class="text-sm text-muted-foreground">@{sortedLeaderboard[2].user.username}</p>
-                  <p class="mt-2 text-2xl font-bold text-foreground">{sortedLeaderboard[2].totalScore.toFixed(1)}</p>
+                  <p class="mt-2 text-2xl font-bold text-foreground">
+                    {sortedLeaderboard[2].totalScore.toFixed(1)}
+                  </p>
                   <p class="text-xs text-muted-foreground">
-                    {sortedLeaderboard[2].tasksSolved} solved · {sortedLeaderboard[2].tasksPartiallySolved} partial
+                    {sortedLeaderboard[2].tasksSolved} solved · {sortedLeaderboard[2]
+                      .tasksPartiallySolved} partial
                   </p>
                 </div>
               </div>
@@ -276,7 +318,8 @@
               Leaderboard
             </Card.Title>
             <p class="text-sm text-muted-foreground">
-              {sortedLeaderboard.length} {sortedLeaderboard.length === 1 ? 'participant' : 'participants'}
+              {sortedLeaderboard.length}
+              {sortedLeaderboard.length === 1 ? 'participant' : 'participants'}
             </p>
           </div>
         </Card.Header>
@@ -289,12 +332,12 @@
                   <Table.Head>Name</Table.Head>
                   <Table.Head class="hidden md:table-cell">Username</Table.Head>
                   <Table.Head class="text-right">Total Score</Table.Head>
-                  <Table.Head class="hidden lg:table-cell text-right">Solved</Table.Head>
-                  <Table.Head class="hidden xl:table-cell text-right">Partially Solved</Table.Head>
+                  <Table.Head class="hidden text-right lg:table-cell">Solved</Table.Head>
+                  <Table.Head class="hidden text-right xl:table-cell">Partially Solved</Table.Head>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {#each paginatedLeaderboard as userStats, index}
+                {#each paginatedLeaderboard as userStats, index (userStats.user.id)}
                   {@const rank = (currentPage - 1) * pageSize + index + 1}
                   {@const RankIcon = getRankIcon(rank)}
                   {@const isCurrentUser = userStats.user.id === data.currentUserId}
@@ -302,7 +345,9 @@
                     <Table.Cell>
                       <div class="flex items-center gap-2">
                         {#if RankIcon}
-                          <div class={`flex h-8 w-8 items-center justify-center rounded-full border ${getRankBadgeClass(rank)}`}>
+                          <div
+                            class={`flex h-8 w-8 items-center justify-center rounded-full border ${getRankBadgeClass(rank)}`}
+                          >
                             <RankIcon class="h-4 w-4" />
                           </div>
                         {:else}
@@ -311,22 +356,25 @@
                       </div>
                     </Table.Cell>
                     <Table.Cell class="font-medium">
-                      {userStats.user.name} {userStats.user.surname}
+                      {userStats.user.name}
+                      {userStats.user.surname}
                       {#if isCurrentUser}
                         <span class="ml-2 text-xs text-primary">(You)</span>
                       {/if}
                     </Table.Cell>
-                    <Table.Cell class="hidden md:table-cell text-muted-foreground">
+                    <Table.Cell class="hidden text-muted-foreground md:table-cell">
                       @{userStats.user.username}
                     </Table.Cell>
                     <Table.Cell class="text-right">
-                      <span class="font-bold text-lg">{userStats.totalScore.toFixed(1)}</span>
+                      <span class="text-lg font-bold">{userStats.totalScore.toFixed(1)}</span>
                     </Table.Cell>
-                    <Table.Cell class="hidden lg:table-cell text-right">
-                      <span class="text-green-600 font-semibold">{userStats.tasksSolved}</span>
+                    <Table.Cell class="hidden text-right lg:table-cell">
+                      <span class="font-semibold text-green-600">{userStats.tasksSolved}</span>
                     </Table.Cell>
-                    <Table.Cell class="hidden xl:table-cell text-right">
-                      <span class="text-yellow-600 font-semibold">{userStats.tasksPartiallySolved}</span>
+                    <Table.Cell class="hidden text-right xl:table-cell">
+                      <span class="font-semibold text-yellow-600"
+                        >{userStats.tasksPartiallySolved}</span
+                      >
                     </Table.Cell>
                   </Table.Row>
                 {/each}
@@ -338,7 +386,10 @@
           {#if totalPages > 1}
             <div class="mt-4 flex items-center justify-between">
               <p class="text-sm text-muted-foreground">
-                Showing {(currentPage - 1) * pageSize + 1} - {Math.min(currentPage * pageSize, sortedLeaderboard.length)} of {sortedLeaderboard.length}
+                Showing {(currentPage - 1) * pageSize + 1} - {Math.min(
+                  currentPage * pageSize,
+                  sortedLeaderboard.length
+                )} of {sortedLeaderboard.length}
               </p>
               <div class="flex gap-2">
                 <button

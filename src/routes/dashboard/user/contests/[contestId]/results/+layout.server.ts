@@ -1,6 +1,12 @@
 import { error } from '@sveltejs/kit';
 
-export const load = async ({ params, locals }: { params: { contestId: string }; locals: App.Locals }) => {
+export const load = async ({
+  params,
+  locals
+}: {
+  params: { contestId: string };
+  locals: App.Locals;
+}) => {
   const contestId = parseInt(params.contestId, 10);
 
   if (isNaN(contestId)) {

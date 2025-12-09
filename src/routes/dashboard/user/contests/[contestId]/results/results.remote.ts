@@ -11,7 +11,11 @@ export const getContestResults = query(
   v.number(),
   async (
     contestId: number
-  ): Promise<{ contest: ContestDetailed; leaderboard: UserContestStats[]; myResults: ContestResults }> => {
+  ): Promise<{
+    contest: ContestDetailed;
+    leaderboard: UserContestStats[];
+    myResults: ContestResults;
+  }> => {
     const { cookies } = getRequestEvent();
 
     try {
