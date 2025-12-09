@@ -65,7 +65,6 @@ export interface UserContestsResponse {
   past: UserContest[];
 }
 
-// New types for split endpoints (from swagger)
 export interface ContestWithStats {
   id: number;
   name: string;

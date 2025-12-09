@@ -15,7 +15,6 @@ export const getUserContests = query(async (): Promise<UserContestsData> => {
   try {
     const contestService = createContestService(cookies);
 
-    // Call both endpoints in parallel
     const [active, past] = await Promise.all([
       contestService.getMyActiveContests(),
       contestService.getMyPastContests()
