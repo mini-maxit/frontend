@@ -142,7 +142,7 @@
       </div>
 
       <!-- Worker Details Card -->
-      {#if Object.keys(status.workerStatus).length > 0}
+      {#if status.workerStatus.length > 0}
         <Card.Root
           class="group relative overflow-hidden border-border shadow-md transition-all duration-300 hover:shadow-lg"
         >
@@ -165,7 +165,7 @@
 
           <Card.Content class="relative">
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {#each Object.entries(status.workerStatus) as [workerId, workerState] (workerId)}
+              {#each status.workerStatus as worker (worker.id)}
                 <div
                   class="group/item relative overflow-hidden rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
@@ -173,22 +173,30 @@
                     class="absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] opacity-5 transition-opacity duration-300 group-hover/item:opacity-10"
                   ></div>
 
-                  <div class="relative flex items-center justify-between">
-                    <div class="flex-1">
-                      <p class="font-mono text-sm font-medium text-foreground">{workerId}</p>
+                  <div class="relative space-y-2">
+                    <div class="flex items-center justify-between">
+                      <p class="font-mono text-sm font-medium text-foreground">
+                        Worker {worker.id}
+                      </p>
+                      {#if worker.status === 'idle'}
+                        <span
+                          class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary shadow-sm"
+                        >
+                          {worker.status}
+                        </span>
+                      {:else}
+                        <span
+                          class="inline-flex items-center rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary-foreground shadow-sm"
+                        >
+                          {worker.status}
+                        </span>
+                      {/if}
                     </div>
-                    {#if workerState === 'idle'}
-                      <span
-                        class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary shadow-sm"
-                      >
-                        {workerState}
-                      </span>
-                    {:else}
-                      <span
-                        class="inline-flex items-center rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary-foreground shadow-sm"
-                      >
-                        {workerState}
-                      </span>
+                    {#if worker.processingMessageId}
+                      <div class="text-xs text-muted-foreground">
+                        <span class="font-medium">Processing:</span>
+                        <span class="font-mono">{worker.processingMessageId}</span>
+                      </div>
                     {/if}
                   </div>
                 </div>
