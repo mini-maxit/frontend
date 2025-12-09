@@ -162,7 +162,6 @@
             <AvailableContestCard
               {contest}
               onRegister={handleRegister}
-              onViewContest={handleViewContest}
               isRegistering={registering === contest.id}
             />
           {/each}
@@ -201,7 +200,6 @@
             <AvailableContestCard
               {contest}
               onRegister={handleRegister}
-              onViewContest={handleViewContest}
               isRegistering={registering === contest.id}
             />
           {/each}
@@ -240,7 +238,6 @@
             <AvailableContestCard
               {contest}
               onRegister={handleRegister}
-              onViewContest={handleViewContest}
               isRegistering={registering === contest.id}
             />
           {/each}

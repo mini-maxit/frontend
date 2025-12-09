@@ -71,6 +71,39 @@ export interface UserContestsResponse {
   past: UserContest[];
 }
 
+export interface ContestWithStats {
+  id: number;
+  name: string;
+  description: string;
+  startAt: string;
+  endAt: string;
+  createdBy: number;
+  creatorName: string;
+  participantCount: number;
+  taskCount: number;
+  solvedTaskCount: number;
+  status: ContestStatus;
+  isSubmissionOpen: boolean;
+}
+
+export interface PastContestWithStats {
+  id: number;
+  name: string;
+  description: string;
+  startAt: string;
+  endAt: string;
+  createdBy: number;
+  creatorName: string;
+  participantCount: number;
+  taskCount: number;
+  status: ContestStatus;
+  isSubmissionOpen: boolean;
+  score: number;
+  maximumScore: number;
+  rank: number;
+  solvedPercentage: number;
+}
+
 export interface CreateContestDto {
   name: string;
   description: string;
