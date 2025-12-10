@@ -9,6 +9,8 @@
   import X from '@lucide/svelte/icons/x';
   import User from '@lucide/svelte/icons/user';
   import ListTodo from '@lucide/svelte/icons/list-todo';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
+  import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
   import { SubmissionStatus } from '$lib/dto/submission';
@@ -31,6 +33,19 @@
   // Filters
   let userFilter = $state('');
   let taskFilter = $state('');
+
+  // Track which submissions have expanded test cases
+  let expandedTestCases = $state<Set<number>>(new Set());
+
+  const toggleTestCases = (submissionId: number) => {
+    const newSet = new Set(expandedTestCases);
+    if (newSet.has(submissionId)) {
+      newSet.delete(submissionId);
+    } else {
+      newSet.add(submissionId);
+    }
+    expandedTestCases = newSet;
+  };
 
   // Query submissions with pagination
   const submissionsQuery = $derived(
@@ -315,12 +330,25 @@
                 <!-- Test Cases Section -->
                 {#if submission.result.testResults && submission.result.testResults.length > 0}
                   <div class="mt-4">
-                    <h4 class="mb-3 text-sm font-semibold text-foreground">Test Cases</h4>
-                    <div class="space-y-2">
-                      {#each submission.result.testResults as testResult, index (testResult.id)}
-                        <TestCaseResult {testResult} testNumber={index + 1} />
-                      {/each}
-                    </div>
+                    <button
+                      onclick={() => toggleTestCases(submission.id)}
+                      class="flex w-full items-center justify-between text-left transition-colors hover:text-primary"
+                    >
+                      <h4 class="text-sm font-semibold text-foreground">Test Cases</h4>
+                      {#if expandedTestCases.has(submission.id)}
+                        <ChevronUp class="h-4 w-4 text-muted-foreground" />
+                      {:else}
+                        <ChevronDown class="h-4 w-4 text-muted-foreground" />
+                      {/if}
+                    </button>
+
+                    {#if expandedTestCases.has(submission.id)}
+                      <div class="mt-3 space-y-2">
+                        {#each submission.result.testResults as testResult, index (testResult.id)}
+                          <TestCaseResult {testResult} testNumber={index + 1} />
+                        {/each}
+                      </div>
+                    {/if}
                   </div>
                 {/if}
               </div>

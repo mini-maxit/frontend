@@ -2,8 +2,6 @@
   import type { TestResult } from '$lib/dto/submission';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
-  import ChevronDown from '@lucide/svelte/icons/chevron-down';
-  import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import Clock from '@lucide/svelte/icons/clock';
 
   interface TestCaseResultProps {
@@ -12,11 +10,6 @@
   }
 
   let { testResult, testNumber }: TestCaseResultProps = $props();
-  let isExpanded = $state(false);
-
-  const toggleExpanded = () => {
-    isExpanded = !isExpanded;
-  };
 
   const formatExecutionTime = (timeMs: number): string => {
     if (!isFinite(timeMs) || timeMs < 0) return 'N/A';
@@ -30,10 +23,7 @@
   };
 </script>
 
-<button
-  onclick={toggleExpanded}
-  class="w-full rounded-lg border border-border bg-card p-3 text-left transition-all hover:bg-accent/5"
->
+<div class="rounded-lg border border-border bg-card p-3">
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-2">
       {#if testResult.passed}
@@ -59,44 +49,37 @@
           <span>{formatExecutionTime(testResult.executionTimeMs)}</span>
         </div>
       {/if}
-      {#if isExpanded}
-        <ChevronUp class="h-4 w-4 text-muted-foreground" />
-      {:else}
-        <ChevronDown class="h-4 w-4 text-muted-foreground" />
-      {/if}
     </div>
   </div>
 
-  {#if isExpanded}
-    <div class="mt-3 space-y-2 border-t border-border pt-3">
-      {#if testResult.code}
-        <div>
-          <span class="text-xs font-medium text-muted-foreground">Status Code:</span>
-          <span
-            class="ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {testResult.passed
-              ? 'bg-primary/10 text-primary'
-              : 'bg-destructive/10 text-destructive'}"
-          >
-            {testResult.code}
-          </span>
-        </div>
-      {/if}
+  <div class="mt-3 space-y-2 border-t border-border pt-3">
+    {#if testResult.code}
+      <div>
+        <span class="text-xs font-medium text-muted-foreground">Status Code:</span>
+        <span
+          class="ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {testResult.passed
+            ? 'bg-primary/10 text-primary'
+            : 'bg-destructive/10 text-destructive'}"
+        >
+          {testResult.code}
+        </span>
+      </div>
+    {/if}
 
-      {#if testResult.errorMessage}
-        <div>
-          <span class="text-xs font-medium text-muted-foreground">Message:</span>
-          <p class="mt-1 text-sm text-foreground">{testResult.errorMessage}</p>
-        </div>
-      {/if}
+    {#if testResult.errorMessage}
+      <div>
+        <span class="text-xs font-medium text-muted-foreground">Message:</span>
+        <p class="mt-1 text-sm text-foreground">{testResult.errorMessage}</p>
+      </div>
+    {/if}
 
-      {#if testResult.executionTimeMs !== undefined && testResult.executionTimeMs !== null}
-        <div>
-          <span class="text-xs font-medium text-muted-foreground">Execution Time:</span>
-          <span class="ml-2 text-sm font-medium text-foreground">
-            {formatExecutionTime(testResult.executionTimeMs)}
-          </span>
-        </div>
-      {/if}
-    </div>
-  {/if}
-</button>
+    {#if testResult.executionTimeMs !== undefined && testResult.executionTimeMs !== null}
+      <div>
+        <span class="text-xs font-medium text-muted-foreground">Execution Time:</span>
+        <span class="ml-2 text-sm font-medium text-foreground">
+          {formatExecutionTime(testResult.executionTimeMs)}
+        </span>
+      </div>
+    {/if}
+  </div>
+</div>
