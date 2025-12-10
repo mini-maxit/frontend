@@ -323,9 +323,6 @@
                     </span>
                   {/if}
                 </div>
-                {#if submission.result.message}
-                  <p class="mt-2 text-sm text-muted-foreground">{submission.result.message}</p>
-                {/if}
 
                 <!-- Test Cases Section -->
                 {#if submission.result.testResults && submission.result.testResults.length > 0}

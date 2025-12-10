@@ -46,12 +46,10 @@
       </span>
     </div>
     <div class="flex items-center gap-2">
-      {#if testResult.executionTimeMs !== undefined && testResult.executionTimeMs !== null}
-        <div class="flex items-center gap-1 text-xs text-muted-foreground">
-          <Clock class="h-3 w-3" />
-          <span>{formatExecutionTime(testResult.executionTimeMs)}</span>
-        </div>
-      {/if}
+      <div class="flex items-center gap-1 text-xs text-muted-foreground">
+        <Clock class="h-3 w-3" />
+        <span>{formatExecutionTime(testResult.executionTimeMs)}</span>
+      </div>
     </div>
   </div>
 
