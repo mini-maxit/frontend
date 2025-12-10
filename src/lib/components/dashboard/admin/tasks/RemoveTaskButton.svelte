@@ -26,7 +26,7 @@
 <Button
   variant="ghost"
   size="icon"
-  class="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+  class="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
   onclick={() => (dialogOpen = true)}
   title={m.admin_tasks_card_remove_task()}
 >
