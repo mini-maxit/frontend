@@ -5,15 +5,19 @@
   import Clock from '@lucide/svelte/icons/clock';
   import Code from '@lucide/svelte/icons/code';
   import Calendar from '@lucide/svelte/icons/calendar';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
+  import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import { SubmissionStatus, type Submission } from '$lib/dto/submission';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
+  import TestCaseResult from './TestCaseResult.svelte';
 
   interface SubmissionListRowProps {
     submission: Submission;
   }
 
   let { submission }: SubmissionListRowProps = $props();
+  let testCasesExpanded = $state(false);
 
   const statusConfig = {
     success: {
@@ -66,6 +70,10 @@
     const passed = submission.result.testResults.filter((t) => t.passed).length;
     const total = submission.result.testResults.length;
     return `${passed}/${total}`;
+  };
+
+  const toggleTestCases = () => {
+    testCasesExpanded = !testCasesExpanded;
   };
 </script>
 
@@ -132,5 +140,32 @@
         </div>
       </div>
     </div>
+
+    <!-- Test Cases Section -->
+    {#if submission.result?.testResults && submission.result.testResults.length > 0}
+      <div class="mt-4 border-t border-border pt-4">
+        <button
+          onclick={toggleTestCases}
+          class="flex w-full items-center justify-between text-left transition-colors hover:text-primary"
+        >
+          <h4 class="text-sm font-semibold text-foreground">
+            {m.admin_contest_submissions_test_cases()}
+          </h4>
+          {#if testCasesExpanded}
+            <ChevronUp class="h-4 w-4 text-muted-foreground" />
+          {:else}
+            <ChevronDown class="h-4 w-4 text-muted-foreground" />
+          {/if}
+        </button>
+
+        {#if testCasesExpanded}
+          <div class="mt-3 space-y-2">
+            {#each submission.result.testResults as testResult, index (testResult.id)}
+              <TestCaseResult {testResult} testNumber={index + 1} />
+            {/each}
+          </div>
+        {/if}
+      </div>
+    {/if}
   </Card.Content>
 </Card.Root>
