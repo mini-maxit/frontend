@@ -61,8 +61,8 @@
         }
       })}
     >
-      <input type="hidden" name="contestId" value={contestId} />
-      <input type="hidden" name="taskId" value={taskId} />
+      <input {...removeTaskFromContest.fields.contestId.as('number')} bind:value={contestId} hidden />
+      <input {...removeTaskFromContest.fields.taskId.as('number')} bind:value={taskId} hidden />
 
       <Dialog.Footer>
         <Button type="button" variant="outline" onclick={handleCancel} disabled={isRemoving}>
