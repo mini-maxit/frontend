@@ -40,6 +40,7 @@
       >
         {m.admin_tasks_card_id_prefix()}{task.id}
       </span>
+      <RemoveTaskButton taskId={task.id} taskTitle={task.title} {deleteTask} />
     </div>
     <Card.Title
       class="mt-3 flex items-start gap-2 text-lg transition-colors group-hover:text-primary"
@@ -97,7 +98,6 @@
         <Users class="mr-2 h-4 w-4" />
         {m.admin_tasks_card_view_collaborators()}
       </Button>
-      <RemoveTaskButton taskId={task.id} taskTitle={task.title} {deleteTask} />
     </div>
   </Card.Content>
 </Card.Root>
