@@ -7,6 +7,7 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
+  import UserIcon from '@lucide/svelte/icons/user';
   import { SubmissionStatus, type Submission } from '$lib/dto/submission';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
@@ -107,7 +108,18 @@
       </div>
 
       <!-- Middle Section: Stats Grid -->
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
+      <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <!-- Submitter -->
+        <div class="rounded-lg border border-border bg-card p-2">
+          <div class="flex items-center gap-1.5">
+            <UserIcon class="h-3.5 w-3.5 text-primary" />
+            <span class="text-xs text-muted-foreground">{m.submissions_submitter_label()}</span>
+          </div>
+          <p class="mt-1 text-sm font-semibold text-foreground">
+            {submission.user.name} {submission.user.surname}
+          </p>
+        </div>
+
         <!-- Language -->
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">

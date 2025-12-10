@@ -322,6 +322,7 @@
   "submissions_language_label": "Language",
   "submissions_submitted_label": "Submitted",
   "submissions_attempt_label": "Attempt",
+  "submissions_submitter_label": "Submitter",
   "sidebar_logout": "Logout",
   "admin_tasks_manage_test_cases_description": "Adjust memory and time limits for {taskTitle}",
   "admin_tasks_manage_test_cases_title": "Manage Test Cases",
