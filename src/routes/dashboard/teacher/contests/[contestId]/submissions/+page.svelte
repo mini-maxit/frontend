@@ -14,6 +14,7 @@
   import { SubmissionStatus } from '$lib/dto/submission';
   import Label from '$lib/components/ui/label/label.svelte';
   import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '$lib/utils';
+  import TestCaseResult from '$lib/components/dashboard/submissions/TestCaseResult.svelte';
 
   interface Props {
     data: {
@@ -309,6 +310,18 @@
                 </div>
                 {#if submission.result.message}
                   <p class="mt-2 text-sm text-muted-foreground">{submission.result.message}</p>
+                {/if}
+
+                <!-- Test Cases Section -->
+                {#if submission.result.testResults && submission.result.testResults.length > 0}
+                  <div class="mt-4">
+                    <h4 class="mb-3 text-sm font-semibold text-foreground">Test Cases</h4>
+                    <div class="space-y-2">
+                      {#each submission.result.testResults as testResult, index (testResult.id)}
+                        <TestCaseResult {testResult} testNumber={index + 1} />
+                      {/each}
+                    </div>
+                  </div>
                 {/if}
               </div>
             {/if}

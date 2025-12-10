@@ -23,9 +23,12 @@ export interface SubmitSolutionDto {
 
 export interface TestResult {
   id: number;
-  inputOutputId: number;
+  testCaseId: number;
   passed: boolean;
   submissionResultId: number;
+  code: string;
+  errorMessage: string;
+  executionTimeMs: number;
 }
 
 export interface SubmissionResult {

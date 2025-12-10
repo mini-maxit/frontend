@@ -8,6 +8,7 @@
   import { SubmissionStatus, type Submission } from '$lib/dto/submission';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
+  import TestCaseResult from './TestCaseResult.svelte';
 
   interface SubmissionListRowProps {
     submission: Submission;
@@ -132,5 +133,17 @@
         </div>
       </div>
     </div>
+
+    <!-- Test Cases Section -->
+    {#if submission.result?.testResults && submission.result.testResults.length > 0}
+      <div class="mt-4 border-t border-border pt-4">
+        <h4 class="mb-3 text-sm font-semibold text-foreground">Test Cases</h4>
+        <div class="space-y-2">
+          {#each submission.result.testResults as testResult, index (testResult.id)}
+            <TestCaseResult {testResult} testNumber={index + 1} />
+          {/each}
+        </div>
+      </div>
+    {/if}
   </Card.Content>
 </Card.Root>
