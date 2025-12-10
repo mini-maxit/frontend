@@ -6,6 +6,7 @@ import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 import type { UserContestStats, ContestResults, ContestDetailed } from '$lib/dto/contest';
 import { ContestStatus } from '$lib/dto/contest';
+import * as m from '$lib/paraglide/messages';
 
 const contestSchema = v.object({
   id: v.number(),
@@ -59,7 +60,7 @@ export const getContestResults = query(
         throw error(err.getStatus(), err.getApiMessage());
       }
 
-      throw error(500, 'Failed to load contest results');
+      throw error(500, m.contest_results_error_generic());
     }
   }
 );

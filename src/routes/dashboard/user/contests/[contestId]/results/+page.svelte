@@ -106,7 +106,7 @@
           <Card.Header class="pb-3">
             <Card.Title class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <Trophy class="h-4 w-4" />
-              My Total Score
+              {m.contest_results_my_total_score()}
             </Card.Title>
           </Card.Header>
           <Card.Content>
@@ -122,7 +122,7 @@
           <Card.Header class="pb-3">
             <Card.Title class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <CheckCircle class="h-4 w-4" />
-              Tasks Completed
+              {m.contest_results_tasks_completed()}
             </Card.Title>
           </Card.Header>
           <Card.Content>
@@ -137,7 +137,7 @@
           <Card.Header class="pb-3">
             <Card.Title class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <Target class="h-4 w-4" />
-              Total Submissions
+              {m.contest_results_total_submissions()}
             </Card.Title>
           </Card.Header>
           <Card.Content>
@@ -155,7 +155,7 @@
             <Card.Header class="pb-3">
               <Card.Title class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <Medal class="h-4 w-4" />
-                My Rank
+                {m.contest_results_my_rank()}
               </Card.Title>
             </Card.Header>
             <Card.Content>
@@ -184,7 +184,7 @@
                   <Table.Head class="hidden md:table-cell"
                     >{m.contest_results_submissions()}</Table.Head
                   >
-                  <Table.Head class="sm:hidden">Score / Submissions</Table.Head>
+                  <Table.Head class="sm:hidden">{m.contest_results_score_submissions()}</Table.Head>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -220,7 +220,7 @@
         <Card.Header>
           <Card.Title class="flex items-center gap-2">
             <Trophy class="h-5 w-5 text-primary" />
-            Top 3 Champions
+            {m.contest_results_top_champions()}
           </Card.Title>
         </Card.Header>
         <Card.Content>
@@ -245,8 +245,10 @@
                     {sortedLeaderboard[1].totalScore.toFixed(1)}
                   </p>
                   <p class="text-xs text-muted-foreground">
-                    {sortedLeaderboard[1].tasksSolved} solved · {sortedLeaderboard[1]
-                      .tasksPartiallySolved} partial
+                    {m.contest_results_solved_partial({
+                      solved: sortedLeaderboard[1].tasksSolved,
+                      partial: sortedLeaderboard[1].tasksPartiallySolved
+                    })}
                   </p>
                 </div>
               </div>
@@ -272,8 +274,10 @@
                     {sortedLeaderboard[0].totalScore.toFixed(1)}
                   </p>
                   <p class="text-xs text-muted-foreground">
-                    {sortedLeaderboard[0].tasksSolved} solved · {sortedLeaderboard[0]
-                      .tasksPartiallySolved} partial
+                    {m.contest_results_solved_partial({
+                      solved: sortedLeaderboard[0].tasksSolved,
+                      partial: sortedLeaderboard[0].tasksPartiallySolved
+                    })}
                   </p>
                 </div>
               </div>
@@ -299,8 +303,10 @@
                     {sortedLeaderboard[2].totalScore.toFixed(1)}
                   </p>
                   <p class="text-xs text-muted-foreground">
-                    {sortedLeaderboard[2].tasksSolved} solved · {sortedLeaderboard[2]
-                      .tasksPartiallySolved} partial
+                    {m.contest_results_solved_partial({
+                      solved: sortedLeaderboard[2].tasksSolved,
+                      partial: sortedLeaderboard[2].tasksPartiallySolved
+                    })}
                   </p>
                 </div>
               </div>
@@ -317,7 +323,7 @@
           <div class="flex items-center justify-between">
             <Card.Title class="flex items-center gap-2">
               <Users class="h-5 w-5" />
-              Leaderboard
+              {m.contest_results_leaderboard()}
             </Card.Title>
             <p class="text-sm text-muted-foreground">
               {m.contest_results_participants({ count: sortedLeaderboard.length })}
@@ -405,7 +411,7 @@
                   disabled={currentPage === 1}
                   onclick={() => currentPage--}
                 >
-                  Previous
+                  {m.contest_results_previous()}
                 </button>
                 <span class="flex items-center px-3 text-sm">
                   {m.contest_results_page_info({ current: currentPage, total: totalPages })}
@@ -415,7 +421,7 @@
                   disabled={currentPage === totalPages}
                   onclick={() => currentPage++}
                 >
-                  Next
+                  {m.contest_results_next()}
                 </button>
               </div>
             </div>

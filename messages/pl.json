@@ -607,5 +607,7 @@
   "contest_results_showing": "Wyświetlanie {start} - {end} z {total}",
   "contest_results_no_results_title": "Brak dostępnych wyników",
   "contest_results_no_results_description": "Żaden uczestnik nie przesłał jeszcze rozwiązań.",
-  "contest_results_solved_partial": "{solved} rozwiązane · {partial} częściowo"
+  "contest_results_solved_partial": "{solved} rozwiązane · {partial} częściowo",
+  "contest_results_score_submissions": "Wynik / Zgłoszenia",
+  "contest_results_error_generic": "Nie udało się załadować wyników konkursu"
 }

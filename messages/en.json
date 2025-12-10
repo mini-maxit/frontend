@@ -607,5 +607,7 @@
   "contest_results_showing": "Showing {start} - {end} of {total}",
   "contest_results_no_results_title": "No results available",
   "contest_results_no_results_description": "No participants have submitted solutions yet.",
-  "contest_results_solved_partial": "{solved} solved · {partial} partial"
+  "contest_results_solved_partial": "{solved} solved · {partial} partial",
+  "contest_results_score_submissions": "Score / Submissions",
+  "contest_results_error_generic": "Failed to load contest results"
 }
