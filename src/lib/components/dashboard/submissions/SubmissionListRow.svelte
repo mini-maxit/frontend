@@ -156,7 +156,7 @@
     </div>
 
     <!-- Result Status Section -->
-    {#if submission.result?.code}
+    {#if submission.result?.code?.trim()}
       <div class="mt-4 border-t border-border pt-4">
         <div class="rounded-lg border border-border bg-card p-3">
           <div class="flex items-center gap-2">
