@@ -37,9 +37,9 @@
 <Dialog.Root bind:open={dialogOpen}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>{m.admin_tasks_remove_first_confirm_title()}</Dialog.Title>
+      <Dialog.Title>{m.admin_tasks_remove_confirm_title()}</Dialog.Title>
       <Dialog.Description>
-        {m.admin_tasks_remove_first_confirm_description({ taskTitle })}
+        {m.admin_tasks_remove_confirm_description({ taskTitle })}
       </Dialog.Description>
     </Dialog.Header>
 
@@ -65,10 +65,10 @@
 
       <Dialog.Footer>
         <Button type="button" variant="outline" onclick={handleCancel} disabled={isDeleting}>
-          {m.admin_tasks_remove_first_cancel_button()}
+          {m.admin_tasks_remove_cancel_button()}
         </Button>
         <Button type="submit" variant="destructive" disabled={isDeleting}>
-          {m.admin_tasks_remove_first_confirm_button()}
+          {m.admin_tasks_remove_confirm_button()}
         </Button>
       </Dialog.Footer>
     </form>
