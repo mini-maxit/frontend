@@ -183,9 +183,12 @@ export class ContestsManagementService {
 
   async removeTaskFromContest(contestId: number, taskIds: number[]): Promise<void> {
     try {
+      const requestData = {
+        taskIds: taskIds
+      };
       await this.apiClient.delete<ApiResponse<{ message: string }>>({
         url: `/contests-management/contests/${contestId}/tasks`,
-        body: JSON.stringify(taskIds)
+        body: JSON.stringify(requestData)
       });
     } catch (error) {
       if (error instanceof ApiError) {
