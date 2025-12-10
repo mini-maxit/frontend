@@ -102,7 +102,7 @@
         <Button type="button" variant="outline" onclick={handleSecondCancel} disabled={isDeleting}>
           {m.admin_tasks_remove_second_cancel_button()}
         </Button>
-        <Button type="submit" variant="destructive" disabled={isDeleting}>
+        <Button type="submit" variant="default" disabled={isDeleting}>
           {m.admin_tasks_remove_second_confirm_button()}
         </Button>
       </Dialog.Footer>
