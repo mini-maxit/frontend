@@ -5,7 +5,6 @@
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import Clock from '@lucide/svelte/icons/clock';
-  import * as m from '$lib/paraglide/messages';
 
   interface TestCaseResultProps {
     testResult: TestResult;
@@ -20,8 +19,9 @@
   };
 
   const formatExecutionTime = (timeMs: number): string => {
+    if (!isFinite(timeMs) || timeMs < 0) return 'N/A';
     if (timeMs < 1) {
-      return `${(timeMs * 1000).toFixed(0)}μs`;
+      return `${timeMs.toFixed(3)}ms`;
     } else if (timeMs < 1000) {
       return `${timeMs.toFixed(2)}ms`;
     } else {
@@ -39,7 +39,7 @@
       {#if testResult.passed}
         <CheckCircle class="h-4 w-4 text-primary" />
       {:else}
-        <XCircle class="h-4 w-4 text-muted-foreground" />
+        <XCircle class="h-4 w-4 text-destructive" />
       {/if}
       <span class="text-sm font-medium text-foreground">
         Test Case #{testNumber}
@@ -47,7 +47,7 @@
       <span
         class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {testResult.passed
           ? 'bg-primary/10 text-primary'
-          : 'bg-muted text-muted-foreground'}"
+          : 'bg-destructive/10 text-destructive'}"
       >
         {testResult.passed ? 'Passed' : 'Failed'}
       </span>
@@ -75,7 +75,7 @@
           <span
             class="ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {testResult.passed
               ? 'bg-primary/10 text-primary'
-              : 'bg-muted text-muted-foreground'}"
+              : 'bg-destructive/10 text-destructive'}"
           >
             {testResult.code}
           </span>
