@@ -72,14 +72,5 @@
         <p class="mt-1 text-sm text-foreground">{testResult.errorMessage}</p>
       </div>
     {/if}
-
-    {#if testResult.executionTimeMs !== undefined && testResult.executionTimeMs !== null}
-      <div>
-        <span class="text-xs font-medium text-muted-foreground">Execution Time:</span>
-        <span class="ml-2 text-sm font-medium text-foreground">
-          {formatExecutionTime(testResult.executionTimeMs)}
-        </span>
-      </div>
-    {/if}
   </div>
 </div>
