@@ -14,9 +14,7 @@
 
   const formatExecutionTime = (timeMs: number): string => {
     if (!isFinite(timeMs) || timeMs < 0) return 'N/A';
-    if (timeMs < 1) {
-      return `${timeMs.toFixed(3)}ms`;
-    } else if (timeMs < 1000) {
+    if (timeMs < 1000) {
       return `${timeMs.toFixed(2)}ms`;
     } else {
       return `${(timeMs / 1000).toFixed(2)}s`;
