@@ -8,8 +8,7 @@
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import UserIcon from '@lucide/svelte/icons/user';
-  import AlertCircle from '@lucide/svelte/icons/alert-circle';
-  import { SubmissionStatus, type Submission } from '$lib/dto/submission';
+  import { SubmissionStatus, type Submission, SubmissionResultCode } from '$lib/dto/submission';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
   import TestCaseResult from './TestCaseResult.svelte';
@@ -67,6 +66,23 @@
 
   const config = $derived(statusConfig[getStatusKey(submission.status)]);
 
+  const getResultCodeLabel = (code: SubmissionResultCode | string) => {
+    switch (code) {
+      case SubmissionResultCode.Success:
+        return m.submissions_result_status_success();
+      case SubmissionResultCode.TestFailed:
+        return m.submissions_result_status_test_failed();
+      case SubmissionResultCode.CompilationError:
+        return m.submissions_result_status_compilation_error();
+      case SubmissionResultCode.InitializationError:
+        return m.submissions_result_status_initialization_error();
+      case SubmissionResultCode.InternalError:
+        return m.submissions_result_status_internal_error();
+      default:
+        return String(code);
+    }
+  };
+
   const getScore = () => {
     if (!submission.result?.testResults) return '-/-';
     const passed = submission.result.testResults.filter((t) => t.passed).length;
@@ -97,11 +113,19 @@
               {submission.task.title}
             </h3>
             <div class="mt-1 flex flex-wrap items-center gap-2">
-              <span
-                class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
-              >
-                {config.label}
-              </span>
+              {#if submission.status === SubmissionStatus.Evaluated && submission.result?.code}
+                <span
+                  class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+                >
+                  {getResultCodeLabel(submission.result.code as SubmissionResultCode)}
+                </span>
+              {:else}
+                <span
+                  class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+                >
+                  {config.label}
+                </span>
+              {/if}
               <span class="text-sm font-medium text-foreground">{getScore()}</span>
             </div>
           </div>
@@ -154,30 +178,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Result Status Section -->
-    {#if submission.result?.code?.trim()}
-      <div class="mt-4 border-t border-border pt-4">
-        <div class="rounded-lg border border-border bg-card p-3">
-          <div class="flex items-center gap-2">
-            <AlertCircle class="h-4 w-4 text-primary" />
-            <span class="text-xs font-medium text-muted-foreground">
-              {m.submissions_result_status_label()}
-            </span>
-          </div>
-          <div class="mt-2 flex items-center gap-2">
-            <span
-              class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {config.bgColor} {config.textColor}"
-            >
-              {submission.result.code}
-            </span>
-            {#if submission.result.message}
-              <span class="text-sm text-muted-foreground">{submission.result.message}</span>
-            {/if}
-          </div>
-        </div>
-      </div>
-    {/if}
 
     <!-- Test Cases Section -->
     {#if submission.result?.testResults && submission.result.testResults.length > 0}
