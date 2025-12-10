@@ -51,7 +51,7 @@
   }
 
   function getRankIcon(rank: number) {
-    // Show medal for top 3, null for others
+    // Returns Medal component for top 3 ranks, null for rank 4+
     if (rank <= 3) return Medal;
     return null;
   }
@@ -183,10 +183,7 @@
                   <Table.Row>
                     <Table.Cell class="font-medium">{taskResult.task.title}</Table.Cell>
                     <Table.Cell class="hidden sm:table-cell">
-                      <span
-                        class="font-semibold"
-                        class:text-green-600={taskResult.bestScore === 100}
-                      >
+                      <span class="font-semibold" class:text-primary={taskResult.bestScore === 100}>
                         {taskResult.bestScore.toFixed(1)}%
                       </span>
                     </Table.Cell>
@@ -194,10 +191,7 @@
                       >{taskResult.submissionCount}</Table.Cell
                     >
                     <Table.Cell class="sm:hidden">
-                      <span
-                        class="font-semibold"
-                        class:text-green-600={taskResult.bestScore === 100}
-                      >
+                      <span class="font-semibold" class:text-primary={taskResult.bestScore === 100}>
                         {taskResult.bestScore.toFixed(1)}%
                       </span>
                       <span class="text-muted-foreground"> / {taskResult.submissionCount}</span>
@@ -368,10 +362,10 @@
                       <span class="text-lg font-bold">{userStats.totalScore.toFixed(1)}</span>
                     </Table.Cell>
                     <Table.Cell class="hidden text-right lg:table-cell">
-                      <span class="font-semibold text-green-600">{userStats.tasksSolved}</span>
+                      <span class="font-semibold text-primary">{userStats.tasksSolved}</span>
                     </Table.Cell>
                     <Table.Cell class="hidden text-right xl:table-cell">
-                      <span class="font-semibold text-yellow-600"
+                      <span class="font-semibold text-secondary"
                         >{userStats.tasksPartiallySolved}</span
                       >
                     </Table.Cell>

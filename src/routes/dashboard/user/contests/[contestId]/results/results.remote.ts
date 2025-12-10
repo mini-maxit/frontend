@@ -5,10 +5,25 @@ import { ApiError } from '$lib/services/ApiService';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 import type { UserContestStats, ContestResults, ContestDetailed } from '$lib/dto/contest';
+import { ContestStatus } from '$lib/dto/contest';
+
+const contestSchema = v.object({
+  id: v.number(),
+  name: v.string(),
+  description: v.string(),
+  startAt: v.string(),
+  endAt: v.string(),
+  createdBy: v.number(),
+  creatorName: v.string(),
+  participantCount: v.number(),
+  taskCount: v.number(),
+  status: v.enum(ContestStatus),
+  isSubmissionOpen: v.boolean()
+});
 
 const contestResultsSchema = v.object({
   contestId: v.number(),
-  contest: v.any()
+  contest: contestSchema
 });
 
 export const getContestResults = query(
