@@ -32,6 +32,8 @@ export const removeTaskFromContest = form(
     try {
       const svc = createContestsManagementService(cookies);
       await svc.removeTaskFromContest(data.contestId, [data.taskId]);
+      // Refresh tasks list so UI updates
+      await getContestTasks(data.contestId).refresh();
       return { success: true };
     } catch (err) {
       console.error('Failed to remove task from contest:', err);
