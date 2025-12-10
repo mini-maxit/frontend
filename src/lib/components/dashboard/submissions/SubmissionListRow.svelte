@@ -8,6 +8,7 @@
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import UserIcon from '@lucide/svelte/icons/user';
+  import AlertCircle from '@lucide/svelte/icons/alert-circle';
   import { SubmissionStatus, type Submission } from '$lib/dto/submission';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
@@ -116,7 +117,8 @@
             <span class="text-xs text-muted-foreground">{m.submissions_submitter_label()}</span>
           </div>
           <p class="mt-1 text-sm font-semibold text-foreground">
-            {submission.user.name} {submission.user.surname}
+            {submission.user.name}
+            {submission.user.surname}
           </p>
         </div>
 
@@ -152,6 +154,30 @@
         </div>
       </div>
     </div>
+
+    <!-- Result Status Section -->
+    {#if submission.result?.code}
+      <div class="mt-4 border-t border-border pt-4">
+        <div class="rounded-lg border border-border bg-card p-3">
+          <div class="flex items-center gap-2">
+            <AlertCircle class="h-4 w-4 text-primary" />
+            <span class="text-xs font-medium text-muted-foreground">
+              {m.submissions_result_status_label()}
+            </span>
+          </div>
+          <div class="mt-2 flex items-center gap-2">
+            <span
+              class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {config.bgColor} {config.textColor}"
+            >
+              {submission.result.code}
+            </span>
+            {#if submission.result.message}
+              <span class="text-sm text-muted-foreground">{submission.result.message}</span>
+            {/if}
+          </div>
+        </div>
+      </div>
+    {/if}
 
     <!-- Test Cases Section -->
     {#if submission.result?.testResults && submission.result.testResults.length > 0}

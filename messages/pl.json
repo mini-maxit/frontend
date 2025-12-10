@@ -274,6 +274,7 @@
   "submissions_submitted_label": "Przesłano",
   "submissions_attempt_label": "Próba",
   "submissions_submitter_label": "Autor zgłoszenia",
+  "submissions_result_status_label": "Status wyniku",
   "task_badge_prefix": "Zadanie #",
   "task_created_by": "Utworzony przez",
   "task_description_none": "Brak dostępnego opisu",
