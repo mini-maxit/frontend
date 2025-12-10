@@ -334,7 +334,9 @@
                       onclick={() => toggleTestCases(submission.id)}
                       class="flex w-full items-center justify-between text-left transition-colors hover:text-primary"
                     >
-                      <h4 class="text-sm font-semibold text-foreground">Test Cases</h4>
+                      <h4 class="text-sm font-semibold text-foreground">
+                        {m.admin_contest_submissions_test_cases()}
+                      </h4>
                       {#if expandedTestCases.has(submission.id)}
                         <ChevronUp class="h-4 w-4 text-muted-foreground" />
                       {:else}

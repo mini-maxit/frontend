@@ -3,6 +3,7 @@
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Clock from '@lucide/svelte/icons/clock';
+  import * as m from '$lib/paraglide/messages';
 
   interface TestCaseResultProps {
     testResult: TestResult;
@@ -32,14 +33,16 @@
         <XCircle class="h-4 w-4 text-destructive" />
       {/if}
       <span class="text-sm font-medium text-foreground">
-        Test Case #{testNumber}
+        {m.admin_contest_submissions_test_case_number({ testNumber: testNumber.toString() })}
       </span>
       <span
         class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {testResult.passed
           ? 'bg-primary/10 text-primary'
           : 'bg-destructive/10 text-destructive'}"
       >
-        {testResult.passed ? 'Passed' : 'Failed'}
+        {testResult.passed
+          ? m.admin_contest_submissions_test_case_passed()
+          : m.admin_contest_submissions_test_case_failed()}
       </span>
     </div>
     <div class="flex items-center gap-2">
@@ -55,7 +58,9 @@
   <div class="mt-3 space-y-2 border-t border-border pt-3">
     {#if testResult.code}
       <div>
-        <span class="text-xs font-medium text-muted-foreground">Status Code:</span>
+        <span class="text-xs font-medium text-muted-foreground"
+          >{m.admin_contest_submissions_test_case_status_code()}</span
+        >
         <span
           class="ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {testResult.passed
             ? 'bg-primary/10 text-primary'
@@ -68,7 +73,9 @@
 
     {#if testResult.errorMessage}
       <div>
-        <span class="text-xs font-medium text-muted-foreground">Message:</span>
+        <span class="text-xs font-medium text-muted-foreground"
+          >{m.admin_contest_submissions_test_case_message()}</span
+        >
         <p class="mt-1 text-sm text-foreground">{testResult.errorMessage}</p>
       </div>
     {/if}
