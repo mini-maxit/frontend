@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getContestTasks } from './tasks.remote';
+  import { getContestTasks, removeTaskFromContest } from './tasks.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { RemoveTaskFromContestButton } from '$lib/components/dashboard/admin/contests';
   import * as m from '$lib/paraglide/messages';
   import ClipboardList from '@lucide/svelte/icons/clipboard-list';
   import User from '@lucide/svelte/icons/user';
@@ -71,6 +72,12 @@
                       {m.admin_contest_tasks_submission_open_no()}
                     </span>
                   {/if}
+                  <RemoveTaskFromContestButton
+                    contestId={data.contestId}
+                    taskId={contestTask.task.id}
+                    taskTitle={contestTask.task.title}
+                    {removeTaskFromContest}
+                  />
                 </div>
               </div>
 
