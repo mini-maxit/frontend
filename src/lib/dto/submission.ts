@@ -7,6 +7,22 @@ export enum SubmissionStatus {
   Lost = 'lost'
 }
 
+export enum SubmissionResultCode {
+  Success = 'success',
+  TestFailed = 'test_failed',
+  CompilationError = 'compilation_error',
+  InitializationError = 'initialization_error',
+  InternalError = 'internal_error'
+}
+
+export enum TestResultCode {
+  OutputDifference = 'output_difference',
+  TimeLimitExceeded = 'time_limit_exceeded',
+  MemoryLimitExceeded = 'memory_limit_exceeded',
+  RuntimeError = 'runtime_error',
+  NotExecuted = 'not_executed'
+}
+
 export interface Language {
   id: number;
   language: string;
@@ -26,13 +42,13 @@ export interface TestResult {
   testCaseId: number;
   passed: boolean;
   submissionResultId: number;
-  code: string;
+  code: TestResultCode;
   errorMessage: string;
   executionTimeMs: number;
 }
 
 export interface SubmissionResult {
-  code: string;
+  code: SubmissionResultCode;
   createdAt: string;
   id: number;
   message: string;

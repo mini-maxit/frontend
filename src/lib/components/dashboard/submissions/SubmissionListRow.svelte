@@ -8,7 +8,7 @@
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import UserIcon from '@lucide/svelte/icons/user';
-  import { SubmissionStatus, type Submission } from '$lib/dto/submission';
+  import { SubmissionStatus, type Submission, SubmissionResultCode } from '$lib/dto/submission';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
   import TestCaseResult from './TestCaseResult.svelte';
@@ -66,6 +66,23 @@
 
   const config = $derived(statusConfig[getStatusKey(submission.status)]);
 
+  const getResultCodeLabel = (code: SubmissionResultCode | string) => {
+    switch (code) {
+      case SubmissionResultCode.Success:
+        return m.submissions_result_status_success();
+      case SubmissionResultCode.TestFailed:
+        return m.submissions_result_status_test_failed();
+      case SubmissionResultCode.CompilationError:
+        return m.submissions_result_status_compilation_error();
+      case SubmissionResultCode.InitializationError:
+        return m.submissions_result_status_initialization_error();
+      case SubmissionResultCode.InternalError:
+        return m.submissions_result_status_internal_error();
+      default:
+        return String(code);
+    }
+  };
+
   const getScore = () => {
     if (!submission.result?.testResults) return '-/-';
     const passed = submission.result.testResults.filter((t) => t.passed).length;
@@ -96,11 +113,19 @@
               {submission.task.title}
             </h3>
             <div class="mt-1 flex flex-wrap items-center gap-2">
-              <span
-                class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
-              >
-                {config.label}
-              </span>
+              {#if submission.status === SubmissionStatus.Evaluated && submission.result?.code}
+                <span
+                  class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+                >
+                  {getResultCodeLabel(submission.result.code as SubmissionResultCode)}
+                </span>
+              {:else}
+                <span
+                  class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+                >
+                  {config.label}
+                </span>
+              {/if}
               <span class="text-sm font-medium text-foreground">{getScore()}</span>
             </div>
           </div>
@@ -116,7 +141,8 @@
             <span class="text-xs text-muted-foreground">{m.submissions_submitter_label()}</span>
           </div>
           <p class="mt-1 text-sm font-semibold text-foreground">
-            {submission.user.name} {submission.user.surname}
+            {submission.user.name}
+            {submission.user.surname}
           </p>
         </div>
 
