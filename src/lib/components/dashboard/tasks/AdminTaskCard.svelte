@@ -12,12 +12,15 @@
   import { localizeHref } from '$lib/paraglide/runtime';
   import { AppRoutes } from '$lib/routes';
   import ManageTestCasesLimitsDialog from '$lib/components/dashboard/admin/tasks/ManageTestCasesLimitsDialog.svelte';
+  import RemoveTaskButton from '$lib/components/dashboard/admin/tasks/RemoveTaskButton.svelte';
+  import type { DeleteTaskForm } from '$routes/dashboard/teacher/tasks/tasks.remote';
 
   interface AdminTaskCardProps {
     task: Task;
+    deleteTask: DeleteTaskForm;
   }
 
-  let { task }: AdminTaskCardProps = $props();
+  let { task, deleteTask }: AdminTaskCardProps = $props();
 
   let manageDialogOpen = $state(false);
 </script>
@@ -94,6 +97,7 @@
         <Users class="mr-2 h-4 w-4" />
         {m.admin_tasks_card_view_collaborators()}
       </Button>
+      <RemoveTaskButton taskId={task.id} taskTitle={task.title} {deleteTask} />
     </div>
   </Card.Content>
 </Card.Root>
