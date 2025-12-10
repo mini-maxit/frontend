@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getTasks } from './tasks.remote';
+  import { getTasks, deleteTask } from './tasks.remote';
   import {
     TasksList,
     TasksUploadDialog,
@@ -47,7 +47,7 @@
         icon={Upload}
       />
     {:else if tasksQuery.current}
-      <TasksList tasks={tasksQuery.current} />
+      <TasksList tasks={tasksQuery.current} {deleteTask} />
     {/if}
   </div>
 </div>
