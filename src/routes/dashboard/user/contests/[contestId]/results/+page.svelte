@@ -9,6 +9,7 @@
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import { getContestResults } from './results.remote';
   import { format } from 'date-fns';
+  import * as m from '$lib/paraglide/messages';
 
   interface Props {
     data: {
@@ -56,6 +57,11 @@
     return null;
   }
 
+  function formatContestDate(dateString: string): string {
+    const date = new Date(dateString);
+    return format(date, 'MMM dd, yyyy');
+  }
+
   // Pagination state
   let currentPage = $state(1);
   let pageSize = $state(10);
@@ -71,14 +77,13 @@
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">
   <div class="space-y-2">
-    <h1 class="text-4xl font-bold tracking-tight text-foreground">Contest Results</h1>
+    <h1 class="text-4xl font-bold tracking-tight text-foreground">{m.contest_results_title()}</h1>
     {#if resultsQuery.current?.contest}
       <div class="flex flex-col gap-2 text-lg text-muted-foreground">
         <p class="font-medium">{resultsQuery.current.contest.name}</p>
         <p class="text-sm">
-          {format(new Date(resultsQuery.current.contest.startAt), 'MMM dd, yyyy')} - {format(
-            new Date(resultsQuery.current.contest.endAt),
-            'MMM dd, yyyy'
+          {formatContestDate(resultsQuery.current.contest.startAt)} - {formatContestDate(
+            resultsQuery.current.contest.endAt
           )}
         </p>
       </div>
@@ -87,12 +92,12 @@
 
   {#if resultsQuery.error}
     <ErrorCard
-      title="Failed to load results"
+      title={m.contest_results_load_error()}
       error={resultsQuery.error}
       onRetry={() => resultsQuery.refresh()}
     />
   {:else if resultsQuery.loading}
-    <LoadingSpinner message="Loading contest results..." />
+    <LoadingSpinner message={m.contest_results_loading()} />
   {:else if resultsQuery.current}
     <!-- My Results Summary Cards -->
     {#if resultsQuery.current.myResults}
@@ -165,16 +170,20 @@
       <!-- My Task Results -->
       <Card.Root>
         <Card.Header>
-          <Card.Title>My Task Results</Card.Title>
+          <Card.Title>{m.contest_results_my_task_results()}</Card.Title>
         </Card.Header>
         <Card.Content>
           <div class="overflow-x-auto">
             <Table.Root>
               <Table.Header>
                 <Table.Row>
-                  <Table.Head>Task</Table.Head>
-                  <Table.Head class="hidden sm:table-cell">Best Score</Table.Head>
-                  <Table.Head class="hidden md:table-cell">Submissions</Table.Head>
+                  <Table.Head>{m.contest_results_task()}</Table.Head>
+                  <Table.Head class="hidden sm:table-cell"
+                    >{m.contest_results_best_score()}</Table.Head
+                  >
+                  <Table.Head class="hidden md:table-cell"
+                    >{m.contest_results_submissions()}</Table.Head
+                  >
                   <Table.Head class="sm:hidden">Score / Submissions</Table.Head>
                 </Table.Row>
               </Table.Header>
@@ -311,8 +320,7 @@
               Leaderboard
             </Card.Title>
             <p class="text-sm text-muted-foreground">
-              {sortedLeaderboard.length}
-              {sortedLeaderboard.length === 1 ? 'participant' : 'participants'}
+              {m.contest_results_participants({ count: sortedLeaderboard.length })}
             </p>
           </div>
         </Card.Header>
@@ -321,12 +329,18 @@
             <Table.Root>
               <Table.Header>
                 <Table.Row>
-                  <Table.Head class="w-16">Rank</Table.Head>
-                  <Table.Head>Name</Table.Head>
-                  <Table.Head class="hidden md:table-cell">Username</Table.Head>
-                  <Table.Head class="text-right">Total Score</Table.Head>
-                  <Table.Head class="hidden text-right lg:table-cell">Solved</Table.Head>
-                  <Table.Head class="hidden text-right xl:table-cell">Partially Solved</Table.Head>
+                  <Table.Head class="w-16">{m.contest_results_rank()}</Table.Head>
+                  <Table.Head>{m.contest_results_name()}</Table.Head>
+                  <Table.Head class="hidden md:table-cell"
+                    >{m.contest_results_username()}</Table.Head
+                  >
+                  <Table.Head class="text-right">{m.contest_results_total_score()}</Table.Head>
+                  <Table.Head class="hidden text-right lg:table-cell"
+                    >{m.contest_results_solved()}</Table.Head
+                  >
+                  <Table.Head class="hidden text-right xl:table-cell"
+                    >{m.contest_results_partially_solved()}</Table.Head
+                  >
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -352,7 +366,7 @@
                       {userStats.user.name}
                       {userStats.user.surname}
                       {#if isCurrentUser}
-                        <span class="ml-2 text-xs text-primary">(You)</span>
+                        <span class="ml-2 text-xs text-primary">{m.contest_results_you()}</span>
                       {/if}
                     </Table.Cell>
                     <Table.Cell class="hidden text-muted-foreground md:table-cell">
@@ -379,10 +393,11 @@
           {#if totalPages > 1}
             <div class="mt-4 flex items-center justify-between">
               <p class="text-sm text-muted-foreground">
-                Showing {(currentPage - 1) * pageSize + 1} - {Math.min(
-                  currentPage * pageSize,
-                  sortedLeaderboard.length
-                )} of {sortedLeaderboard.length}
+                {m.contest_results_showing({
+                  start: (currentPage - 1) * pageSize + 1,
+                  end: Math.min(currentPage * pageSize, sortedLeaderboard.length),
+                  total: sortedLeaderboard.length
+                })}
               </p>
               <div class="flex gap-2">
                 <button
@@ -393,7 +408,7 @@
                   Previous
                 </button>
                 <span class="flex items-center px-3 text-sm">
-                  Page {currentPage} of {totalPages}
+                  {m.contest_results_page_info({ current: currentPage, total: totalPages })}
                 </span>
                 <button
                   class="rounded border border-border px-3 py-1 text-sm transition-colors hover:bg-muted disabled:opacity-50"
@@ -409,8 +424,8 @@
       </Card.Root>
     {:else}
       <EmptyState
-        title="No results available"
-        description="No participants have submitted solutions yet."
+        title={m.contest_results_no_results_title()}
+        description={m.contest_results_no_results_description()}
         icon={Trophy}
       />
     {/if}

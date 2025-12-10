@@ -4,6 +4,7 @@ import { createApiClient } from '$lib/services/ApiService';
 import { AccessControlService } from '$lib/services/AccessControlService';
 import { UserRole } from '$lib/dto/jwt';
 import { ContestStatus } from '$lib/dto/contest';
+import * as m from '$lib/paraglide/messages';
 
 export const load = async ({
   params,
@@ -17,7 +18,7 @@ export const load = async ({
   const contestId = parseInt(params.contestId, 10);
 
   if (isNaN(contestId)) {
-    throw error(400, 'Invalid contest ID');
+    throw error(400, m.contest_results_invalid_contest_id());
   }
 
   const parentData = await parent();
@@ -35,7 +36,7 @@ export const load = async ({
   if (!isContestPast) {
     // If contest is not past, only admin or teacher with access can view
     if (!isAdmin && !isTeacher) {
-      throw error(403, 'Results are only available after the contest has ended');
+      throw error(403, m.contest_results_access_denied());
     }
 
     // For teachers, verify they have access to this contest
@@ -45,7 +46,7 @@ export const load = async ({
       const result = await accessControlService.getContestCollaborators(contestId);
 
       if (!result.success) {
-        throw error(403, 'Results are only available after the contest has ended');
+        throw error(403, m.contest_results_access_denied());
       }
     }
   }
