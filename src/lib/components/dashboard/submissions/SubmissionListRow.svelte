@@ -116,7 +116,8 @@
             <span class="text-xs text-muted-foreground">{m.submissions_submitter_label()}</span>
           </div>
           <p class="mt-1 text-sm font-semibold text-foreground">
-            {submission.user.name} {submission.user.surname}
+            {submission.user.name}
+            {submission.user.surname}
           </p>
         </div>
 
