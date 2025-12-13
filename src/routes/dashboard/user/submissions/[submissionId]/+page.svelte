@@ -134,7 +134,6 @@
   {:else if submissionQuery.loading}
     <LoadingSpinner message={m.submission_details_loading()} inCard size="h-12 w-12" />
   {:else if submission}
-
     <!-- Status Overview Card -->
     <Card.Root class="overflow-hidden shadow-md">
       <Card.Content class="p-6">
@@ -201,7 +200,9 @@
               <span class="text-sm text-muted-foreground">{m.submission_details_contest()}</span>
             </div>
             <p class="mt-2 text-lg font-semibold text-foreground">
-              {submission.contestId ? `#${submission.contestId}` : m.submission_details_no_contest()}
+              {submission.contestId
+                ? `#${submission.contestId}`
+                : m.submission_details_no_contest()}
             </p>
           </div>
 
@@ -224,7 +225,8 @@
               <span class="text-sm text-muted-foreground">{m.submission_details_language()}</span>
             </div>
             <p class="mt-2 text-lg font-semibold text-foreground">
-              {submission.language.language} {submission.language.version}
+              {submission.language.language}
+              {submission.language.version}
             </p>
           </div>
 
@@ -243,7 +245,8 @@
           <div class="rounded-lg border border-border bg-card p-3">
             <div class="flex items-center gap-2">
               <Calendar class="h-4 w-4 text-primary" />
-              <span class="text-sm text-muted-foreground">{m.submission_details_submitted_at()}</span
+              <span class="text-sm text-muted-foreground"
+                >{m.submission_details_submitted_at()}</span
               >
             </div>
             <p class="mt-2 text-lg font-semibold text-foreground">
@@ -256,7 +259,8 @@
             <div class="rounded-lg border border-border bg-card p-3">
               <div class="flex items-center gap-2">
                 <Calendar class="h-4 w-4 text-primary" />
-                <span class="text-sm text-muted-foreground">{m.submission_details_checked_at()}</span
+                <span class="text-sm text-muted-foreground"
+                  >{m.submission_details_checked_at()}</span
                 >
               </div>
               <p class="mt-2 text-lg font-semibold text-foreground">

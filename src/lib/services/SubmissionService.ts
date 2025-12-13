@@ -1,6 +1,11 @@
 import { ApiError, type ApiService } from './ApiService';
 import type { ApiResponse, PaginatedData } from '../dto/response';
-import type { Language, SubmitSolutionDto, Submission, SubmissionDetailed } from '../dto/submission';
+import type {
+  Language,
+  SubmitSolutionDto,
+  Submission,
+  SubmissionDetailed
+} from '../dto/submission';
 
 export class SubmissionService {
   constructor(private apiClient: ApiService) {}

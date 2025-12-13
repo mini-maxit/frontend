@@ -61,7 +61,11 @@
         }
       })}
     >
-      <input {...removeTaskFromContest.fields.contestId.as('number')} bind:value={contestId} hidden />
+      <input
+        {...removeTaskFromContest.fields.contestId.as('number')}
+        bind:value={contestId}
+        hidden
+      />
       <input {...removeTaskFromContest.fields.taskId.as('number')} bind:value={taskId} hidden />
 
       <Dialog.Footer>
