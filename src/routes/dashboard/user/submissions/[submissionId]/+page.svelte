@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getSubmissionDetails } from './submission.remote';
+  import { getSubmissionDetails, type SubmissionWithFileContent } from './submission.remote';
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as Card from '$lib/components/ui/card';
   import * as m from '$lib/paraglide/messages';
@@ -27,6 +27,9 @@
   let { data }: Props = $props();
 
   const submissionQuery = getSubmissionDetails(data.submissionId);
+
+  // Reactive variable with proper typing
+  const submission = $derived(submissionQuery.current as SubmissionWithFileContent | undefined);
 
   const statusConfig = {
     success: {
@@ -90,21 +93,21 @@
   };
 
   const highlighted = $derived(() => {
-    if (!submissionQuery.current?.fileContent) return '';
-    const result = hljs.highlightAuto(submissionQuery.current.fileContent);
+    if (!submission?.fileContent) return '';
+    const result = hljs.highlightAuto(submission.fileContent);
     return result.value;
   });
 
   const config = $derived(
-    submissionQuery.current
-      ? statusConfig[getStatusKey(submissionQuery.current.status, submissionQuery.current.result?.testResults)]
+    submission
+      ? statusConfig[getStatusKey(submission.status, submission.result?.testResults)]
       : statusConfig.pending
   );
 
   const getScore = () => {
-    if (!submissionQuery.current?.result?.testResults) return '-/-';
-    const passed = submissionQuery.current.result.testResults.filter((t) => t.passed).length;
-    const total = submissionQuery.current.result.testResults.length;
+    if (!submission?.result?.testResults) return '-/-';
+    const passed = submission.result.testResults.filter((t) => t.passed).length;
+    const total = submission.result.testResults.length;
     return `${passed}/${total}`;
   };
 </script>
@@ -130,8 +133,7 @@
     />
   {:else if submissionQuery.loading}
     <LoadingSpinner message={m.submission_details_loading()} inCard size="h-12 w-12" />
-  {:else if submissionQuery.current}
-    {@const submission = submissionQuery.current}
+  {:else if submission}
 
     <!-- Status Overview Card -->
     <Card.Root class="overflow-hidden shadow-md">

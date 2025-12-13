@@ -1,14 +1,16 @@
+import * as v from 'valibot';
 import { query, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
 import { SubmissionService } from '$lib/services/SubmissionService';
 import { error } from '@sveltejs/kit';
 import type { SubmissionDetailed } from '$lib/dto/submission';
 
-interface SubmissionWithFileContent extends SubmissionDetailed {
+export interface SubmissionWithFileContent extends SubmissionDetailed {
   fileContent: string;
 }
 
 export const getSubmissionDetails = query(
+  v.number(),
   async (submissionId: number): Promise<SubmissionWithFileContent> => {
     const event = getRequestEvent();
     const apiClient = createApiClient(event.cookies);
