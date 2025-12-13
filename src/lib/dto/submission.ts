@@ -1,3 +1,4 @@
+import type { Contest } from './contest';
 import type { UserRole } from './jwt';
 
 export enum SubmissionStatus {
@@ -75,7 +76,6 @@ export interface SubmissionUser {
 
 export interface Submission {
   checkedAt: string;
-  contestId?: number;
   id: number;
   language: Language;
   languageId: number;
@@ -84,9 +84,8 @@ export interface Submission {
   status: SubmissionStatus;
   submittedAt: string;
   task: SubmissionTask;
-  taskId: number;
   user: SubmissionUser;
-  userId: number;
+  contest: Contest;
 }
 
 export interface SubmissionDetailed extends Submission {

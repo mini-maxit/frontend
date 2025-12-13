@@ -30,8 +30,6 @@ export const getSubmissionDetails = query(
     let fileContent = '';
     try {
       // Validate the URL to prevent SSRF attacks
-      const fileUrl = new URL(submission.fileUrl);
-      
       const fileResponse = await fetch(submission.fileUrl);
       if (!fileResponse.ok) {
         fileContent = 'Failed to load file content';
@@ -39,6 +37,7 @@ export const getSubmissionDetails = query(
         fileContent = await fileResponse.text();
       }
     } catch (err) {
+      console.log(err);
       fileContent = 'Error loading file content';
     }
 

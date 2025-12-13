@@ -15,8 +15,7 @@
   import FileText from '@lucide/svelte/icons/file-text';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Hash from '@lucide/svelte/icons/hash';
-  import hljs from 'highlight.js';
-  import 'highlight.js/styles/mono-blue.css';
+  import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
 
   interface Props {
     data: {
@@ -91,12 +90,6 @@
         return String(code);
     }
   };
-
-  const highlighted = $derived(() => {
-    if (!submission?.fileContent) return '';
-    const result = hljs.highlightAuto(submission.fileContent);
-    return result.value;
-  });
 
   const config = $derived(
     submission
@@ -200,8 +193,8 @@
               <span class="text-sm text-muted-foreground">{m.submission_details_contest()}</span>
             </div>
             <p class="mt-2 text-lg font-semibold text-foreground">
-              {submission.contestId
-                ? `#${submission.contestId}`
+              {submission.contest.id
+                ? `${submission.contest.name}`
                 : m.submission_details_no_contest()}
             </p>
           </div>
@@ -294,7 +287,7 @@
         <Card.Title>{m.submission_details_code_title()}</Card.Title>
       </Card.Header>
       <Card.Content class="mx-6 overflow-auto px-0">
-        <pre class="rounded-lg text-xs"><code>{@html highlighted()}</code></pre>
+        <FilePreview content={submission.fileContent} />
       </Card.Content>
     </Card.Root>
   {/if}
