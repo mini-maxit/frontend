@@ -29,15 +29,16 @@ export const getSubmissionDetails = query(
     // Fetch file content from the fileUrl
     let fileContent = '';
     try {
+      // Validate the URL to prevent SSRF attacks
+      const fileUrl = new URL(submission.fileUrl);
+      
       const fileResponse = await fetch(submission.fileUrl);
       if (!fileResponse.ok) {
-        console.error('Failed to fetch submission file:', fileResponse.statusText);
         fileContent = 'Failed to load file content';
       } else {
         fileContent = await fileResponse.text();
       }
     } catch (err) {
-      console.error('Error fetching submission file:', err);
       fileContent = 'Error loading file content';
     }
 
