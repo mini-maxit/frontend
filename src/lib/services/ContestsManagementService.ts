@@ -181,6 +181,24 @@ export class ContestsManagementService {
     }
   }
 
+  async removeTaskFromContest(contestId: number, taskIds: number[]): Promise<void> {
+    try {
+      const requestData = {
+        taskIds
+      };
+      await this.apiClient.delete<ApiResponse<{ message: string }>>({
+        url: `/contests-management/contests/${contestId}/tasks`,
+        body: JSON.stringify(requestData)
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to remove task from contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
   async getContestTasks(contestId: number): Promise<ContestTask[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<ContestTask[]>>({

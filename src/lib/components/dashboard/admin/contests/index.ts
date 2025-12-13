@@ -4,3 +4,4 @@ export { default as EditContestDialog } from './EditContestDialog.svelte';
 export { default as AddContestCollaboratorButton } from './AddContestCollaboratorButton.svelte';
 export { default as ContestCollaboratorPermissionEditor } from './ContestCollaboratorPermissionEditor.svelte';
 export { default as RemoveContestCollaboratorButton } from './RemoveContestCollaboratorButton.svelte';
+export { default as RemoveTaskFromContestButton } from './RemoveTaskFromContestButton.svelte';
