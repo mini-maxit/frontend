@@ -110,4 +110,26 @@ export class TasksManagementService {
       throw error;
     }
   }
+
+  async deleteTask(taskId: number): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.delete<ApiResponse<void>>({
+        url: `/tasks-management/tasks/${taskId}`
+      });
+      return { success: true, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
 }
