@@ -89,6 +89,10 @@ export interface Submission {
   userId: number;
 }
 
+export interface SubmissionDetailed extends Submission {
+  fileUrl: string;
+}
+
 export interface GetContestSubmissionsParams {
   limit?: number;
   offset?: number;
