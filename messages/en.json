@@ -296,6 +296,8 @@
   "submission_details_code_title": "Submitted Code",
   "submission_details_test_results": "Test Results",
   "submission_details_no_test_results": "No test results available",
+  "submission_details_file_load_error": "Failed to load file content",
+  "submission_details_file_fetch_error": "Error loading file content",
   "task_badge_prefix": "Task #",
   "task_created_by": "Created by",
   "task_description_none": "No description available",

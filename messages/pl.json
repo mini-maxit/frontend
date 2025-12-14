@@ -301,6 +301,8 @@
   "submission_details_code_title": "Przesłany Kod",
   "submission_details_test_results": "Wyniki Testów",
   "submission_details_no_test_results": "Brak wyników testów",
+  "submission_details_file_load_error": "Nie udało się załadować zawartości pliku",
+  "submission_details_file_fetch_error": "Błąd ładowania zawartości pliku",
   "task_badge_prefix": "Zadanie #",
   "task_created_by": "Utworzony przez",
   "task_description_none": "Brak dostępnego opisu",

@@ -27,9 +27,6 @@
 
   const submissionQuery = getSubmissionDetails(data.submissionId);
 
-  // Reactive variable with proper typing
-  const submission = $derived(submissionQuery.current as SubmissionWithFileContent | undefined);
-
   const statusConfig = {
     success: {
       bgColor: 'bg-primary/10',
@@ -92,15 +89,17 @@
   };
 
   const config = $derived(
-    submission
-      ? statusConfig[getStatusKey(submission.status, submission.result?.testResults)]
+    submissionQuery.current
+      ? statusConfig[
+          getStatusKey(submissionQuery.current.status, submissionQuery.current.result?.testResults)
+        ]
       : statusConfig.pending
   );
 
   const getScore = () => {
-    if (!submission?.result?.testResults) return '-/-';
-    const passed = submission.result.testResults.filter((t) => t.passed).length;
-    const total = submission.result.testResults.length;
+    if (!submissionQuery.current?.result?.testResults) return '-/-';
+    const passed = submissionQuery.current.result.testResults.filter((t) => t.passed).length;
+    const total = submissionQuery.current.result.testResults.length;
     return `${passed}/${total}`;
   };
 </script>
@@ -126,7 +125,8 @@
     />
   {:else if submissionQuery.loading}
     <LoadingSpinner message={m.submission_details_loading()} inCard size="h-12 w-12" />
-  {:else if submission}
+  {:else if submissionQuery.current}
+    {@const submission = submissionQuery.current}
     <!-- Status Overview Card -->
     <Card.Root class="overflow-hidden shadow-md">
       <Card.Content class="p-6">

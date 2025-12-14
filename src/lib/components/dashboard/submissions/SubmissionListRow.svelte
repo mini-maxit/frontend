@@ -12,6 +12,7 @@
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
   import TestCaseResult from './TestCaseResult.svelte';
+  import { localizeHref } from '$lib/paraglide/runtime';
 
   interface SubmissionListRowProps {
     submission: Submission;
@@ -111,7 +112,7 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2">
               <a
-                href="/dashboard/user/submissions/{submission.id}"
+                href={localizeHref(`/dashboard/user/submissions/${submission.id}`)}
                 class="font-semibold text-foreground transition-colors hover:text-primary hover:underline"
               >
                 {submission.task.title}

@@ -4,6 +4,8 @@ import { createApiClient } from '$lib/services/ApiService';
 import { SubmissionService } from '$lib/services/SubmissionService';
 import { error } from '@sveltejs/kit';
 import type { SubmissionDetailed } from '$lib/dto/submission';
+import * as m from '$lib/paraglide/messages';
+import { env } from '$env/dynamic/private';
 
 export interface SubmissionWithFileContent extends SubmissionDetailed {
   fileContent: string;
@@ -30,14 +32,22 @@ export const getSubmissionDetails = query(
     let fileContent = '';
     try {
       // Validate the URL to prevent SSRF attacks
-      const fileResponse = await fetch(submission.fileUrl);
-      if (!fileResponse.ok) {
-        fileContent = 'Failed to load file content';
+      const fileUrl = new URL(submission.fileUrl);
+
+      // Only allow URLs from the backend API domain (trusted source)
+      const backendUrl = new URL(env.BACKEND_API_URL || 'http://localhost:8000');
+      if (fileUrl.hostname !== backendUrl.hostname) {
+        fileContent = m.submission_details_file_load_error();
       } else {
-        fileContent = await fileResponse.text();
+        const fileResponse = await fetch(submission.fileUrl);
+        if (!fileResponse.ok) {
+          fileContent = m.submission_details_file_load_error();
+        } else {
+          fileContent = await fileResponse.text();
+        }
       }
     } catch (err) {
-      fileContent = 'Error loading file content';
+      fileContent = m.submission_details_file_fetch_error();
     }
 
     return {
