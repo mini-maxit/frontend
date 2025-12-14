@@ -37,7 +37,6 @@ export const getSubmissionDetails = query(
         fileContent = await fileResponse.text();
       }
     } catch (err) {
-      console.log(err);
       fileContent = 'Error loading file content';
     }
 
