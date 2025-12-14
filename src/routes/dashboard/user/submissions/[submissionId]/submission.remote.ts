@@ -34,9 +34,14 @@ export const getSubmissionDetails = query(
       // Validate the URL to prevent SSRF attacks
       const fileUrl = new URL(submission.fileUrl);
 
-      // Only allow URLs from the backend API domain (trusted source)
+      // Only allow URLs from trusted domains: backend API or file storage
       const backendUrl = new URL(env.BACKEND_API_URL || 'http://localhost:8000');
-      if (fileUrl.hostname !== backendUrl.hostname) {
+      const fileStorageUrl = new URL(env.FILE_STORAGE_URL || 'http://file-storage:8888');
+
+      const isBackendDomain = fileUrl.hostname === backendUrl.hostname;
+      const isFileStorageDomain = fileUrl.hostname === fileStorageUrl.hostname;
+
+      if (!isBackendDomain && !isFileStorageDomain) {
         fileContent = m.submission_details_file_load_error();
       } else {
         const fileResponse = await fetch(submission.fileUrl);
