@@ -3,6 +3,7 @@
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Clock from '@lucide/svelte/icons/clock';
+  import Activity from '@lucide/svelte/icons/activity';
   import * as m from '$lib/paraglide/messages';
 
   interface TestCaseResultProps {
@@ -18,6 +19,15 @@
       return `${timeMs.toFixed(2)}ms`;
     } else {
       return `${(timeMs / 1000).toFixed(2)}s`;
+    }
+  };
+
+  const formatPeakMemory = (memoryKb: number): string => {
+    if (!isFinite(memoryKb) || memoryKb < 0) return 'N/A';
+    if (memoryKb < 1024) {
+      return `${memoryKb.toFixed(2)} KB`;
+    } else {
+      return `${(memoryKb / 1024).toFixed(2)} MB`;
     }
   };
 </script>
@@ -43,10 +53,14 @@
           : m.admin_contest_submissions_test_case_failed()}
       </span>
     </div>
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-3">
       <div class="flex items-center gap-1 text-xs text-muted-foreground">
         <Clock class="h-3 w-3" />
         <span>{formatExecutionTime(testResult.executionTimeMs)}</span>
+      </div>
+      <div class="flex items-center gap-1 text-xs text-muted-foreground">
+        <Activity class="h-3 w-3" />
+        <span>{formatPeakMemory(testResult.peakMemoryKb)}</span>
       </div>
     </div>
   </div>

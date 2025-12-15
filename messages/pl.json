@@ -476,6 +476,7 @@
   "admin_contest_submissions_test_case_failed": "Niezaliczony",
   "admin_contest_submissions_test_case_status_code": "Kod Statusu:",
   "admin_contest_submissions_test_case_message": "Wiadomość:",
+  "admin_contest_submissions_test_case_peak_memory": "Szczytowa Pamięć:",
   "admin_contest_submissions_showing_count": "Wyświetlanie {count} zgłoszenia",
   "admin_contest_submissions_showing_count_plural": "Wyświetlanie {count} zgłoszeń",
   "admin_contest_submissions_placeholder_user": "Szukaj według nazwy użytkownika, imienia...",
