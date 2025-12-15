@@ -1,9 +1,5 @@
 import { error } from '@sveltejs/kit';
 import { createContestService } from '$lib/services/ContestService';
-import { createApiClient } from '$lib/services/ApiService';
-import { AccessControlService } from '$lib/services/AccessControlService';
-import { UserRole } from '$lib/dto/jwt';
-import { ContestStatus } from '$lib/dto/contest';
 import * as m from '$lib/paraglide/messages';
 
 export const load = async ({
@@ -24,32 +20,9 @@ export const load = async ({
   const parentData = await parent();
   const user = parentData.user;
 
-  // Fetch contest details to check status
+  // Fetch contest details
   const contestService = createContestService(cookies);
   const contest = await contestService.getContest(contestId);
-
-  // Check access: contest must be past OR user is admin/teacher with access
-  const isAdmin = user.role === UserRole.Admin;
-  const isTeacher = user.role === UserRole.Teacher;
-  const isContestPast = contest.status === ContestStatus.Past;
-
-  if (!isContestPast) {
-    // If contest is not past, only admin or teacher with access can view
-    if (!isAdmin && !isTeacher) {
-      throw error(403, m.contest_results_access_denied());
-    }
-
-    // For teachers, verify they have access to this contest
-    if (isTeacher) {
-      const apiClient = createApiClient(cookies);
-      const accessControlService = new AccessControlService(apiClient);
-      const result = await accessControlService.getContestCollaborators(contestId);
-
-      if (!result.success) {
-        throw error(403, m.contest_results_access_denied());
-      }
-    }
-  }
 
   return {
     contestId,
