@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { uploadTask, getUploadLimit } from '$routes/dashboard/teacher/tasks/upload.remote';
+  import { uploadTask } from '$routes/dashboard/teacher/tasks/upload.remote';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
@@ -17,16 +17,6 @@
 
   let fileInput = $state<HTMLInputElement | null>(null);
   let selectedFile = $state<File | null>(null);
-
-  // Read upload limit from server via remote query (single source of truth)
-  const uploadLimit = getUploadLimit();
-
-  function toMB(bytes: number): number {
-    return Math.round((bytes / (1024 * 1024)) * 100) / 100;
-  }
-
-  let MAX_UPLOAD_BYTES = $derived(uploadLimit.current?.bytes ?? 20 * 1024 * 1024);
-  let MAX_UPLOAD_MB = $derived(toMB(MAX_UPLOAD_BYTES));
 
   function handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -60,13 +50,6 @@
       <Dialog.Title>{m.admin_tasks_dialog_title()}</Dialog.Title>
       <Dialog.Description>
         {m.admin_tasks_dialog_description()}
-        {#if uploadLimit.loading}
-          <span class="ml-1 text-sm text-muted-foreground">(…)</span>
-        {:else if uploadLimit.error}
-          <span class="ml-1 text-sm text-muted-foreground">(limit unavailable)</span>
-        {:else if uploadLimit.current}
-          <span class="ml-1 text-sm text-muted-foreground">({MAX_UPLOAD_MB} MB max)</span>
-        {/if}
       </Dialog.Description>
     </Dialog.Header>
 
@@ -74,41 +57,11 @@
       enctype="multipart/form-data"
       {...uploadTask.enhance(async ({ submit }) => {
         try {
-          // Client-side guard to prevent submitting too-large files
-          if (uploadLimit.current && selectedFile && selectedFile.size > MAX_UPLOAD_BYTES) {
-            throw new Error('UPLOAD_TOO_LARGE');
-          }
-
           await submit();
           await handleTaskUploadSuccess();
         } catch (error: HttpError | unknown) {
-          if (error instanceof Error && error.message === 'UPLOAD_TOO_LARGE') {
-            toast.error(
-              `${m.admin_tasks_upload_too_large_title()} — ${m.admin_tasks_upload_too_large_description(
-                {
-                  limit: MAX_UPLOAD_MB
-                }
-              )} ${m.admin_tasks_upload_too_large_try_smaller()}`
-            );
-          } else if (isHttpError(error)) {
-            const rawMessage = error?.body?.message || '';
-            const message = rawMessage.toLowerCase();
-            if (
-              error.status === 413 ||
-              message.includes('exceeds limit') ||
-              (error.status === 500 &&
-                (message.includes('exceeds limit') || message.includes('body_size_limit')))
-            ) {
-              toast.error(
-                `${m.admin_tasks_upload_too_large_title()} — ${m.admin_tasks_upload_too_large_description(
-                  {
-                    limit: MAX_UPLOAD_MB
-                  }
-                )} ${m.admin_tasks_upload_too_large_try_smaller()}`
-              );
-            } else {
-              toast.error(rawMessage || m.admin_tasks_upload_error());
-            }
+          if (isHttpError(error)) {
+            toast.error(error.body.message);
           } else {
             toast.error(m.admin_tasks_upload_error());
           }
@@ -157,7 +110,6 @@
         </Button>
         <Button
           type="submit"
-          disabled={uploadLimit.loading}
           class="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
         >
           {m.admin_tasks_form_upload()}
