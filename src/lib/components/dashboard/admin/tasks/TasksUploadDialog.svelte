@@ -22,7 +22,7 @@
   const uploadLimit = getUploadLimit();
 
   let MAX_UPLOAD_BYTES = $derived(uploadLimit.current?.bytes ?? 512 * 1024);
-  let MAX_UPLOAD_MB = $derived(Math.round((MAX_UPLOAD_BYTES / (1024 * 1024)) * 100) / 100);
+  let MAX_UPLOAD_MB = $derived(Number((MAX_UPLOAD_BYTES / (1024 * 1024)).toFixed(2)));
 
   function handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
