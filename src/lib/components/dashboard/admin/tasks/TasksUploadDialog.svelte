@@ -25,7 +25,7 @@
     return Math.round((bytes / (1024 * 1024)) * 100) / 100;
   }
 
-  let MAX_UPLOAD_BYTES = $derived(uploadLimit.current?.bytes ?? 20 * 1024 * 1024);
+  let MAX_UPLOAD_BYTES = $derived(uploadLimit.current?.bytes ?? 512 * 1024);
   let MAX_UPLOAD_MB = $derived(toMB(MAX_UPLOAD_BYTES));
 
   function handleFileChange(event: Event) {
@@ -52,6 +52,10 @@
       fileInput.value = '';
     }
   }
+
+  function showUploadTooLargeError() {
+    toast.error(m.admin_tasks_upload_too_large({ limit: MAX_UPLOAD_MB }));
+  }
 </script>
 
 <Dialog.Root bind:open>
@@ -61,11 +65,11 @@
       <Dialog.Description>
         {m.admin_tasks_dialog_description()}
         {#if uploadLimit.loading}
-          <span class="ml-1 text-sm text-muted-foreground">(…)</span>
+          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit_loading()})</span>
         {:else if uploadLimit.error}
-          <span class="ml-1 text-sm text-muted-foreground">(limit unavailable)</span>
+          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit_unavailable()})</span>
         {:else if uploadLimit.current}
-          <span class="ml-1 text-sm text-muted-foreground">({MAX_UPLOAD_MB} MB max)</span>
+          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit({ limit: MAX_UPLOAD_MB })})</span>
         {/if}
       </Dialog.Description>
     </Dialog.Header>
@@ -83,13 +87,7 @@
           await handleTaskUploadSuccess();
         } catch (error: HttpError | unknown) {
           if (error instanceof Error && error.message === 'UPLOAD_TOO_LARGE') {
-            toast.error(
-              `${m.admin_tasks_upload_too_large_title()} — ${m.admin_tasks_upload_too_large_description(
-                {
-                  limit: MAX_UPLOAD_MB
-                }
-              )} ${m.admin_tasks_upload_too_large_try_smaller()}`
-            );
+            showUploadTooLargeError();
           } else if (isHttpError(error)) {
             const rawMessage = error?.body?.message || '';
             const message = rawMessage.toLowerCase();
@@ -99,13 +97,7 @@
               (error.status === 500 &&
                 (message.includes('exceeds limit') || message.includes('body_size_limit')))
             ) {
-              toast.error(
-                `${m.admin_tasks_upload_too_large_title()} — ${m.admin_tasks_upload_too_large_description(
-                  {
-                    limit: MAX_UPLOAD_MB
-                  }
-                )} ${m.admin_tasks_upload_too_large_try_smaller()}`
-              );
+              showUploadTooLargeError();
             } else {
               toast.error(rawMessage || m.admin_tasks_upload_error());
             }
