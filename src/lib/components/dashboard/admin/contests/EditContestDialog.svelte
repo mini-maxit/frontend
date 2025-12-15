@@ -17,7 +17,7 @@
     parseDate
   } from '@internationalized/date';
   import { updateContest } from '$routes/dashboard/teacher/contests/contests.remote';
-  import { cn } from '$lib/utils';
+  import { cn, toLocalRFC3339 } from '$lib/utils';
   import type { CreatedContest } from '$lib/dto/contest';
 
   interface Props {
@@ -68,14 +68,7 @@
     const dateObj = date.toDate(getLocalTimeZone());
     dateObj.setHours(hours, minutes, 0, 0);
 
-    // Build YYYY-MM-DDTHH:mm string from local components to avoid timezone conversion
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    const hour = String(dateObj.getHours()).padStart(2, '0');
-    const minute = String(dateObj.getMinutes()).padStart(2, '0');
-
-    return `${year}-${month}-${day}T${hour}:${minute}`;
+    return toLocalRFC3339(dateObj);
   }
 
   let startAtValue = $derived(getDateTimeString(startDate, startTime));
@@ -109,12 +102,8 @@
     >
       <!-- Hidden inputs for form submission -->
       <input {...updateContest.fields.id.as('number')} type="hidden" value={contest.id} />
-      <input
-        {...updateContest.fields.startAt.as('datetime-local')}
-        bind:value={startAtValue}
-        hidden
-      />
-      <input {...updateContest.fields.endAt.as('datetime-local')} bind:value={endAtValue} hidden />
+      <input {...updateContest.fields.startAt.as('text')} bind:value={startAtValue} hidden />
+      <input {...updateContest.fields.endAt.as('text')} bind:value={endAtValue} hidden />
 
       <div class="space-y-2">
         <Label for="name">{m.admin_contests_form_name_label()}</Label>
@@ -192,7 +181,7 @@
               autocomplete="off"
               bind:value={startTime}
               required
-              class="[color-scheme:light] transition-all duration-200 focus:ring-2 focus:ring-primary dark:[color-scheme:dark]"
+              class="scheme-light transition-all duration-200 focus:ring-2 focus:ring-primary dark:scheme-dark"
             />
           </div>
 
@@ -247,7 +236,7 @@
                 autocomplete="off"
                 bind:value={endTime}
                 required
-                class="[color-scheme:light] transition-all duration-200 focus:ring-2 focus:ring-primary dark:[color-scheme:dark]"
+                class="scheme-light transition-all duration-200 focus:ring-2 focus:ring-primary dark:scheme-dark"
               />
             </div>
 

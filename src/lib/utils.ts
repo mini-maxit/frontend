@@ -28,25 +28,13 @@ export function formatDate(dateString: string | null): string {
   }).format(date);
 }
 
+// toRFC3339 helper removed — datetime values are now passed from the client with local timezone context
+
 /**
- * Converts a datetime-local input value to RFC3339 format for API requests
- * @param datetimeLocal - String in format "YYYY-MM-DDTHH:mm" from datetime-local input
- * @returns RFC3339 formatted string with timezone offset (e.g., "2025-10-18T16:30:00+01:00")
+ * Encodes a Date into an RFC3339 string using the client's local timezone offset.
+ * Example: "2025-10-18T16:30:00+01:00"
  */
-export function toRFC3339(datetimeLocal: string): string {
-  const date = new Date(datetimeLocal);
-
-  // Get timezone offset in minutes
-  // getTimezoneOffset() returns positive for west of UTC (behind UTC)
-  // RFC3339 uses positive for east of UTC (ahead of UTC), so we negate it
-  const tzOffsetMinutes = -date.getTimezoneOffset();
-
-  // Calculate timezone offset sign, hours, and minutes
-  const sign = tzOffsetMinutes >= 0 ? '+' : '-';
-  const absOffset = Math.abs(tzOffsetMinutes);
-  const hours = String(Math.floor(absOffset / 60)).padStart(2, '0');
-  const minutes = String(absOffset % 60).padStart(2, '0');
-
+export function toLocalRFC3339(date: Date): string {
   // Format the date components
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -55,8 +43,16 @@ export function toRFC3339(datetimeLocal: string): string {
   const minute = String(date.getMinutes()).padStart(2, '0');
   const second = String(date.getSeconds()).padStart(2, '0');
 
-  // Return RFC3339 formatted string with timezone offset
-  return `${year}-${month}-${day}T${hour}:${minute}:${second}${sign}${hours}:${minutes}`;
+  // Get timezone offset in minutes (positive behind UTC)
+  // RFC3339 uses positive for east of UTC (ahead), so negate
+  const tzOffsetMinutes = -date.getTimezoneOffset();
+
+  const sign = tzOffsetMinutes >= 0 ? '+' : '-';
+  const abs = Math.abs(tzOffsetMinutes);
+  const offHours = String(Math.floor(abs / 60)).padStart(2, '0');
+  const offMinutes = String(abs % 60).padStart(2, '0');
+
+  return `${year}-${month}-${day}T${hour}:${minute}:${second}${sign}${offHours}:${offMinutes}`;
 }
 
 /**
