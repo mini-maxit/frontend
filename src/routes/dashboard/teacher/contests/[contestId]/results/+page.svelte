@@ -341,7 +341,8 @@
                       <span class="font-semibold text-primary">{userStats.tasksSolved}</span>
                     </Table.Cell>
                     <Table.Cell class="hidden text-right xl:table-cell">
-                      <span class="font-semibold text-secondary">{userStats.tasksPartiallySolved}</span
+                      <span class="font-semibold text-secondary"
+                        >{userStats.tasksPartiallySolved}</span
                       >
                     </Table.Cell>
                   </Table.Row>

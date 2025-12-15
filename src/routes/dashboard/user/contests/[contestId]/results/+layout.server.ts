@@ -18,7 +18,6 @@ export const load = async ({
   }
 
   const parentData = await parent();
-  const user = parentData.user;
 
   // Fetch contest details
   const contestService = createContestService(cookies);
@@ -26,7 +25,6 @@ export const load = async ({
 
   return {
     contestId,
-    currentUserId: user.userId,
     contest
   };
 };

@@ -12,7 +12,6 @@
   interface Props {
     data: {
       contestId: number;
-      currentUserId: number;
       contest: import('$lib/dto/contest').ContestDetailed;
     };
   }

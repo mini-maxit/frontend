@@ -57,11 +57,17 @@
       <Dialog.Description>
         {m.admin_tasks_dialog_description()}
         {#if uploadLimit.loading}
-          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit_loading()})</span>
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit_loading()})</span
+          >
         {:else if uploadLimit.error}
-          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit_unavailable()})</span>
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit_unavailable()})</span
+          >
         {:else if uploadLimit.current}
-          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit({ limit: MAX_UPLOAD_MB })})</span>
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit({ limit: MAX_UPLOAD_MB })})</span
+          >
         {/if}
       </Dialog.Description>
     </Dialog.Header>
