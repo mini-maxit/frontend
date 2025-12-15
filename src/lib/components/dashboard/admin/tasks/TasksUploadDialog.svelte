@@ -21,12 +21,8 @@
   // Read upload limit from server via remote query (single source of truth)
   const uploadLimit = getUploadLimit();
 
-  function toMB(bytes: number): number {
-    return Math.round((bytes / (1024 * 1024)) * 100) / 100;
-  }
-
   let MAX_UPLOAD_BYTES = $derived(uploadLimit.current?.bytes ?? 512 * 1024);
-  let MAX_UPLOAD_MB = $derived(toMB(MAX_UPLOAD_BYTES));
+  let MAX_UPLOAD_MB = $derived(Number((MAX_UPLOAD_BYTES / (1024 * 1024)).toFixed(2)));
 
   function handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -52,10 +48,6 @@
       fileInput.value = '';
     }
   }
-
-  function showUploadTooLargeError() {
-    toast.error(m.admin_tasks_upload_too_large({ limit: MAX_UPLOAD_MB }));
-  }
 </script>
 
 <Dialog.Root bind:open>
@@ -78,29 +70,11 @@
       enctype="multipart/form-data"
       {...uploadTask.enhance(async ({ submit }) => {
         try {
-          // Client-side guard to prevent submitting too-large files
-          if (uploadLimit.current && selectedFile && selectedFile.size > MAX_UPLOAD_BYTES) {
-            throw new Error('UPLOAD_TOO_LARGE');
-          }
-
           await submit();
           await handleTaskUploadSuccess();
         } catch (error: HttpError | unknown) {
-          if (error instanceof Error && error.message === 'UPLOAD_TOO_LARGE') {
-            showUploadTooLargeError();
-          } else if (isHttpError(error)) {
-            const rawMessage = error?.body?.message || '';
-            const message = rawMessage.toLowerCase();
-            if (
-              error.status === 413 ||
-              message.includes('exceeds limit') ||
-              (error.status === 500 &&
-                (message.includes('exceeds limit') || message.includes('body_size_limit')))
-            ) {
-              showUploadTooLargeError();
-            } else {
-              toast.error(rawMessage || m.admin_tasks_upload_error());
-            }
+          if (isHttpError(error)) {
+            toast.error(error?.body?.message || m.admin_tasks_upload_error());
           } else {
             toast.error(m.admin_tasks_upload_error());
           }
