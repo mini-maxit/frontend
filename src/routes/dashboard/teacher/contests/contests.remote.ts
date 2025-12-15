@@ -41,7 +41,7 @@ export const createContest = form(
       const contestsManagementService = createContestsManagementService(cookies);
       const contest = await contestsManagementService.createContest({
         ...data,
-        endAt: data.endAt ?? null
+        endAt: data.endAt ? data.endAt : null
       });
 
       // Refresh the contests list
@@ -81,7 +81,7 @@ export const updateContest = form(
       const { id, ...contestData } = data;
       const contest = await contestsManagementService.updateContest(id, {
         ...contestData,
-        endAt: contestData.endAt ?? null
+        endAt: contestData.endAt ? contestData.endAt : null
       });
 
       // Refresh the contests list

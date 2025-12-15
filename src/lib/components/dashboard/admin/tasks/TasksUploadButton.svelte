@@ -11,10 +11,10 @@
 
 <button
   {onclick}
-  class="group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary to-secondary p-6 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+  class="group relative overflow-hidden rounded-2xl border border-border bg-linear-to-br from-primary to-secondary p-6 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
 >
   <div
-    class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    class="absolute inset-0 bg-linear-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
   ></div>
 
   <div class="relative flex flex-col items-center gap-4 text-center">

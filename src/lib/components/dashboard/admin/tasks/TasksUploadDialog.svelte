@@ -5,7 +5,7 @@
   import { Label } from '$lib/components/ui/label';
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
+  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
 
   interface TasksUploadDialogProps {
@@ -57,11 +57,17 @@
       <Dialog.Description>
         {m.admin_tasks_dialog_description()}
         {#if uploadLimit.loading}
-          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit_loading()})</span>
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit_loading()})</span
+          >
         {:else if uploadLimit.error}
-          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit_unavailable()})</span>
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit_unavailable()})</span
+          >
         {:else if uploadLimit.current}
-          <span class="ml-1 text-sm text-muted-foreground">({m.admin_tasks_upload_limit({ limit: MAX_UPLOAD_MB })})</span>
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit({ limit: MAX_UPLOAD_MB })})</span
+          >
         {/if}
       </Dialog.Description>
     </Dialog.Header>
@@ -72,7 +78,7 @@
         try {
           await submit();
           await handleTaskUploadSuccess();
-        } catch (error: HttpError | unknown) {
+        } catch (error) {
           if (isHttpError(error)) {
             toast.error(error?.body?.message || m.admin_tasks_upload_error());
           } else {

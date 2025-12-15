@@ -13,7 +13,6 @@ import type { Task, ContestTask } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse, PaginatedData } from '$lib/dto/response';
 import type { Submission, GetContestSubmissionsParams } from '$lib/dto/submission';
-import { toRFC3339 } from '$lib/utils';
 
 export class ContestsManagementService {
   private apiClient;
@@ -58,8 +57,8 @@ export class ContestsManagementService {
     try {
       const requestData = {
         ...data,
-        startAt: toRFC3339(data.startAt),
-        endAt: data.endAt ? toRFC3339(data.endAt) : null
+        startAt: data.startAt,
+        endAt: data.endAt ? data.endAt : null
       };
 
       const response = await this.apiClient.post<ApiResponse<{ id: number }>>({
@@ -80,8 +79,8 @@ export class ContestsManagementService {
     try {
       const requestData = {
         ...data,
-        startAt: toRFC3339(data.startAt),
-        endAt: data.endAt ? toRFC3339(data.endAt) : null
+        startAt: data.startAt,
+        endAt: data.endAt ? data.endAt : null
       };
 
       const response = await this.apiClient.put<ApiResponse<CreatedContest>>({
@@ -163,10 +162,9 @@ export class ContestsManagementService {
     try {
       const requestData = {
         taskId: data.taskId,
-        startAt: toRFC3339(data.startAt),
-        endAt: data.endAt ? toRFC3339(data.endAt) : null
+        startAt: data.startAt,
+        endAt: data.endAt ? data.endAt : null
       };
-
       const response = await this.apiClient.post<ApiResponse<ContestTaskRelation>>({
         url: `/contests-management/contests/${contestId}/tasks`,
         body: JSON.stringify(requestData)
