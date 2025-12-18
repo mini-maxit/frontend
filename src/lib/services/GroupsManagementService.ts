@@ -1,5 +1,5 @@
 import { ApiError, type ApiService } from './ApiService';
-import type { ApiResponse, PaginatedData } from '../dto/response';
+import type { ApiResponse } from '../dto/response';
 import type { Group } from '../dto/group';
 
 export class GroupsManagementService {
