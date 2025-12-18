@@ -12,10 +12,10 @@ export class GroupsManagementService {
     error?: string;
   }> {
     try {
-      const response = await this.apiClient.get<ApiResponse<PaginatedData<Group>>>({
+      const response = await this.apiClient.get<ApiResponse<Group[]>>({
         url: '/groups-management/groups'
       });
-      return { success: true, data: response.data.items, status: 200 };
+      return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {
