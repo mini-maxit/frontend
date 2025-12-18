@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { createContestService } from '$lib/services/ContestService';
 import { createApiClient } from '$lib/services/ApiService';
 import { AccessControlService } from '$lib/services/AccessControlService';
+import { ResourceType } from '$lib/dto/accessControl';
 import { UserRole } from '$lib/dto/jwt';
 import { ContestStatus } from '$lib/dto/contest';
 import * as m from '$lib/paraglide/messages';
@@ -43,7 +44,7 @@ export const load = async ({
     if (isTeacher) {
       const apiClient = createApiClient(cookies);
       const accessControlService = new AccessControlService(apiClient);
-      const result = await accessControlService.getContestCollaborators(contestId);
+      const result = await accessControlService.getCollaborators(ResourceType.Contests, contestId);
 
       if (!result.success) {
         throw error(403, m.contest_results_access_denied());

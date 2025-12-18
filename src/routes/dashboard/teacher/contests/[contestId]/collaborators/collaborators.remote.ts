@@ -12,7 +12,7 @@ export const getContestCollaborators = query(v.number(), async (contestId: numbe
   const apiClient = createApiClient(cookies);
   const accessControlService = new AccessControlService(apiClient);
 
-  const result = await accessControlService.getContestCollaborators(contestId);
+  const result = await accessControlService.getCollaborators(ResourceType.Contests, contestId);
 
   if (!result.success || !result.data) {
     error(result.status, { message: result.error || 'Failed to load collaborators' });
@@ -38,23 +38,6 @@ export const getAllUsers = query(async () => {
   return result.data;
 });
 
-export const getAssignableUsers = query(v.number(), async (contestId: number) => {
-  const { cookies } = getRequestEvent();
-
-  const apiClient = createApiClient(cookies);
-  const accessControlService = new AccessControlService(apiClient);
-
-  const result = await accessControlService.getAssignableUsers(ResourceType.Contests, contestId, {
-    limit: 1000
-  });
-
-  if (!result.success || !result.data) {
-    error(result.status, { message: result.error || 'Failed to load assignable users' });
-  }
-
-  return result.data;
-});
-
 export const addCollaborator = form(
   v.object({
     contestId: v.pipe(v.string(), v.transform(Number), v.integer(), v.minValue(1)),
@@ -67,7 +50,7 @@ export const addCollaborator = form(
     const apiClient = createApiClient(cookies);
     const accessControlService = new AccessControlService(apiClient);
 
-    const result = await accessControlService.addContestCollaborator(data.contestId, {
+    const result = await accessControlService.addCollaborator(ResourceType.Contests, data.contestId, {
       user_id: data.userId,
       permission: data.permission
     });
@@ -97,7 +80,8 @@ export const updateCollaborator = form(
     const apiClient = createApiClient(cookies);
     const accessControlService = new AccessControlService(apiClient);
 
-    const result = await accessControlService.updateContestCollaborator(
+    const result = await accessControlService.updateCollaborator(
+      ResourceType.Contests,
       data.contestId,
       data.userId,
       {
@@ -129,7 +113,8 @@ export const removeCollaborator = form(
     const apiClient = createApiClient(cookies);
     const accessControlService = new AccessControlService(apiClient);
 
-    const result = await accessControlService.deleteContestCollaborator(
+    const result = await accessControlService.deleteCollaborator(
+      ResourceType.Contests,
       data.contestId,
       data.userId
     );
