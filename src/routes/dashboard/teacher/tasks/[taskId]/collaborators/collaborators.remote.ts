@@ -1,7 +1,6 @@
 import { query, form, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
 import { AccessControlService } from '$lib/services/AccessControlService';
-import { UserService } from '$lib/services/UserService';
 import { Permission, ResourceType } from '$lib/dto/accessControl';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
@@ -21,18 +20,18 @@ export const getTaskCollaborators = query(v.number(), async (taskId: number) => 
   return result.data;
 });
 
-export const getAllUsers = query(async () => {
+export const getAssignableUsers = query(v.number(), async (taskId: number) => {
   const { cookies } = getRequestEvent();
 
   const apiClient = createApiClient(cookies);
-  const userService = new UserService(apiClient);
+  const accessControlService = new AccessControlService(apiClient);
 
-  // Fetch users with a high limit for client-side filtering.
-  // Client-side filtering is performed in the AddCollaboratorButton component.
-  const result = await userService.listUsers({ limit: 1000 });
+  const result = await accessControlService.getAssignableUsers(ResourceType.Tasks, taskId, {
+    limit: 1000
+  });
 
   if (!result.success || !result.data) {
-    error(result.status, { message: result.error || 'Failed to load users' });
+    error(result.status, { message: result.error || 'Failed to load assignable users' });
   }
 
   return result.data;
