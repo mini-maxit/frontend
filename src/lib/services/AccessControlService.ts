@@ -3,9 +3,9 @@ import type { ApiResponse, PaginatedData } from '../dto/response';
 import type {
   Collaborator,
   AddCollaboratorRequest,
-  UpdateCollaboratorRequest,
-  ResourceType
+  UpdateCollaboratorRequest
 } from '../dto/accessControl';
+import { ResourceType } from '../dto/accessControl';
 import type { User } from '../dto/user';
 
 export class AccessControlService {
@@ -190,7 +190,7 @@ export class AccessControlService {
     data?: Collaborator[];
     error?: string;
   }> {
-    return this.getCollaborators('tasks' as ResourceType, taskId);
+    return this.getCollaborators(ResourceType.Tasks, taskId);
   }
 
   /**
@@ -204,7 +204,7 @@ export class AccessControlService {
     status: number;
     error?: string;
   }> {
-    return this.addCollaborator('tasks' as ResourceType, taskId, data);
+    return this.addCollaborator(ResourceType.Tasks, taskId, data);
   }
 
   /**
@@ -219,7 +219,7 @@ export class AccessControlService {
     status: number;
     error?: string;
   }> {
-    return this.updateCollaborator('tasks' as ResourceType, taskId, userId, data);
+    return this.updateCollaborator(ResourceType.Tasks, taskId, userId, data);
   }
 
   /**
@@ -233,7 +233,7 @@ export class AccessControlService {
     status: number;
     error?: string;
   }> {
-    return this.deleteCollaborator('tasks' as ResourceType, taskId, userId);
+    return this.deleteCollaborator(ResourceType.Tasks, taskId, userId);
   }
 
   /**
@@ -245,7 +245,7 @@ export class AccessControlService {
     data?: Collaborator[];
     error?: string;
   }> {
-    return this.getCollaborators('contests' as ResourceType, contestId);
+    return this.getCollaborators(ResourceType.Contests, contestId);
   }
 
   /**
@@ -259,7 +259,7 @@ export class AccessControlService {
     status: number;
     error?: string;
   }> {
-    return this.addCollaborator('contests' as ResourceType, contestId, data);
+    return this.addCollaborator(ResourceType.Contests, contestId, data);
   }
 
   /**
@@ -274,7 +274,7 @@ export class AccessControlService {
     status: number;
     error?: string;
   }> {
-    return this.updateCollaborator('contests' as ResourceType, contestId, userId, data);
+    return this.updateCollaborator(ResourceType.Contests, contestId, userId, data);
   }
 
   /**
@@ -288,6 +288,6 @@ export class AccessControlService {
     status: number;
     error?: string;
   }> {
-    return this.deleteCollaborator('contests' as ResourceType, contestId, userId);
+    return this.deleteCollaborator(ResourceType.Contests, contestId, userId);
   }
 }
