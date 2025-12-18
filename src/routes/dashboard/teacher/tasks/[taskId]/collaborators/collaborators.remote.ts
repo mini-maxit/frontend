@@ -2,7 +2,7 @@ import { query, form, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
 import { AccessControlService } from '$lib/services/AccessControlService';
 import { UserService } from '$lib/services/UserService';
-import { Permission } from '$lib/dto/accessControl';
+import { Permission, ResourceType } from '$lib/dto/accessControl';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 
@@ -33,6 +33,23 @@ export const getAllUsers = query(async () => {
 
   if (!result.success || !result.data) {
     error(result.status, { message: result.error || 'Failed to load users' });
+  }
+
+  return result.data;
+});
+
+export const getAssignableUsers = query(v.number(), async (taskId: number) => {
+  const { cookies } = getRequestEvent();
+
+  const apiClient = createApiClient(cookies);
+  const accessControlService = new AccessControlService(apiClient);
+
+  const result = await accessControlService.getAssignableUsers(ResourceType.Tasks, taskId, {
+    limit: 1000
+  });
+
+  if (!result.success || !result.data) {
+    error(result.status, { message: result.error || 'Failed to load assignable users' });
   }
 
   return result.data;
