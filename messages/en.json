@@ -662,5 +662,11 @@
   "contest_results_no_results_description": "No participants have submitted solutions yet.",
   "contest_results_solved_partial": "{solved} solved · {partial} partial",
   "contest_results_score_submissions": "Score / Submissions",
-  "contest_results_error_generic": "Failed to load contest results"
+  "contest_results_error_generic": "Failed to load contest results",
+  "teacher_contest_results_title": "Contest Results (Teacher View)",
+  "teacher_contest_results_total_participants": "Total Participants",
+  "teacher_contest_results_total_submissions": "Total Submissions",
+  "teacher_contest_results_tasks_solved": "Tasks Solved",
+  "teacher_contest_results_avg_score": "Average Score",
+  "user_contest_results_no_results_description": "You haven't submitted any solutions yet."
 }

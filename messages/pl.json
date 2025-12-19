@@ -662,5 +662,11 @@
   "contest_results_no_results_description": "Żaden uczestnik nie przesłał jeszcze rozwiązań.",
   "contest_results_solved_partial": "{solved} rozwiązane · {partial} częściowo",
   "contest_results_score_submissions": "Wynik / Zgłoszenia",
-  "contest_results_error_generic": "Nie udało się załadować wyników konkursu"
+  "contest_results_error_generic": "Nie udało się załadować wyników konkursu",
+  "teacher_contest_results_title": "Wyniki Konkursu (Widok Nauczyciela)",
+  "teacher_contest_results_total_participants": "Liczba Uczestników",
+  "teacher_contest_results_total_submissions": "Liczba Zgłoszeń",
+  "teacher_contest_results_tasks_solved": "Rozwiązane Zadania",
+  "teacher_contest_results_avg_score": "Średni Wynik",
+  "user_contest_results_no_results_description": "Nie przesłałeś jeszcze żadnych rozwiązań."
 }

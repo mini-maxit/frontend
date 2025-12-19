@@ -1,50 +1,38 @@
 import { query, getRequestEvent } from '$app/server';
+import { createContestsManagementService } from '$lib/services/ContestsManagementService';
 import { createContestService } from '$lib/services/ContestService';
 import { ApiError } from '$lib/services/ApiService';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
-import type { ContestResults, ContestDetailed } from '$lib/dto/contest';
-import { ContestStatus } from '$lib/dto/contest';
+import type { UserContestStats, ContestDetailed } from '$lib/dto/contest';
 import * as m from '$lib/paraglide/messages';
 
-const contestSchema = v.object({
-  id: v.number(),
-  name: v.string(),
-  description: v.string(),
-  startAt: v.string(),
-  endAt: v.string(),
-  createdBy: v.number(),
-  creatorName: v.string(),
-  participantCount: v.number(),
-  taskCount: v.number(),
-  status: v.enum(ContestStatus),
-  isSubmissionOpen: v.boolean()
-});
-
 const contestResultsSchema = v.object({
-  contestId: v.number(),
-  contest: contestSchema
+  contestId: v.number()
 });
 
 export const getContestResults = query(
   contestResultsSchema,
   async (params: {
     contestId: number;
-    contest: ContestDetailed;
   }): Promise<{
     contest: ContestDetailed;
-    myResults: ContestResults;
+    userStats: UserContestStats[];
   }> => {
     const { cookies } = getRequestEvent();
 
     try {
+      const contestsManagementService = createContestsManagementService(cookies);
       const contestService = createContestService(cookies);
 
-      const myResults = await contestService.getMyResults(params.contestId);
+      const [userStats, contest] = await Promise.all([
+        contestsManagementService.getUserStats(params.contestId),
+        contestService.getContest(params.contestId)
+      ]);
 
       return {
-        contest: params.contest,
-        myResults
+        contest,
+        userStats
       };
     } catch (err) {
       console.error('Failed to load contest results:', err);
