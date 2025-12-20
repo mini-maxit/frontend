@@ -83,8 +83,7 @@
                     </span>
                   {/if}
                   <Button
-                    href="/dashboard/teacher/contests/{data.contestId}/tasks/{contestTask.task
-                      .id}/user-stats"
+                    href={`/dashboard/teacher/contests/${data.contestId}/tasks/${contestTask.task.id}/user-stats`}
                     variant="outline"
                     size="sm"
                     class="gap-2"

@@ -731,5 +731,6 @@
   "contest_user_stats_showing": "Pokazywanie {start} - {end} z {total}",
   "contest_user_stats_no_data_title": "Brak dostępnych statystyk",
   "contest_user_stats_no_data_description": "Żaden użytkownik nie wziął jeszcze udziału w tym konkursie.",
-  "admin_contest_view_all_user_stats": "Zobacz statystyki konkursu"
+  "admin_contest_view_all_user_stats": "Zobacz statystyki konkursu",
+  "admin_contests_card_view_user_stats": "Zobacz statystyki użytkowników"
 }

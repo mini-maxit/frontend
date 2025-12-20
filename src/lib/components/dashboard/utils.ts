@@ -25,6 +25,16 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     return m.header_task_details();
   }
 
+  // Check for teacher contest task user stats (e.g., /dashboard/teacher/contests/[contestId]/tasks/[taskId]/user-stats)
+  if (path.match(/^\/dashboard\/teacher\/contests\/\d+\/tasks\/\d+\/user-stats/)) {
+    return m.task_user_stats_title();
+  }
+
+  // Check for teacher contest user stats (e.g., /dashboard/teacher/contests/[contestId]/user-stats)
+  if (path.match(/^\/dashboard\/teacher\/contests\/\d+\/user-stats/)) {
+    return m.contest_user_stats_title();
+  }
+
   // Check for admin contest registration requests (e.g., /dashboard/admin/contests/[contestId]/registration-requests)
   if (path.match(/^\/dashboard\/admin\/contests\/\d+\/registration-requests/)) {
     return m.admin_registration_requests_title();

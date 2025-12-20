@@ -6,8 +6,8 @@ import { error } from '@sveltejs/kit';
 import type { TaskUserStats } from '$lib/dto/contest';
 
 const paramsSchema = v.object({
-  contestId: v.number(),
-  taskId: v.number()
+  contestId: v.pipe(v.number(), v.integer()),
+  taskId: v.pipe(v.number(), v.integer())
 });
 
 export const getTaskUserStats = query(
