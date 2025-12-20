@@ -25,6 +25,14 @@
     <h1 class="text-3xl font-bold text-foreground">
       {m.admin_contest_tasks_page_title({ contestId: data.contestId })}
     </h1>
+    <Button
+      href="/dashboard/teacher/contests/{data.contestId}/user-stats"
+      variant="default"
+      class="gap-2"
+    >
+      <ChartBar class="h-4 w-4" />
+      {m.admin_contest_view_all_user_stats()}
+    </Button>
   </div>
 
   <!-- Contest Tasks Section -->
