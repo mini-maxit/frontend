@@ -49,10 +49,14 @@ export const addCollaborator = form(
     const apiClient = createApiClient(cookies);
     const accessControlService = new AccessControlService(apiClient);
 
-    const result = await accessControlService.addCollaborator(ResourceType.Contests, data.contestId, {
-      user_id: data.userId,
-      permission: data.permission
-    });
+    const result = await accessControlService.addCollaborator(
+      ResourceType.Contests,
+      data.contestId,
+      {
+        user_id: data.userId,
+        permission: data.permission
+      }
+    );
 
     if (!result.success) {
       error(result.status, { message: result.error || 'Failed to add collaborator' });

@@ -179,5 +179,4 @@ export class AccessControlService {
       throw error;
     }
   }
-
 }

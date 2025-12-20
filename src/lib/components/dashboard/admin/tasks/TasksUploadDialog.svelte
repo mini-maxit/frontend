@@ -3,6 +3,7 @@
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
+  import { Checkbox } from '$lib/components/ui/checkbox';
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
   import { isHttpError } from '@sveltejs/kit';
@@ -121,6 +122,21 @@
             })}
           </p>
         {/if}
+      </div>
+
+      <div class="flex items-start space-x-2">
+        <Checkbox {...uploadTask.fields.isVisible.as('checkbox')} />
+        <div class="grid gap-1.5 leading-none">
+          <Label
+            for="isVisible"
+            class="cursor-pointer text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            {m.admin_tasks_form_visible_label()}
+          </Label>
+          <p class="text-sm text-muted-foreground">
+            {m.admin_tasks_form_visible_description()}
+          </p>
+        </div>
       </div>
 
       <Dialog.Footer>

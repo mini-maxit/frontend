@@ -7,7 +7,8 @@ import { getTasks } from './tasks.remote';
 
 const UploadTaskSchema = v.object({
   title: v.pipe(v.string('Title is required'), v.nonEmpty('Title cannot be empty')),
-  archive: v.instance(File, 'Task archive is required')
+  archive: v.instance(File, 'Task archive is required'),
+  isVisible: v.optional(v.boolean(), false)
 });
 
 type UploadTaskData = v.InferOutput<typeof UploadTaskSchema>;
@@ -19,7 +20,8 @@ export const uploadTask = form(UploadTaskSchema, async (data: UploadTaskData) =>
 
   const result = await tasksManagementService.uploadTask({
     title: data.title,
-    archive: data.archive
+    archive: data.archive,
+    isVisible: data.isVisible ?? false
   });
   if (!result.success) {
     error(result.status, { message: result.error || 'Failed to upload task.' });

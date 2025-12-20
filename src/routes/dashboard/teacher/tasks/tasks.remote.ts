@@ -1,4 +1,4 @@
-import { query, form, getRequestEvent } from '$app/server';
+import { query, form, command, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
 import { TasksManagementService } from '$lib/services/TasksManagementService';
 import { error } from '@sveltejs/kit';
@@ -16,6 +16,30 @@ export const getTasks = query(async () => {
 
   return result.data;
 });
+
+export const toggleTaskVisibility = command(
+  v.object({
+    taskId: v.pipe(v.number(), v.integer(), v.minValue(1)),
+    isVisible: v.boolean()
+  }),
+  async (data) => {
+    const { cookies } = getRequestEvent();
+
+    const apiClient = createApiClient(cookies);
+    const tasksManagementService = new TasksManagementService(apiClient);
+
+    const result = await tasksManagementService.toggleTaskVisibility(data.taskId, data.isVisible);
+
+    if (!result.success) {
+      error(result.status, { message: result.error || 'Failed to toggle task visibility' });
+    }
+
+    // Refresh tasks list
+    await getTasks().refresh();
+
+    return { success: true };
+  }
+);
 
 export const deleteTask = form(
   v.object({

@@ -12,6 +12,7 @@
   import { localizeHref } from '$lib/paraglide/runtime';
   import { AppRoutes } from '$lib/routes';
   import ManageTestCasesLimitsDialog from '$lib/components/dashboard/admin/tasks/ManageTestCasesLimitsDialog.svelte';
+  import TaskVisibilityToggle from '$lib/components/dashboard/admin/tasks/TaskVisibilityToggle.svelte';
   import RemoveTaskButton from '$lib/components/dashboard/admin/tasks/RemoveTaskButton.svelte';
   import type { DeleteTaskForm } from '$routes/dashboard/teacher/tasks/tasks.remote';
 
@@ -72,6 +73,16 @@
           >{m.admin_tasks_card_user_prefix()}{task.createdBy}</span
         >
       </div>
+    </div>
+
+    <!-- Visibility Toggle -->
+    <div class="rounded-lg border border-border bg-muted/30 p-3">
+      <TaskVisibilityToggle
+        taskId={task.id}
+        taskTitle={task.title}
+        initialVisibility={task.isVisible}
+        onToggled={() => {}}
+      />
     </div>
 
     <!-- Action Buttons -->
