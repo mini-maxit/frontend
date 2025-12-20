@@ -11,10 +11,8 @@
   import * as m from '$lib/paraglide/messages';
   import { Permission } from '$lib/dto/accessControl';
   import type { User } from '$lib/dto/user';
-  import type { Collaborator } from '$lib/dto/accessControl';
   import type { AddCollaboratorForm } from '$routes/dashboard/teacher/tasks/[taskId]/collaborators/collaborators.remote';
   import { LoadingSpinner } from '$lib/components/common';
-  import { UserRole } from '$lib/dto/jwt';
   import type { PaginatedData } from '$lib/dto/response';
 
   interface Props {
@@ -23,25 +21,17 @@
     users: PaginatedData<User> | undefined;
     usersLoading: boolean;
     usersError: Error | null;
-    existingCollaborators: Collaborator[] | undefined;
   }
 
-  let { taskId, addCollaborator, users, usersLoading, usersError, existingCollaborators }: Props =
-    $props();
+  let { taskId, addCollaborator, users, usersLoading, usersError }: Props = $props();
 
   let dialogOpen = $state(false);
   let searchQuery = $state('');
   let selectedUserId = $state<number | null>(null);
   let selectedPermission = $state<Permission | null>(null);
 
-  // Filter out users who are already collaborators and users with student role
-  let availableUsers = $derived.by(() => {
-    if (!users) return [];
-    const collaboratorIds = new Set(existingCollaborators?.map((c) => c.userId) ?? []);
-    return users.items.filter(
-      (user) => !collaboratorIds.has(user.id) && user.role !== UserRole.Student
-    );
-  });
+  // Backend returns only assignable users (teachers who aren't already collaborators)
+  let availableUsers = $derived(users?.items ?? []);
 
   // Filter users by search query
   let filteredUsers = $derived.by(() => {

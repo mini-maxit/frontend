@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
     getTaskCollaborators,
-    getAllUsers,
+    getAssignableUsers,
     addCollaborator,
     updateCollaborator,
     removeCollaborator
@@ -36,7 +36,7 @@
   let { data }: Props = $props();
 
   const collaboratorsQuery = getTaskCollaborators(data.taskId);
-  const usersQuery = getAllUsers();
+  const assignableUsersQuery = getAssignableUsers(data.taskId);
 
   // Get current user's permission level
   const currentUserPermission = $derived.by(() => {
@@ -68,10 +68,9 @@
       <AddCollaboratorButton
         taskId={data.taskId}
         {addCollaborator}
-        users={usersQuery.current}
-        usersLoading={usersQuery.loading}
-        usersError={usersQuery.error}
-        existingCollaborators={collaboratorsQuery.current}
+        users={assignableUsersQuery.current}
+        usersLoading={assignableUsersQuery.loading}
+        usersError={assignableUsersQuery.error}
       />
     </div>
   </div>

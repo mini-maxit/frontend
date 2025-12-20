@@ -1,8 +1,7 @@
 import { query, form, getRequestEvent } from '$app/server';
 import { createApiClient } from '$lib/services/ApiService';
 import { AccessControlService } from '$lib/services/AccessControlService';
-import { UserService } from '$lib/services/UserService';
-import { Permission } from '$lib/dto/accessControl';
+import { Permission, ResourceType } from '$lib/dto/accessControl';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
 
@@ -12,7 +11,7 @@ export const getTaskCollaborators = query(v.number(), async (taskId: number) => 
   const apiClient = createApiClient(cookies);
   const accessControlService = new AccessControlService(apiClient);
 
-  const result = await accessControlService.getTaskCollaborators(taskId);
+  const result = await accessControlService.getCollaborators(ResourceType.Tasks, taskId);
 
   if (!result.success || !result.data) {
     error(result.status, { message: result.error || 'Failed to load collaborators' });
@@ -21,18 +20,18 @@ export const getTaskCollaborators = query(v.number(), async (taskId: number) => 
   return result.data;
 });
 
-export const getAllUsers = query(async () => {
+export const getAssignableUsers = query(v.number(), async (taskId: number) => {
   const { cookies } = getRequestEvent();
 
   const apiClient = createApiClient(cookies);
-  const userService = new UserService(apiClient);
+  const accessControlService = new AccessControlService(apiClient);
 
-  // Fetch users with a high limit for client-side filtering.
-  // Client-side filtering is performed in the AddCollaboratorButton component.
-  const result = await userService.listUsers({ limit: 1000 });
+  const result = await accessControlService.getAssignableUsers(ResourceType.Tasks, taskId, {
+    limit: 1000
+  });
 
   if (!result.success || !result.data) {
-    error(result.status, { message: result.error || 'Failed to load users' });
+    error(result.status, { message: result.error || 'Failed to load assignable users' });
   }
 
   return result.data;
@@ -50,7 +49,7 @@ export const addCollaborator = form(
     const apiClient = createApiClient(cookies);
     const accessControlService = new AccessControlService(apiClient);
 
-    const result = await accessControlService.addTaskCollaborator(data.taskId, {
+    const result = await accessControlService.addCollaborator(ResourceType.Tasks, data.taskId, {
       user_id: data.userId,
       permission: data.permission
     });
@@ -80,9 +79,14 @@ export const updateCollaborator = form(
     const apiClient = createApiClient(cookies);
     const accessControlService = new AccessControlService(apiClient);
 
-    const result = await accessControlService.updateTaskCollaborator(data.taskId, data.userId, {
-      permission: data.permission
-    });
+    const result = await accessControlService.updateCollaborator(
+      ResourceType.Tasks,
+      data.taskId,
+      data.userId,
+      {
+        permission: data.permission
+      }
+    );
 
     if (!result.success) {
       error(result.status, { message: result.error || 'Failed to update collaborator' });
@@ -108,7 +112,11 @@ export const removeCollaborator = form(
     const apiClient = createApiClient(cookies);
     const accessControlService = new AccessControlService(apiClient);
 
-    const result = await accessControlService.deleteTaskCollaborator(data.taskId, data.userId);
+    const result = await accessControlService.deleteCollaborator(
+      ResourceType.Tasks,
+      data.taskId,
+      data.userId
+    );
 
     if (!result.success) {
       error(result.status, { message: result.error || 'Failed to remove collaborator' });

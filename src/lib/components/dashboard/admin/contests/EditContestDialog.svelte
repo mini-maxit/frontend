@@ -252,7 +252,6 @@
 
         <div class="flex items-center gap-3">
           <Checkbox
-            id="isRegistrationOpen"
             {...updateContest.fields.isRegistrationOpen.as('checkbox')}
             checked={contest.isRegistrationOpen}
           />
@@ -263,7 +262,6 @@
 
         <div class="flex items-center gap-3">
           <Checkbox
-            id="isSubmissionOpen"
             {...updateContest.fields.isSubmissionOpen.as('checkbox')}
             checked={contest.isSubmissionOpen}
           />
@@ -274,7 +272,6 @@
 
         <div class="flex items-center gap-3">
           <Checkbox
-            id="isVisible"
             {...updateContest.fields.isVisible.as('checkbox')}
             checked={contest.isVisible}
           />

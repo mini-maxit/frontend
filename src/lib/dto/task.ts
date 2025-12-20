@@ -4,6 +4,7 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   createdBy: number;
+  isVisible: boolean;
 }
 
 export interface TaskDetail {
@@ -37,6 +38,7 @@ export interface UploadTaskResponse {
 export interface UploadTaskDto {
   title: string;
   archive: File;
+  isVisible: boolean;
 }
 
 export interface UserContestTask {
