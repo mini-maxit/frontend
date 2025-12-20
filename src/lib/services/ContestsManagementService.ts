@@ -7,7 +7,8 @@ import type {
   AddContestTaskDto,
   ContestTask as ContestTaskRelation,
   ManagedContest,
-  UserContestStats
+  UserContestStats,
+  TaskUserStats
 } from '$lib/dto/contest';
 import type { Task, ContestTask } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
@@ -255,6 +256,23 @@ export class ContestsManagementService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get contest user stats:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getTaskUserStats(contestId: number, taskId: number): Promise<TaskUserStats[]> {
+    try {
+      const url = `/contests-management/contests/${contestId}/tasks/${taskId}/user-stats`;
+
+      const response = await this.apiClient.get<ApiResponse<TaskUserStats[]>>({
+        url
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get task user stats:', error.toJSON());
         throw error;
       }
       throw error;
