@@ -74,8 +74,6 @@ export const updateContest = form(
     isVisible: v.optional(v.boolean(), false)
   }),
   async (data) => {
-    console.log('Updating contest with data:', data);
-
     const { cookies } = getRequestEvent();
 
     try {
