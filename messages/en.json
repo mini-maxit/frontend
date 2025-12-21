@@ -714,7 +714,6 @@
   "contest_user_stats_average_score": "Average Score",
   "contest_user_stats_total_solved": "Total Tasks Solved",
   "contest_user_stats_total_attempted": "Total Tasks Attempted",
-  "contest_user_stats_top_performers": "Top 3 Performers",
   "contest_user_stats_all_users": "All User Statistics",
   "contest_user_stats_participants": "{count} participants",
   "contest_user_stats_rank": "Rank",
@@ -724,7 +723,6 @@
   "contest_user_stats_solved": "Solved",
   "contest_user_stats_partial": "Partial",
   "contest_user_stats_attempted": "Attempted",
-  "contest_user_stats_tasks_info": "{solved} solved · {partial} partial",
   "contest_user_stats_previous": "Previous",
   "contest_user_stats_next": "Next",
   "contest_user_stats_page_info": "Page {current} of {total}",
@@ -732,5 +730,16 @@
   "contest_user_stats_no_data_title": "No statistics available",
   "contest_user_stats_no_data_description": "No users have participated in this contest yet.",
   "admin_contest_view_all_user_stats": "View Contest Stats",
-  "admin_contests_card_view_user_stats": "View User Stats"
+  "admin_contests_card_view_user_stats": "View User Stats",
+  "contest_user_stats_task_breakdown": "Task Breakdown",
+  "contest_user_stats_task_title": "Task",
+  "contest_user_stats_task_score": "Score",
+  "contest_user_stats_task_attempts": "Attempts",
+  "contest_user_stats_task_status": "Status",
+  "contest_user_stats_task_solved": "Solved",
+  "contest_user_stats_task_partial": "Partial",
+  "contest_user_stats_task_failed": "Failed",
+  "contest_user_stats_task_not_attempted": "Not Attempted",
+  "contest_user_stats_expand_details": "Click to expand task breakdown",
+  "contest_user_stats_collapse_details": "Click to collapse task breakdown"
 }

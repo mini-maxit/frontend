@@ -714,7 +714,6 @@
   "contest_user_stats_average_score": "Średni wynik",
   "contest_user_stats_total_solved": "Łącznie rozwiązanych zadań",
   "contest_user_stats_total_attempted": "Łącznie podjętych prób",
-  "contest_user_stats_top_performers": "Najlepsi 3",
   "contest_user_stats_all_users": "Wszystkie statystyki użytkowników",
   "contest_user_stats_participants": "{count} uczestników",
   "contest_user_stats_rank": "Miejsce",
@@ -724,7 +723,6 @@
   "contest_user_stats_solved": "Rozwiązane",
   "contest_user_stats_partial": "Częściowe",
   "contest_user_stats_attempted": "Podjęte",
-  "contest_user_stats_tasks_info": "{solved} rozwiązane · {partial} częściowe",
   "contest_user_stats_previous": "Poprzednia",
   "contest_user_stats_next": "Następna",
   "contest_user_stats_page_info": "Strona {current} z {total}",
@@ -732,5 +730,16 @@
   "contest_user_stats_no_data_title": "Brak dostępnych statystyk",
   "contest_user_stats_no_data_description": "Żaden użytkownik nie wziął jeszcze udziału w tym konkursie.",
   "admin_contest_view_all_user_stats": "Zobacz statystyki konkursu",
-  "admin_contests_card_view_user_stats": "Zobacz statystyki użytkowników"
+  "admin_contests_card_view_user_stats": "Zobacz statystyki użytkowników",
+  "contest_user_stats_task_breakdown": "Rozbicie na zadania",
+  "contest_user_stats_task_title": "Zadanie",
+  "contest_user_stats_task_score": "Wynik",
+  "contest_user_stats_task_attempts": "Próby",
+  "contest_user_stats_task_status": "Status",
+  "contest_user_stats_task_solved": "Rozwiązane",
+  "contest_user_stats_task_partial": "Częściowe",
+  "contest_user_stats_task_failed": "Nieudane",
+  "contest_user_stats_task_not_attempted": "Nie próbowano",
+  "contest_user_stats_expand_details": "Kliknij, aby rozwinąć rozbicie na zadania",
+  "contest_user_stats_collapse_details": "Kliknij, aby zwinąć rozbicie na zadania"
 }

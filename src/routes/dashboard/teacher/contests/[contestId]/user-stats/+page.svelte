@@ -8,6 +8,8 @@
   import Target from '@lucide/svelte/icons/target';
   import Users from '@lucide/svelte/icons/users';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
+  import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import * as m from '$lib/paraglide/messages';
 
   interface Props {
@@ -48,6 +50,47 @@
   // Pagination state
   let currentPage = $state(1);
   let pageSize = $state(10);
+
+  // Expanded rows state (tracks which user rows are expanded)
+  let expandedRows = $state(new Set<number>());
+
+  function toggleRowExpansion(userId: number) {
+    if (expandedRows.has(userId)) {
+      expandedRows.delete(userId);
+    } else {
+      expandedRows.add(userId);
+    }
+    expandedRows = new Set(expandedRows);
+  }
+
+  function getTaskStatusBadge(task: {
+    isSolved: boolean;
+    bestScore: number;
+    attemptCount: number;
+  }) {
+    if (task.isSolved) {
+      return {
+        text: m.contest_user_stats_task_solved(),
+        class: 'bg-primary/10 text-primary border-primary/20'
+      };
+    } else if (task.bestScore > 0) {
+      return {
+        text: m.contest_user_stats_task_partial(),
+        class: 'bg-secondary/10 text-secondary border-secondary/20'
+      };
+    } else if (task.attemptCount > 0) {
+      return {
+        text: m.contest_user_stats_task_failed(),
+        class:
+          'bg-muted text-muted-foreground border-borderbg-muted text-muted-foreground border-border'
+      };
+    } else {
+      return {
+        text: m.contest_user_stats_task_not_attempted(),
+        class: 'bg-muted text-muted-foreground border-border'
+      };
+    }
+  }
 
   let paginatedStats = $derived.by(() => {
     const start = (currentPage - 1) * pageSize;
@@ -143,108 +186,6 @@
       </Card.Root>
     </div>
 
-    <!-- Top 3 Podium -->
-    {#if sortedStats.length >= 3}
-      <Card.Root class="bg-gradient-to-br from-primary/5 to-secondary/5">
-        <Card.Header>
-          <Card.Title class="flex items-center gap-2">
-            <Trophy class="h-5 w-5 text-primary" />
-            {m.contest_user_stats_top_performers()}
-          </Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <div class="grid gap-4 md:grid-cols-3">
-            <!-- 2nd Place -->
-            {#if sortedStats[1]}
-              <div
-                class="order-2 flex flex-col items-center rounded-lg border-2 border-secondary/30 bg-card/50 p-4 md:order-1"
-              >
-                <div
-                  class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-secondary/80 to-secondary shadow-lg"
-                >
-                  <Medal class="h-8 w-8 text-secondary-foreground" />
-                </div>
-                <div class="text-center">
-                  <p class="text-lg font-semibold">
-                    {sortedStats[1].user.name}
-                    {sortedStats[1].user.surname}
-                  </p>
-                  <p class="text-sm text-muted-foreground">@{sortedStats[1].user.username}</p>
-                  <p class="mt-2 text-2xl font-bold text-foreground">
-                    {sortedStats[1].totalScore.toFixed(1)}%
-                  </p>
-                  <p class="text-xs text-muted-foreground">
-                    {m.contest_user_stats_tasks_info({
-                      solved: sortedStats[1].tasksSolved,
-                      partial: sortedStats[1].tasksPartiallySolved
-                    })}
-                  </p>
-                </div>
-              </div>
-            {/if}
-
-            <!-- 1st Place -->
-            {#if sortedStats[0]}
-              <div
-                class="order-1 flex flex-col items-center rounded-lg border-2 border-primary/50 bg-card/50 p-6 md:order-2 md:-translate-y-4"
-              >
-                <div
-                  class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary/90 to-primary shadow-xl ring-4 ring-primary/20"
-                >
-                  <Trophy class="h-10 w-10 text-primary-foreground" />
-                </div>
-                <div class="text-center">
-                  <p class="text-xl font-bold">
-                    {sortedStats[0].user.name}
-                    {sortedStats[0].user.surname}
-                  </p>
-                  <p class="text-sm text-muted-foreground">@{sortedStats[0].user.username}</p>
-                  <p class="mt-3 text-3xl font-bold text-foreground">
-                    {sortedStats[0].totalScore.toFixed(1)}%
-                  </p>
-                  <p class="text-xs text-muted-foreground">
-                    {m.contest_user_stats_tasks_info({
-                      solved: sortedStats[0].tasksSolved,
-                      partial: sortedStats[0].tasksPartiallySolved
-                    })}
-                  </p>
-                </div>
-              </div>
-            {/if}
-
-            <!-- 3rd Place -->
-            {#if sortedStats[2]}
-              <div
-                class="order-3 flex flex-col items-center rounded-lg border-2 border-accent/30 bg-card/50 p-4"
-              >
-                <div
-                  class="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-accent/80 to-accent shadow-lg"
-                >
-                  <Medal class="h-8 w-8 text-accent-foreground" />
-                </div>
-                <div class="text-center">
-                  <p class="text-lg font-semibold">
-                    {sortedStats[2].user.name}
-                    {sortedStats[2].user.surname}
-                  </p>
-                  <p class="text-sm text-muted-foreground">@{sortedStats[2].user.username}</p>
-                  <p class="mt-2 text-2xl font-bold text-foreground">
-                    {sortedStats[2].totalScore.toFixed(1)}%
-                  </p>
-                  <p class="text-xs text-muted-foreground">
-                    {m.contest_user_stats_tasks_info({
-                      solved: sortedStats[2].tasksSolved,
-                      partial: sortedStats[2].tasksPartiallySolved
-                    })}
-                  </p>
-                </div>
-              </div>
-            {/if}
-          </div>
-        </Card.Content>
-      </Card.Root>
-    {/if}
-
     <!-- User Statistics Table -->
     {#if sortedStats.length > 0}
       <Card.Root>
@@ -264,6 +205,7 @@
             <Table.Root>
               <Table.Header>
                 <Table.Row>
+                  <Table.Head class="w-12"></Table.Head>
                   <Table.Head class="w-16">{m.contest_user_stats_rank()}</Table.Head>
                   <Table.Head>{m.contest_user_stats_name()}</Table.Head>
                   <Table.Head class="hidden md:table-cell"
@@ -283,7 +225,30 @@
                 {#each paginatedStats as userStat, index (userStat.user.id)}
                   {@const rank = (currentPage - 1) * pageSize + index + 1}
                   {@const RankIcon = getRankIcon(rank)}
-                  <Table.Row>
+                  {@const isExpanded = expandedRows.has(userStat.user.id)}
+                  <!-- Main row -->
+                  <Table.Row
+                    class="cursor-pointer transition-colors hover:bg-muted/50"
+                    onclick={() => toggleRowExpansion(userStat.user.id)}
+                    title={isExpanded
+                      ? m.contest_user_stats_collapse_details()
+                      : m.contest_user_stats_expand_details()}
+                  >
+                    <Table.Cell>
+                      <button
+                        class="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
+                        onclick={(e) => {
+                          e.stopPropagation();
+                          toggleRowExpansion(userStat.user.id);
+                        }}
+                      >
+                        {#if isExpanded}
+                          <ChevronUp class="h-4 w-4 text-muted-foreground" />
+                        {:else}
+                          <ChevronDown class="h-4 w-4 text-muted-foreground" />
+                        {/if}
+                      </button>
+                    </Table.Cell>
                     <Table.Cell>
                       <div class="flex items-center gap-2">
                         {#if RankIcon}
@@ -319,6 +284,67 @@
                       <span class="font-semibold">{userStat.tasksAttempted}</span>
                     </Table.Cell>
                   </Table.Row>
+                  <!-- Expanded task breakdown row -->
+                  {#if isExpanded}
+                    <Table.Row class="bg-card">
+                      <Table.Cell colspan={8} class="p-0">
+                        <div class="p-4 transition-colors">
+                          <h4 class="mb-3 text-sm font-semibold text-foreground">
+                            {m.contest_user_stats_task_breakdown()}
+                          </h4>
+                          <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                              <thead>
+                                <tr class="border-b border-border">
+                                  <th class="pb-2 text-left font-medium text-muted-foreground">
+                                    {m.contest_user_stats_task_title()}
+                                  </th>
+                                  <th class="pb-2 text-right font-medium text-muted-foreground">
+                                    {m.contest_user_stats_task_score()}
+                                  </th>
+                                  <th class="pb-2 text-right font-medium text-muted-foreground">
+                                    {m.contest_user_stats_task_attempts()}
+                                  </th>
+                                  <th class="pb-2 text-center font-medium text-muted-foreground">
+                                    {m.contest_user_stats_task_status()}
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody class="divide-y divide-border">
+                                {#each userStat.taskBreakdown as task (task.taskId)}
+                                  {@const statusBadge = getTaskStatusBadge(task)}
+                                  <tr class="bg-card">
+                                    <td class="py-2 font-medium text-foreground">
+                                      {task.taskTitle}
+                                    </td>
+                                    <td class="py-2 text-right">
+                                      <span
+                                        class="font-semibold"
+                                        class:text-primary={task.isSolved}
+                                        class:text-secondary={!task.isSolved && task.bestScore > 0}
+                                      >
+                                        {task.bestScore.toFixed(1)}%
+                                      </span>
+                                    </td>
+                                    <td class="py-2 text-right text-muted-foreground">
+                                      {task.attemptCount}
+                                    </td>
+                                    <td class="py-2 text-center">
+                                      <span
+                                        class={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold ${statusBadge.class}`}
+                                      >
+                                        {statusBadge.text}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                {/each}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </Table.Cell>
+                    </Table.Row>
+                  {/if}
                 {/each}
               </Table.Body>
             </Table.Root>
