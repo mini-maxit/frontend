@@ -24,12 +24,16 @@
     contestId: data.contestId
   });
 
-  // Sort users by total score (sum of best scores across all tasks)
+  // Sort users by total score (average of best scores across all tasks)
   let sortedStats = $derived.by(() => {
     if (!statsQuery.current) return [];
     return [...statsQuery.current]
       .map((userStat) => {
-        const totalScore = userStat.taskBreakdown.reduce((sum, task) => sum + task.bestScore, 0);
+        const totalScore =
+          userStat.taskBreakdown.length > 0
+            ? userStat.taskBreakdown.reduce((sum, task) => sum + task.bestScore, 0) /
+              userStat.taskBreakdown.length
+            : 0;
         return { ...userStat, totalScore };
       })
       .sort((a, b) => b.totalScore - a.totalScore);
