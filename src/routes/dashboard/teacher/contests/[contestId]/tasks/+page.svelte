@@ -2,6 +2,7 @@
   import { getContestTasks, removeTaskFromContest } from './tasks.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import { RemoveTaskFromContestButton } from '$lib/components/dashboard/admin/contests';
+  import { Button } from '$lib/components/ui/button';
   import * as m from '$lib/paraglide/messages';
   import ClipboardList from '@lucide/svelte/icons/clipboard-list';
   import User from '@lucide/svelte/icons/user';
@@ -9,6 +10,7 @@
   import Clock from '@lucide/svelte/icons/clock';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
+  import ChartBar from '@lucide/svelte/icons/chart-bar';
   import { formatDate } from '$lib/utils';
 
   interface Props {
@@ -23,6 +25,14 @@
     <h1 class="text-3xl font-bold text-foreground">
       {m.admin_contest_tasks_page_title({ contestId: data.contestId })}
     </h1>
+    <Button
+      href="/dashboard/teacher/contests/{data.contestId}/user-stats"
+      variant="default"
+      class="gap-2"
+    >
+      <ChartBar class="h-4 w-4" />
+      {m.admin_contest_view_all_user_stats()}
+    </Button>
   </div>
 
   <!-- Contest Tasks Section -->
@@ -72,6 +82,15 @@
                       {m.admin_contest_tasks_submission_open_no()}
                     </span>
                   {/if}
+                  <Button
+                    href={`/dashboard/teacher/contests/${data.contestId}/tasks/${contestTask.task.id}/user-stats`}
+                    variant="outline"
+                    size="sm"
+                    class="gap-2"
+                  >
+                    <ChartBar class="h-4 w-4" />
+                    {m.admin_contest_tasks_view_user_stats()}
+                  </Button>
                   <RemoveTaskFromContestButton
                     contestId={data.contestId}
                     taskId={contestTask.task.id}

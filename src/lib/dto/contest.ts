@@ -214,6 +214,13 @@ export interface UserContestStats {
   taskBreakdown: UserTaskPerformance[];
 }
 
+export interface TaskUserStats {
+  user: UserInfo;
+  bestScore: number;
+  submissionCount: number;
+  bestSubmissionId: number;
+}
+
 export interface ContestDetailed {
   id: number;
   name: string;
