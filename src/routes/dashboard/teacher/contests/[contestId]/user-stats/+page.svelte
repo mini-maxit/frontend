@@ -81,8 +81,7 @@
     } else if (task.attemptCount > 0) {
       return {
         text: m.contest_user_stats_task_failed(),
-        class:
-          'bg-muted text-muted-foreground border-border'
+        class: 'bg-muted text-muted-foreground border-border'
       };
     } else {
       return {

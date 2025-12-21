@@ -6,7 +6,7 @@ import { error } from '@sveltejs/kit';
 import type { UserContestStats } from '$lib/dto/contest';
 
 const paramsSchema = v.object({
-  contestId: v.number()
+  contestId: v.pipe(v.number(), v.integer())
 });
 
 export const getContestUserStats = query(
