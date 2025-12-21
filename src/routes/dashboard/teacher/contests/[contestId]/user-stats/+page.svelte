@@ -82,7 +82,7 @@
       return {
         text: m.contest_user_stats_task_failed(),
         class:
-          'bg-muted text-muted-foreground border-borderbg-muted text-muted-foreground border-border'
+          'bg-muted text-muted-foreground border-border'
       };
     } else {
       return {
