@@ -22,7 +22,7 @@
 
   let dialogOpen = $state(false);
   let searchQuery = $state('');
-  let selectedUserIds = new SvelteSet<number>();
+  let selectedUserIds = $state(new SvelteSet<number>());
 
   const usersQuery = getAllUsers();
   const membersQuery = getGroupMembers(groupId);

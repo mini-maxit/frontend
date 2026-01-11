@@ -20,7 +20,7 @@
 
   let dialogOpen = $state(false);
   let searchQuery = $state('');
-  let selectedGroupIds = new SvelteSet<number>();
+  let selectedGroupIds = $state(new SvelteSet<number>());
 
   let filteredGroups = $derived.by(() => {
     if (!searchQuery.trim()) return assignableGroups;

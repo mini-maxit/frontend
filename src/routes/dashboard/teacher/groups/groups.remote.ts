@@ -4,6 +4,7 @@ import { ApiError } from '$lib/services/ApiService';
 import type { Group } from '$lib/dto/group';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
+import * as m from '$lib/paraglide/messages';
 
 export const getAllGroups = query(async (): Promise<Group[]> => {
   const { cookies } = getRequestEvent();
@@ -28,9 +29,9 @@ export const createGroup = form(
   v.object({
     name: v.pipe(
       v.string(),
-      v.nonEmpty('Group name is required'),
-      v.minLength(3, 'Group name must be at least 3 characters'),
-      v.maxLength(50, 'Group name must be at most 50 characters')
+      v.nonEmpty(m.groups_form_name_required()),
+      v.minLength(3, m.groups_form_name_min_length()),
+      v.maxLength(50, m.groups_form_name_max_length())
     )
   }),
   async (data) => {

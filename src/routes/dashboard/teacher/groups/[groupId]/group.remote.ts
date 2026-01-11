@@ -7,6 +7,7 @@ import type { User } from '$lib/dto/user';
 import type { PaginatedData } from '$lib/dto/response';
 import { error } from '@sveltejs/kit';
 import * as v from 'valibot';
+import * as m from '$lib/paraglide/messages';
 
 export const getGroup = query(v.number(), async (groupId: number): Promise<Group> => {
   const { cookies } = getRequestEvent();
@@ -71,9 +72,9 @@ export const updateGroup = form(
     id: v.pipe(v.number(), v.integer()),
     name: v.pipe(
       v.string(),
-      v.nonEmpty('Group name is required'),
-      v.minLength(3, 'Group name must be at least 3 characters'),
-      v.maxLength(50, 'Group name must be at most 50 characters')
+      v.nonEmpty(m.groups_form_name_required()),
+      v.minLength(3, m.groups_form_name_min_length()),
+      v.maxLength(50, m.groups_form_name_max_length())
     )
   }),
   async (data) => {
