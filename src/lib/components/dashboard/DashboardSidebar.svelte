@@ -74,6 +74,11 @@
       icon: Trophy
     },
     {
+      title: () => m.sidebar_groups(),
+      href: localizeHref(AppRoutes.TeacherGroups),
+      icon: Users
+    },
+    {
       title: () => m.sidebar_admin_tasks(),
       href: localizeHref(AppRoutes.TeacherTasks),
       icon: ListTodo

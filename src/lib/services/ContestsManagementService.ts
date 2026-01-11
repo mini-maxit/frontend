@@ -11,6 +11,7 @@ import type {
   TaskUserStats
 } from '$lib/dto/contest';
 import type { Task, ContestTask } from '$lib/dto/task';
+import type { Group } from '$lib/dto/group';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse, PaginatedData } from '$lib/dto/response';
 import type { Submission, GetContestSubmissionsParams } from '$lib/dto/submission';
@@ -273,6 +274,66 @@ export class ContestsManagementService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get task user stats:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestGroups(contestId: number): Promise<Group[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<Group[]>>({
+        url: `/contests-management/contests/${contestId}/groups`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest groups:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getAssignableGroups(contestId: number): Promise<Group[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<Group[]>>({
+        url: `/contests-management/contests/${contestId}/groups/assignable`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get assignable groups:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async addGroupsToContest(contestId: number, groupIds: number[]): Promise<void> {
+    try {
+      await this.apiClient.post<ApiResponse<{ message: string }>>({
+        url: `/contests-management/contests/${contestId}/groups`,
+        body: JSON.stringify({ groupIds })
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to add groups to contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async removeGroupsFromContest(contestId: number, groupIds: number[]): Promise<void> {
+    try {
+      await this.apiClient.delete<ApiResponse<{ message: string }>>({
+        url: `/contests-management/contests/${contestId}/groups`,
+        body: JSON.stringify({ groupIds })
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to remove groups from contest:', error.toJSON());
         throw error;
       }
       throw error;

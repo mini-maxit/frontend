@@ -1,0 +1,59 @@
+import { query, form, getRequestEvent } from '$app/server';
+import { createGroupsManagementService } from '$lib/services/GroupsManagementService';
+import { ApiError } from '$lib/services/ApiService';
+import type { Group } from '$lib/dto/group';
+import { error } from '@sveltejs/kit';
+import * as v from 'valibot';
+
+export const getAllGroups = query(async (): Promise<Group[]> => {
+  const { cookies } = getRequestEvent();
+
+  try {
+    const groupsManagementService = createGroupsManagementService(cookies);
+    const groups = await groupsManagementService.getAllGroups();
+
+    return groups;
+  } catch (err) {
+    console.error('Failed to load all groups:', err);
+
+    if (err instanceof ApiError) {
+      throw error(err.getStatus(), err.getApiMessage());
+    }
+
+    throw error(500, 'Failed to load groups');
+  }
+});
+
+export const createGroup = form(
+  v.object({
+    name: v.pipe(
+      v.string(),
+      v.nonEmpty('Group name is required'),
+      v.minLength(3, 'Group name must be at least 3 characters'),
+      v.maxLength(50, 'Group name must be at most 50 characters')
+    )
+  }),
+  async (data) => {
+    const { cookies } = getRequestEvent();
+
+    try {
+      const groupsManagementService = createGroupsManagementService(cookies);
+      const group = await groupsManagementService.createGroup(data);
+
+      // Refresh the groups list
+      await getAllGroups().refresh();
+
+      return { success: true, group };
+    } catch (err) {
+      console.error('Failed to create group:', err);
+
+      if (err instanceof ApiError) {
+        throw error(err.getStatus(), err.getApiMessage());
+      }
+
+      throw error(500, 'Failed to create group');
+    }
+  }
+);
+
+export type CreateGroupForm = typeof createGroup;

@@ -12,7 +12,8 @@ export enum Permission {
  */
 export enum ResourceType {
   Tasks = 'tasks',
-  Contests = 'contests'
+  Contests = 'contests',
+  Groups = 'groups'
 }
 
 /**
