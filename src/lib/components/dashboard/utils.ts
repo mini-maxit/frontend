@@ -16,6 +16,7 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.AvailableTasks]: () => m.sidebar_available_tasks(),
     [AppRoutes.Admin]: () => m.sidebar_admin(),
     [AppRoutes.TeacherContests]: () => m.sidebar_admin_contests(),
+    [AppRoutes.TeacherGroups]: () => m.groups_management_title(),
     [AppRoutes.TeacherTasks]: () => m.sidebar_admin_tasks(),
     [AppRoutes.AdminUsers]: () => m.admin_users_title()
   };
@@ -38,6 +39,16 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
   // Check for admin contest registration requests (e.g., /dashboard/admin/contests/[contestId]/registration-requests)
   if (path.match(/^\/dashboard\/admin\/contests\/\d+\/registration-requests/)) {
     return m.admin_registration_requests_title();
+  }
+
+  // Check for teacher groups detail pages (e.g., /dashboard/teacher/groups/[groupId])
+  if (path.match(/^\/dashboard\/teacher\/groups\/\d+/)) {
+    return m.groups_management_title();
+  }
+
+  // Check for contest groups pages (e.g., /dashboard/teacher/contests/[contestId]/groups)
+  if (path.match(/^\/dashboard\/teacher\/contests\/\d+\/groups/)) {
+    return m.contest_groups_title();
   }
 
   // Return the translation for the route, or default to main dashboard title
