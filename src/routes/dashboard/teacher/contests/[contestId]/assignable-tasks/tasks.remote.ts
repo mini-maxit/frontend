@@ -39,7 +39,7 @@ export const addTaskToContest = form(
       const contestTask = await contestsManagementService.addTaskToContest(data.contestId, {
         taskId: data.taskId,
         startAt: data.startAt,
-        endAt: data.endAt ?? null
+        endAt: data.endAt ? data.endAt : null
       });
 
       return { success: true, contestTask };

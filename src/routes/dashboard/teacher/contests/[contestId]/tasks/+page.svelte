@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { getContestTasks } from './tasks.remote';
+  import { getContestTasks, removeTaskFromContest } from './tasks.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { RemoveTaskFromContestButton } from '$lib/components/dashboard/admin/contests';
+  import { Button } from '$lib/components/ui/button';
   import * as m from '$lib/paraglide/messages';
   import ClipboardList from '@lucide/svelte/icons/clipboard-list';
   import User from '@lucide/svelte/icons/user';
@@ -8,6 +10,7 @@
   import Clock from '@lucide/svelte/icons/clock';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
+  import ChartBar from '@lucide/svelte/icons/chart-bar';
   import { formatDate } from '$lib/utils';
 
   interface Props {
@@ -22,6 +25,14 @@
     <h1 class="text-3xl font-bold text-foreground">
       {m.admin_contest_tasks_page_title({ contestId: data.contestId })}
     </h1>
+    <Button
+      href="/dashboard/teacher/contests/{data.contestId}/user-stats"
+      variant="default"
+      class="gap-2"
+    >
+      <ChartBar class="h-4 w-4" />
+      {m.admin_contest_view_all_user_stats()}
+    </Button>
   </div>
 
   <!-- Contest Tasks Section -->
@@ -42,7 +53,7 @@
       />
     {:else if tasksQuery.current}
       <div class="space-y-3">
-        {#each tasksQuery.current as task (task.id)}
+        {#each tasksQuery.current as contestTask (contestTask.task.id)}
           <div
             class="rounded-2xl border bg-card p-6 text-card-foreground shadow-md transition-all hover:shadow-lg"
           >
@@ -50,13 +61,13 @@
               <!-- Task Header -->
               <div class="flex items-start justify-between">
                 <div>
-                  <div class="text-xl font-bold text-foreground">{task.title}</div>
+                  <div class="text-xl font-bold text-foreground">{contestTask.task.title}</div>
                   <div class="mt-1 text-sm text-muted-foreground">
-                    {m.admin_contest_tasks_task_id()}: {task.id}
+                    {m.admin_contest_tasks_task_id()}: {contestTask.task.id}
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
-                  {#if task.isSubmissionOpen}
+                  {#if contestTask.isSubmissionOpen}
                     <span
                       class="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
                     >
@@ -71,6 +82,21 @@
                       {m.admin_contest_tasks_submission_open_no()}
                     </span>
                   {/if}
+                  <Button
+                    href={`/dashboard/teacher/contests/${data.contestId}/tasks/${contestTask.task.id}/user-stats`}
+                    variant="outline"
+                    size="sm"
+                    class="gap-2"
+                  >
+                    <ChartBar class="h-4 w-4" />
+                    {m.admin_contest_tasks_view_user_stats()}
+                  </Button>
+                  <RemoveTaskFromContestButton
+                    contestId={data.contestId}
+                    taskId={contestTask.task.id}
+                    taskTitle={contestTask.task.title}
+                    {removeTaskFromContest}
+                  />
                 </div>
               </div>
 
@@ -83,7 +109,7 @@
                       {m.admin_contest_tasks_creator_name()}
                     </div>
                     <div class="text-sm font-semibold text-foreground">
-                      {task.creatorName}
+                      {contestTask.creatorName}
                     </div>
                   </div>
                 </div>
@@ -95,7 +121,7 @@
                       {m.admin_contest_tasks_created_at()}
                     </div>
                     <div class="text-sm text-foreground">
-                      {formatDate(task.createdAt)}
+                      {formatDate(contestTask.task.createdAt)}
                     </div>
                   </div>
                 </div>
@@ -107,7 +133,7 @@
                       {m.admin_contest_tasks_updated_at()}
                     </div>
                     <div class="text-sm text-foreground">
-                      {formatDate(task.updatedAt)}
+                      {formatDate(contestTask.task.updatedAt)}
                     </div>
                   </div>
                 </div>
@@ -119,7 +145,7 @@
                       {m.admin_contest_tasks_start_at()}
                     </div>
                     <div class="text-sm font-semibold text-foreground">
-                      {formatDate(task.startAt)}
+                      {formatDate(contestTask.startAt)}
                     </div>
                   </div>
                 </div>
@@ -131,8 +157,8 @@
                       {m.admin_contest_tasks_end_at()}
                     </div>
                     <div class="text-sm font-semibold text-foreground">
-                      {#if task.endAt}
-                        {formatDate(task.endAt)}
+                      {#if contestTask.endAt}
+                        {formatDate(contestTask.endAt)}
                       {:else}
                         <span class="text-muted-foreground"
                           >{m.admin_contest_tasks_no_end_date()}</span
@@ -149,7 +175,7 @@
                       {m.admin_contest_tasks_created_by_id()}
                     </div>
                     <div class="text-sm text-foreground">
-                      {task.createdBy}
+                      {contestTask.task.createdBy}
                     </div>
                   </div>
                 </div>

@@ -1,3 +1,4 @@
+import type { Contest } from './contest';
 import type { UserRole } from './jwt';
 
 export enum SubmissionStatus {
@@ -5,6 +6,22 @@ export enum SubmissionStatus {
   SentForEvaluation = 'sent for evaluation',
   Evaluated = 'evaluated',
   Lost = 'lost'
+}
+
+export enum SubmissionResultCode {
+  Success = 'success',
+  TestFailed = 'test_failed',
+  CompilationError = 'compilation_error',
+  InitializationError = 'initialization_error',
+  InternalError = 'internal_error'
+}
+
+export enum TestResultCode {
+  OutputDifference = 'output_difference',
+  TimeLimitExceeded = 'time_limit_exceeded',
+  MemoryLimitExceeded = 'memory_limit_exceeded',
+  RuntimeError = 'runtime_error',
+  NotExecuted = 'not_executed'
 }
 
 export interface Language {
@@ -23,13 +40,17 @@ export interface SubmitSolutionDto {
 
 export interface TestResult {
   id: number;
-  inputOutputId: number;
+  testCaseId: number;
   passed: boolean;
   submissionResultId: number;
+  code: TestResultCode;
+  errorMessage: string;
+  executionTimeMs: number;
+  peakMemoryKb: number;
 }
 
 export interface SubmissionResult {
-  code: string;
+  code: SubmissionResultCode;
   createdAt: string;
   id: number;
   message: string;
@@ -56,7 +77,6 @@ export interface SubmissionUser {
 
 export interface Submission {
   checkedAt: string;
-  contestId?: number;
   id: number;
   language: Language;
   languageId: number;
@@ -65,9 +85,12 @@ export interface Submission {
   status: SubmissionStatus;
   submittedAt: string;
   task: SubmissionTask;
-  taskId: number;
   user: SubmissionUser;
-  userId: number;
+  contest: Contest;
+}
+
+export interface SubmissionDetailed extends Submission {
+  fileUrl: string;
 }
 
 export interface GetContestSubmissionsParams {

@@ -4,6 +4,7 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   createdBy: number;
+  isVisible: boolean;
 }
 
 export interface TaskDetail {
@@ -37,6 +38,7 @@ export interface UploadTaskResponse {
 export interface UploadTaskDto {
   title: string;
   archive: File;
+  isVisible: boolean;
 }
 
 export interface UserContestTask {
@@ -66,7 +68,8 @@ export interface ContestTaskWithStatistics {
   attemptsSummary: AttemptsSummary;
 }
 
-export interface ContestTask extends Task {
+export interface ContestTask {
+  task: Task;
   creatorName: string;
   startAt: string;
   endAt: string | null;

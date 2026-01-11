@@ -23,6 +23,7 @@ export enum AppRoutes {
   Teacher = `${AppRoutes.Dashboard}/teacher`,
   TeacherContests = `${AppRoutes.Teacher}/contests`,
   TeacherContestsRegistrationRequests = `${AppRoutes.Teacher}/contests/`,
+  TeacherGroups = `${AppRoutes.Teacher}/groups`,
   TeacherTasks = `${AppRoutes.Teacher}/tasks`,
   TeacherTaskCollaborators = `${AppRoutes.TeacherTasks}/`,
 

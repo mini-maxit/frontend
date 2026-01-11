@@ -18,6 +18,7 @@ export class TasksManagementService {
     const formData = new FormData();
     formData.append('title', body.title);
     formData.append('archive', body.archive);
+    formData.append('isVisible', body.isVisible.toString());
 
     try {
       const response = await this.apiClient.post<ApiResponse<UploadTaskResponse>>({
@@ -99,6 +100,53 @@ export class TasksManagementService {
         contentType: RequestContentType.Json
       });
       return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async toggleTaskVisibility(
+    taskId: number,
+    isVisible: boolean
+  ): Promise<{ success: boolean; status: number; error?: string }> {
+    const formData = new FormData();
+    formData.append('isVisible', isVisible.toString());
+
+    try {
+      await this.apiClient.patch<ApiResponse<void>>({
+        url: `/tasks-management/tasks/${taskId}`,
+        body: formData
+      });
+      return { success: true, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async deleteTask(taskId: number): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.delete<ApiResponse<void>>({
+        url: `/tasks-management/tasks/${taskId}`
+      });
+      return { success: true, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {

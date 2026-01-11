@@ -1,32 +1,47 @@
 import { ApiError, type ApiService } from './ApiService';
-import type { ApiResponse } from '../dto/response';
-import type { Collaborator, Permission } from '../dto/accessControl';
-
-export interface AddCollaboratorRequest {
-  user_id: number;
-  permission: Permission;
-}
-
-export interface UpdateCollaboratorRequest {
-  permission: Permission;
-}
+import type { ApiResponse, PaginatedData } from '../dto/response';
+import type {
+  Collaborator,
+  AddCollaboratorRequest,
+  UpdateCollaboratorRequest
+} from '../dto/accessControl';
+import { ResourceType } from '../dto/accessControl';
+import type { User } from '../dto/user';
 
 export class AccessControlService {
   constructor(private apiClient: ApiService) {}
 
   /**
-   * Get collaborators for a specific task.
-   * Only users with edit permission or higher can see collaborators.
+   * Get assignable users for a resource.
+   * Returns users (teachers) who can be granted access to the resource.
+   * Only users with manage permission can view assignable users.
+   * Returned users do not currently have any access entry for the resource.
    */
-  async getTaskCollaborators(taskId: number): Promise<{
+  async getAssignableUsers(
+    resourceType: ResourceType,
+    resourceId: number,
+    params?: { limit?: number; offset?: number; sort?: string }
+  ): Promise<{
     success: boolean;
     status: number;
-    data?: Collaborator[];
+    data?: PaginatedData<User>;
     error?: string;
   }> {
     try {
-      const response = await this.apiClient.get<ApiResponse<Collaborator[]>>({
-        url: `/access-control/tasks/${taskId}/collaborators`
+      const queryParams = new URLSearchParams();
+      if (params?.limit !== undefined) {
+        queryParams.append('limit', params.limit.toString());
+      }
+      if (params?.offset !== undefined) {
+        queryParams.append('offset', params.offset.toString());
+      }
+      if (params?.sort) {
+        queryParams.append('sort', params.sort);
+      }
+
+      const url = `/access-control/resources/${resourceType}/${resourceId}/assignable${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<User>>>({
+        url
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -42,11 +57,42 @@ export class AccessControlService {
   }
 
   /**
-   * Add a collaborator to a specific task.
+   * Get collaborators for a resource.
+   * Only users with edit permission or higher can see collaborators.
+   */
+  async getCollaborators(
+    resourceType: ResourceType,
+    resourceId: number
+  ): Promise<{
+    success: boolean;
+    status: number;
+    data?: Collaborator[];
+    error?: string;
+  }> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<Collaborator[]>>({
+        url: `/access-control/resources/${resourceType}/${resourceId}/collaborators`
+      });
+      return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Add a collaborator to a resource.
    * Only users with manage permission can add collaborators.
    */
-  async addTaskCollaborator(
-    taskId: number,
+  async addCollaborator(
+    resourceType: ResourceType,
+    resourceId: number,
     data: AddCollaboratorRequest
   ): Promise<{
     success: boolean;
@@ -55,7 +101,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.post<ApiResponse<void>>({
-        url: `/access-control/tasks/${taskId}/collaborators`,
+        url: `/access-control/resources/${resourceType}/${resourceId}/collaborators`,
         body: JSON.stringify(data)
       });
       return { success: true, status: 201 };
@@ -72,11 +118,12 @@ export class AccessControlService {
   }
 
   /**
-   * Update a collaborator's permission on a specific task.
+   * Update a collaborator's permission on a resource.
    * Only users with manage permission can update collaborators.
    */
-  async updateTaskCollaborator(
-    taskId: number,
+  async updateCollaborator(
+    resourceType: ResourceType,
+    resourceId: number,
     userId: number,
     data: UpdateCollaboratorRequest
   ): Promise<{
@@ -86,7 +133,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.put<ApiResponse<void>>({
-        url: `/access-control/tasks/${taskId}/collaborators/${userId}`,
+        url: `/access-control/resources/${resourceType}/${resourceId}/collaborators/${userId}`,
         body: JSON.stringify(data)
       });
       return { success: true, status: 200 };
@@ -103,12 +150,13 @@ export class AccessControlService {
   }
 
   /**
-   * Remove a collaborator from a specific task.
+   * Remove a collaborator from a resource.
    * Only users with manage or owner permission can remove collaborators.
    * Managers can only remove editors and managers, owners can remove everyone except other owners.
    */
-  async deleteTaskCollaborator(
-    taskId: number,
+  async deleteCollaborator(
+    resourceType: ResourceType,
+    resourceId: number,
     userId: number
   ): Promise<{
     success: boolean;
@@ -117,125 +165,7 @@ export class AccessControlService {
   }> {
     try {
       await this.apiClient.delete<ApiResponse<void>>({
-        url: `/access-control/tasks/${taskId}/collaborators/${userId}`
-      });
-      return { success: true, status: 200 };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          success: false,
-          error: error.getApiMessage(),
-          status: error.getStatus()
-        };
-      }
-      throw error;
-    }
-  }
-
-  /**
-   * Get collaborators for a specific contest.
-   * Only users with edit permission or higher can see collaborators.
-   */
-  async getContestCollaborators(contestId: number): Promise<{
-    success: boolean;
-    status: number;
-    data?: Collaborator[];
-    error?: string;
-  }> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<Collaborator[]>>({
-        url: `/access-control/contests/${contestId}/collaborators`
-      });
-      return { success: true, data: response.data, status: 200 };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          success: false,
-          error: error.getApiMessage(),
-          status: error.getStatus()
-        };
-      }
-      throw error;
-    }
-  }
-
-  /**
-   * Add a collaborator to a specific contest.
-   * Only users with manage permission can add collaborators.
-   */
-  async addContestCollaborator(
-    contestId: number,
-    data: AddCollaboratorRequest
-  ): Promise<{
-    success: boolean;
-    status: number;
-    error?: string;
-  }> {
-    try {
-      await this.apiClient.post<ApiResponse<void>>({
-        url: `/access-control/contests/${contestId}/collaborators`,
-        body: JSON.stringify(data)
-      });
-      return { success: true, status: 201 };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          success: false,
-          error: error.getApiMessage(),
-          status: error.getStatus()
-        };
-      }
-      throw error;
-    }
-  }
-
-  /**
-   * Update a collaborator's permission on a specific contest.
-   * Only users with manage permission can update collaborators.
-   */
-  async updateContestCollaborator(
-    contestId: number,
-    userId: number,
-    data: UpdateCollaboratorRequest
-  ): Promise<{
-    success: boolean;
-    status: number;
-    error?: string;
-  }> {
-    try {
-      await this.apiClient.put<ApiResponse<void>>({
-        url: `/access-control/contests/${contestId}/collaborators/${userId}`,
-        body: JSON.stringify(data)
-      });
-      return { success: true, status: 200 };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          success: false,
-          error: error.getApiMessage(),
-          status: error.getStatus()
-        };
-      }
-      throw error;
-    }
-  }
-
-  /**
-   * Remove a collaborator from a specific contest.
-   * Only users with manage or owner permission can remove collaborators.
-   * Managers can only remove editors and managers, owners can remove everyone except other owners.
-   */
-  async deleteContestCollaborator(
-    contestId: number,
-    userId: number
-  ): Promise<{
-    success: boolean;
-    status: number;
-    error?: string;
-  }> {
-    try {
-      await this.apiClient.delete<ApiResponse<void>>({
-        url: `/access-control/contests/${contestId}/collaborators/${userId}`
+        url: `/access-control/resources/${resourceType}/${resourceId}/collaborators/${userId}`
       });
       return { success: true, status: 200 };
     } catch (error) {

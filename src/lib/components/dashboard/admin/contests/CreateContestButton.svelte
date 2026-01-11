@@ -9,11 +9,12 @@
   import Plus from '@lucide/svelte/icons/plus';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { toast } from 'svelte-sonner';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
+  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
-  import { cn } from '$lib/utils';
-  import type { CreateContestForm } from '$routes/dashboard/admin/contests/contests.remote';
+  import { cn, toLocalRFC3339 } from '$lib/utils';
+  import { SvelteDate } from 'svelte/reactivity';
+  import type { CreateContestForm } from '$routes/dashboard/teacher/contests/contests.remote';
 
   interface Props {
     createContest: CreateContestForm;
@@ -37,7 +38,7 @@
   }
 
   function getDefaultEndDateTime() {
-    const tomorrow = new Date();
+    const tomorrow = new SvelteDate();
     tomorrow.setHours(tomorrow.getHours() + 24);
     const date = today(getLocalTimeZone()).add({ days: 1 });
     const time = `${String(tomorrow.getHours()).padStart(2, '0')}:${String(tomorrow.getMinutes()).padStart(2, '0')}`;
@@ -51,9 +52,6 @@
   let endTime = $state<string | null>(getDefaultEndDateTime().time);
 
   // Checkbox states
-  let isRegistrationOpen = $state(true);
-  let isSubmissionOpen = $state(true);
-  let isVisible = $state(true);
   let hasEndTime = $state(false);
 
   function getDateTimeString(date: DateValue | undefined, time: string | null): string {
@@ -63,14 +61,8 @@
     const dateObj = date.toDate(getLocalTimeZone());
     dateObj.setHours(hours, minutes, 0, 0);
 
-    // Build YYYY-MM-DDTHH:mm string from local components to avoid timezone conversion
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    const hour = String(dateObj.getHours()).padStart(2, '0');
-    const minute = String(dateObj.getMinutes()).padStart(2, '0');
-
-    return `${year}-${month}-${day}T${hour}:${minute}`;
+    // Build RFC3339 string using utility
+    return toLocalRFC3339(dateObj);
   }
 
   let startAtValue = $derived(getDateTimeString(startDate, startTime));
@@ -80,10 +72,10 @@
 <Dialog.Root bind:open={dialogOpen}>
   <button
     onclick={() => (dialogOpen = true)}
-    class="group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+    class="group relative overflow-hidden rounded-2xl border border-border bg-linear-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
   >
     <div
-      class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      class="absolute inset-0 bg-linear-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
     ></div>
 
     <div class="relative flex flex-col items-center gap-4 text-center">
@@ -117,7 +109,7 @@
           await submit();
           toast.success(m.admin_contests_create_success());
           dialogOpen = false;
-        } catch (error: HttpError | unknown) {
+        } catch (error) {
           if (isHttpError(error)) {
             toast.error(error.body.message);
           } else {
@@ -128,12 +120,8 @@
       class="space-y-6"
     >
       <!-- Hidden inputs for form submission -->
-      <input
-        {...createContest.fields.startAt.as('datetime-local')}
-        bind:value={startAtValue}
-        hidden
-      />
-      <input {...createContest.fields.endAt.as('datetime-local')} bind:value={endAtValue} hidden />
+      <input {...createContest.fields.startAt.as('text')} bind:value={startAtValue} hidden />
+      <input {...createContest.fields.endAt.as('text')} bind:value={endAtValue} hidden />
 
       <div class="space-y-2">
         <Label for="name">{m.admin_contests_form_name_label()}</Label>
@@ -209,7 +197,7 @@
               autocomplete="off"
               bind:value={startTime}
               required
-              class="[color-scheme:light] transition-all duration-200 focus:ring-2 focus:ring-primary dark:[color-scheme:dark]"
+              class="scheme-light transition-all duration-200 focus:ring-2 focus:ring-primary dark:scheme-dark"
             />
           </div>
 
@@ -264,7 +252,7 @@
                 autocomplete="off"
                 bind:value={endTime}
                 required
-                class="[color-scheme:light] transition-all duration-200 focus:ring-2 focus:ring-primary dark:[color-scheme:dark]"
+                class="scheme-light transition-all duration-200 focus:ring-2 focus:ring-primary dark:scheme-dark"
               />
             </div>
 

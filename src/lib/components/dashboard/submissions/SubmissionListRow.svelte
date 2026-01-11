@@ -5,15 +5,21 @@
   import Clock from '@lucide/svelte/icons/clock';
   import Code from '@lucide/svelte/icons/code';
   import Calendar from '@lucide/svelte/icons/calendar';
-  import { SubmissionStatus, type Submission } from '$lib/dto/submission';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
+  import ChevronUp from '@lucide/svelte/icons/chevron-up';
+  import UserIcon from '@lucide/svelte/icons/user';
+  import { SubmissionStatus, type Submission, SubmissionResultCode } from '$lib/dto/submission';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
+  import TestCaseResult from './TestCaseResult.svelte';
+  import { localizeHref } from '$lib/paraglide/runtime';
 
   interface SubmissionListRowProps {
     submission: Submission;
   }
 
   let { submission }: SubmissionListRowProps = $props();
+  let testCasesExpanded = $state(false);
 
   const statusConfig = {
     success: {
@@ -61,11 +67,32 @@
 
   const config = $derived(statusConfig[getStatusKey(submission.status)]);
 
+  const getResultCodeLabel = (code: SubmissionResultCode | string) => {
+    switch (code) {
+      case SubmissionResultCode.Success:
+        return m.submissions_result_status_success();
+      case SubmissionResultCode.TestFailed:
+        return m.submissions_result_status_test_failed();
+      case SubmissionResultCode.CompilationError:
+        return m.submissions_result_status_compilation_error();
+      case SubmissionResultCode.InitializationError:
+        return m.submissions_result_status_initialization_error();
+      case SubmissionResultCode.InternalError:
+        return m.submissions_result_status_internal_error();
+      default:
+        return String(code);
+    }
+  };
+
   const getScore = () => {
     if (!submission.result?.testResults) return '-/-';
     const passed = submission.result.testResults.filter((t) => t.passed).length;
     const total = submission.result.testResults.length;
     return `${passed}/${total}`;
+  };
+
+  const toggleTestCases = () => {
+    testCasesExpanded = !testCasesExpanded;
   };
 </script>
 
@@ -83,15 +110,28 @@
             <config.icon class="h-5 w-5 {config.textColor}" />
           </div>
           <div class="min-w-0 flex-1">
-            <h3 class="font-semibold text-foreground transition-colors group-hover:text-primary">
-              {submission.task.title}
-            </h3>
-            <div class="mt-1 flex flex-wrap items-center gap-2">
-              <span
-                class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+            <div class="flex items-center gap-2">
+              <a
+                href={localizeHref(`/dashboard/user/submissions/${submission.id}`)}
+                class="font-semibold text-foreground transition-colors hover:text-primary hover:underline"
               >
-                {config.label}
-              </span>
+                {submission.task.title}
+              </a>
+            </div>
+            <div class="mt-1 flex flex-wrap items-center gap-2">
+              {#if submission.status === SubmissionStatus.Evaluated && submission.result?.code}
+                <span
+                  class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+                >
+                  {getResultCodeLabel(submission.result.code as SubmissionResultCode)}
+                </span>
+              {:else}
+                <span
+                  class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+                >
+                  {config.label}
+                </span>
+              {/if}
               <span class="text-sm font-medium text-foreground">{getScore()}</span>
             </div>
           </div>
@@ -99,7 +139,19 @@
       </div>
 
       <!-- Middle Section: Stats Grid -->
-      <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
+      <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <!-- Submitter -->
+        <div class="rounded-lg border border-border bg-card p-2">
+          <div class="flex items-center gap-1.5">
+            <UserIcon class="h-3.5 w-3.5 text-primary" />
+            <span class="text-xs text-muted-foreground">{m.submissions_submitter_label()}</span>
+          </div>
+          <p class="mt-1 text-sm font-semibold text-foreground">
+            {submission.user.name}
+            {submission.user.surname}
+          </p>
+        </div>
+
         <!-- Language -->
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
@@ -132,5 +184,32 @@
         </div>
       </div>
     </div>
+
+    <!-- Test Cases Section -->
+    {#if submission.result?.testResults && submission.result.testResults.length > 0}
+      <div class="mt-4 border-t border-border pt-4">
+        <button
+          onclick={toggleTestCases}
+          class="flex w-full items-center justify-between text-left transition-colors hover:text-primary"
+        >
+          <h4 class="text-sm font-semibold text-foreground">
+            {m.admin_contest_submissions_test_cases()}
+          </h4>
+          {#if testCasesExpanded}
+            <ChevronUp class="h-4 w-4 text-muted-foreground" />
+          {:else}
+            <ChevronDown class="h-4 w-4 text-muted-foreground" />
+          {/if}
+        </button>
+
+        {#if testCasesExpanded}
+          <div class="mt-3 space-y-2">
+            {#each submission.result.testResults as testResult, index (testResult.id)}
+              <TestCaseResult {testResult} testNumber={index + 1} />
+            {/each}
+          </div>
+        {/if}
+      </div>
+    {/if}
   </Card.Content>
 </Card.Root>

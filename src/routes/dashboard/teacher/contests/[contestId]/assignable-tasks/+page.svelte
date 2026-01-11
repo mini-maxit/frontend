@@ -17,7 +17,7 @@
   import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
-  import { cn, formatDate } from '$lib/utils';
+  import { cn, formatDate, toLocalRFC3339 } from '$lib/utils';
   import { SvelteDate } from 'svelte/reactivity';
   interface Props {
     data: {
@@ -65,14 +65,8 @@
     const dateObj = date.toDate(getLocalTimeZone());
     dateObj.setHours(hours, minutes, 0, 0);
 
-    // Build YYYY-MM-DDTHH:mm string from local components to avoid timezone conversion
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    const hour = String(dateObj.getHours()).padStart(2, '0');
-    const minute = String(dateObj.getMinutes()).padStart(2, '0');
-
-    return `${year}-${month}-${day}T${hour}:${minute}`;
+    // Use shared utility to encode local timezone into RFC3339
+    return toLocalRFC3339(dateObj);
   }
 
   let startAtValue = $derived(getDateTimeString(startDate, startTime));
@@ -202,16 +196,8 @@
         hidden
       />
       <input {...addTaskToContest.fields.taskId.as('number')} bind:value={selectedTaskId} hidden />
-      <input
-        {...addTaskToContest.fields.startAt.as('datetime-local')}
-        bind:value={startAtValue}
-        hidden
-      />
-      <input
-        {...addTaskToContest.fields.endAt.as('datetime-local')}
-        bind:value={endAtValue}
-        hidden
-      />
+      <input {...addTaskToContest.fields.startAt.as('text')} bind:value={startAtValue} hidden />
+      <input {...addTaskToContest.fields.endAt.as('text')} bind:value={endAtValue} hidden />
 
       <div class="grid gap-4 sm:grid-cols-2">
         <!-- Start Date & Time -->

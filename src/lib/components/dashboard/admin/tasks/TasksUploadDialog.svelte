@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { uploadTask } from '$routes/dashboard/teacher/tasks/upload.remote';
+  import { uploadTask, getUploadLimit } from '$routes/dashboard/teacher/tasks/upload.remote';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
+  import { Checkbox } from '$lib/components/ui/checkbox';
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
+  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
 
   interface TasksUploadDialogProps {
@@ -17,6 +18,12 @@
 
   let fileInput = $state<HTMLInputElement | null>(null);
   let selectedFile = $state<File | null>(null);
+
+  // Read upload limit from server via remote query (single source of truth)
+  const uploadLimit = getUploadLimit();
+
+  let MAX_UPLOAD_BYTES = $derived(uploadLimit.current?.bytes ?? 512 * 1024);
+  let MAX_UPLOAD_MB = $derived(Number((MAX_UPLOAD_BYTES / (1024 * 1024)).toFixed(2)));
 
   function handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -50,6 +57,19 @@
       <Dialog.Title>{m.admin_tasks_dialog_title()}</Dialog.Title>
       <Dialog.Description>
         {m.admin_tasks_dialog_description()}
+        {#if uploadLimit.loading}
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit_loading()})</span
+          >
+        {:else if uploadLimit.error}
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit_unavailable()})</span
+          >
+        {:else if uploadLimit.current}
+          <span class="ml-1 text-sm text-muted-foreground"
+            >({m.admin_tasks_upload_limit({ limit: MAX_UPLOAD_MB })})</span
+          >
+        {/if}
       </Dialog.Description>
     </Dialog.Header>
 
@@ -59,9 +79,9 @@
         try {
           await submit();
           await handleTaskUploadSuccess();
-        } catch (error: HttpError | unknown) {
+        } catch (error) {
           if (isHttpError(error)) {
-            toast.error(error.body.message);
+            toast.error(error?.body?.message || m.admin_tasks_upload_error());
           } else {
             toast.error(m.admin_tasks_upload_error());
           }
@@ -104,12 +124,28 @@
         {/if}
       </div>
 
+      <div class="flex items-start space-x-2">
+        <Checkbox {...uploadTask.fields.isVisible.as('checkbox')} />
+        <div class="grid gap-1.5 leading-none">
+          <Label
+            for="isVisible"
+            class="cursor-pointer text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            {m.admin_tasks_form_visible_label()}
+          </Label>
+          <p class="text-sm text-muted-foreground">
+            {m.admin_tasks_form_visible_description()}
+          </p>
+        </div>
+      </div>
+
       <Dialog.Footer>
         <Button type="button" variant="outline" onclick={handleCancel}>
           {m.admin_tasks_form_cancel()}
         </Button>
         <Button
           type="submit"
+          disabled={uploadLimit.loading}
           class="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
         >
           {m.admin_tasks_form_upload()}

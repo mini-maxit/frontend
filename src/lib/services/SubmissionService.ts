@@ -1,6 +1,11 @@
 import { ApiError, type ApiService } from './ApiService';
 import type { ApiResponse, PaginatedData } from '../dto/response';
-import type { Language, SubmitSolutionDto, Submission } from '../dto/submission';
+import type {
+  Language,
+  SubmitSolutionDto,
+  Submission,
+  SubmissionDetailed
+} from '../dto/submission';
 
 export class SubmissionService {
   constructor(private apiClient: ApiService) {}
@@ -77,6 +82,29 @@ export class SubmissionService {
         url
       });
       return { success: true, data: response.data.items, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async getSubmissionById(submissionId: number): Promise<{
+    success: boolean;
+    status: number;
+    data?: SubmissionDetailed;
+    error?: string;
+  }> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<SubmissionDetailed>>({
+        url: `/submissions/${submissionId}`
+      });
+      return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {

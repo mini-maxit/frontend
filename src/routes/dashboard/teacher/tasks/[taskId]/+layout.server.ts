@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { createApiClient } from '$lib/services/ApiService';
 import { AccessControlService } from '$lib/services/AccessControlService';
+import { ResourceType } from '$lib/dto/accessControl';
 
 export const load = async ({
   params,
@@ -22,7 +23,7 @@ export const load = async ({
   // Verify task exists by checking if we can access collaborators
   const apiClient = createApiClient(cookies);
   const accessControlService = new AccessControlService(apiClient);
-  const result = await accessControlService.getTaskCollaborators(taskId);
+  const result = await accessControlService.getCollaborators(ResourceType.Tasks, taskId);
 
   if (!result.success) {
     if (result.status === 404) {

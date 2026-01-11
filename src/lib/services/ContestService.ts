@@ -1,5 +1,12 @@
 import { ApiError, createApiClient } from './ApiService';
-import type { Contest, UserContestsResponse } from '$lib/dto/contest';
+import type {
+  Contest,
+  UserContestsResponse,
+  ContestWithStats,
+  PastContestWithStats,
+  ContestResults,
+  ContestDetailed
+} from '$lib/dto/contest';
 import type { ContestTaskWithStatistics, TaskDetail } from '$lib/dto/task';
 import type { Cookies } from '@sveltejs/kit';
 import type { ApiResponse, PaginatedData } from '$lib/dto/response';
@@ -56,15 +63,30 @@ export class ContestService {
     }
   }
 
-  async getMyContests(): Promise<UserContestsResponse> {
+  async getMyActiveContests(): Promise<ContestWithStats[]> {
     try {
-      const response = await this.apiClient.get<ApiResponse<UserContestsResponse>>({
-        url: `/contests/my`
+      const response = await this.apiClient.get<ApiResponse<ContestWithStats[]>>({
+        url: `/contests/my/active`
       });
       return response.data;
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Failed to get user contests:', error.toJSON());
+        console.error('Failed to get active contests:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getMyPastContests(): Promise<PastContestWithStats[]> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<PastContestWithStats[]>>({
+        url: `/contests/my/past`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get past contests:', error.toJSON());
         throw error;
       }
       throw error;
@@ -109,6 +131,36 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get contest task:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContest(contestId: number): Promise<ContestDetailed> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<ContestDetailed>>({
+        url: `/contests/${contestId}`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getMyResults(contestId: number): Promise<ContestResults> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<ContestResults>>({
+        url: `/contests/${contestId}/results/my`
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest results:', error.toJSON());
         throw error;
       }
       throw error;
