@@ -55,43 +55,36 @@ docker run -p 3000:3000 \
 
 ## Critical Architecture Patterns
 
-### 1. Remote Functions (Primary Server Pattern)
+### 1. Client-Side Service Pattern (Direct API Integration)
 
-This project uses **SvelteKit remote functions** (`experimental.remoteFunctions: true`) instead of traditional `+page.server.ts` load functions.
+This project uses **direct client-to-backend API communication** through service classes with browser-side token management.
 
-**Three types of remote functions:**
+**Key Components:**
+- Client-side services with singleton pattern
+- In-memory access tokens + HttpOnly refresh cookies
+- Reactive query utilities with Svelte 5 runes
+- Browser-based authentication guards
 
-#### `query` - Server-side data fetching
+#### Data Fetching with `createQuery`
 
 ```typescript
-// tasks.remote.ts
-import { query, getRequestEvent } from '$app/server';
-import * as v from 'valibot';
+// Component: /src/routes/dashboard/tasks/+page.svelte
+import { createQuery } from '$lib/utils/query.svelte';
+import { getTaskInstance } from '$lib/services';
 
-// Without parameters
-export const getTasks = query(async () => {
-  const { cookies } = getRequestEvent();
-  const taskService = createTaskService(cookies);
-  return await taskService.getAllTasks();
-});
+const taskService = getTaskInstance();
 
-// With parameters (requires Valibot schema)
-export const getTask = query(v.number(), async (taskId: number) => {
-  const { cookies } = getRequestEvent();
-  const taskService = createTaskService(cookies);
-  return await taskService.getTaskById(taskId);
+const tasksQuery = createQuery(async () => {
+  if (!taskService) throw new Error('Service unavailable');
+  const result = await taskService.getAllTasks();
+  if (!result.success) throw new Error(result.error || 'Failed to fetch');
+  return result.data!;
 });
 ```
 
 Usage in component:
 
 ```svelte
-<script lang="ts">
-  import { getTasks } from './tasks.remote';
-
-  const tasksQuery = getTasks();
-</script>
-
 {#if tasksQuery.error}
   <ErrorCard error={tasksQuery.error} onRetry={() => tasksQuery.refresh()} />
 {:else if tasksQuery.loading}
@@ -101,83 +94,84 @@ Usage in component:
 {/if}
 ```
 
-#### `form` - Form submissions with progressive enhancement
+**Parameterized queries:**
 
 ```typescript
-// login.remote.ts
-import { form, getRequestEvent } from '$app/server';
-import * as v from 'valibot';
+import { createParameterizedQuery } from '$lib/utils/query.svelte';
 
-export const login = form(
-  v.object({
-    email: v.pipe(v.string(), v.email()),
-    password: v.pipe(v.string(), v.nonEmpty())
-  }),
-  async (data) => {
-    const { cookies } = getRequestEvent();
-    // Handle login logic
-    return { success: true };
-  }
-);
+const taskQuery = createParameterizedQuery(taskId, async (id) => {
+  if (!taskService) throw new Error('Service unavailable');
+  const result = await taskService.getTaskById(id);
+  if (!result.success) throw new Error(result.error || 'Failed to fetch');
+  return result.data!;
+});
 ```
 
-Usage:
+#### Form Submissions with sveltekit-superforms
 
 ```svelte
 <script lang="ts">
-  const loginAction = login();
+  import { superForm, defaults } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import { LoginSchema } from '$lib/schemas';
+  import { getAuthInstance, getUserInstance } from '$lib/services';
+
+  const authService = getAuthInstance();
+
+  const { form, errors, enhance, submitting } = superForm(
+    defaults(valibot(LoginSchema)),
+    {
+      validators: valibot(LoginSchema),
+      SPA: true,
+      async onUpdate({ form }) {
+        if (!authService || !form.valid) return;
+
+        const result = await authService.login(form.data);
+        if (result.success) {
+          // Fetch user data and redirect
+          const userService = getUserInstance();
+          await userService?.getCurrentUser();
+          await goto(AppRoutes.Dashboard);
+        } else {
+          toast.error(result.error || 'Login failed');
+        }
+      }
+    }
+  );
 </script>
 
-<form method="POST" use:loginAction.enhance>
-  <input name="email" type="email" />
-  <button type="submit" disabled={loginAction.submitting}>Submit</button>
+<form method="POST" use:enhance>
+  <input bind:value={$form.email} type="email" />
+  <button type="submit" disabled={$submitting}>Submit</button>
 </form>
-```
-
-#### `command` - Programmatic mutations
-
-```typescript
-export const approveRequest = command(
-  v.object({
-    contestId: v.pipe(v.number(), v.integer()),
-    userId: v.pipe(v.number(), v.integer())
-  }),
-  async (data) => {
-    const { cookies } = getRequestEvent();
-    const contestService = createContestService(cookies);
-    await contestService.approveRegistrationRequest(data.contestId, data.userId);
-    return { success: true };
-  }
-);
-```
-
-Usage (only from event handlers):
-
-```svelte
-<button onclick={() => approveRequest({ contestId: 123, userId: 456 })}> Approve </button>
 ```
 
 ### 2. Service Layer Pattern
 
 **All API communication goes through service classes.** Never make direct fetch calls.
 
-Services are located in `/src/lib/services/`:
+Services are located in `/src/lib/services/api/`:
 
 - `ApiService.ts` - Base HTTP client with auth & token refresh
 - `AuthService.ts` - Authentication operations
+- `UserService.ts` - User profile management
 - `TaskService.ts` - Task management
 - `ContestService.ts` - Contest operations
 - `SubmissionService.ts` - Code submission handling
-- `UserService.ts` - User profile management
-- `AccessControlService.ts` - Access control operations
 - `TasksManagementService.ts` - Admin task management
 - `ContestsManagementService.ts` - Admin contest management
+- `GroupsManagementService.ts` - Admin group management
+- `AccessControlService.ts` - Access control operations
+- `WorkerService.ts` - Worker status monitoring
 
 **Service pattern:**
 
 ```typescript
+// /src/lib/services/api/TaskService.ts
 import type { ApiService } from './ApiService';
+import { ApiError } from '../ApiService';
 import type { Task } from '$lib/dto/task';
+import type { ApiResponse } from '$lib/dto/response';
 
 export class TaskService {
   constructor(private apiClient: ApiService) {}
@@ -190,7 +184,7 @@ export class TaskService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<Task[]>>({
-        url: '/tasks/'
+        url: '/tasks'
       });
       return { success: true, data: response.data, status: 200 };
     } catch (error) {
@@ -205,22 +199,40 @@ export class TaskService {
     }
   }
 }
+```
 
-// Factory function for dependency injection
-export function createTaskService(cookies: Cookies): TaskService {
-  const apiClient = createApiClient(cookies);
-  return new TaskService(apiClient);
+**Service instance management (singleton pattern):**
+
+```typescript
+// /src/lib/stores/service-instances.svelte.ts
+import { browser } from '$app/environment';
+import type { TaskService } from '$lib/services/api/TaskService';
+
+let taskInstance: TaskService | null = $state(null);
+
+export function getTaskInstance(): TaskService | null {
+  if (!browser) return null;
+
+  if (!taskInstance) {
+    const apiClient = getApiInstance();
+    if (!apiClient) return null;
+    taskInstance = new TaskService(apiClient);
+  }
+
+  return taskInstance;
 }
 ```
 
-**Using services in remote functions:**
+**Using services in components:**
 
 ```typescript
-import { createTaskService } from '$lib/services/TaskService';
-import { getRequestEvent } from '$app/server';
+import { getTaskInstance } from '$lib/services';
 
-const { cookies } = getRequestEvent();
-const taskService = createTaskService(cookies);
+const taskService = getTaskInstance();
+if (taskService) {
+  const result = await taskService.getAllTasks();
+  // Handle result
+}
 ```
 
 ### 3. Svelte 5 Runes (No Legacy Syntax)
@@ -488,7 +500,7 @@ type FormData = v.InferOutput<typeof FormSchema>;
 | Services         | PascalCase + `Service` suffix | `TaskService.ts`                    |
 | DTOs             | lowercase                     | `task.ts`, `contest.ts`             |
 | Routes           | SvelteKit convention          | `+page.svelte`, `+layout.server.ts` |
-| Remote functions | `.remote.ts` suffix           | `tasks.remote.ts`                   |
+| Schemas          | PascalCase + `Schema` suffix  | `LoginSchema`, `CreateGroupSchema`  |
 | Utilities        | camelCase                     | `calculateScore.ts`                 |
 
 ## Common Patterns
@@ -497,10 +509,18 @@ type FormData = v.InferOutput<typeof FormSchema>;
 
 ```svelte
 <script lang="ts">
-  import { getData } from './data.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getTaskInstance } from '$lib/services';
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
 
-  const query = getData();
+  const taskService = getTaskInstance();
+
+  const query = createQuery(async () => {
+    if (!taskService) throw new Error('Service unavailable');
+    const result = await taskService.getAllTasks();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch');
+    return result.data!;
+  });
 </script>
 
 {#if query.error}
@@ -508,21 +528,45 @@ type FormData = v.InferOutput<typeof FormSchema>;
 {:else if query.loading}
   <LoadingSpinner />
 {:else if query.current}
-  <div>{query.current.title}</div>
+  <div>{query.current[0]?.title}</div>
 {/if}
 ```
 
-### Form Submission
+### Form Submission with sveltekit-superforms
 
 ```svelte
 <script lang="ts">
-  import { submitForm } from './form.remote';
-  const formAction = submitForm();
+  import { superForm, defaults } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import { LoginSchema } from '$lib/schemas';
+  import { getAuthInstance } from '$lib/services';
+  import { toast } from 'svelte-sonner';
+
+  const authService = getAuthInstance();
+
+  const { form, errors, enhance, submitting } = superForm(
+    defaults(valibot(LoginSchema)),
+    {
+      validators: valibot(LoginSchema),
+      SPA: true,
+      async onUpdate({ form }) {
+        if (!authService || !form.valid) return;
+
+        const result = await authService.login(form.data);
+        if (result.success) {
+          toast.success('Login successful');
+        } else {
+          toast.error(result.error || 'Login failed');
+        }
+      }
+    }
+  );
 </script>
 
-<form method="POST" use:formAction.enhance>
-  <input name="email" type="email" />
-  <button type="submit" disabled={formAction.submitting}>Submit</button>
+<form method="POST" use:enhance>
+  <input bind:value={$form.email} type="email" />
+  {#if $errors.email}<span class="error">{$errors.email}</span>{/if}
+  <button type="submit" disabled={$submitting}>Submit</button>
 </form>
 ```
 
@@ -552,13 +596,14 @@ Before committing:
 ## Important Notes
 
 1. **Always use pnpm** - NEVER use npm or yarn (will create wrong lockfiles)
-2. **Always use remote functions** for server-side operations
-3. **Always use services** for API calls - never direct fetch
+2. **Always use services** for API calls - never direct fetch
+3. **Always use createQuery/createParameterizedQuery** for data fetching in components
 4. **Always add i18n to BOTH languages** - check existing messages first
 5. **Use Svelte 5 runes** - no legacy reactive syntax (`$:`, stores unless necessary)
 6. **Match existing design** - refer to landing page, admin pages, and task pages
 7. **Validate with Valibot** - especially for user input and form schemas
-8. **HTTP-only cookies for tokens** - never use localStorage/sessionStorage
+8. **HTTP-only cookies for refresh tokens** - access tokens in memory only
+9. **Use sveltekit-superforms in SPA mode** for form handling
 
 ## Environment Variables
 
@@ -586,10 +631,14 @@ refactor: simplify auth service
 
 ## Key Reference Files
 
-- Remote function examples: `/src/routes/dashboard/tasks/tasks.remote.ts`
-- Form example: `/src/routes/(landing)/login/login.remote.ts`
-- Service example: `/src/lib/services/TaskService.ts`
-- API client: `/src/lib/services/ApiService.ts`
+- Query utility: `/src/lib/utils/query.svelte.ts`
+- Service examples: `/src/lib/services/api/TaskService.ts`, `/src/lib/services/api/AuthService.ts`
+- Service instances: `/src/lib/stores/service-instances.svelte.ts`
+- API client: `/src/lib/services/api/ApiService.ts`
+- Schema examples: `/src/lib/schemas/user.ts`, `/src/lib/schemas/task.ts`
+- Form example (SPA mode): `/src/lib/components/auth/ClientLoginForm.svelte`
+- Auth guards: `/src/lib/auth/guards.ts`
+- Component example: `/src/routes/dashboard/tasks/+page.svelte`
 - Landing page styling: `/src/routes/+page.svelte`
 - Dashboard layout: `/src/routes/dashboard/+layout.svelte`
 - Auth middleware: `/src/hooks.server.ts`
