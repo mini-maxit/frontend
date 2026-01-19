@@ -60,6 +60,7 @@ docker run -p 3000:3000 \
 This project uses **direct client-to-backend API communication** through service classes with browser-side token management.
 
 **Key Components:**
+
 - Client-side services with singleton pattern
 - In-memory access tokens + HttpOnly refresh cookies
 - Reactive query utilities with Svelte 5 runes
@@ -118,26 +119,23 @@ const taskQuery = createParameterizedQuery(taskId, async (id) => {
 
   const authService = getAuthInstance();
 
-  const { form, errors, enhance, submitting } = superForm(
-    defaults(valibot(LoginSchema)),
-    {
-      validators: valibot(LoginSchema),
-      SPA: true,
-      async onUpdate({ form }) {
-        if (!authService || !form.valid) return;
+  const { form, errors, enhance, submitting } = superForm(defaults(valibot(LoginSchema)), {
+    validators: valibot(LoginSchema),
+    SPA: true,
+    async onUpdate({ form }) {
+      if (!authService || !form.valid) return;
 
-        const result = await authService.login(form.data);
-        if (result.success) {
-          // Fetch user data and redirect
-          const userService = getUserInstance();
-          await userService?.getCurrentUser();
-          await goto(AppRoutes.Dashboard);
-        } else {
-          toast.error(result.error || 'Login failed');
-        }
+      const result = await authService.login(form.data);
+      if (result.success) {
+        // Fetch user data and redirect
+        const userService = getUserInstance();
+        await userService?.getCurrentUser();
+        await goto(AppRoutes.Dashboard);
+      } else {
+        toast.error(result.error || 'Login failed');
       }
     }
-  );
+  });
 </script>
 
 <form method="POST" use:enhance>
@@ -494,14 +492,14 @@ type FormData = v.InferOutput<typeof FormSchema>;
 
 ## File Naming Conventions
 
-| Type             | Convention                    | Example                             |
-| ---------------- | ----------------------------- | ----------------------------------- |
-| Components       | PascalCase                    | `TaskDescription.svelte`            |
-| Services         | PascalCase + `Service` suffix | `TaskService.ts`                    |
-| DTOs             | lowercase                     | `task.ts`, `contest.ts`             |
-| Routes           | SvelteKit convention          | `+page.svelte`, `+layout.server.ts` |
-| Schemas          | PascalCase + `Schema` suffix  | `LoginSchema`, `CreateGroupSchema`  |
-| Utilities        | camelCase                     | `calculateScore.ts`                 |
+| Type       | Convention                    | Example                             |
+| ---------- | ----------------------------- | ----------------------------------- |
+| Components | PascalCase                    | `TaskDescription.svelte`            |
+| Services   | PascalCase + `Service` suffix | `TaskService.ts`                    |
+| DTOs       | lowercase                     | `task.ts`, `contest.ts`             |
+| Routes     | SvelteKit convention          | `+page.svelte`, `+layout.server.ts` |
+| Schemas    | PascalCase + `Schema` suffix  | `LoginSchema`, `CreateGroupSchema`  |
+| Utilities  | camelCase                     | `calculateScore.ts`                 |
 
 ## Common Patterns
 
@@ -544,23 +542,20 @@ type FormData = v.InferOutput<typeof FormSchema>;
 
   const authService = getAuthInstance();
 
-  const { form, errors, enhance, submitting } = superForm(
-    defaults(valibot(LoginSchema)),
-    {
-      validators: valibot(LoginSchema),
-      SPA: true,
-      async onUpdate({ form }) {
-        if (!authService || !form.valid) return;
+  const { form, errors, enhance, submitting } = superForm(defaults(valibot(LoginSchema)), {
+    validators: valibot(LoginSchema),
+    SPA: true,
+    async onUpdate({ form }) {
+      if (!authService || !form.valid) return;
 
-        const result = await authService.login(form.data);
-        if (result.success) {
-          toast.success('Login successful');
-        } else {
-          toast.error(result.error || 'Login failed');
-        }
+      const result = await authService.login(form.data);
+      if (result.success) {
+        toast.success('Login successful');
+      } else {
+        toast.error(result.error || 'Login failed');
       }
     }
-  );
+  });
 </script>
 
 <form method="POST" use:enhance>

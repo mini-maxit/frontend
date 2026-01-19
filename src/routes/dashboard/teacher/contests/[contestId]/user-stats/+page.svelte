@@ -4,7 +4,12 @@
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
 
   // Placeholder function - to be replaced when remote function is implemented
-  const getContestUserStats = (params: any) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getContestUserStats = (params: any) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
   import * as Table from '$lib/components/ui/table';
   import * as Card from '$lib/components/ui/card';
   import Trophy from '@lucide/svelte/icons/trophy';
@@ -36,8 +41,10 @@
       .map((userStat) => {
         const totalScore =
           userStat.taskBreakdown.length > 0
-            ? userStat.taskBreakdown.reduce((sum: number, task: TaskResult) => sum + task.bestScore, 0) /
-              userStat.taskBreakdown.length
+            ? userStat.taskBreakdown.reduce(
+                (sum: number, task: TaskResult) => sum + task.bestScore,
+                0
+              ) / userStat.taskBreakdown.length
             : 0;
         return { ...userStat, totalScore };
       })

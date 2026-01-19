@@ -22,14 +22,7 @@
     onSuccess?: () => void;
   }
 
-  let {
-    taskId,
-    userId,
-    userName,
-    currentPermission,
-    canEdit = false,
-    onSuccess
-  }: Props = $props();
+  let { taskId, userId, userName, currentPermission, canEdit = false, onSuccess }: Props = $props();
 
   const accessControlService = getAccessControlInstance();
 
@@ -41,7 +34,10 @@
   const isEditable = $derived(canEdit && currentPermission !== Permission.Owner);
 
   const { form, errors, enhance, submitting } = superForm(
-    defaults({ resourceId: taskId, userId, permission: currentPermission }, valibot(UpdateCollaboratorSchema)),
+    defaults(
+      { resourceId: taskId, userId, permission: currentPermission },
+      valibot(UpdateCollaboratorSchema)
+    ),
     {
       id: `task-collab-perm-${taskId}-${userId}`,
       validators: valibot(UpdateCollaboratorSchema),

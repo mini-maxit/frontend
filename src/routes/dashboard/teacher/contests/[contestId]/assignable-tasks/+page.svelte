@@ -22,8 +22,21 @@
   import { SvelteDate } from 'svelte/reactivity';
 
   // Placeholder functions - to be replaced when remote functions are implemented
-  const getAssignableTasks = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
-  const addTaskToContest = { enhance: (callback: any) => callback, fields: { contestId: { as: (t: string) => ({}) }, taskId: { as: (t: string) => ({}) }, startAt: { as: (t: string) => ({}) }, endAt: { as: (t: string) => ({}) } } };
+  const getAssignableTasks = (contestId: number) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
+  const addTaskToContest = {
+    enhance: (callback: any) => callback,
+    fields: {
+      contestId: { as: (t: string) => ({}) },
+      taskId: { as: (t: string) => ({}) },
+      startAt: { as: (t: string) => ({}) },
+      endAt: { as: (t: string) => ({}) }
+    }
+  };
 
   interface Props {
     data: {

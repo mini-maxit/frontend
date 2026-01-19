@@ -4,10 +4,10 @@ import { browser } from '$app/environment';
  * Query result interface exposing reactive state
  */
 export interface Query<T> {
-	readonly current: T | null;
-	readonly loading: boolean;
-	readonly error: Error | null;
-	refresh: () => Promise<void>;
+  readonly current: T | null;
+  readonly loading: boolean;
+  readonly error: Error | null;
+  refresh: () => Promise<void>;
 }
 
 /**
@@ -38,42 +38,42 @@ export interface Query<T> {
  * ```
  */
 export function createQuery<T>(fetcher: () => Promise<T>): Query<T> {
-	let current = $state<T | null>(null);
-	let loading = $state(true);
-	let error = $state<Error | null>(null);
+  let current = $state<T | null>(null);
+  let loading = $state(true);
+  let error = $state<Error | null>(null);
 
-	async function fetchData(): Promise<void> {
-		loading = true;
-		error = null;
-		try {
-			const data = await fetcher();
-			current = data;
-		} catch (e) {
-			error = e instanceof Error ? e : new Error('Unknown error occurred');
-			current = null;
-			console.error('Query error:', e);
-		} finally {
-			loading = false;
-		}
-	}
+  async function fetchData(): Promise<void> {
+    loading = true;
+    error = null;
+    try {
+      const data = await fetcher();
+      current = data;
+    } catch (e) {
+      error = e instanceof Error ? e : new Error('Unknown error occurred');
+      current = null;
+      console.error('Query error:', e);
+    } finally {
+      loading = false;
+    }
+  }
 
-	// Auto-fetch on creation (browser only for client-side queries)
-	if (browser) {
-		fetchData();
-	}
+  // Auto-fetch on creation (browser only for client-side queries)
+  if (browser) {
+    fetchData();
+  }
 
-	return {
-		get current() {
-			return current;
-		},
-		get loading() {
-			return loading;
-		},
-		get error() {
-			return error;
-		},
-		refresh: fetchData
-	};
+  return {
+    get current() {
+      return current;
+    },
+    get loading() {
+      return loading;
+    },
+    get error() {
+      return error;
+    },
+    refresh: fetchData
+  };
 }
 
 /**
@@ -101,66 +101,66 @@ export function createQuery<T>(fetcher: () => Promise<T>): Query<T> {
  * ```
  */
 export function createParameterizedQuery<T, P>(
-	param: P,
-	fetcher: (param: P) => Promise<T>
+  param: P,
+  fetcher: (param: P) => Promise<T>
 ): Query<T> {
-	let current = $state<T | null>(null);
-	let loading = $state(true);
-	let error = $state<Error | null>(null);
+  let current = $state<T | null>(null);
+  let loading = $state(true);
+  let error = $state<Error | null>(null);
 
-	// Watch parameter changes and refetch automatically
-	// This properly tracks reactive parameters like $derived values
-	$effect(() => {
-		// Access param to establish reactivity
-		const currentParam = param;
+  // Watch parameter changes and refetch automatically
+  // This properly tracks reactive parameters like $derived values
+  $effect(() => {
+    // Access param to establish reactivity
+    const currentParam = param;
 
-		if (!browser) return;
+    if (!browser) return;
 
-		loading = true;
-		error = null;
+    loading = true;
+    error = null;
 
-		fetcher(currentParam)
-			.then((data) => {
-				current = data;
-				loading = false;
-			})
-			.catch((e) => {
-				error = e instanceof Error ? e : new Error('Unknown error occurred');
-				current = null;
-				loading = false;
-				console.error('Parameterized query error:', e);
-			});
-	});
+    fetcher(currentParam)
+      .then((data) => {
+        current = data;
+        loading = false;
+      })
+      .catch((e) => {
+        error = e instanceof Error ? e : new Error('Unknown error occurred');
+        current = null;
+        loading = false;
+        console.error('Parameterized query error:', e);
+      });
+  });
 
-	// Manual refresh function that uses current param value
-	async function refresh(): Promise<void> {
-		if (!browser) return;
+  // Manual refresh function that uses current param value
+  async function refresh(): Promise<void> {
+    if (!browser) return;
 
-		loading = true;
-		error = null;
+    loading = true;
+    error = null;
 
-		try {
-			const data = await fetcher(param);
-			current = data;
-		} catch (e) {
-			error = e instanceof Error ? e : new Error('Unknown error occurred');
-			current = null;
-			console.error('Parameterized query error:', e);
-		} finally {
-			loading = false;
-		}
-	}
+    try {
+      const data = await fetcher(param);
+      current = data;
+    } catch (e) {
+      error = e instanceof Error ? e : new Error('Unknown error occurred');
+      current = null;
+      console.error('Parameterized query error:', e);
+    } finally {
+      loading = false;
+    }
+  }
 
-	return {
-		get current() {
-			return current;
-		},
-		get loading() {
-			return loading;
-		},
-		get error() {
-			return error;
-		},
-		refresh
-	};
+  return {
+    get current() {
+      return current;
+    },
+    get loading() {
+      return loading;
+    },
+    get error() {
+      return error;
+    },
+    refresh
+  };
 }

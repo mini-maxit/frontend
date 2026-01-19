@@ -91,7 +91,6 @@
       </div>
     {:else}
       <form class="space-y-4" onsubmit={handleSubmit}>
-
         <div class="grid grid-cols-3 gap-4 border-b pb-2 text-sm font-semibold">
           <div>{m.admin_tasks_test_case_id()}</div>
           <div>{m.admin_tasks_memory_limit()}</div>

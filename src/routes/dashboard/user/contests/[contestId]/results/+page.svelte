@@ -30,7 +30,10 @@
 
     return [...resultsQuery.current.leaderboard]
       .map((userStats) => {
-        const totalScore = userStats.taskBreakdown.reduce((sum: number, task: TaskResult) => sum + task.bestScore, 0);
+        const totalScore = userStats.taskBreakdown.reduce(
+          (sum: number, task: TaskResult) => sum + task.bestScore,
+          0
+        );
         return { ...userStats, totalScore };
       })
       .sort((a, b) => b.totalScore - a.totalScore);
@@ -125,7 +128,9 @@
           </Card.Header>
           <Card.Content>
             <p class="text-2xl font-bold text-foreground">
-              {resultsQuery.current.myResults.taskResults.filter((t: TaskResult) => t.bestScore === 100).length}
+              {resultsQuery.current.myResults.taskResults.filter(
+                (t: TaskResult) => t.bestScore === 100
+              ).length}
               / {resultsQuery.current.myResults.taskResults.length}
             </p>
           </Card.Content>

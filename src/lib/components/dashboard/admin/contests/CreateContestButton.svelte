@@ -155,7 +155,6 @@
     </Dialog.Header>
 
     <form method="POST" use:enhance class="space-y-6">
-
       <div class="space-y-2">
         <Label for="name">{m.admin_contests_form_name_label()}</Label>
         <Input

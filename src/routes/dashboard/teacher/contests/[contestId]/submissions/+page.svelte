@@ -4,7 +4,12 @@
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
 
   // Placeholder function - to be replaced when remote function is implemented
-  const getContestSubmissions = (params: any) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getContestSubmissions = (params: any) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
   import type { Submission } from '$lib/dto/submission';
   import { SubmissionsList } from '$lib/components/dashboard/submissions';
   import { Button } from '$lib/components/ui/button';

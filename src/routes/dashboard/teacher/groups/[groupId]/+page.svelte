@@ -4,8 +4,18 @@
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
 
   // Placeholder functions - to be replaced when remote functions are implemented
-  const getGroup = (groupId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
-  const getGroupMembers = (groupId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getGroup = (groupId: number) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
+  const getGroupMembers = (groupId: number) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
   const updateGroup = { enhance: (callback: any) => callback, fields: {} };
   import {
     EditGroupDialog,

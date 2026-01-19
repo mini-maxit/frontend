@@ -83,7 +83,12 @@
       </div>
 
       <Dialog.Footer>
-        <Button type="button" variant="outline" onclick={() => (dialogOpen = false)} disabled={$submitting}>
+        <Button
+          type="button"
+          variant="outline"
+          onclick={() => (dialogOpen = false)}
+          disabled={$submitting}
+        >
           {m.groups_form_cancel()}
         </Button>
         <Button type="submit" disabled={$submitting}>

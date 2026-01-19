@@ -12,20 +12,20 @@ export { SubmissionService } from './SubmissionService';
 export { TasksManagementService } from './TasksManagementService';
 export { ContestsManagementService } from './ContestsManagementService';
 export { GroupsManagementService } from './GroupsManagementService';
-export { AccessControlService} from './AccessControlService';
+export { AccessControlService } from './AccessControlService';
 export { WorkerService } from './WorkerService';
 
 // Re-export service instance getters for convenience
 export {
-	getApiInstance,
-	getAuthInstance,
-	getUserInstance,
-	getTaskInstance,
-	getContestInstance,
-	getSubmissionInstance,
-	getTasksManagementInstance,
-	getContestsManagementInstance,
-	getGroupsManagementInstance,
-	getAccessControlInstance,
-	getWorkerInstance
+  getApiInstance,
+  getAuthInstance,
+  getUserInstance,
+  getTaskInstance,
+  getContestInstance,
+  getSubmissionInstance,
+  getTasksManagementInstance,
+  getContestsManagementInstance,
+  getGroupsManagementInstance,
+  getAccessControlInstance,
+  getWorkerInstance
 } from '$lib/stores/service-instances.svelte';

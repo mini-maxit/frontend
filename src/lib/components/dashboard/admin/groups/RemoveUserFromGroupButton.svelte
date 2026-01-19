@@ -55,7 +55,12 @@
     </Dialog.Header>
 
     <Dialog.Footer>
-      <Button type="button" variant="outline" onclick={() => (dialogOpen = false)} disabled={submitting}>
+      <Button
+        type="button"
+        variant="outline"
+        onclick={() => (dialogOpen = false)}
+        disabled={submitting}
+      >
         {m.group_members_remove_cancel()}
       </Button>
       <Button type="button" class="bg-primary" onclick={handleRemove} disabled={submitting}>

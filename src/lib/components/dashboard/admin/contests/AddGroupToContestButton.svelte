@@ -150,10 +150,19 @@
     </div>
 
     <Dialog.Footer>
-      <Button type="button" variant="outline" onclick={() => (dialogOpen = false)} disabled={submitting}>
+      <Button
+        type="button"
+        variant="outline"
+        onclick={() => (dialogOpen = false)}
+        disabled={submitting}
+      >
         {m.contest_groups_add_cancel()}
       </Button>
-      <Button type="button" onclick={handleSubmit} disabled={selectedGroupIds.size === 0 || submitting}>
+      <Button
+        type="button"
+        onclick={handleSubmit}
+        disabled={selectedGroupIds.size === 0 || submitting}
+      >
         {submitting ? 'Adding...' : m.contest_groups_add_submit()}
       </Button>
     </Dialog.Footer>

@@ -100,7 +100,9 @@
 
   const getScore = () => {
     if (!submissionQuery.current?.result?.testResults) return '-/-';
-    const passed = submissionQuery.current.result.testResults.filter((t: TestResult) => t.passed).length;
+    const passed = submissionQuery.current.result.testResults.filter(
+      (t: TestResult) => t.passed
+    ).length;
     const total = submissionQuery.current.result.testResults.length;
     return `${passed}/${total}`;
   };

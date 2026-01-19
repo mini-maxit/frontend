@@ -53,7 +53,10 @@
   let selectedUser = $derived(users?.items.find((u) => u.id === selectedUserId));
 
   const { form, errors, enhance, submitting } = superForm(
-    defaults({ resourceId: taskId, userId: 0, permission: Permission.Edit }, valibot(AddCollaboratorSchema)),
+    defaults(
+      { resourceId: taskId, userId: 0, permission: Permission.Edit },
+      valibot(AddCollaboratorSchema)
+    ),
     {
       id: `add-task-collab-${taskId}`,
       validators: valibot(AddCollaboratorSchema),
@@ -64,11 +67,10 @@
         if (!accessControlService || !form.valid) return;
 
         try {
-          await accessControlService.addCollaborator(
-            ResourceType.Tasks,
-            form.data.resourceId,
-            { userId: form.data.userId, permission: form.data.permission as Permission.Edit | Permission.Manage }
-          );
+          await accessControlService.addCollaborator(ResourceType.Tasks, form.data.resourceId, {
+            userId: form.data.userId,
+            permission: form.data.permission as Permission.Edit | Permission.Manage
+          });
           toast.success(m.task_collaborators_add_success());
           dialogOpen = false;
           resetForm();
@@ -141,7 +143,6 @@
       <LoadingSpinner />
     {:else}
       <form method="POST" use:enhance class="space-y-6">
-
         <!-- User Search and Selection -->
         <div class="space-y-3">
           <Label for="userSearch">{m.task_collaborators_add_user_label()}</Label>

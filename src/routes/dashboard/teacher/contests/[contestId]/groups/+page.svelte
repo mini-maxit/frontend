@@ -4,8 +4,18 @@
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
 
   // Placeholder functions - to be replaced when remote functions are implemented
-  const getContestGroups = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
-  const getAssignableGroups = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getContestGroups = (contestId: number) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
+  const getAssignableGroups = (contestId: number) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
   import {
     AddGroupToContestButton,
     RemoveGroupFromContestButton

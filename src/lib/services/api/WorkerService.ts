@@ -8,28 +8,28 @@ import type { WorkerStatus } from '$lib/dto/worker';
  * Mirrors the server-side WorkerService API
  */
 export class WorkerService {
-	constructor(private apiClient: ApiService) {}
+  constructor(private apiClient: ApiService) {}
 
-	async getWorkerStatus(): Promise<{
-		success: boolean;
-		status: number;
-		data?: WorkerStatus;
-		error?: string;
-	}> {
-		try {
-			const response: ApiResponse<WorkerStatus> = await this.apiClient.get({
-				url: '/workers/status'
-			});
-			return { success: true, data: response.data, status: 200 };
-		} catch (error) {
-			if (error instanceof ApiError) {
-				return {
-					success: false,
-					error: error.getApiMessage(),
-					status: error.getStatus()
-				};
-			}
-			throw error;
-		}
-	}
+  async getWorkerStatus(): Promise<{
+    success: boolean;
+    status: number;
+    data?: WorkerStatus;
+    error?: string;
+  }> {
+    try {
+      const response: ApiResponse<WorkerStatus> = await this.apiClient.get({
+        url: '/workers/status'
+      });
+      return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
 }

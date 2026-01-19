@@ -16,14 +16,8 @@
     onSuccess?: () => void;
   }
 
-  let {
-    taskId,
-    userId,
-    userName,
-    targetPermission,
-    currentUserPermission,
-    onSuccess
-  }: Props = $props();
+  let { taskId, userId, userName, targetPermission, currentUserPermission, onSuccess }: Props =
+    $props();
 
   const accessControlService = getAccessControlInstance();
 

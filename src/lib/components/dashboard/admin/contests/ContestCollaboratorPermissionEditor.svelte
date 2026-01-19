@@ -41,7 +41,10 @@
   const isEditable = $derived(canEdit && currentPermission !== Permission.Owner);
 
   const { form, errors, enhance, submitting } = superForm(
-    defaults({ resourceId: contestId, userId, permission: currentPermission }, valibot(UpdateCollaboratorSchema)),
+    defaults(
+      { resourceId: contestId, userId, permission: currentPermission },
+      valibot(UpdateCollaboratorSchema)
+    ),
     {
       id: `contest-collab-perm-${contestId}-${userId}`,
       validators: valibot(UpdateCollaboratorSchema),

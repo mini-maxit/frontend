@@ -8,7 +8,12 @@
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
 
   // Placeholder functions - to be replaced when remote functions are implemented
-  const getRegistrationRequests = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getRegistrationRequests = (contestId: number) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
   const approveRequest = async (data: any) => {};
   const rejectRequest = async (data: any) => {};
   import {

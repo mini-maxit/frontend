@@ -10,8 +10,18 @@
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
 
   // Placeholder functions - to be replaced when remote functions are implemented
-  const getTaskCollaborators = (taskId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
-  const getAssignableUsers = (taskId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getTaskCollaborators = (taskId: number) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
+  const getAssignableUsers = (taskId: number) => ({
+    current: null,
+    loading: true,
+    error: null,
+    refresh: () => {}
+  });
   const addCollaborator = { enhance: (callback: any) => callback, fields: {} };
   const updateCollaborator = { enhance: (callback: any) => callback, fields: {} };
   const removeCollaborator = { enhance: (callback: any) => callback, fields: {} };
