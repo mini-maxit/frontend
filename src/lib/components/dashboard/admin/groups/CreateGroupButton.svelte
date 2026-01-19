@@ -5,17 +5,45 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import Plus from '@lucide/svelte/icons/plus';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
-  import type { CreateGroupForm } from '$routes/dashboard/teacher/groups/groups.remote';
+  import { superForm, defaults } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import { CreateGroupSchema } from '$lib/schemas';
+  import { getGroupsManagementInstance } from '$lib/services';
 
   interface Props {
-    createGroup: CreateGroupForm;
+    onSuccess?: () => void;
   }
 
-  let { createGroup }: Props = $props();
+  let { onSuccess }: Props = $props();
+
+  const groupsService = getGroupsManagementInstance();
 
   let dialogOpen = $state(false);
+
+  // Initialize superform for SPA mode with client-side validation
+  const { form, errors, enhance, submitting } = superForm(defaults(valibot(CreateGroupSchema)), {
+    id: 'create-group',
+    validators: valibot(CreateGroupSchema),
+    SPA: true,
+    dataType: 'json',
+    resetForm: false,
+    async onUpdate({ form }) {
+      if (!groupsService || !form.valid) return;
+
+      try {
+        await groupsService.createGroup({
+          name: form.data.name
+        });
+        toast.success(m.groups_create_success());
+        dialogOpen = false;
+        if (onSuccess) onSuccess();
+      } catch (error) {
+        console.error('Create group error:', error);
+        toast.error(m.groups_create_error());
+      }
+    }
+  });
 </script>
 
 <Dialog.Root bind:open={dialogOpen}>
@@ -52,44 +80,30 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      {...createGroup.enhance(async ({ submit }) => {
-        try {
-          await submit();
-          toast.success(m.groups_create_success());
-          dialogOpen = false;
-        } catch (error) {
-          if (isHttpError(error)) {
-            toast.error(error.body.message);
-          } else {
-            toast.error(m.groups_create_error());
-          }
-        }
-      })}
-      class="space-y-6"
-    >
+    <form method="POST" use:enhance class="space-y-6">
       <div class="space-y-2">
         <Label for="name">{m.groups_form_name_label()}</Label>
         <Input
-          {...createGroup.fields.name.as('text')}
           id="name"
           name="name"
-          autocomplete="off"
+          type="text"
+          bind:value={$form.name}
+          disabled={$submitting}
+          aria-invalid={$errors.name ? 'true' : undefined}
           placeholder={m.groups_form_name_placeholder()}
-          required
           class="transition-all duration-200 focus:ring-2 focus:ring-primary"
         />
-        {#each createGroup.fields.name.issues() as issue (issue.message)}
-          <p class="text-sm text-destructive">{issue.message}</p>
-        {/each}
+        {#if $errors.name}
+          <p class="text-sm text-destructive">{$errors.name}</p>
+        {/if}
       </div>
 
       <Dialog.Footer>
-        <Button type="button" variant="outline" onclick={() => (dialogOpen = false)}>
+        <Button type="button" variant="outline" onclick={() => (dialogOpen = false)} disabled={$submitting}>
           {m.groups_form_cancel()}
         </Button>
-        <Button type="submit">
-          {m.groups_form_create()}
+        <Button type="submit" disabled={$submitting}>
+          {$submitting ? 'Creating...' : m.groups_form_create()}
         </Button>
       </Dialog.Footer>
     </form>

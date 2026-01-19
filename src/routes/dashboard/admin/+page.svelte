@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { getWorkerStatus } from './worker-status.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getWorkerInstance } from '$lib/services';
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as Card from '$lib/components/ui/card';
   import * as m from '$lib/paraglide/messages';
@@ -10,7 +11,13 @@
   import Clock from '@lucide/svelte/icons/clock';
   import { WorkerStatusType } from '$lib/dto/worker';
 
-  const workerStatusQuery = getWorkerStatus();
+  const workerService = getWorkerInstance();
+  const workerStatusQuery = createQuery(async () => {
+    if (!workerService) throw new Error('Service unavailable');
+    const result = await workerService.getWorkerStatus();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch worker status');
+    return result.data!;
+  });
 
   // Status styling configuration
   const statusStyles = {

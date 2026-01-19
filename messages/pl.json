@@ -871,5 +871,11 @@
   "contest_groups_remove_success": "Grupa została usunięta pomyślnie!",
   "contest_groups_remove_error": "Nie udało się usunąć grupy",
   "admin_contests_card_view_groups": "Zarządzaj Grupami",
-  "sidebar_groups": "Grupy"
+  "sidebar_groups": "Grupy",
+  "tasks_title": "Dostępne zadania",
+  "tasks_subtitle": "Przeglądaj i pracuj nad dostępnymi wyzwaniami programistycznymi",
+  "tasks_empty_title": "Brak dostępnych zadań",
+  "tasks_empty_description": "Obecnie nie masz przypisanych żadnych zadań",
+  "tasks_loading": "Ładowanie zadań...",
+  "tasks_page_title": "Zadania"
 }

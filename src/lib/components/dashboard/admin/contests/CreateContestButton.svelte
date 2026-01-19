@@ -9,20 +9,68 @@
   import Plus from '@lucide/svelte/icons/plus';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
   import { cn, toLocalRFC3339 } from '$lib/utils';
   import { SvelteDate } from 'svelte/reactivity';
-  import type { CreateContestForm } from '$routes/dashboard/teacher/contests/contests.remote';
+  import { superForm, defaults } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import { CreateContestSchema } from '$lib/schemas';
+  import { getContestsManagementInstance } from '$lib/services';
 
   interface Props {
-    createContest: CreateContestForm;
+    onSuccess?: () => void;
   }
 
-  let { createContest }: Props = $props();
+  let { onSuccess }: Props = $props();
+
+  const contestsService = getContestsManagementInstance();
 
   let dialogOpen = $state(false);
+
+  // Initialize superform for SPA mode with client-side validation
+  const { form, errors, enhance, submitting } = superForm(
+    defaults(
+      {
+        name: '',
+        description: '',
+        startAt: '',
+        endAt: '',
+        isRegistrationOpen: false,
+        isSubmissionOpen: false,
+        isVisible: false
+      },
+      valibot(CreateContestSchema)
+    ),
+    {
+      id: 'create-contest',
+      validators: valibot(CreateContestSchema),
+      SPA: true,
+      dataType: 'json',
+      resetForm: false,
+      async onUpdate({ form }) {
+        if (!contestsService || !form.valid) return;
+
+        try {
+          await contestsService.createContest({
+            name: form.data.name,
+            description: form.data.description,
+            startAt: form.data.startAt,
+            endAt: form.data.endAt || undefined,
+            isRegistrationOpen: form.data.isRegistrationOpen,
+            isSubmissionOpen: form.data.isSubmissionOpen,
+            isVisible: form.data.isVisible
+          });
+          toast.success(m.admin_contests_create_success());
+          dialogOpen = false;
+          if (onSuccess) onSuccess();
+        } catch (error) {
+          console.error('Create contest error:', error);
+          toast.error(m.admin_contests_create_error());
+        }
+      }
+    }
+  );
 
   // Date formatters
   const df = new DateFormatter('en-US', {
@@ -65,8 +113,11 @@
     return toLocalRFC3339(dateObj);
   }
 
-  let startAtValue = $derived(getDateTimeString(startDate, startTime));
-  let endAtValue = $derived(hasEndTime ? getDateTimeString(endDate, endTime) : '');
+  // Update form values when date/time changes
+  $effect(() => {
+    $form.startAt = getDateTimeString(startDate, startTime);
+    $form.endAt = hasEndTime ? getDateTimeString(endDate, endTime) : '';
+  });
 </script>
 
 <Dialog.Root bind:open={dialogOpen}>
@@ -103,57 +154,40 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      {...createContest.enhance(async ({ submit }) => {
-        try {
-          await submit();
-          toast.success(m.admin_contests_create_success());
-          dialogOpen = false;
-        } catch (error) {
-          if (isHttpError(error)) {
-            toast.error(error.body.message);
-          } else {
-            toast.error(m.admin_contests_create_error());
-          }
-        }
-      })}
-      class="space-y-6"
-    >
-      <!-- Hidden inputs for form submission -->
-      <input {...createContest.fields.startAt.as('text')} bind:value={startAtValue} hidden />
-      <input {...createContest.fields.endAt.as('text')} bind:value={endAtValue} hidden />
+    <form method="POST" use:enhance class="space-y-6">
 
       <div class="space-y-2">
         <Label for="name">{m.admin_contests_form_name_label()}</Label>
         <Input
-          {...createContest.fields.name.as('text')}
           id="name"
           name="name"
-          autocomplete="off"
+          type="text"
+          bind:value={$form.name}
+          disabled={$submitting}
+          aria-invalid={$errors.name ? 'true' : undefined}
           placeholder={m.admin_contests_form_name_placeholder()}
-          required
           class="transition-all duration-200 focus:ring-2 focus:ring-primary"
         />
-        {#each createContest.fields.name.issues() as issue (issue.message)}
-          <p class="text-sm text-destructive">{issue.message}</p>
-        {/each}
+        {#if $errors.name}
+          <p class="text-sm text-destructive">{$errors.name}</p>
+        {/if}
       </div>
 
       <div class="space-y-2">
         <Label for="description">{m.admin_contests_form_description_label()}</Label>
         <textarea
-          {...createContest.fields.description.as('text')}
           id="description"
           name="description"
-          autocomplete="off"
+          bind:value={$form.description}
+          disabled={$submitting}
+          aria-invalid={$errors.description ? 'true' : undefined}
           placeholder={m.admin_contests_form_description_placeholder()}
-          required
           rows="4"
           class="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
         ></textarea>
-        {#each createContest.fields.description.issues() as issue (issue.message)}
-          <p class="text-sm text-destructive">{issue.message}</p>
-        {/each}
+        {#if $errors.description}
+          <p class="text-sm text-destructive">{$errors.description}</p>
+        {/if}
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2">
@@ -201,9 +235,9 @@
             />
           </div>
 
-          {#each createContest.fields.startAt.issues() as issue (issue.message)}
-            <p class="text-sm text-destructive">{issue.message}</p>
-          {/each}
+          {#if $errors.startAt}
+            <p class="text-sm text-destructive">{$errors.startAt}</p>
+          {/if}
         </div>
 
         <!-- End Date & Time -->
@@ -256,9 +290,9 @@
               />
             </div>
 
-            {#each createContest.fields.endAt.issues() as issue (issue.message)}
-              <p class="text-sm text-destructive">{issue.message}</p>
-            {/each}
+            {#if $errors.endAt}
+              <p class="text-sm text-destructive">{$errors.endAt}</p>
+            {/if}
           {/if}
         </div>
       </div>
@@ -269,7 +303,9 @@
         <div class="flex items-center gap-3">
           <Checkbox
             id="isRegistrationOpen"
-            {...createContest.fields.isRegistrationOpen.as('checkbox')}
+            name="isRegistrationOpen"
+            bind:checked={$form.isRegistrationOpen}
+            disabled={$submitting}
           />
           <Label for="isRegistrationOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_registration_open()}
@@ -279,7 +315,9 @@
         <div class="flex items-center gap-3">
           <Checkbox
             id="isSubmissionOpen"
-            {...createContest.fields.isSubmissionOpen.as('checkbox')}
+            name="isSubmissionOpen"
+            bind:checked={$form.isSubmissionOpen}
+            disabled={$submitting}
           />
           <Label for="isSubmissionOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_submission_open()}
@@ -287,7 +325,12 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <Checkbox id="isVisible" {...createContest.fields.isVisible.as('checkbox')} />
+          <Checkbox
+            id="isVisible"
+            name="isVisible"
+            bind:checked={$form.isVisible}
+            disabled={$submitting}
+          />
           <Label for="isVisible" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_visible()}
           </Label>
@@ -298,17 +341,17 @@
         <Button
           type="button"
           variant="outline"
-          onclick={() => {
-            dialogOpen = false;
-          }}
+          onclick={() => (dialogOpen = false)}
+          disabled={$submitting}
         >
           {m.admin_contests_form_cancel()}
         </Button>
         <Button
           type="submit"
+          disabled={$submitting}
           class="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
         >
-          {m.admin_contests_form_create()}
+          {$submitting ? 'Creating...' : m.admin_contests_form_create()}
         </Button>
       </Dialog.Footer>
     </form>

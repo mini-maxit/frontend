@@ -2,11 +2,18 @@
   import ActiveContestCard from '$lib/components/dashboard/contests/ActiveContestCard.svelte';
   import PastContestCard from '$lib/components/dashboard/contests/PastContestCard.svelte';
   import { calculateTimeInMinutes, formatRelativeDate } from '$lib/utils/contest';
-  import { getUserContests } from './contests.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getContestInstance } from '$lib/services';
   import * as m from '$lib/paraglide/messages';
   import { Button } from '$lib/components/ui/button';
 
-  const contestsQuery = getUserContests();
+  const contestService = getContestInstance();
+  const contestsQuery = createQuery(async () => {
+    if (!contestService) throw new Error('Service unavailable');
+    const result = await contestService.getUserContests();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch contests');
+    return result.data!;
+  });
 </script>
 
 <svelte:boundary onerror={(error) => console.error('Contest page error:', error)}>

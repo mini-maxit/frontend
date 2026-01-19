@@ -8,7 +8,6 @@
   import * as Popover from '$lib/components/ui/popover';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import {
     DateFormatter,
@@ -16,16 +15,67 @@
     getLocalTimeZone,
     parseDate
   } from '@internationalized/date';
-  import { updateContest } from '$routes/dashboard/teacher/contests/contests.remote';
   import { cn, toLocalRFC3339 } from '$lib/utils';
   import type { CreatedContest } from '$lib/dto/contest';
+  import { superForm, defaults } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import { UpdateContestSchema } from '$lib/schemas';
+  import { getContestsManagementInstance } from '$lib/services';
 
   interface Props {
     contest: CreatedContest;
     dialogOpen: boolean;
+    onSuccess?: () => void;
   }
 
-  let { contest, dialogOpen = $bindable() }: Props = $props();
+  let { contest, dialogOpen = $bindable(), onSuccess }: Props = $props();
+
+  const contestsService = getContestsManagementInstance();
+
+  // Initialize superform for SPA mode with client-side validation
+  const { form, errors, enhance, submitting } = superForm(
+    defaults(
+      {
+        id: contest.id,
+        name: contest.name,
+        description: contest.description,
+        startAt: contest.startAt,
+        endAt: contest.endAt || '',
+        isRegistrationOpen: contest.isRegistrationOpen,
+        isSubmissionOpen: contest.isSubmissionOpen,
+        isVisible: contest.isVisible
+      },
+      valibot(UpdateContestSchema)
+    ),
+    {
+      id: `edit-contest-${contest.id}`,
+      validators: valibot(UpdateContestSchema),
+      SPA: true,
+      dataType: 'json',
+      resetForm: false,
+      async onUpdate({ form }) {
+        if (!contestsService || !form.valid) return;
+
+        try {
+          await contestsService.updateContest(form.data.id, {
+            name: form.data.name,
+            description: form.data.description,
+            startAt: form.data.startAt,
+            endAt: form.data.endAt || undefined,
+            isRegistrationOpen: form.data.isRegistrationOpen,
+            isSubmissionOpen: form.data.isSubmissionOpen,
+            isVisible: form.data.isVisible
+          });
+          toast.success(m.admin_contests_edit_success());
+          dialogOpen = false;
+          if (onSuccess) onSuccess();
+        } catch (error) {
+          console.error('Update contest error:', error);
+          toast.error(m.admin_contests_edit_error());
+        }
+      }
+    }
+  );
 
   // Date formatters
   const df = new DateFormatter('en-US', {
@@ -71,8 +121,11 @@
     return toLocalRFC3339(dateObj);
   }
 
-  let startAtValue = $derived(getDateTimeString(startDate, startTime));
-  let endAtValue = $derived(hasEndTime ? getDateTimeString(endDate, endTime) : '');
+  // Update form values when date/time changes
+  $effect(() => {
+    $form.startAt = getDateTimeString(startDate, startTime);
+    $form.endAt = hasEndTime ? getDateTimeString(endDate, endTime) : '';
+  });
 </script>
 
 <Dialog.Root bind:open={dialogOpen}>
@@ -84,60 +137,39 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      {...updateContest.enhance(async ({ submit }) => {
-        try {
-          await submit();
-          toast.success(m.admin_contests_edit_success());
-          dialogOpen = false;
-        } catch (error: unknown) {
-          if (isHttpError(error)) {
-            toast.error(error.body.message);
-          } else {
-            toast.error(m.admin_contests_edit_error());
-          }
-        }
-      })}
-      class="space-y-6"
-    >
-      <!-- Hidden inputs for form submission -->
-      <input {...updateContest.fields.id.as('number')} type="hidden" value={contest.id} />
-      <input {...updateContest.fields.startAt.as('text')} bind:value={startAtValue} hidden />
-      <input {...updateContest.fields.endAt.as('text')} bind:value={endAtValue} hidden />
-
+    <form method="POST" use:enhance class="space-y-6">
       <div class="space-y-2">
         <Label for="name">{m.admin_contests_form_name_label()}</Label>
         <Input
-          {...updateContest.fields.name.as('text')}
           id="name"
           name="name"
-          value={contest.name}
-          autocomplete="off"
+          type="text"
+          bind:value={$form.name}
+          disabled={$submitting}
+          aria-invalid={$errors.name ? 'true' : undefined}
           placeholder={m.admin_contests_form_name_placeholder()}
-          required
           class="transition-all duration-200 focus:ring-2 focus:ring-primary"
         />
-        {#each updateContest.fields.name.issues() ?? [] as issue (issue.message)}
-          <p class="text-sm text-destructive">{issue.message}</p>
-        {/each}
+        {#if $errors.name}
+          <p class="text-sm text-destructive">{$errors.name}</p>
+        {/if}
       </div>
 
       <div class="space-y-2">
         <Label for="description">{m.admin_contests_form_description_label()}</Label>
         <textarea
-          {...updateContest.fields.description.as('text')}
           id="description"
           name="description"
-          value={contest.description}
-          autocomplete="off"
+          bind:value={$form.description}
+          disabled={$submitting}
+          aria-invalid={$errors.description ? 'true' : undefined}
           placeholder={m.admin_contests_form_description_placeholder()}
-          required
           rows="4"
           class="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
         ></textarea>
-        {#each updateContest.fields.description.issues() ?? [] as issue (issue.message)}
-          <p class="text-sm text-destructive">{issue.message}</p>
-        {/each}
+        {#if $errors.description}
+          <p class="text-sm text-destructive">{$errors.description}</p>
+        {/if}
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2">
@@ -185,9 +217,9 @@
             />
           </div>
 
-          {#each updateContest.fields.startAt.issues() ?? [] as issue (issue.message)}
-            <p class="text-sm text-destructive">{issue.message}</p>
-          {/each}
+          {#if $errors.startAt}
+            <p class="text-sm text-destructive">{$errors.startAt}</p>
+          {/if}
         </div>
 
         <!-- End Date & Time -->
@@ -240,9 +272,9 @@
               />
             </div>
 
-            {#each updateContest.fields.endAt.issues() ?? [] as issue (issue.message)}
-              <p class="text-sm text-destructive">{issue.message}</p>
-            {/each}
+            {#if $errors.endAt}
+              <p class="text-sm text-destructive">{$errors.endAt}</p>
+            {/if}
           {/if}
         </div>
       </div>
@@ -252,8 +284,10 @@
 
         <div class="flex items-center gap-3">
           <Checkbox
-            {...updateContest.fields.isRegistrationOpen.as('checkbox')}
-            checked={contest.isRegistrationOpen}
+            id="isRegistrationOpen"
+            name="isRegistrationOpen"
+            bind:checked={$form.isRegistrationOpen}
+            disabled={$submitting}
           />
           <Label for="isRegistrationOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_registration_open()}
@@ -262,8 +296,10 @@
 
         <div class="flex items-center gap-3">
           <Checkbox
-            {...updateContest.fields.isSubmissionOpen.as('checkbox')}
-            checked={contest.isSubmissionOpen}
+            id="isSubmissionOpen"
+            name="isSubmissionOpen"
+            bind:checked={$form.isSubmissionOpen}
+            disabled={$submitting}
           />
           <Label for="isSubmissionOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_submission_open()}
@@ -272,8 +308,10 @@
 
         <div class="flex items-center gap-3">
           <Checkbox
-            {...updateContest.fields.isVisible.as('checkbox')}
-            checked={contest.isVisible}
+            id="isVisible"
+            name="isVisible"
+            bind:checked={$form.isVisible}
+            disabled={$submitting}
           />
           <Label for="isVisible" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_visible()}
@@ -285,17 +323,17 @@
         <Button
           type="button"
           variant="outline"
-          onclick={() => {
-            dialogOpen = false;
-          }}
+          onclick={() => (dialogOpen = false)}
+          disabled={$submitting}
         >
           {m.admin_contests_form_cancel()}
         </Button>
         <Button
           type="submit"
+          disabled={$submitting}
           class="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
         >
-          {m.admin_contests_form_update()}
+          {$submitting ? 'Updating...' : m.admin_contests_form_update()}
         </Button>
       </Dialog.Footer>
     </form>

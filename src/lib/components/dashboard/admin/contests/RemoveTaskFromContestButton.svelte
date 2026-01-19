@@ -3,24 +3,47 @@
   import { Button } from '$lib/components/ui/button';
   import Trash2 from '@lucide/svelte/icons/trash-2';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
-  import type { RemoveTaskFromContestForm } from '$routes/dashboard/teacher/contests/[contestId]/tasks/tasks.remote';
+  import { getContestsManagementInstance } from '$lib/services';
 
   interface Props {
     contestId: number;
     taskId: number;
     taskTitle: string;
-    removeTaskFromContest: RemoveTaskFromContestForm;
+    onSuccess?: () => void;
   }
 
-  let { contestId, taskId, taskTitle, removeTaskFromContest }: Props = $props();
+  let { contestId, taskId, taskTitle, onSuccess }: Props = $props();
+
+  const contestsService = getContestsManagementInstance();
 
   let dialogOpen = $state(false);
   let isRemoving = $state(false);
 
   function handleCancel() {
     dialogOpen = false;
+  }
+
+  async function handleRemove(event: Event) {
+    event.preventDefault();
+
+    if (!contestsService) {
+      toast.error(m.admin_contest_tasks_remove_error());
+      return;
+    }
+
+    isRemoving = true;
+    try {
+      await contestsService.removeTaskFromContest(contestId, taskId);
+      toast.success(m.admin_contest_tasks_remove_success());
+      dialogOpen = false;
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error('Remove task from contest error:', error);
+      toast.error(m.admin_contest_tasks_remove_error());
+    } finally {
+      isRemoving = false;
+    }
   }
 </script>
 
@@ -43,37 +66,13 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      {...removeTaskFromContest.enhance(async ({ submit }) => {
-        isRemoving = true;
-        try {
-          await submit();
-          toast.success(m.admin_contest_tasks_remove_success());
-          dialogOpen = false;
-        } catch (error: unknown) {
-          if (isHttpError(error)) {
-            toast.error(error.body.message);
-          } else {
-            toast.error(m.admin_contest_tasks_remove_error());
-          }
-        } finally {
-          isRemoving = false;
-        }
-      })}
-    >
-      <input
-        {...removeTaskFromContest.fields.contestId.as('number')}
-        bind:value={contestId}
-        hidden
-      />
-      <input {...removeTaskFromContest.fields.taskId.as('number')} bind:value={taskId} hidden />
-
+    <form onsubmit={handleRemove}>
       <Dialog.Footer>
         <Button type="button" variant="outline" onclick={handleCancel} disabled={isRemoving}>
           {m.admin_contest_tasks_remove_cancel()}
         </Button>
         <Button type="submit" variant="destructive" disabled={isRemoving}>
-          {m.admin_contest_tasks_remove_confirm()}
+          {isRemoving ? 'Removing...' : m.admin_contest_tasks_remove_confirm()}
         </Button>
       </Dialog.Footer>
     </form>

@@ -1,7 +1,7 @@
 import { goto } from '$app/navigation';
 import { browser } from '$app/environment';
 import { AppRoutes } from '$lib/routes';
-import { getClientAuthInstance } from '$lib/services';
+import { getAuthInstance } from '$lib/services';
 
 /**
  * Client-side logout function
@@ -14,7 +14,7 @@ export async function clientLogout(): Promise<void> {
   }
 
   try {
-    const authService = getClientAuthInstance();
+    const authService = getAuthInstance();
     if (!authService) {
       console.error('Auth service not available');
       return;

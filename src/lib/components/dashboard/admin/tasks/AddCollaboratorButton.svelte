@@ -7,23 +7,27 @@
   import UserPlus from '@lucide/svelte/icons/user-plus';
   import Search from '@lucide/svelte/icons/search';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
-  import { Permission } from '$lib/dto/accessControl';
+  import { Permission, ResourceType } from '$lib/dto/accessControl';
   import type { User } from '$lib/dto/user';
-  import type { AddCollaboratorForm } from '$routes/dashboard/teacher/tasks/[taskId]/collaborators/collaborators.remote';
+  import { getAccessControlInstance } from '$lib/services';
   import { LoadingSpinner } from '$lib/components/common';
   import type { PaginatedData } from '$lib/dto/response';
+  import { AddCollaboratorSchema } from '$lib/schemas';
+  import { defaults, superForm } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
 
   interface Props {
     taskId: number;
-    addCollaborator: AddCollaboratorForm;
     users: PaginatedData<User> | undefined;
     usersLoading: boolean;
     usersError: Error | null;
+    onSuccess?: () => void;
   }
 
-  let { taskId, addCollaborator, users, usersLoading, usersError }: Props = $props();
+  let { taskId, users, usersLoading, usersError, onSuccess }: Props = $props();
+
+  const accessControlService = getAccessControlInstance();
 
   let dialogOpen = $state(false);
   let searchQuery = $state('');
@@ -47,6 +51,35 @@
   });
 
   let selectedUser = $derived(users?.items.find((u) => u.id === selectedUserId));
+
+  const { form, errors, enhance, submitting } = superForm(
+    defaults({ resourceId: taskId, userId: 0, permission: Permission.Edit }, valibot(AddCollaboratorSchema)),
+    {
+      id: `add-task-collab-${taskId}`,
+      validators: valibot(AddCollaboratorSchema),
+      SPA: true,
+      dataType: 'json',
+      resetForm: false,
+      async onUpdate({ form }) {
+        if (!accessControlService || !form.valid) return;
+
+        try {
+          await accessControlService.addCollaborator(
+            ResourceType.Tasks,
+            form.data.resourceId,
+            { userId: form.data.userId, permission: form.data.permission as Permission.Edit | Permission.Manage }
+          );
+          toast.success(m.task_collaborators_add_success());
+          dialogOpen = false;
+          resetForm();
+          if (onSuccess) onSuccess();
+        } catch (error) {
+          console.error('Add task collaborator error:', error);
+          toast.error(m.task_collaborators_add_error());
+        }
+      }
+    }
+  );
 
   function resetForm() {
     searchQuery = '';
@@ -107,27 +140,7 @@
     {:else if usersLoading}
       <LoadingSpinner />
     {:else}
-      <form
-        {...addCollaborator.enhance(async ({ submit }) => {
-          try {
-            await submit();
-            toast.success(m.task_collaborators_add_success());
-            dialogOpen = false;
-            resetForm();
-          } catch (error: unknown) {
-            if (isHttpError(error)) {
-              toast.error(error.body.message);
-            } else {
-              toast.error(m.task_collaborators_add_error());
-            }
-          }
-        })}
-        class="space-y-6"
-      >
-        <!-- Hidden inputs for form submission -->
-        <input type="hidden" name="taskId" value={taskId} />
-        <input type="hidden" name="userId" value={selectedUserId ?? ''} />
-        <input type="hidden" name="permission" value={selectedPermission ?? ''} />
+      <form method="POST" use:enhance class="space-y-6">
 
         <!-- User Search and Selection -->
         <div class="space-y-3">
@@ -157,7 +170,10 @@
               {#each filteredUsers as user (user.id)}
                 <button
                   type="button"
-                  onclick={() => (selectedUserId = user.id)}
+                  onclick={() => {
+                    selectedUserId = user.id;
+                    $form.userId = user.id;
+                  }}
                   class="flex w-full items-center gap-3 border-b border-border p-3 text-left transition-colors last:border-b-0 hover:bg-muted/50 {selectedUserId ===
                   user.id
                     ? 'bg-primary/10'
@@ -200,7 +216,10 @@
           <Label for="permission">{m.task_collaborators_add_permission_label()}</Label>
           <Select.Root
             type="single"
-            onValueChange={(value) => (selectedPermission = value as Permission)}
+            onValueChange={(value) => {
+              selectedPermission = value as Permission;
+              $form.permission = value as Permission;
+            }}
           >
             <Select.Trigger class="w-full" id="permission">
               {selectedPermission
@@ -226,15 +245,16 @@
               dialogOpen = false;
               resetForm();
             }}
+            disabled={$submitting}
           >
             {m.task_collaborators_add_cancel()}
           </Button>
           <Button
             type="submit"
-            disabled={!selectedUserId || !selectedPermission}
+            disabled={!selectedUserId || !selectedPermission || $submitting}
             class="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
           >
-            {m.task_collaborators_add_submit()}
+            {$submitting ? 'Adding...' : m.task_collaborators_add_submit()}
           </Button>
         </Dialog.Footer>
       </form>

@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getTask, getLanguages } from './task.remote';
-  import { submitSolution } from './submit.remote';
+  import { page } from '$app/state';
+  import { createParameterizedQuery, createQuery } from '$lib/utils/query.svelte';
+  import { getTaskInstance, getSubmissionInstance } from '$lib/services';
   import TaskHeader from '$lib/components/dashboard/tasks/task-page/tasks/TaskHeader.svelte';
   import TaskPdfViewer from '$lib/components/dashboard/tasks/task-page/tasks/TaskPdfViewer.svelte';
   import TaskSubmissionForm from '$lib/components/dashboard/tasks/task-page/tasks/TaskSubmissionForm.svelte';
@@ -8,16 +9,24 @@
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as m from '$lib/paraglide/messages';
 
-  interface Props {
-    data: {
-      taskId: number;
-    };
-  }
+  const taskService = getTaskInstance();
+  const submissionService = getSubmissionInstance();
 
-  let { data }: Props = $props();
+  const taskId = $derived(Number(page.params.taskId));
 
-  const taskQuery = getTask(data.taskId);
-  const languagesQuery = getLanguages();
+  const taskQuery = createParameterizedQuery(taskId, async (id) => {
+    if (!taskService) throw new Error('Service unavailable');
+    const result = await taskService.getTaskById(id);
+    if (!result.success) throw new Error(result.error || 'Failed to fetch task');
+    return result.data!;
+  });
+
+  const languagesQuery = createQuery(async () => {
+    if (!submissionService) throw new Error('Service unavailable');
+    const result = await submissionService.getAvailableLanguages();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch languages');
+    return result.data!;
+  });
 
   let fileContent = $state<string>('');
 </script>
@@ -49,8 +58,8 @@
           languages={languagesQuery.current || []}
           loading={languagesQuery.loading}
           error={languagesQuery.error}
-          submitAction={submitSolution}
-          taskId={data.taskId}
+          {taskId}
+          onSuccess={() => taskQuery.refresh()}
         />
 
         <FilePreview content={fileContent} />

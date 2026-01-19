@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { toggleTaskVisibility } from '$routes/dashboard/teacher/tasks/tasks.remote';
+  // TODO: Import from new API service when available
+  // import { toggleTaskVisibility } from '$routes/dashboard/teacher/tasks/tasks.remote';
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Label } from '$lib/components/ui/label';
   import { Button } from '$lib/components/ui/button';

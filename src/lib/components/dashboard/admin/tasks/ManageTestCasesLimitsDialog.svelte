@@ -1,8 +1,5 @@
 <script lang="ts">
-  import {
-    getTaskLimits,
-    updateTaskLimits
-  } from '$routes/dashboard/teacher/tasks/test-cases.remote';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
@@ -10,24 +7,60 @@
   import { toast } from 'svelte-sonner';
   import * as m from '$lib/paraglide/messages';
   import Loader from '@lucide/svelte/icons/loader-circle';
+  import { getTasksManagementInstance } from '$lib/services';
 
   interface ManageTestCasesDialogProps {
     open: boolean;
     taskId: number;
     taskTitle: string;
+    onSuccess?: () => void;
   }
 
-  let { open = $bindable(), taskId, taskTitle }: ManageTestCasesDialogProps = $props();
+  interface TaskLimit {
+    order: number;
+    memoryLimit: number;
+    timeLimit: number;
+  }
 
-  let taskLimitsQuery = getTaskLimits(taskId);
+  let { open = $bindable(), taskId, taskTitle, onSuccess }: ManageTestCasesDialogProps = $props();
+
+  const tasksManagementService = getTasksManagementInstance();
+
+  let taskLimitsQuery = createParameterizedQuery(taskId, async (id) => {
+    if (!tasksManagementService) throw new Error('Service unavailable');
+    return await tasksManagementService.getTaskTestCaseLimits(id);
+  });
 
   let editedLimits = $state<Array<{ order: number; memoryLimit: number; timeLimit: number }>>([]);
+  let submitting = $state(false);
 
   $effect(() => {
     if (taskLimitsQuery?.current) {
-      editedLimits = taskLimitsQuery.current.map((l) => ({ ...l }));
+      editedLimits = taskLimitsQuery.current.map((limit) => ({ ...limit }));
     }
   });
+
+  async function handleSubmit(event: Event) {
+    event.preventDefault();
+
+    if (!tasksManagementService) {
+      toast.error(m.admin_tasks_test_cases_update_error());
+      return;
+    }
+
+    submitting = true;
+    try {
+      await tasksManagementService.updateTaskTestCaseLimits(taskId, editedLimits);
+      toast.success(m.admin_tasks_test_cases_updated());
+      open = false;
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error('Update task limits error:', error);
+      toast.error(m.admin_tasks_test_cases_update_error());
+    } finally {
+      submitting = false;
+    }
+  }
 </script>
 
 <Dialog.Root bind:open>
@@ -57,37 +90,7 @@
         <p class="text-sm text-muted-foreground">{m.admin_tasks_no_test_cases()}</p>
       </div>
     {:else}
-      <form
-        class="space-y-4"
-        {...updateTaskLimits.enhance(async ({ submit }) => {
-          try {
-            await submit();
-            toast.success(m.admin_tasks_test_cases_updated());
-            open = false;
-          } catch (error) {
-            toast.error(m.admin_tasks_test_cases_update_error());
-          }
-        })}
-      >
-        <input {...updateTaskLimits.fields.taskId.as('number')} type="hidden" value={taskId} />
-
-        {#each editedLimits as limit, i (limit.order)}
-          <input
-            {...updateTaskLimits.fields.limits[i].order.as('number')}
-            type="hidden"
-            value={limit.order}
-          />
-          <input
-            {...updateTaskLimits.fields.limits[i].memoryLimit.as('number')}
-            type="hidden"
-            value={limit.memoryLimit}
-          />
-          <input
-            {...updateTaskLimits.fields.limits[i].timeLimit.as('number')}
-            type="hidden"
-            value={limit.timeLimit}
-          />
-        {/each}
+      <form class="space-y-4" onsubmit={handleSubmit}>
 
         <div class="grid grid-cols-3 gap-4 border-b pb-2 text-sm font-semibold">
           <div>{m.admin_tasks_test_case_id()}</div>
@@ -134,17 +137,15 @@
             type="button"
             variant="outline"
             onclick={() => (open = false)}
-            disabled={!!updateTaskLimits.pending}
+            disabled={submitting}
           >
             {m.admin_tasks_form_cancel()}
           </Button>
           <Button
             type="submit"
-            disabled={!!updateTaskLimits.pending ||
-              !!taskLimitsQuery?.loading ||
-              !!taskLimitsQuery?.error}
+            disabled={submitting || taskLimitsQuery?.loading || !!taskLimitsQuery?.error}
           >
-            {#if updateTaskLimits.pending}
+            {#if submitting}
               <Loader class="mr-2 h-4 w-4 animate-spin" />
             {/if}
             {m.admin_tasks_save_changes()}

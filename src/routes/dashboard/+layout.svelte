@@ -9,7 +9,7 @@
   import { AppRoutes } from '$lib/routes';
   import { userStore } from '$lib/stores/user-store.svelte';
   import { tokenStore } from '$lib/stores/token-store.svelte';
-  import { getClientUserInstance, getClientApiInstance } from '$lib/services';
+  import { getUserInstance, getApiInstance } from '$lib/services';
   import { LoadingSpinner } from '$lib/components/common';
   import Footer from '$lib/components/Footer.svelte';
 
@@ -24,7 +24,7 @@
 
     // Check if we have a token, if not try silent refresh
     if (!tokenStore.hasToken()) {
-      const apiClient = getClientApiInstance();
+      const apiClient = getApiInstance();
       if (apiClient) {
         try {
           const refreshed = await apiClient.silentRefresh();
@@ -45,7 +45,7 @@
 
     // Fetch user data if not already loaded
     if (!userStore.tryGetUser() && !isLoading) {
-      const userService = getClientUserInstance();
+      const userService = getUserInstance();
       if (userService) {
         const result = await userService.getCurrentUser();
         if (!result.success) {

@@ -3,10 +3,9 @@
   import { Button } from '$lib/components/ui/button';
   import X from '@lucide/svelte/icons/x';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
-  import { Permission } from '$lib/dto/accessControl';
-  import type { RemoveCollaboratorForm } from '$routes/dashboard/teacher/tasks/[taskId]/collaborators/collaborators.remote';
+  import { Permission, ResourceType } from '$lib/dto/accessControl';
+  import { getAccessControlInstance } from '$lib/services';
 
   interface Props {
     taskId: number;
@@ -14,7 +13,7 @@
     userName: string;
     targetPermission: Permission;
     currentUserPermission: Permission;
-    removeCollaborator: RemoveCollaboratorForm;
+    onSuccess?: () => void;
   }
 
   let {
@@ -23,8 +22,10 @@
     userName,
     targetPermission,
     currentUserPermission,
-    removeCollaborator
+    onSuccess
   }: Props = $props();
+
+  const accessControlService = getAccessControlInstance();
 
   let dialogOpen = $state(false);
   let isRemoving = $state(false);
@@ -55,6 +56,28 @@
   function handleCancel() {
     dialogOpen = false;
   }
+
+  async function handleRemove(event: Event) {
+    event.preventDefault();
+
+    if (!accessControlService) {
+      toast.error(m.task_collaborators_remove_error());
+      return;
+    }
+
+    isRemoving = true;
+    try {
+      await accessControlService.deleteCollaborator(ResourceType.Tasks, taskId, userId);
+      toast.success(m.task_collaborators_remove_success());
+      dialogOpen = false;
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error('Remove task collaborator error:', error);
+      toast.error(m.task_collaborators_remove_error());
+    } finally {
+      isRemoving = false;
+    }
+  }
 </script>
 
 {#if canRemove}
@@ -77,33 +100,13 @@
         </Dialog.Description>
       </Dialog.Header>
 
-      <form
-        {...removeCollaborator.enhance(async ({ submit }) => {
-          isRemoving = true;
-          try {
-            await submit();
-            toast.success(m.task_collaborators_remove_success());
-            dialogOpen = false;
-          } catch (error: unknown) {
-            if (isHttpError(error)) {
-              toast.error(error.body.message);
-            } else {
-              toast.error(m.task_collaborators_remove_error());
-            }
-          } finally {
-            isRemoving = false;
-          }
-        })}
-      >
-        <input type="hidden" name="taskId" value={taskId} />
-        <input type="hidden" name="userId" value={userId} />
-
+      <form onsubmit={handleRemove}>
         <Dialog.Footer>
           <Button type="button" variant="outline" onclick={handleCancel} disabled={isRemoving}>
             {m.task_collaborators_remove_cancel()}
           </Button>
           <Button type="submit" variant="default" disabled={isRemoving}>
-            {m.task_collaborators_remove_confirm()}
+            {isRemoving ? 'Removing...' : m.task_collaborators_remove_confirm()}
           </Button>
         </Dialog.Footer>
       </form>

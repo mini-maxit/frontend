@@ -15,14 +15,14 @@ import type { AuthTokenData } from '../../dto/auth';
  * - Refresh token: stored in HttpOnly cookie by backend (secure, persistent)
  * - Silent refresh: automatically fetches new access token on page load
  */
-export class ClientApiService {
+export class ApiService {
   private baseUrl: string;
   private isRefreshing = false;
   private refreshPromise: Promise<void> | null = null;
 
   constructor(baseUrl: string) {
     if (!browser) {
-      throw new Error('ClientApiService can only be used in browser context');
+      throw new Error('ApiService can only be used in browser context');
     }
     this.baseUrl = baseUrl;
   }
@@ -76,7 +76,6 @@ export class ClientApiService {
       await this.refreshToken();
       return tokenStore.hasToken();
     } catch (error) {
-      console.error('Silent refresh failed:', error);
       return false;
     }
   }

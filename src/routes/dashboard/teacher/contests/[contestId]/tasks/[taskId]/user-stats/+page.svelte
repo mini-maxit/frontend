@@ -1,6 +1,10 @@
 <script lang="ts">
-  import { getTaskUserStats } from './user-stats.remote';
+  // TODO: getTaskUserStats was imported from user-stats.remote which no longer exists
+  // import { getTaskUserStats } from './user-stats.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+
+  // Placeholder function - to be replaced when remote function is implemented
+  const getTaskUserStats = (params: any) => ({ current: null, loading: true, error: null, refresh: () => {} });
   import * as Table from '$lib/components/ui/table';
   import * as Card from '$lib/components/ui/card';
   import Trophy from '@lucide/svelte/icons/trophy';

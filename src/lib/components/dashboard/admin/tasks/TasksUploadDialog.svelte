@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { uploadTask, getUploadLimit } from '$routes/dashboard/teacher/tasks/upload.remote';
+  // TODO: Import uploadTask and getUploadLimit from new API service when available
+  // import { uploadTask, getUploadLimit } from '$routes/dashboard/teacher/tasks/upload.remote';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
@@ -75,7 +76,7 @@
 
     <form
       enctype="multipart/form-data"
-      {...uploadTask.enhance(async ({ submit }) => {
+      {...uploadTask.enhance(async ({ submit }: { submit: () => Promise<void> }) => {
         try {
           await submit();
           await handleTaskUploadSuccess();

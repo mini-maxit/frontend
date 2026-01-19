@@ -13,9 +13,10 @@
   interface Props {
     languages: Language[];
     selectedLanguageId: number | null;
+    onChange?: (id: number | null) => void;
   }
 
-  let { languages, selectedLanguageId = $bindable() }: Props = $props();
+  let { languages, selectedLanguageId = $bindable(), onChange }: Props = $props();
 
   const selectedLanguage: Language | null = $derived.by(() => {
     if (!selectedLanguageId) {
@@ -37,7 +38,11 @@
   <Select.Root
     type="single"
     name="language"
-    onValueChange={(value) => (selectedLanguageId = Number(value))}
+    onValueChange={(value) => {
+      const id = Number(value);
+      selectedLanguageId = id;
+      onChange?.(id);
+    }}
   >
     <Select.Trigger class="w-full">
       {selectedLanguageTriggerString}

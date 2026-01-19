@@ -7,18 +7,20 @@
   import Trophy from '@lucide/svelte/icons/trophy';
   import Target from '@lucide/svelte/icons/target';
   import ChevronRight from '@lucide/svelte/icons/chevron-right';
-  import { getContestTasksWithStatistics } from './contest.remote';
+  import { page } from '$app/state';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestInstance } from '$lib/services';
   import { AppRoutes } from '$lib/routes';
 
-  interface Props {
-    data: {
-      contestId: number;
-    };
-  }
+  const contestService = getContestInstance();
+  const contestId = $derived(Number(page.params.contestId));
 
-  let { data }: Props = $props();
-
-  const tasksQuery = getContestTasksWithStatistics(data.contestId);
+  const tasksQuery = createParameterizedQuery(contestId, async (id) => {
+    if (!contestService) throw new Error('Service unavailable');
+    const result = await contestService.getContestTasksWithStatistics(id);
+    if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
+    return result.data!;
+  });
 </script>
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">

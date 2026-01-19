@@ -1,23 +1,33 @@
 <script lang="ts">
   import AvailableContestsStats from '$lib/components/dashboard/available-contests/AvailableContestsStats.svelte';
   import AvailableContestCard from '$lib/components/dashboard/available-contests/AvailableContestCard.svelte';
-  import {
-    getOngoingContests,
-    getUpcomingContests,
-    getPastContests,
-    registerForContest
-  } from './contests.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getContestInstance } from '$lib/services';
   import { toast } from 'svelte-sonner';
-  import { ContestRegistrationStatus } from '$lib/dto/contest';
+  import { ContestRegistrationStatus, type Contest } from '$lib/dto/contest';
   import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button';
   import Loader from '@lucide/svelte/icons/loader-circle';
 
   import * as m from '$lib/paraglide/messages';
 
-  const ongoingContestsQuery = getOngoingContests();
-  const upcomingContestsQuery = getUpcomingContests();
-  const pastContestsQuery = getPastContests();
+  const contestService = getContestInstance();
+
+  const ongoingContestsQuery = createQuery(async () => {
+    if (!contestService) throw new Error('Service unavailable');
+    return await contestService.getOngoing();
+  });
+
+  const upcomingContestsQuery = createQuery(async () => {
+    if (!contestService) throw new Error('Service unavailable');
+    return await contestService.getUpcoming();
+  });
+
+  const pastContestsQuery = createQuery(async () => {
+    if (!contestService) throw new Error('Service unavailable');
+    return await contestService.getPast();
+  });
+
   let registering = $state<number | null>(null);
 
   function handleViewContest(contestId: number) {
@@ -28,28 +38,36 @@
   }
 
   async function handleRegister(contestId: number) {
+    if (!contestService) return;
     registering = contestId;
     try {
-      await registerForContest(contestId).updates(
-        ongoingContestsQuery.withOverride((contests) =>
-          contests.map((contest) =>
-            contest.id === contestId
-              ? { ...contest, registrationStatus: ContestRegistrationStatus.Registered }
-              : contest
-          )
-        ),
-        upcomingContestsQuery.withOverride((contests) =>
-          contests.map((contest) =>
-            contest.id === contestId
-              ? { ...contest, registrationStatus: ContestRegistrationStatus.Registered }
-              : contest
-          )
-        )
-      );
+      // Optimistically update UI
+      if (ongoingContestsQuery.current) {
+        ongoingContestsQuery.current = ongoingContestsQuery.current.map((contest: Contest) =>
+          contest.id === contestId
+            ? { ...contest, registrationStatus: ContestRegistrationStatus.Registered }
+            : contest
+        );
+      }
+      if (upcomingContestsQuery.current) {
+        upcomingContestsQuery.current = upcomingContestsQuery.current.map((contest: Contest) =>
+          contest.id === contestId
+            ? { ...contest, registrationStatus: ContestRegistrationStatus.Registered }
+            : contest
+        );
+      }
+
+      const result = await contestService.registerForContest(contestId);
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to register');
+      }
       toast.success(m.contests_registration_success());
     } catch (error) {
       console.error('Registration failed:', error);
       toast.error(m.contests_registration_error());
+      // Refresh to revert optimistic update
+      ongoingContestsQuery.refresh();
+      upcomingContestsQuery.refresh();
     } finally {
       registering = null;
     }

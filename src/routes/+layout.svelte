@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
   import { page } from '$app/state';
-  import { getClientApiInstance } from '$lib/services';
+  import { getApiInstance } from '$lib/services';
   import { isProtectedRoute } from '$lib/routes';
 
   let { children } = $props();
@@ -14,7 +14,7 @@
     if (browser) {
       // Only perform silent refresh on protected routes
       if (isProtectedRoute(page.url.pathname)) {
-        const apiClient = getClientApiInstance();
+        const apiClient = getApiInstance();
         if (apiClient) {
           try {
             await apiClient.silentRefresh();

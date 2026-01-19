@@ -1,5 +1,5 @@
 import { ApiError } from '../ApiService';
-import type { ClientApiService } from './ClientApiService';
+import type { ApiService } from './ApiService';
 import type { User } from '../../dto/user';
 import type { ApiResponse } from '../../dto/response';
 import { userStore } from '$lib/stores/user-store.svelte';
@@ -8,8 +8,8 @@ import { userStore } from '$lib/stores/user-store.svelte';
  * Client-side user service
  * Uses in-memory user storage
  */
-export class ClientUserService {
-  constructor(private apiClient: ClientApiService) {}
+export class UserService {
+  constructor(private apiClient: ApiService) {}
 
   /**
    * Fetch current authenticated user and store in userStore

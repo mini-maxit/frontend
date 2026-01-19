@@ -1,6 +1,10 @@
 <script lang="ts">
-  import { getContestUserStats } from './user-stats.remote';
+  // TODO: getContestUserStats was imported from user-stats.remote which no longer exists
+  // import { getContestUserStats } from './user-stats.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+
+  // Placeholder function - to be replaced when remote function is implemented
+  const getContestUserStats = (params: any) => ({ current: null, loading: true, error: null, refresh: () => {} });
   import * as Table from '$lib/components/ui/table';
   import * as Card from '$lib/components/ui/card';
   import Trophy from '@lucide/svelte/icons/trophy';
@@ -11,6 +15,7 @@
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import * as m from '$lib/paraglide/messages';
+  import type { TaskResult } from '$lib/dto/contest';
 
   interface Props {
     data: {
@@ -31,7 +36,7 @@
       .map((userStat) => {
         const totalScore =
           userStat.taskBreakdown.length > 0
-            ? userStat.taskBreakdown.reduce((sum, task) => sum + task.bestScore, 0) /
+            ? userStat.taskBreakdown.reduce((sum: number, task: TaskResult) => sum + task.bestScore, 0) /
               userStat.taskBreakdown.length
             : 0;
         return { ...userStat, totalScore };

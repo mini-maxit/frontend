@@ -4,25 +4,39 @@
   import X from '@lucide/svelte/icons/x';
   import { toast } from 'svelte-sonner';
   import * as m from '$lib/paraglide/messages';
-  import { removeGroupsFromContest } from '$routes/dashboard/teacher/contests/[contestId]/groups/groups.remote';
+  import { getContestsManagementInstance } from '$lib/services';
 
   interface Props {
     contestId: number;
     groupId: number;
     groupName: string;
+    onSuccess?: () => void;
   }
 
-  let { contestId, groupId, groupName }: Props = $props();
+  let { contestId, groupId, groupName, onSuccess }: Props = $props();
 
   let dialogOpen = $state(false);
+  let submitting = $state(false);
+
+  const contestsService = getContestsManagementInstance();
 
   async function handleRemove() {
+    if (!contestsService) {
+      toast.error(m.contest_groups_remove_error());
+      return;
+    }
+
+    submitting = true;
     try {
-      await removeGroupsFromContest({ contestId, groupIds: [groupId] });
+      await contestsService.removeGroupsFromContest(contestId, [groupId]);
       toast.success(m.contest_groups_remove_success());
       dialogOpen = false;
-    } catch {
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error('Remove group from contest error:', error);
       toast.error(m.contest_groups_remove_error());
+    } finally {
+      submitting = false;
     }
   }
 </script>
@@ -41,11 +55,11 @@
     </Dialog.Header>
 
     <Dialog.Footer>
-      <Button type="button" variant="outline" onclick={() => (dialogOpen = false)}>
+      <Button type="button" variant="outline" onclick={() => (dialogOpen = false)} disabled={submitting}>
         {m.contest_groups_remove_cancel()}
       </Button>
-      <Button type="button" class="bg-primary" onclick={handleRemove}>
-        {m.contest_groups_remove_confirm()}
+      <Button type="button" class="bg-primary" onclick={handleRemove} disabled={submitting}>
+        {submitting ? 'Removing...' : m.contest_groups_remove_confirm()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

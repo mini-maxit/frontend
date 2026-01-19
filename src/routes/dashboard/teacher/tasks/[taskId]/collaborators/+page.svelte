@@ -1,12 +1,20 @@
 <script lang="ts">
-  import {
-    getTaskCollaborators,
-    getAssignableUsers,
-    addCollaborator,
-    updateCollaborator,
-    removeCollaborator
-  } from './collaborators.remote';
+  // TODO: Remote functions were imported from collaborators.remote which no longer exists
+  // import {
+  //   getTaskCollaborators,
+  //   getAssignableUsers,
+  //   addCollaborator,
+  //   updateCollaborator,
+  //   removeCollaborator
+  // } from './collaborators.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+
+  // Placeholder functions - to be replaced when remote functions are implemented
+  const getTaskCollaborators = (taskId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getAssignableUsers = (taskId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const addCollaborator = { enhance: (callback: any) => callback, fields: {} };
+  const updateCollaborator = { enhance: (callback: any) => callback, fields: {} };
+  const removeCollaborator = { enhance: (callback: any) => callback, fields: {} };
   import {
     AddCollaboratorButton,
     CollaboratorPermissionEditor,
@@ -24,7 +32,7 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import * as m from '$lib/paraglide/messages';
   import { formatDistanceToNow } from 'date-fns';
-  import { Permission } from '$lib/dto/accessControl';
+  import { Permission, type Collaborator } from '$lib/dto/accessControl';
 
   interface Props {
     data: {
@@ -42,7 +50,7 @@
   const currentUserPermission = $derived.by(() => {
     if (!collaboratorsQuery.current) return Permission.Edit;
     const currentUserCollaborator = collaboratorsQuery.current.find(
-      (c) => c.userId === data.currentUserId
+      (c: Collaborator) => c.userId === data.currentUserId
     );
     return currentUserCollaborator?.permission ?? Permission.Edit;
   });

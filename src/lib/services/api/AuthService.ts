@@ -1,5 +1,5 @@
 import { ApiError } from '../ApiService';
-import type { ClientApiService } from './ClientApiService';
+import type { ApiService } from './ApiService';
 import type { AuthTokenData } from '../../dto/auth';
 import type { UserLoginDto, UserRegisterDto } from '../../dto/user';
 import { RequestContentType } from '../../dto/request';
@@ -13,8 +13,8 @@ import { userStore } from '$lib/stores/user-store.svelte';
  * - Access token: stored in memory (better security, cleared on refresh)
  * - Refresh token: stored in HttpOnly cookie by backend (secure, persistent)
  */
-export class ClientAuthService {
-  constructor(private apiClient: ClientApiService) {}
+export class AuthService {
+  constructor(private apiClient: ApiService) {}
 
   async login(
     body: UserLoginDto

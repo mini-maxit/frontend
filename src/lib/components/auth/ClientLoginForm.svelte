@@ -6,7 +6,7 @@
   import { Label } from '$lib/components/ui/label';
   import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
-  import { getClientAuthInstance, getClientUserInstance } from '$lib/services';
+  import { getAuthInstance, getUserInstance } from '$lib/services';
   import { browser } from '$app/environment';
   import { LoginSchema } from '$lib/schemas';
   import { defaults, superForm } from 'sveltekit-superforms';
@@ -19,10 +19,11 @@
   let { redirectTo = AppRoutes.Dashboard }: Props = $props();
 
   // Get singleton auth service instance
-  const authService = browser ? getClientAuthInstance() : null;
+  const authService = browser ? getAuthInstance() : null;
 
   // Initialize superform for SPA mode with client-side validation
   const { form, errors, enhance, submitting } = superForm(defaults(valibot(LoginSchema)), {
+    id: 'login',
     validators: valibot(LoginSchema),
     SPA: true,
     dataType: 'json',
@@ -40,7 +41,7 @@
 
         if (loginResult.success) {
           // Fetch user data to populate userStore
-          const userService = browser ? getClientUserInstance() : null;
+          const userService = browser ? getUserInstance() : null;
           if (userService) {
             await userService.getCurrentUser();
           }

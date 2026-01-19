@@ -1,10 +1,16 @@
 <script lang="ts">
-  import {
-    getRegistrationRequests,
-    approveRequest,
-    rejectRequest
-  } from './registration-requests.remote';
+  // TODO: Remote functions were imported from registration-requests.remote which no longer exists
+  // import {
+  //   getRegistrationRequests,
+  //   approveRequest,
+  //   rejectRequest
+  // } from './registration-requests.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+
+  // Placeholder functions - to be replaced when remote functions are implemented
+  const getRegistrationRequests = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const approveRequest = async (data: any) => {};
+  const rejectRequest = async (data: any) => {};
   import {
     Card,
     CardHeader,

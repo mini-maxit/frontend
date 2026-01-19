@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { getUsers } from './users.remote';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getUserInstance } from '$lib/services';
   import { UsersList, UserEditDialog } from '$lib/components/dashboard/admin/users';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import { Input } from '$lib/components/ui/input';
@@ -11,18 +12,21 @@
   import Search from '@lucide/svelte/icons/search';
   import * as m from '$lib/paraglide/messages';
 
+  const userService = getUserInstance();
+
   let limit = $state(20);
   let offset = $state(0);
   let sortKey = $state<UserSortKey>(UserSortKey.Id);
   let sortDir = $state<SortDirection>(SortDirection.Asc);
 
-  let usersQuery = $derived(
-    getUsers({
-      limit,
-      offset,
-      sort: `${sortKey}:${sortDir}`
-    })
-  );
+  const queryParams = $derived({ limit, offset, sort: `${sortKey}:${sortDir}` });
+
+  const usersQuery = createParameterizedQuery(queryParams, async (params) => {
+    if (!userService) throw new Error('Service unavailable');
+    const result = await userService.getUsers(params);
+    if (!result.success) throw new Error(result.error || 'Failed to fetch users');
+    return result.data!;
+  });
 
   let editDialogOpen = $state(false);
   let selectedUser = $state<User | null>(null);
@@ -58,7 +62,7 @@
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
-        (user) =>
+        (user: User) =>
           user.name.toLowerCase().includes(query) ||
           user.surname.toLowerCase().includes(query) ||
           user.username.toLowerCase().includes(query) ||
@@ -67,7 +71,7 @@
     }
 
     if (roleFilterValue !== 'all') {
-      filtered = filtered.filter((user) => user.role === roleFilterValue);
+      filtered = filtered.filter((user: User) => user.role === roleFilterValue);
     }
 
     return filtered;

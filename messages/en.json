@@ -871,5 +871,11 @@
   "contest_groups_remove_success": "Group removed successfully!",
   "contest_groups_remove_error": "Failed to remove group",
   "admin_contests_card_view_groups": "Manage Groups",
-  "sidebar_groups": "Groups"
+  "sidebar_groups": "Groups",
+  "tasks_title": "Available Tasks",
+  "tasks_subtitle": "Browse and work on available programming challenges",
+  "tasks_empty_title": "No tasks available",
+  "tasks_empty_description": "There are currently no tasks assigned to you",
+  "tasks_loading": "Loading tasks...",
+  "tasks_page_title": "Tasks"
 }

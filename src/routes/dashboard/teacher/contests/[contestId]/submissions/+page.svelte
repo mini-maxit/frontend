@@ -1,6 +1,11 @@
 <script lang="ts">
-  import { getContestSubmissions } from './submissions.remote';
+  // TODO: getContestSubmissions was imported from submissions.remote which no longer exists
+  // import { getContestSubmissions } from './submissions.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+
+  // Placeholder function - to be replaced when remote function is implemented
+  const getContestSubmissions = (params: any) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  import type { Submission } from '$lib/dto/submission';
   import { SubmissionsList } from '$lib/components/dashboard/submissions';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -50,7 +55,7 @@
   const filteredSubmissions = $derived.by(() => {
     if (!submissionsQuery.current) return [];
 
-    return submissionsQuery.current.items.filter((submission) => {
+    return submissionsQuery.current.items.filter((submission: Submission) => {
       const matchesUser =
         !userFilter ||
         submission.user.username.toLowerCase().includes(userFilter.toLowerCase()) ||

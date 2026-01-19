@@ -30,7 +30,7 @@
   import LogOut from '@lucide/svelte/icons/log-out';
   import SidebarTrigger from '../ui/sidebar/sidebar-trigger.svelte';
   import { userStore } from '$lib/stores/user-store.svelte';
-  import { getClientAuthInstance } from '$lib/services';
+  import { getAuthInstance } from '$lib/services';
   import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
 
@@ -251,7 +251,7 @@
               {...props}
               onclick={async () => {
                 if (!browser) return;
-                const authService = getClientAuthInstance();
+                const authService = getAuthInstance();
                 if (authService) {
                   await authService.logout();
                   goto(AppRoutes.Login);

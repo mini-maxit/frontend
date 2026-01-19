@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { getAssignableTasks, addTaskToContest } from './tasks.remote';
+  // TODO: getAssignableTasks, addTaskToContest were imported from tasks.remote which no longer exists
+  // import { getAssignableTasks, addTaskToContest } from './tasks.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -19,6 +20,11 @@
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
   import { cn, formatDate, toLocalRFC3339 } from '$lib/utils';
   import { SvelteDate } from 'svelte/reactivity';
+
+  // Placeholder functions - to be replaced when remote functions are implemented
+  const getAssignableTasks = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const addTaskToContest = { enhance: (callback: any) => callback, fields: { contestId: { as: (t: string) => ({}) }, taskId: { as: (t: string) => ({}) }, startAt: { as: (t: string) => ({}) }, endAt: { as: (t: string) => ({}) } } };
+
   interface Props {
     data: {
       contestId: number;
@@ -173,7 +179,7 @@
     </Dialog.Header>
 
     <form
-      {...addTaskToContest.enhance(async ({ submit }) => {
+      {...addTaskToContest.enhance(async ({ submit }: { submit: () => Promise<void> }) => {
         try {
           await submit();
           toast.success(m.admin_contest_tasks_add_success());

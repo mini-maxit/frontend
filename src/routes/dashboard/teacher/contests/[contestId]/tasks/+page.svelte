@@ -1,6 +1,11 @@
 <script lang="ts">
-  import { getContestTasks, removeTaskFromContest } from './tasks.remote';
+  // TODO: getContestTasks, removeTaskFromContest were imported from tasks.remote which no longer exists
+  // import { getContestTasks, removeTaskFromContest } from './tasks.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+
+  // Placeholder functions - to be replaced when remote functions are implemented
+  const getContestTasks = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const removeTaskFromContest = { enhance: (callback: any) => callback, fields: {} };
   import { RemoveTaskFromContestButton } from '$lib/components/dashboard/admin/contests';
   import { Button } from '$lib/components/ui/button';
   import * as m from '$lib/paraglide/messages';

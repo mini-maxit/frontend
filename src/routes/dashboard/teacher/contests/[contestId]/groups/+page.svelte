@@ -1,6 +1,11 @@
 <script lang="ts">
-  import { getContestGroups, getAssignableGroups } from './groups.remote';
+  // TODO: getContestGroups, getAssignableGroups were imported from groups.remote which no longer exists
+  // import { getContestGroups, getAssignableGroups } from './groups.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+
+  // Placeholder functions - to be replaced when remote functions are implemented
+  const getContestGroups = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getAssignableGroups = (contestId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
   import {
     AddGroupToContestButton,
     RemoveGroupFromContestButton

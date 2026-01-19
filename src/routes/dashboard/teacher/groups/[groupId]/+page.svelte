@@ -1,6 +1,12 @@
 <script lang="ts">
-  import { getGroup, getGroupMembers, updateGroup } from './group.remote';
+  // TODO: getGroup, getGroupMembers, updateGroup were imported from group.remote which no longer exists
+  // import { getGroup, getGroupMembers, updateGroup } from './group.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+
+  // Placeholder functions - to be replaced when remote functions are implemented
+  const getGroup = (groupId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const getGroupMembers = (groupId: number) => ({ current: null, loading: true, error: null, refresh: () => {} });
+  const updateGroup = { enhance: (callback: any) => callback, fields: {} };
   import {
     EditGroupDialog,
     AddUsersToGroupButton,

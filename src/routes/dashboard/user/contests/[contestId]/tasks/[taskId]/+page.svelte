@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getContestTask, getLanguages } from './task.remote';
-  import { submitContestSolution } from './submit.remote';
+  import { page } from '$app/state';
+  import { createParameterizedQuery, createQuery } from '$lib/utils/query.svelte';
+  import { getTaskInstance, getSubmissionInstance } from '$lib/services';
   import TaskPdfViewer from '$lib/components/dashboard/tasks/task-page/tasks/TaskPdfViewer.svelte';
   import ContestTaskSubmissionForm from '$lib/components/dashboard/tasks/task-page/tasks/ContestTaskSubmissionForm.svelte';
   import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
@@ -8,17 +9,26 @@
   import * as m from '$lib/paraglide/messages';
   import TaskHeader from '$lib/components/dashboard/tasks/task-page/tasks/TaskHeader.svelte';
 
-  interface Props {
-    data: {
-      contestId: number;
-      taskId: number;
-    };
-  }
+  const taskService = getTaskInstance();
+  const submissionService = getSubmissionInstance();
 
-  let { data }: Props = $props();
+  const contestId = $derived(Number(page.params.contestId));
+  const taskId = $derived(Number(page.params.taskId));
+  const params = $derived({ contestId, taskId });
 
-  const taskQuery = getContestTask({ contestId: data.contestId, taskId: data.taskId });
-  const languagesQuery = getLanguages();
+  const taskQuery = createParameterizedQuery(params, async (p) => {
+    if (!taskService) throw new Error('Service unavailable');
+    const result = await taskService.getContestTask(p.contestId, p.taskId);
+    if (!result.success) throw new Error(result.error || 'Failed to fetch task');
+    return result.data!;
+  });
+
+  const languagesQuery = createQuery(async () => {
+    if (!submissionService) throw new Error('Service unavailable');
+    const result = await submissionService.getAvailableLanguages();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch languages');
+    return result.data!;
+  });
 
   let fileContent = $state<string>('');
 </script>
@@ -50,9 +60,9 @@
           languages={languagesQuery.current || []}
           loading={languagesQuery.loading}
           error={languagesQuery.error}
-          submitAction={submitContestSolution}
-          contestId={data.contestId}
-          taskId={data.taskId}
+          {contestId}
+          {taskId}
+          onSuccess={() => taskQuery.refresh()}
         />
 
         <FilePreview content={fileContent} />

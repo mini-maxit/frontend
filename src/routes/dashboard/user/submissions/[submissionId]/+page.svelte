@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { getSubmissionDetails, type SubmissionWithFileContent } from './submission.remote';
+  import { page } from '$app/state';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getSubmissionInstance } from '$lib/services';
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as Card from '$lib/components/ui/card';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
   import TestCaseResult from '$lib/components/dashboard/submissions/TestCaseResult.svelte';
-  import { SubmissionStatus, SubmissionResultCode } from '$lib/dto/submission';
+  import { SubmissionStatus, SubmissionResultCode, type TestResult } from '$lib/dto/submission';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Clock from '@lucide/svelte/icons/clock';
@@ -17,15 +19,15 @@
   import Hash from '@lucide/svelte/icons/hash';
   import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
 
-  interface Props {
-    data: {
-      submissionId: number;
-    };
-  }
+  const submissionService = getSubmissionInstance();
+  const submissionId = $derived(Number(page.params.submissionId));
 
-  let { data }: Props = $props();
-
-  const submissionQuery = getSubmissionDetails(data.submissionId);
+  const submissionQuery = createParameterizedQuery(submissionId, async (id) => {
+    if (!submissionService) throw new Error('Service unavailable');
+    const result = await submissionService.getSubmissionDetails(id);
+    if (!result.success) throw new Error(result.error || 'Failed to fetch submission');
+    return result.data!;
+  });
 
   const statusConfig = {
     success: {
@@ -98,7 +100,7 @@
 
   const getScore = () => {
     if (!submissionQuery.current?.result?.testResults) return '-/-';
-    const passed = submissionQuery.current.result.testResults.filter((t) => t.passed).length;
+    const passed = submissionQuery.current.result.testResults.filter((t: TestResult) => t.passed).length;
     const total = submissionQuery.current.result.testResults.length;
     return `${passed}/${total}`;
   };

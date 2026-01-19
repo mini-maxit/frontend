@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { page } from '$app/state';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestInstance } from '$lib/services';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import * as Table from '$lib/components/ui/table';
   import * as Card from '$lib/components/ui/card';
@@ -7,23 +10,18 @@
   import Target from '@lucide/svelte/icons/target';
   import Users from '@lucide/svelte/icons/users';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
-  import { getContestResults } from './results.remote';
   import { format } from 'date-fns';
   import * as m from '$lib/paraglide/messages';
+  import type { TaskResult } from '$lib/dto/contest';
 
-  interface Props {
-    data: {
-      contestId: number;
-      currentUserId: number;
-      contest: import('$lib/dto/contest').ContestDetailed;
-    };
-  }
+  const contestService = getContestInstance();
+  const contestId = $derived(Number(page.params.contestId));
 
-  let { data }: Props = $props();
-
-  const resultsQuery = getContestResults({
-    contestId: data.contestId,
-    contest: data.contest
+  const resultsQuery = createParameterizedQuery(contestId, async (id) => {
+    if (!contestService) throw new Error('Service unavailable');
+    const result = await contestService.getContestResults(id);
+    if (!result.success) throw new Error(result.error || 'Failed to fetch results');
+    return result.data!;
   });
 
   // Sort leaderboard by total score (sum of best scores across all tasks)
@@ -32,7 +30,7 @@
 
     return [...resultsQuery.current.leaderboard]
       .map((userStats) => {
-        const totalScore = userStats.taskBreakdown.reduce((sum, task) => sum + task.bestScore, 0);
+        const totalScore = userStats.taskBreakdown.reduce((sum: number, task: TaskResult) => sum + task.bestScore, 0);
         return { ...userStats, totalScore };
       })
       .sort((a, b) => b.totalScore - a.totalScore);
@@ -112,7 +110,7 @@
           <Card.Content>
             <p class="text-2xl font-bold text-foreground">
               {resultsQuery.current.myResults.taskResults
-                .reduce((sum, task) => sum + task.bestScore, 0)
+                .reduce((sum: number, task: TaskResult) => sum + task.bestScore, 0)
                 .toFixed(1)}
             </p>
           </Card.Content>
@@ -127,7 +125,7 @@
           </Card.Header>
           <Card.Content>
             <p class="text-2xl font-bold text-foreground">
-              {resultsQuery.current.myResults.taskResults.filter((t) => t.bestScore === 100).length}
+              {resultsQuery.current.myResults.taskResults.filter((t: TaskResult) => t.bestScore === 100).length}
               / {resultsQuery.current.myResults.taskResults.length}
             </p>
           </Card.Content>
@@ -143,7 +141,7 @@
           <Card.Content>
             <p class="text-2xl font-bold text-foreground">
               {resultsQuery.current.myResults.taskResults.reduce(
-                (sum, task) => sum + task.submissionCount,
+                (sum: number, task: TaskResult) => sum + task.submissionCount,
                 0
               )}
             </p>
