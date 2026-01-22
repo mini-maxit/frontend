@@ -46,7 +46,7 @@ export class TasksManagementService {
   }> {
     try {
       const response = await this.apiClient.get<ApiResponse<PaginatedData<Task>>>({
-        url: '/tasks-management/tasks/created'
+        url: '/tasks-management/tasks/created?limit=100'
       });
       return { success: true, data: response.data.items, status: 200 };
     } catch (error) {
