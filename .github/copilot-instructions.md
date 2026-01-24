@@ -859,6 +859,29 @@ pnpm run check     # Type checking
 - Use `TokenManager` for cookie operations
 - All API requests include authentication via `createApiClient(cookies)`
 
+### Client-Side API (Optional Pattern)
+
+For scenarios requiring direct browser-to-backend communication:
+
+- **Global Instance**: Use `getClientApiInstance()` for singleton API client
+- **Client Services**: `ClientApiService` and `ClientAuthService`
+- **Security**: HttpOnly cookies, automatic token refresh, race condition protection
+- **Use Cases**: Real-time features, SPA-like interactions, progressive enhancement
+
+Example:
+
+```typescript
+import { getClientApiInstance, ClientAuthService } from '$lib/services';
+
+const apiClient = getClientApiInstance();
+if (apiClient) {
+  const authService = new ClientAuthService(apiClient);
+  await authService.login({ email, password });
+}
+```
+
+**Note**: Prefer remote functions for most server-side operations. Use client API only when direct browser-to-backend communication is specifically needed.
+
 ## Important Notes
 
 1. **Always use remote functions** for server-side operations - don't use `+page.server.ts` unless absolutely necessary

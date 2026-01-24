@@ -1,12 +1,7 @@
 <script lang="ts">
-  import {
-    getTaskCollaborators,
-    getAssignableUsers,
-    addCollaborator,
-    updateCollaborator,
-    removeCollaborator
-  } from './collaborators.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getAccessControlInstance } from '$lib/services';
   import {
     AddCollaboratorButton,
     CollaboratorPermissionEditor,
@@ -24,7 +19,9 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import * as m from '$lib/paraglide/messages';
   import { formatDistanceToNow } from 'date-fns';
-  import { Permission } from '$lib/dto/accessControl';
+  import { Permission, ResourceType, type Collaborator } from '$lib/dto/accessControl';
+  import type { PaginatedData } from '$lib/dto/response';
+  import type { User } from '$lib/dto/user';
 
   interface Props {
     data: {
@@ -34,15 +31,36 @@
   }
 
   let { data }: Props = $props();
+  const taskId = $derived(data.taskId);
+  const accessControlService = getAccessControlInstance();
 
-  const collaboratorsQuery = getTaskCollaborators(data.taskId);
-  const assignableUsersQuery = getAssignableUsers(data.taskId);
+  const collaboratorsQuery = createParameterizedQuery(
+    () => taskId,
+    async (id) => {
+      if (!accessControlService) throw new Error('Service unavailable');
+      const result = await accessControlService.getCollaborators(ResourceType.Tasks, id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch collaborators');
+      return result.data ?? [];
+    }
+  );
+
+  const assignableUsersQuery = createParameterizedQuery(
+    () => taskId,
+    async (id): Promise<PaginatedData<User>> => {
+      if (!accessControlService) throw new Error('Service unavailable');
+      const result = await accessControlService.getAssignableUsers(ResourceType.Tasks, id);
+      if (!result.success || !result.data) {
+        throw new Error(result.error || 'Failed to fetch assignable users');
+      }
+      return result.data;
+    }
+  );
 
   // Get current user's permission level
   const currentUserPermission = $derived.by(() => {
     if (!collaboratorsQuery.current) return Permission.Edit;
     const currentUserCollaborator = collaboratorsQuery.current.find(
-      (c) => c.userId === data.currentUserId
+      (c: Collaborator) => c.userId === data.currentUserId
     );
     return currentUserCollaborator?.permission ?? Permission.Edit;
   });
@@ -66,11 +84,14 @@
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <AddCollaboratorButton
-        taskId={data.taskId}
-        {addCollaborator}
-        users={assignableUsersQuery.current}
+        {taskId}
+        users={assignableUsersQuery.current ?? undefined}
         usersLoading={assignableUsersQuery.loading}
         usersError={assignableUsersQuery.error}
+        onSuccess={() => {
+          collaboratorsQuery.refresh();
+          assignableUsersQuery.refresh();
+        }}
       />
     </div>
   </div>
@@ -108,20 +129,23 @@
                 </div>
                 <div class="flex items-center gap-1">
                   <CollaboratorPermissionEditor
-                    taskId={data.taskId}
+                    {taskId}
                     userId={collaborator.userId}
                     userName={collaborator.userName}
                     currentPermission={collaborator.permission}
-                    {updateCollaborator}
                     canEdit={canEditCollaborators}
+                    onSuccess={() => collaboratorsQuery.refresh()}
                   />
                   <RemoveCollaboratorButton
-                    taskId={data.taskId}
+                    {taskId}
                     userId={collaborator.userId}
                     userName={collaborator.userName}
                     targetPermission={collaborator.permission}
                     {currentUserPermission}
-                    {removeCollaborator}
+                    onSuccess={() => {
+                      collaboratorsQuery.refresh();
+                      assignableUsersQuery.refresh();
+                    }}
                   />
                 </div>
               </div>

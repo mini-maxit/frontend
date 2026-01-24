@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getTaskUserStats } from './user-stats.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
   import * as Table from '$lib/components/ui/table';
   import * as Card from '$lib/components/ui/card';
   import Trophy from '@lucide/svelte/icons/trophy';
@@ -18,10 +19,15 @@
   }
 
   let { data }: Props = $props();
+  const contestId = $derived(data.contestId);
+  const taskId = $derived(data.taskId);
+  const contestsService = getContestsManagementInstance();
 
-  const statsQuery = getTaskUserStats({
-    contestId: data.contestId,
-    taskId: data.taskId
+  const getParams = () => ({ contestId, taskId });
+
+  const statsQuery = createParameterizedQuery(getParams, async (params) => {
+    if (!contestsService) throw new Error('Service unavailable');
+    return await contestsService.getTaskUserStats(params.contestId, params.taskId);
   });
 
   // Sort users by best score (descending)

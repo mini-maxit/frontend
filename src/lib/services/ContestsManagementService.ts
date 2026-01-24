@@ -23,22 +23,6 @@ export class ContestsManagementService {
     this.apiClient = createApiClient(cookies);
   }
 
-  async getCreatedContests(): Promise<CreatedContest[]> {
-    try {
-      const contests = await this.apiClient.get<ApiResponse<PaginatedData<CreatedContest>>>({
-        url: '/contests-management/contests/created'
-      });
-
-      return contests.data.items;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get created contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
-  }
-
   async getManagedContests(): Promise<ManagedContest[]> {
     try {
       const contests = await this.apiClient.get<ApiResponse<PaginatedData<ManagedContest>>>({
@@ -48,7 +32,7 @@ export class ContestsManagementService {
       return contests.data.items;
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Failed to get created contests:', error.toJSON());
+        console.error('Failed to get managed contests:', error.toJSON());
         throw error;
       }
       throw error;

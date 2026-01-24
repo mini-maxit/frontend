@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getContestUserStats } from './user-stats.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
   import * as Table from '$lib/components/ui/table';
   import * as Card from '$lib/components/ui/card';
   import Trophy from '@lucide/svelte/icons/trophy';
@@ -11,6 +12,7 @@
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import * as m from '$lib/paraglide/messages';
+  import type { UserTaskPerformance } from '$lib/dto/contest';
 
   interface Props {
     data: {
@@ -19,10 +21,16 @@
   }
 
   let { data }: Props = $props();
+  const contestId = $derived(data.contestId);
+  const contestsService = getContestsManagementInstance();
 
-  const statsQuery = getContestUserStats({
-    contestId: data.contestId
-  });
+  const statsQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getUserStats(id);
+    }
+  );
 
   // Sort users by total score (average of best scores across all tasks)
   let sortedStats = $derived.by(() => {
@@ -31,8 +39,10 @@
       .map((userStat) => {
         const totalScore =
           userStat.taskBreakdown.length > 0
-            ? userStat.taskBreakdown.reduce((sum, task) => sum + task.bestScore, 0) /
-              userStat.taskBreakdown.length
+            ? userStat.taskBreakdown.reduce(
+                (sum: number, task: UserTaskPerformance) => sum + task.bestScore,
+                0
+              ) / userStat.taskBreakdown.length
             : 0;
         return { ...userStat, totalScore };
       })

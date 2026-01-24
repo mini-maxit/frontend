@@ -1,28 +1,79 @@
-# sv
+# Frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Frontend application for the programming contest platform built with SvelteKit and Svelte 5.
 
-## Creating a project
+## Architecture
 
-If you're seeing this, you've probably already done this step. Congrats!
+This application uses **SvelteKit with remote functions** for server-side operations and data fetching. Additionally, it provides a **client-side API** for scenarios requiring direct browser-to-backend communication.
 
-```sh
-# create a new project in the current directory
-npx sv create
+### Client API
 
-# create a new project in my-app
-npx sv create my-app
+For use cases requiring direct client-to-backend communication (e.g., real-time features, SPA-like interactions):
+
+- **Global Instance**: Use `getClientApiInstance()` for a singleton API client
+- **Authentication**: `ClientAuthService` for login, register, logout
+- **Security**: HttpOnly cookies, automatic token refresh, CSRF protection via SameSite=Strict
+
+Example usage:
+
+```typescript
+import { getClientApiInstance, ClientAuthService } from '$lib/services';
+
+const apiClient = getClientApiInstance();
+if (apiClient) {
+  const authService = new ClientAuthService(apiClient);
+  const result = await authService.login({ email, password });
+}
 ```
 
-## Developing
+## Quick Start
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```bash
+# Install dependencies
+pnpm install
+
+# Set up environment
+cp .env.example .env
+# Edit .env with your configuration
+
+# Run development server
+pnpm dev
+
+# Type check
+pnpm check
+
+# Build for production
+pnpm build
+```
+
+## Environment Variables
+
+```env
+# Server-side (private)
+BACKEND_API_URL=http://localhost:8000
+
+# Client-side (public) - for direct client API usage
+PUBLIC_BACKEND_API_URL=http://localhost:8000/api/v1
+```
+
+## Technologies
+
+- **Framework**: SvelteKit with Svelte 5
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS 4
+- **i18n**: Paraglide (English & Polish)
+- **Validation**: Valibot
+- **Package Manager**: pnpm (required)
+
+## Development
+
+Once you've created a project and installed dependencies with `pnpm install`, start a development server:
 
 ```sh
-npm run dev
+pnpm dev
 
 # or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm dev -- --open
 ```
 
 ## Building
@@ -30,9 +81,42 @@ npm run dev -- --open
 To create a production version of your app:
 
 ```sh
-npm run build
+pnpm build
 ```
 
-You can preview the production build with `npm run preview`.
+You can preview the production build with `pnpm preview`.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Testing
+
+```sh
+# Type checking
+pnpm check
+
+# Watch mode
+pnpm check:watch
+
+# Linting
+pnpm lint
+
+# Format code
+pnpm format
+```
+
+## Project Structure
+
+```
+src/
+├── lib/
+│   ├── auth/              # Client-side auth utilities
+│   ├── components/        # Reusable components
+│   │   └── auth/         # Auth-specific components
+│   ├── dto/              # Data transfer objects
+│   ├── services/         # API services
+│   │   ├── ApiService.ts          # Server-side API client
+│   │   ├── ClientApiService.ts    # Browser-side API client
+│   │   ├── client-api-instance.ts # Global singleton instance
+│   │   ├── AuthService.ts         # Server-side auth
+│   │   └── ClientAuthService.ts   # Browser-side auth
+│   └── token.ts          # Token management
+└── routes/               # SvelteKit routes
+```

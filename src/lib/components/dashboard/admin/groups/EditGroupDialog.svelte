@@ -4,18 +4,55 @@
   import { Label } from '$lib/components/ui/label';
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import type { Group } from '$lib/dto/group';
-  import type { UpdateGroupForm } from '$routes/dashboard/teacher/groups/[groupId]/group.remote';
+  import { superForm, defaults } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import { UpdateGroupSchema } from '$lib/schemas';
+  import { getGroupsManagementInstance } from '$lib/services';
 
   interface Props {
     group: Group;
     dialogOpen: boolean;
-    updateGroup: UpdateGroupForm;
+    onSuccess?: () => void;
   }
 
-  let { group, dialogOpen = $bindable(), updateGroup }: Props = $props();
+  let { group, dialogOpen = $bindable(), onSuccess }: Props = $props();
+
+  const groupsService = getGroupsManagementInstance();
+
+  // Initialize superform for SPA mode with client-side validation
+  const { form, errors, enhance, submitting } = superForm(
+    defaults(
+      {
+        groupId: group.id,
+        name: group.name
+      },
+      valibot(UpdateGroupSchema)
+    ),
+    {
+      id: `edit-group-${group.id}`,
+      validators: valibot(UpdateGroupSchema),
+      SPA: true,
+      dataType: 'json',
+      resetForm: false,
+      async onUpdate({ form }) {
+        if (!groupsService || !form.valid) return;
+
+        try {
+          await groupsService.updateGroup(form.data.groupId, {
+            name: form.data.name
+          });
+          toast.success(m.groups_edit_success());
+          dialogOpen = false;
+          if (onSuccess) onSuccess();
+        } catch (error) {
+          console.error('Update group error:', error);
+          toast.error(m.groups_edit_error());
+        }
+      }
+    }
+  );
 </script>
 
 <Dialog.Root bind:open={dialogOpen}>
@@ -27,47 +64,35 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      {...updateGroup.enhance(async ({ submit }) => {
-        try {
-          await submit();
-          toast.success(m.groups_edit_success());
-          dialogOpen = false;
-        } catch (error) {
-          if (isHttpError(error)) {
-            toast.error(error.body.message);
-          } else {
-            toast.error(m.groups_edit_error());
-          }
-        }
-      })}
-      class="space-y-6"
-    >
-      <input {...updateGroup.fields.id.as('number')} type="hidden" value={group.id} />
-
+    <form method="POST" use:enhance class="space-y-6">
       <div class="space-y-2">
         <Label for="name">{m.groups_form_name_label()}</Label>
         <Input
-          {...updateGroup.fields.name.as('text')}
           id="name"
           name="name"
-          autocomplete="off"
-          value={group.name}
+          type="text"
+          bind:value={$form.name}
+          disabled={$submitting}
+          aria-invalid={$errors.name ? 'true' : undefined}
           placeholder={m.groups_form_name_placeholder()}
-          required
           class="transition-all duration-200 focus:ring-2 focus:ring-primary"
         />
-        {#each updateGroup.fields.name.issues() as issue (issue.message)}
-          <p class="text-sm text-destructive">{issue.message}</p>
-        {/each}
+        {#if $errors.name}
+          <p class="text-sm text-destructive">{$errors.name}</p>
+        {/if}
       </div>
 
       <Dialog.Footer>
-        <Button type="button" variant="outline" onclick={() => (dialogOpen = false)}>
+        <Button
+          type="button"
+          variant="outline"
+          onclick={() => (dialogOpen = false)}
+          disabled={$submitting}
+        >
           {m.groups_form_cancel()}
         </Button>
-        <Button type="submit">
-          {m.groups_form_update()}
+        <Button type="submit" disabled={$submitting}>
+          {$submitting ? 'Updating...' : m.groups_form_update()}
         </Button>
       </Dialog.Footer>
     </form>

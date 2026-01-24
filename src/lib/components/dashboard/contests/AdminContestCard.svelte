@@ -20,9 +20,10 @@
 
   interface AdminContestCardProps {
     contest: CreatedContest;
+    onContestUpdated?: () => void;
   }
 
-  let { contest }: AdminContestCardProps = $props();
+  let { contest, onContestUpdated }: AdminContestCardProps = $props();
 
   let editDialogOpen = $state(false);
 
@@ -191,4 +192,4 @@
   </Card.Content>
 </Card.Root>
 
-<EditContestDialog {contest} bind:dialogOpen={editDialogOpen} />
+<EditContestDialog {contest} bind:dialogOpen={editDialogOpen} onSuccess={onContestUpdated} />

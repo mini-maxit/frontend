@@ -7,34 +7,71 @@
   import FileUploader from './FileUploader.svelte';
   import SubmitButton from './SubmitButton.svelte';
   import { toast } from 'svelte-sonner';
-  import { isHttpError, type HttpError } from '@sveltejs/kit';
-  import type { SubmitContestSolutionRemoteForm } from '$routes/dashboard/user/contests/[contestId]/tasks/[taskId]/submit.remote';
+  import { getSubmissionInstance } from '$lib/services';
+  import { superForm, defaults } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import { SubmitContestSolutionSchema } from '$lib/schemas';
   import type { Language } from '$lib/dto/submission';
 
   interface Props {
     languages: Language[];
     loading?: boolean;
-    error?: HttpError | Error | null;
-    submitAction: SubmitContestSolutionRemoteForm;
+    error?: any;
     contestId: number;
     taskId: number;
     fileContent: string;
+    onSuccess?: () => void;
   }
 
   let {
     languages,
     loading = false,
     error = null,
-    submitAction,
     contestId,
     taskId,
-    fileContent = $bindable()
+    fileContent = $bindable(),
+    onSuccess
   }: Props = $props();
 
-  let selectedLanguageId = $state<number | null>(null);
+  const submissionService = getSubmissionInstance();
+
+  const { form, errors, enhance, submitting } = superForm(
+    defaults(
+      { contestId, taskId, languageId: 0, solution: new File([], '') },
+      valibot(SubmitContestSolutionSchema)
+    ),
+    {
+      id: `submit-contest-task-${contestId}-${taskId}`,
+      validators: valibot(SubmitContestSolutionSchema),
+      SPA: true,
+      dataType: 'json',
+      resetForm: false,
+      async onUpdate({ form }) {
+        if (!submissionService || !form.valid) return;
+
+        const result = await submissionService.submitSolution({
+          taskID: form.data.taskId,
+          contestID: form.data.contestId,
+          solution: form.data.solution,
+          languageID: form.data.languageId
+        });
+
+        if (result.success) {
+          toast.success(m.task_submit_success());
+          selectedFiles = null;
+          selectedLanguageId = null;
+          fileUploader?.clear();
+          onSuccess?.();
+        } else {
+          toast.error(result.error || m.task_submit_error());
+        }
+      }
+    }
+  );
+
   let selectedFiles = $state<FileList | null>(null);
   let fileUploader = $state<FileUploader | null>(null);
-  let formElement = $state<HTMLFormElement | null>(null);
+  let selectedLanguageId = $state<number | null>(null);
 
   function getFileExtension(filename: string): string {
     return filename.split('.').pop()?.toLowerCase() || '';
@@ -48,8 +85,15 @@
     return fileExt === language.fileExtension.toLowerCase();
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(e: Event) {
+    e.preventDefault();
+
     if (!selectedFiles || !selectedLanguageId) {
+      toast.error(m.task_submit_validation_both());
+      return;
+    }
+
+    if (selectedFiles.length === 0) {
       toast.error(m.task_submit_validation_both());
       return;
     }
@@ -64,10 +108,9 @@
       );
       return;
     }
-
-    formElement?.requestSubmit();
   }
 
+  // Read file content for preview
   $effect(() => {
     if (selectedFiles && selectedFiles.length > 0) {
       const reader = new FileReader();
@@ -98,53 +141,37 @@
     {:else}
       <form
         enctype="multipart/form-data"
-        bind:this={formElement}
-        id="submission-form"
-        class="hidden"
-        {...submitAction.enhance(async ({ submit }) => {
-          try {
-            await submit();
-            toast.success(m.task_submit_success());
-            selectedFiles = new DataTransfer().files;
-            selectedLanguageId = null;
-            fileUploader?.clear();
-          } catch (error: unknown) {
-            if (isHttpError(error)) {
-              toast.error(error.body.message);
-            } else {
-              toast.error(m.task_submit_error());
-            }
-          }
-        })}
+        method="POST"
+        class="space-y-4"
+        use:enhance
+        onsubmit={handleSubmit}
       >
-        <input {...submitAction.fields.contestId.as('number')} bind:value={contestId} hidden />
-        <input {...submitAction.fields.taskId.as('number')} bind:value={taskId} hidden />
-        <input
-          {...submitAction.fields.languageId.as('number')}
-          bind:value={selectedLanguageId}
-          hidden
+        <LanguageSelector
+          {languages}
+          bind:selectedLanguageId
+          onChange={(id) => {
+            if (id !== null) {
+              $form.languageId = id;
+            }
+          }}
         />
-        <input
-          {...submitAction.fields.solution.as('file')}
-          bind:files={selectedFiles}
-          type="file"
-          hidden
+
+        <FileUploader
+          bind:this={fileUploader}
+          bind:selectedFiles
+          disabled={selectedLanguageId === null}
+          onChange={(files) => {
+            if (files && files.length > 0) {
+              $form.solution = files[0];
+            }
+          }}
+        />
+
+        <SubmitButton
+          disabled={!selectedFiles || selectedLanguageId === null || $submitting}
+          loading={$submitting}
         />
       </form>
-
-      <LanguageSelector {languages} bind:selectedLanguageId />
-
-      <FileUploader
-        bind:this={fileUploader}
-        bind:selectedFiles
-        disabled={selectedLanguageId === null}
-      />
-
-      <SubmitButton
-        disabled={!selectedFiles || selectedLanguageId === null || !!submitAction.pending}
-        loading={!!submitAction.pending}
-        onclick={handleSubmit}
-      />
     {/if}
   </Card.Content>
 </Card.Root>

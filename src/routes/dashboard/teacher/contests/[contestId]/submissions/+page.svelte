@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { getContestSubmissions } from './submissions.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
+  import type { Submission } from '$lib/dto/submission';
   import { SubmissionsList } from '$lib/components/dashboard/submissions';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -19,6 +21,8 @@
   }
 
   let { data }: Props = $props();
+  const contestId = $derived(data.contestId);
+  const contestsService = getContestsManagementInstance();
 
   // Pagination state
   let limit = $state(20);
@@ -29,13 +33,19 @@
   let taskFilter = $state('');
 
   // Query submissions with pagination
-  const submissionsQuery = $derived(
-    getContestSubmissions({
-      contestId: data.contestId,
-      limit,
-      offset
-    })
-  );
+  const getQueryParams = () => ({
+    contestId,
+    limit,
+    offset
+  });
+
+  const submissionsQuery = createParameterizedQuery(getQueryParams, async (params) => {
+    if (!contestsService) throw new Error('Service unavailable');
+    return await contestsService.getContestSubmissions(params.contestId, {
+      limit: params.limit,
+      offset: params.offset
+    });
+  });
 
   // Pagination calculations
   let currentPage = $derived(getCurrentPage(offset, limit));
@@ -50,7 +60,7 @@
   const filteredSubmissions = $derived.by(() => {
     if (!submissionsQuery.current) return [];
 
-    return submissionsQuery.current.items.filter((submission) => {
+    return submissionsQuery.current.items.filter((submission: Submission) => {
       const matchesUser =
         !userFilter ||
         submission.user.username.toLowerCase().includes(userFilter.toLowerCase()) ||

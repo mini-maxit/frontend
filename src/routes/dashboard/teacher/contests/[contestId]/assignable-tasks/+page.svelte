@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { getAssignableTasks, addTaskToContest } from './tasks.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -14,21 +13,33 @@
   import Plus from '@lucide/svelte/icons/plus';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
   import { DateFormatter, type DateValue, getLocalTimeZone, today } from '@internationalized/date';
   import { cn, formatDate, toLocalRFC3339 } from '$lib/utils';
   import { SvelteDate } from 'svelte/reactivity';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
+
   interface Props {
     data: {
       contestId: number;
     };
   }
   let { data }: Props = $props();
-  const tasksQuery = getAssignableTasks(data.contestId);
+  const contestId = $derived(data.contestId);
+  const contestsService = getContestsManagementInstance();
+
+  const tasksQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getAssignableTasks(id);
+    }
+  );
 
   let dialogOpen = $state(false);
   let selectedTaskId = $state<number | null>(null);
+  let submitting = $state(false);
 
   // Date formatters
   const df = new DateFormatter('en-US', {
@@ -58,19 +69,16 @@
   let endTime = $state<string | null>(getDefaultEndDateTime().time);
   let hasEndTime = $state(false);
 
-  function getDateTimeString(date: DateValue | undefined, time: string | null): string {
-    if (!date) return '';
-    if (!time) return '';
+  function buildDateTime(date: DateValue | undefined, time: string | null): string {
+    if (!date || !time) return '';
     const [hours, minutes] = time.split(':').map(Number);
     const dateObj = date.toDate(getLocalTimeZone());
     dateObj.setHours(hours, minutes, 0, 0);
-
-    // Use shared utility to encode local timezone into RFC3339
     return toLocalRFC3339(dateObj);
   }
 
-  let startAtValue = $derived(getDateTimeString(startDate, startTime));
-  let endAtValue = $derived(hasEndTime ? getDateTimeString(endDate, endTime) : '');
+  let startAtValue = $derived(buildDateTime(startDate, startTime));
+  let endAtValue = $derived(hasEndTime ? buildDateTime(endDate, endTime) : '');
 
   function openDialog(taskId: number) {
     selectedTaskId = taskId;
@@ -83,6 +91,33 @@
     endTime = defaultEnd.time;
     hasEndTime = false;
     dialogOpen = true;
+  }
+
+  async function handleAddTask(event: Event) {
+    event.preventDefault();
+
+    if (!contestsService || !selectedTaskId || !startAtValue) {
+      toast.error(m.admin_contest_tasks_add_error());
+      return;
+    }
+
+    submitting = true;
+    try {
+      await contestsService.addTaskToContest(contestId, {
+        taskId: selectedTaskId,
+        startAt: startAtValue,
+        endAt: hasEndTime ? endAtValue : null
+      });
+      toast.success(m.admin_contest_tasks_add_success());
+      dialogOpen = false;
+      selectedTaskId = null;
+      await tasksQuery.refresh();
+    } catch (error) {
+      console.error('Add task to contest error:', error);
+      toast.error(m.admin_contest_tasks_add_error());
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 
@@ -172,33 +207,7 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      {...addTaskToContest.enhance(async ({ submit }) => {
-        try {
-          await submit();
-          toast.success(m.admin_contest_tasks_add_success());
-          dialogOpen = false;
-          selectedTaskId = null;
-        } catch (error: unknown) {
-          if (isHttpError(error)) {
-            toast.error(error.body.message);
-          } else {
-            toast.error(m.admin_contest_tasks_add_error());
-          }
-        }
-      })}
-      class="space-y-6"
-    >
-      <!-- Hidden inputs for form submission -->
-      <input
-        {...addTaskToContest.fields.contestId.as('number')}
-        bind:value={data.contestId}
-        hidden
-      />
-      <input {...addTaskToContest.fields.taskId.as('number')} bind:value={selectedTaskId} hidden />
-      <input {...addTaskToContest.fields.startAt.as('text')} bind:value={startAtValue} hidden />
-      <input {...addTaskToContest.fields.endAt.as('text')} bind:value={endAtValue} hidden />
-
+    <form class="space-y-6" onsubmit={handleAddTask}>
       <div class="grid gap-4 sm:grid-cols-2">
         <!-- Start Date & Time -->
         <div class="space-y-3">
@@ -243,10 +252,6 @@
               class="scheme-light transition-all duration-200 focus:ring-2 focus:ring-primary dark:scheme-dark"
             />
           </div>
-
-          {#each addTaskToContest.fields.startAt.issues() as issue (issue.message)}
-            <p class="text-sm text-destructive">{issue.message}</p>
-          {/each}
         </div>
 
         <!-- End Date & Time -->
@@ -298,10 +303,6 @@
                 class="scheme-light transition-all duration-200 focus:ring-2 focus:ring-primary dark:scheme-dark"
               />
             </div>
-
-            {#each addTaskToContest.fields.endAt.issues() as issue (issue.message)}
-              <p class="text-sm text-destructive">{issue.message}</p>
-            {/each}
           {/if}
         </div>
       </div>
@@ -319,6 +320,7 @@
         </Button>
         <Button
           type="submit"
+          disabled={submitting}
           class="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
         >
           {m.admin_contest_tasks_add_button()}
