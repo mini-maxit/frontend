@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as m from '$lib/paraglide/messages';
-  import TaskCard from '$lib/components/dashboard/tasks/TaskCard.svelte';
+  import BasicTaskCard from '$lib/components/dashboard/tasks/BasicTaskCard.svelte';
   import { LoadingSpinner } from '$lib/components/common';
   import ErrorCard from '$lib/components/common/ErrorCard.svelte';
   import EmptyState from '$lib/components/common/EmptyState.svelte';
@@ -29,7 +29,11 @@
   </div>
 
   {#if tasksQuery.error}
-    <ErrorCard error={tasksQuery.error} onRetry={() => tasksQuery.refresh()} />
+    <ErrorCard
+      title={m.error_loading_tasks()}
+      error={tasksQuery.error}
+      onRetry={() => tasksQuery.refresh()}
+    />
   {:else if tasksQuery.loading}
     <LoadingSpinner message={m.tasks_loading()} />
   {:else if tasksQuery.current && tasksQuery.current.length === 0}
@@ -41,7 +45,7 @@
   {:else if tasksQuery.current}
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {#each tasksQuery.current as task (task.id)}
-        <TaskCard {task} />
+        <BasicTaskCard {task} />
       {/each}
     </div>
   {/if}

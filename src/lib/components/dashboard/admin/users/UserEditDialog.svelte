@@ -53,7 +53,7 @@
             surname: form.data.surname,
             username: form.data.username,
             email: form.data.email,
-            role: form.data.role
+            role: form.data.role as UserRole
           });
 
           if (result.success) {
@@ -171,7 +171,7 @@
             value={$form.role}
             onValueChange={(value) => {
               if (value) {
-                $form.role = value;
+                $form.role = value as UserRole;
               }
             }}
             disabled={$submitting}

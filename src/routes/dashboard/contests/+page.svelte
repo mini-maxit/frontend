@@ -41,33 +41,16 @@
     if (!contestService) return;
     registering = contestId;
     try {
-      // Optimistically update UI
-      if (ongoingContestsQuery.current) {
-        ongoingContestsQuery.current = ongoingContestsQuery.current.map((contest: Contest) =>
-          contest.id === contestId
-            ? { ...contest, registrationStatus: ContestRegistrationStatus.Registered }
-            : contest
-        );
-      }
-      if (upcomingContestsQuery.current) {
-        upcomingContestsQuery.current = upcomingContestsQuery.current.map((contest: Contest) =>
-          contest.id === contestId
-            ? { ...contest, registrationStatus: ContestRegistrationStatus.Registered }
-            : contest
-        );
-      }
-
       const result = await contestService.registerForContest(contestId);
       if (!result.success) {
         throw new Error(result.error || 'Failed to register');
       }
       toast.success(m.contests_registration_success());
+      // Refresh queries to show updated registration status
+      await Promise.all([ongoingContestsQuery.refresh(), upcomingContestsQuery.refresh()]);
     } catch (error) {
       console.error('Registration failed:', error);
       toast.error(m.contests_registration_error());
-      // Refresh to revert optimistic update
-      ongoingContestsQuery.refresh();
-      upcomingContestsQuery.refresh();
     } finally {
       registering = null;
     }

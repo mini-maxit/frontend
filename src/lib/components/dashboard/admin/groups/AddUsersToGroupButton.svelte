@@ -9,8 +9,9 @@
   import { toast } from 'svelte-sonner';
   import * as m from '$lib/paraglide/messages';
   import { SvelteSet } from 'svelte/reactivity';
-  import { createQuery, createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getUserManagementInstance, getGroupsManagementInstance } from '$lib/services';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getAccessControlInstance, getGroupsManagementInstance } from '$lib/services';
+  import { ResourceType } from '$lib/dto/accessControl';
   import type { User } from '$lib/dto/user';
 
   interface Props {
@@ -25,36 +26,25 @@
   let selectedUserIds = $state(new SvelteSet<number>());
   let submitting = $state(false);
 
-  const userManagementService = getUserManagementInstance();
   const groupsService = getGroupsManagementInstance();
+  const accessControlService = getAccessControlInstance();
 
-  // Fetch all users
-  const usersQuery = createQuery(async () => {
-    if (!userManagementService) throw new Error('User service unavailable');
-    const result = await userManagementService.getAllUsers();
-    if (!result.success) throw new Error(result.error || 'Failed to fetch users');
-    return result.data!;
-  });
-
-  // Fetch current group members
-  const membersQuery = createParameterizedQuery(groupId, async (id) => {
-    if (!groupsService) throw new Error('Groups service unavailable');
-    const members = await groupsService.getGroupMembers(id);
-    return members;
-  });
-
-  // Filter out users who are already members
-  let availableUsers = $derived.by(() => {
-    if (!usersQuery.current?.items || !membersQuery.current) return [];
-    const memberIds = new SvelteSet(membersQuery.current.map((m) => m.id));
-    return usersQuery.current.items.filter((user: User) => !memberIds.has(user.id));
-  });
+  const assignableUsersQuery = createParameterizedQuery(
+    () => groupId,
+    async (id) => {
+      if (!accessControlService) throw new Error('Access control service unavailable');
+      const result = await accessControlService.getAssignableUsers(ResourceType.Groups, id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch assignable users');
+      return result.data!;
+    }
+  );
 
   // Filter by search query
   let filteredUsers = $derived.by(() => {
-    if (!searchQuery.trim()) return availableUsers;
+    const users = assignableUsersQuery.current?.items ?? [];
+    if (!searchQuery.trim()) return users;
     const query = searchQuery.toLowerCase();
-    return availableUsers.filter(
+    return users.filter(
       (user: User) =>
         user.username.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query) ||
@@ -87,8 +77,7 @@
       selectedUserIds = new SvelteSet();
       searchQuery = '';
 
-      // Refresh the members list
-      await membersQuery.refresh();
+      await assignableUsersQuery.refresh();
 
       if (onSuccess) onSuccess();
     } catch (error) {
@@ -160,15 +149,15 @@
       </div>
 
       <!-- User List -->
-      {#if usersQuery.error || membersQuery.error}
+      {#if assignableUsersQuery.error}
         <ErrorCard
-          error={usersQuery.error || membersQuery.error}
+          title={m.error_loading_data()}
+          error={assignableUsersQuery.error}
           onRetry={() => {
-            usersQuery.refresh();
-            membersQuery.refresh();
+            assignableUsersQuery.refresh();
           }}
         />
-      {:else if usersQuery.loading || membersQuery.loading}
+      {:else if assignableUsersQuery.loading}
         <LoadingSpinner message={m.groups_loading()} />
       {:else if filteredUsers.length === 0}
         <p class="text-sm text-muted-foreground">{m.group_members_no_users_found()}</p>

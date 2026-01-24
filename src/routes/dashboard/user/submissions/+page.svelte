@@ -9,7 +9,7 @@
   const submissionService = getSubmissionInstance();
   const submissionsQuery = createQuery(async () => {
     if (!submissionService) throw new Error('Service unavailable');
-    const result = await submissionService.getUserSubmissions();
+    const result = await submissionService.getMySubmissions();
     if (!result.success) throw new Error(result.error || 'Failed to fetch submissions');
     return result.data!;
   });

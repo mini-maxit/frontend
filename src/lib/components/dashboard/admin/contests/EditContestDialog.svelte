@@ -39,8 +39,8 @@
         id: contest.id,
         name: contest.name,
         description: contest.description,
-        startAt: contest.startAt,
-        endAt: contest.endAt || '',
+        startAt: contest.startAt ?? '',
+        endAt: contest.endAt ?? '',
         isRegistrationOpen: contest.isRegistrationOpen,
         isSubmissionOpen: contest.isSubmissionOpen,
         isVisible: contest.isVisible
@@ -61,7 +61,7 @@
             name: form.data.name,
             description: form.data.description,
             startAt: form.data.startAt,
-            endAt: form.data.endAt || undefined,
+            endAt: form.data.endAt || null,
             isRegistrationOpen: form.data.isRegistrationOpen,
             isSubmissionOpen: form.data.isSubmissionOpen,
             isVisible: form.data.isVisible

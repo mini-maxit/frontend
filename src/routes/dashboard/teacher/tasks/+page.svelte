@@ -16,7 +16,7 @@
   let dialogOpen = $state(false);
   const tasksQuery = createQuery(async () => {
     if (!tasksManagementService) throw new Error('Service unavailable');
-    const result = await tasksManagementService.getTasks();
+    const result = await tasksManagementService.getCreatedTasks();
     if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
     return result.data!;
   });
@@ -67,7 +67,7 @@
         icon={Upload}
       />
     {:else if tasksQuery.current}
-      <TasksList tasks={tasksQuery.current} {deleteTask} />
+      <TasksList tasks={tasksQuery.current} onTaskDeleted={() => tasksQuery.refresh()} />
     {/if}
   </div>
 </div>

@@ -14,15 +14,27 @@
   import * as m from '$lib/paraglide/messages';
   import type { TaskResult } from '$lib/dto/contest';
 
+  interface Props {
+    data: {
+      contestId: number;
+      currentUserId: number;
+    };
+  }
+
+  let { data }: Props = $props();
+
   const contestService = getContestInstance();
   const contestId = $derived(Number(page.params.contestId));
 
-  const resultsQuery = createParameterizedQuery(contestId, async (id) => {
-    if (!contestService) throw new Error('Service unavailable');
-    const result = await contestService.getContestResults(id);
-    if (!result.success) throw new Error(result.error || 'Failed to fetch results');
-    return result.data!;
-  });
+  const resultsQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestService) throw new Error('Service unavailable');
+      const result = await contestService.getContestResults(id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch results');
+      return result.data!;
+    }
+  );
 
   // Sort leaderboard by total score (sum of best scores across all tasks)
   let sortedLeaderboard = $derived.by(() => {

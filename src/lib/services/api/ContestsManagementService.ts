@@ -23,21 +23,6 @@ import type { Submission, GetContestSubmissionsParams } from '$lib/dto/submissio
 export class ContestsManagementService {
   constructor(private apiClient: ApiService) {}
 
-  async getCreatedContests(): Promise<CreatedContest[]> {
-    try {
-      const contests = await this.apiClient.get<ApiResponse<PaginatedData<CreatedContest>>>({
-        url: '/contests-management/contests/created'
-      });
-      return contests.data.items;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get created contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
-  }
-
   async getManagedContests(): Promise<ManagedContest[]> {
     try {
       const contests = await this.apiClient.get<ApiResponse<PaginatedData<ManagedContest>>>({
@@ -179,10 +164,10 @@ export class ContestsManagementService {
     }
   }
 
-  async removeTaskFromContest(contestId: number, taskIds: number[]): Promise<void> {
+  async removeTaskFromContest(contestId: number, taskIds: number | number[]): Promise<void> {
     try {
       const requestData = {
-        taskIds
+        taskIds: Array.isArray(taskIds) ? taskIds : [taskIds]
       };
       await this.apiClient.delete<ApiResponse<{ message: string }>>({
         url: `/contests-management/contests/${contestId}/tasks`,

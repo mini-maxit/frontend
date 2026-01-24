@@ -28,7 +28,9 @@
 
   let taskLimitsQuery = createParameterizedQuery(taskId, async (id) => {
     if (!tasksManagementService) throw new Error('Service unavailable');
-    return await tasksManagementService.getTaskTestCaseLimits(id);
+    const result = await tasksManagementService.getTaskLimits(id);
+    if (!result.success) throw new Error(result.error || 'Failed to fetch task limits');
+    return result.data || [];
   });
 
   let editedLimits = $state<Array<{ order: number; memoryLimit: number; timeLimit: number }>>([]);
@@ -36,7 +38,7 @@
 
   $effect(() => {
     if (taskLimitsQuery?.current) {
-      editedLimits = taskLimitsQuery.current.map((limit) => ({ ...limit }));
+      editedLimits = taskLimitsQuery.current.map((limit: TaskLimit) => ({ ...limit }));
     }
   });
 
@@ -50,10 +52,16 @@
 
     submitting = true;
     try {
-      await tasksManagementService.updateTaskTestCaseLimits(taskId, editedLimits);
-      toast.success(m.admin_tasks_test_cases_updated());
-      open = false;
-      if (onSuccess) onSuccess();
+      const result = await tasksManagementService.updateTaskLimits(taskId, {
+        limits: editedLimits
+      });
+      if (result.success) {
+        toast.success(m.admin_tasks_test_cases_updated());
+        open = false;
+        if (onSuccess) onSuccess();
+      } else {
+        toast.error(result.error || m.admin_tasks_test_cases_update_error());
+      }
     } catch (error) {
       console.error('Update task limits error:', error);
       toast.error(m.admin_tasks_test_cases_update_error());

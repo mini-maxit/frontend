@@ -15,12 +15,15 @@
   const contestService = getContestInstance();
   const contestId = $derived(Number(page.params.contestId));
 
-  const tasksQuery = createParameterizedQuery(contestId, async (id) => {
-    if (!contestService) throw new Error('Service unavailable');
-    const result = await contestService.getContestTasksWithStatistics(id);
-    if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
-    return result.data!;
-  });
+  const tasksQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestService) throw new Error('Service unavailable');
+      const result = await contestService.getContestTasksWithStatistics(id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
+      return result.data!;
+    }
+  );
 </script>
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">
@@ -88,7 +91,7 @@
 
               <div class="pt-2">
                 <Button
-                  href={`${AppRoutes.UserContests}/${data.contestId}/tasks/${task.id}`}
+                  href={`${AppRoutes.UserContests}/${contestId}/tasks/${task.id}`}
                   class="w-full"
                   variant="default"
                 >

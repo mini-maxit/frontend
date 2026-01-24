@@ -101,7 +101,7 @@ export function createQuery<T>(fetcher: () => Promise<T>): Query<T> {
  * ```
  */
 export function createParameterizedQuery<T, P>(
-  param: P,
+  param: () => P,
   fetcher: (param: P) => Promise<T>
 ): Query<T> {
   let current = $state<T | null>(null);
@@ -112,14 +112,12 @@ export function createParameterizedQuery<T, P>(
   // This properly tracks reactive parameters like $derived values
   $effect(() => {
     // Access param to establish reactivity
-    const currentParam = param;
-
     if (!browser) return;
 
     loading = true;
     error = null;
 
-    fetcher(currentParam)
+    fetcher(param())
       .then((data) => {
         current = data;
         loading = false;
@@ -140,7 +138,7 @@ export function createParameterizedQuery<T, P>(
     error = null;
 
     try {
-      const data = await fetcher(param);
+      const data = await fetcher(param());
       current = data;
     } catch (e) {
       error = e instanceof Error ? e : new Error('Unknown error occurred');

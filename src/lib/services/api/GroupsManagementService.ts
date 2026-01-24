@@ -2,7 +2,7 @@ import type { ApiService } from './ApiService';
 import { ApiError } from '../ApiService';
 import type { Group, CreateGroupDto, EditGroupDto } from '$lib/dto/group';
 import type { User } from '$lib/dto/user';
-import type { ApiResponse } from '$lib/dto/response';
+import type { ApiResponse, PaginatedData } from '$lib/dto/response';
 
 /**
  * Client-side service for group management API calls
@@ -11,16 +11,26 @@ import type { ApiResponse } from '$lib/dto/response';
 export class GroupsManagementService {
   constructor(private apiClient: ApiService) {}
 
-  async getAllGroups(): Promise<Group[]> {
+  async getAllGroups(): Promise<{
+    success: boolean;
+    status: number;
+    data?: Group[];
+    error?: string;
+  }> {
     try {
-      const response = await this.apiClient.get<ApiResponse<Group[]>>({
+      const response = await this.apiClient.get<ApiResponse<Group[] | PaginatedData<Group>>>({
         url: '/groups-management/groups'
       });
-      return response.data;
+      const payload = response.data;
+      const groups = Array.isArray(payload) ? payload : (payload.items ?? []);
+      return { success: true, data: groups, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Failed to get groups:', error.toJSON());
-        throw error;
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
       }
       throw error;
     }

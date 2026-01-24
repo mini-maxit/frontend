@@ -10,7 +10,7 @@
 
   const contestsQuery = createQuery(async () => {
     if (!contestsManagementService) throw new Error('Service unavailable');
-    return await contestsManagementService.getCreatedContests();
+    return await contestsManagementService.getManagedContests();
   });
 </script>
 

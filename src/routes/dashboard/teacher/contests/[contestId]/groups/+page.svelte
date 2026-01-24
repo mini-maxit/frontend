@@ -1,21 +1,7 @@
 <script lang="ts">
-  // TODO: getContestGroups, getAssignableGroups were imported from groups.remote which no longer exists
-  // import { getContestGroups, getAssignableGroups } from './groups.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
-
-  // Placeholder functions - to be replaced when remote functions are implemented
-  const getContestGroups = (contestId: number) => ({
-    current: null,
-    loading: true,
-    error: null,
-    refresh: () => {}
-  });
-  const getAssignableGroups = (contestId: number) => ({
-    current: null,
-    loading: true,
-    error: null,
-    refresh: () => {}
-  });
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
   import {
     AddGroupToContestButton,
     RemoveGroupFromContestButton
@@ -29,9 +15,24 @@
   }
 
   let { data }: Props = $props();
+  const contestId = $derived(data.contestId);
+  const contestsService = getContestsManagementInstance();
 
-  const groupsQuery = getContestGroups(data.contestId);
-  const assignableQuery = getAssignableGroups(data.contestId);
+  const groupsQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getContestGroups(id);
+    }
+  );
+
+  const assignableQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getAssignableGroups(id);
+    }
+  );
 </script>
 
 <div class="space-y-6">
@@ -47,8 +48,12 @@
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {#if assignableQuery.current}
         <AddGroupToContestButton
-          contestId={data.contestId}
+          {contestId}
           assignableGroups={assignableQuery.current}
+          onSuccess={() => {
+            groupsQuery.refresh();
+            assignableQuery.refresh();
+          }}
         />
       {/if}
     </div>
@@ -80,9 +85,13 @@
               <div class="flex items-center justify-between">
                 <Card.Title>{group.name}</Card.Title>
                 <RemoveGroupFromContestButton
-                  contestId={data.contestId}
+                  {contestId}
                   groupId={group.id}
                   groupName={group.name}
+                  onSuccess={() => {
+                    groupsQuery.refresh();
+                    assignableQuery.refresh();
+                  }}
                 />
               </div>
             </Card.Header>

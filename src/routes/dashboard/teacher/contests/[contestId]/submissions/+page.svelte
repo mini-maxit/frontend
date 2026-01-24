@@ -1,15 +1,7 @@
 <script lang="ts">
-  // TODO: getContestSubmissions was imported from submissions.remote which no longer exists
-  // import { getContestSubmissions } from './submissions.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
-
-  // Placeholder function - to be replaced when remote function is implemented
-  const getContestSubmissions = (params: any) => ({
-    current: null,
-    loading: true,
-    error: null,
-    refresh: () => {}
-  });
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
   import type { Submission } from '$lib/dto/submission';
   import { SubmissionsList } from '$lib/components/dashboard/submissions';
   import { Button } from '$lib/components/ui/button';
@@ -29,6 +21,8 @@
   }
 
   let { data }: Props = $props();
+  const contestId = $derived(data.contestId);
+  const contestsService = getContestsManagementInstance();
 
   // Pagination state
   let limit = $state(20);
@@ -39,13 +33,19 @@
   let taskFilter = $state('');
 
   // Query submissions with pagination
-  const submissionsQuery = $derived(
-    getContestSubmissions({
-      contestId: data.contestId,
-      limit,
-      offset
-    })
-  );
+  const getQueryParams = () => ({
+    contestId,
+    limit,
+    offset
+  });
+
+  const submissionsQuery = createParameterizedQuery(getQueryParams, async (params) => {
+    if (!contestsService) throw new Error('Service unavailable');
+    return await contestsService.getContestSubmissions(params.contestId, {
+      limit: params.limit,
+      offset: params.offset
+    });
+  });
 
   // Pagination calculations
   let currentPage = $derived(getCurrentPage(offset, limit));

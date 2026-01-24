@@ -34,7 +34,7 @@
 
     isRemoving = true;
     try {
-      await contestsService.removeTaskFromContest(contestId, taskId);
+      await contestsService.removeTaskFromContest(contestId, [taskId]);
       toast.success(m.admin_contest_tasks_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();

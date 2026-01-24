@@ -17,6 +17,52 @@ import type { ApiResponse, PaginatedData } from '$lib/dto/response';
 export class ContestService {
   constructor(private apiClient: ApiService) {}
 
+  async getUserContests(): Promise<{
+    success: boolean;
+    status: number;
+    data?: {
+      active: ContestWithStats[];
+      upcoming: ContestWithStats[];
+      past: PastContestWithStats[];
+    };
+    error?: string;
+  }> {
+    try {
+      const response = await this.apiClient.get<
+        ApiResponse<{
+          ongoing: ContestWithStats[];
+          upcoming: ContestWithStats[];
+          past: PastContestWithStats[];
+        }>
+      >({
+        url: '/contests/my'
+      });
+
+      const ongoing = response.data.ongoing ?? [];
+      const upcoming = response.data.upcoming ?? [];
+      const past = response.data.past ?? [];
+
+      return {
+        success: true,
+        status: 200,
+        data: {
+          active: [...ongoing, ...upcoming],
+          upcoming,
+          past
+        }
+      };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
   async getOngoing(): Promise<Contest[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<PaginatedData<Contest>>>({
@@ -92,45 +138,72 @@ export class ContestService {
     }
   }
 
-  async registerForContest(contestId: number): Promise<void> {
+  async registerForContest(contestId: number): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
     try {
       await this.apiClient.post<ApiResponse<void>>({
         url: `/contests/${contestId}/register`
       });
+      return { success: true, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Failed to register for contest:', error.toJSON());
-        throw error;
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
       }
       throw error;
     }
   }
 
-  async getContestTasksWithStatistics(contestId: number): Promise<ContestTaskWithStatistics[]> {
+  async getContestTasksWithStatistics(contestId: number): Promise<{
+    success: boolean;
+    status: number;
+    data?: ContestTaskWithStatistics[];
+    error?: string;
+  }> {
     try {
       const response = await this.apiClient.get<ApiResponse<ContestTaskWithStatistics[]>>({
         url: `/contests/${contestId}/tasks/user-statistics`
       });
-      return response.data;
+      return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Failed to get contest tasks with statistics:', error.toJSON());
-        throw error;
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
       }
       throw error;
     }
   }
 
-  async getContestTask(contestId: number, taskId: number): Promise<TaskDetail> {
+  async getContestTask(
+    contestId: number,
+    taskId: number
+  ): Promise<{
+    success: boolean;
+    status: number;
+    data?: TaskDetail;
+    error?: string;
+  }> {
     try {
       const response = await this.apiClient.get<ApiResponse<TaskDetail>>({
         url: `/contests/${contestId}/tasks/${taskId}`
       });
-      return response.data;
+      return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Failed to get contest task:', error.toJSON());
-        throw error;
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
       }
       throw error;
     }
@@ -161,6 +234,29 @@ export class ContestService {
       if (error instanceof ApiError) {
         console.error('Failed to get contest results:', error.toJSON());
         throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestResults(contestId: number): Promise<{
+    success: boolean;
+    status: number;
+    data?: ContestResults;
+    error?: string;
+  }> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<ContestResults>>({
+        url: `/contests/${contestId}/results/my`
+      });
+      return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
       }
       throw error;
     }

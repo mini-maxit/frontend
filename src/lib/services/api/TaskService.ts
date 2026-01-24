@@ -98,4 +98,33 @@ export class TaskService {
       throw error;
     }
   }
+
+  /**
+   * Get contest task details by contest and task ID
+   */
+  async getContestTask(
+    contestId: number,
+    taskId: number
+  ): Promise<{
+    success: boolean;
+    status: number;
+    data?: TaskDetail;
+    error?: string;
+  }> {
+    try {
+      const response = await this.apiClient.get<ApiResponse<TaskDetail>>({
+        url: `/contests/${contestId}/tasks/${taskId}`
+      });
+      return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: error.getApiMessage(),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
 }

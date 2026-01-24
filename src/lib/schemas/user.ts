@@ -1,4 +1,5 @@
 import * as v from 'valibot';
+import { UserRole } from '$lib/dto/jwt';
 
 /**
  * Schema for changing user password
@@ -58,7 +59,7 @@ export const UpdateUserSchema = v.object({
     )
   ),
   email: v.pipe(v.string(), v.nonEmpty('Email is required'), v.email('Invalid email address')),
-  role: v.string('Role is required')
+  role: v.picklist([UserRole.Student, UserRole.Teacher, UserRole.Admin], 'Invalid role')
 });
 
 export type UpdateUserInput = v.InferOutput<typeof UpdateUserSchema>;

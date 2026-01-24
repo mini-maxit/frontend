@@ -56,7 +56,7 @@
             name: form.data.name,
             description: form.data.description,
             startAt: form.data.startAt,
-            endAt: form.data.endAt || undefined,
+            endAt: form.data.endAt || null,
             isRegistrationOpen: form.data.isRegistrationOpen,
             isSubmissionOpen: form.data.isSubmissionOpen,
             isVisible: form.data.isVisible

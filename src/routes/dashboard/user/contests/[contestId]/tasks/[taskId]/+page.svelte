@@ -14,9 +14,9 @@
 
   const contestId = $derived(Number(page.params.contestId));
   const taskId = $derived(Number(page.params.taskId));
-  const params = $derived({ contestId, taskId });
+  const getParams = () => ({ contestId, taskId });
 
-  const taskQuery = createParameterizedQuery(params, async (p) => {
+  const taskQuery = createParameterizedQuery(getParams, async (p) => {
     if (!taskService) throw new Error('Service unavailable');
     const result = await taskService.getContestTask(p.contestId, p.taskId);
     if (!result.success) throw new Error(result.error || 'Failed to fetch task');

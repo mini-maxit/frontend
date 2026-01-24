@@ -12,14 +12,17 @@
   const taskService = getTaskInstance();
   const submissionService = getSubmissionInstance();
 
-  const taskId = $derived(Number(page.params.taskId));
+  const taskId = $derived.by(() => Number(page.params.taskId));
 
-  const taskQuery = createParameterizedQuery(taskId, async (id) => {
-    if (!taskService) throw new Error('Service unavailable');
-    const result = await taskService.getTaskById(id);
-    if (!result.success) throw new Error(result.error || 'Failed to fetch task');
-    return result.data!;
-  });
+  const taskQuery = createParameterizedQuery(
+    () => taskId,
+    async (id) => {
+      if (!taskService) throw new Error('Service unavailable');
+      const result = await taskService.getTaskById(id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch task');
+      return result.data!;
+    }
+  );
 
   const languagesQuery = createQuery(async () => {
     if (!submissionService) throw new Error('Service unavailable');

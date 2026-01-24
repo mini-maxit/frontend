@@ -1,30 +1,7 @@
 <script lang="ts">
-  // TODO: Remote functions were imported from collaborators.remote which no longer exists
-  // import {
-  //   getGroupCollaborators,
-  //   getAssignableUsers,
-  //   addCollaborator,
-  //   updateCollaborator,
-  //   removeCollaborator
-  // } from './collaborators.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
-
-  // Placeholder functions - to be replaced when remote functions are implemented
-  const getGroupCollaborators = (groupId: number) => ({
-    current: null,
-    loading: true,
-    error: null,
-    refresh: () => {}
-  });
-  const getAssignableUsers = (groupId: number) => ({
-    current: null,
-    loading: true,
-    error: null,
-    refresh: () => {}
-  });
-  const addCollaborator = { enhance: (callback: any) => callback, fields: {} };
-  const updateCollaborator = { enhance: (callback: any) => callback, fields: {} };
-  const removeCollaborator = { enhance: (callback: any) => callback, fields: {} };
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getAccessControlInstance } from '$lib/services';
   import {
     AddGroupCollaboratorButton,
     GroupCollaboratorPermissionEditor,
@@ -42,7 +19,9 @@
   import Calendar from '@lucide/svelte/icons/calendar';
   import * as m from '$lib/paraglide/messages';
   import { formatDistanceToNow } from 'date-fns';
-  import { Permission, type Collaborator } from '$lib/dto/accessControl';
+  import { Permission, ResourceType, type Collaborator } from '$lib/dto/accessControl';
+  import type { PaginatedData } from '$lib/dto/response';
+  import type { User } from '$lib/dto/user';
 
   interface Props {
     data: {
@@ -52,9 +31,30 @@
   }
 
   let { data }: Props = $props();
+  const groupId = $derived(data.groupId);
+  const accessControlService = getAccessControlInstance();
 
-  const collaboratorsQuery = getGroupCollaborators(data.groupId);
-  const assignableUsersQuery = getAssignableUsers(data.groupId);
+  const collaboratorsQuery = createParameterizedQuery(
+    () => groupId,
+    async (id) => {
+      if (!accessControlService) throw new Error('Service unavailable');
+      const result = await accessControlService.getCollaborators(ResourceType.Groups, id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch collaborators');
+      return result.data ?? [];
+    }
+  );
+
+  const assignableUsersQuery = createParameterizedQuery(
+    () => groupId,
+    async (id): Promise<PaginatedData<User>> => {
+      if (!accessControlService) throw new Error('Service unavailable');
+      const result = await accessControlService.getAssignableUsers(ResourceType.Groups, id);
+      if (!result.success || !result.data) {
+        throw new Error(result.error || 'Failed to fetch assignable users');
+      }
+      return result.data;
+    }
+  );
 
   // Get current user's permission level
   const currentUserPermission = $derived.by(() => {
@@ -84,11 +84,14 @@
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <AddGroupCollaboratorButton
-        groupId={data.groupId}
-        {addCollaborator}
-        users={assignableUsersQuery.current}
+        {groupId}
+        users={assignableUsersQuery.current ?? undefined}
         usersLoading={assignableUsersQuery.loading}
         usersError={assignableUsersQuery.error}
+        onSuccess={() => {
+          collaboratorsQuery.refresh();
+          assignableUsersQuery.refresh();
+        }}
       />
     </div>
   </div>
@@ -126,20 +129,23 @@
                 </div>
                 <div class="flex items-center gap-1">
                   <GroupCollaboratorPermissionEditor
-                    groupId={data.groupId}
+                    {groupId}
                     userId={collaborator.userId}
                     userName={collaborator.userName}
                     currentPermission={collaborator.permission}
-                    {updateCollaborator}
                     canEdit={canEditCollaborators}
+                    onSuccess={() => collaboratorsQuery.refresh()}
                   />
                   <RemoveGroupCollaboratorButton
-                    groupId={data.groupId}
+                    {groupId}
                     userId={collaborator.userId}
                     userName={collaborator.userName}
                     targetPermission={collaborator.permission}
                     {currentUserPermission}
-                    {removeCollaborator}
+                    onSuccess={() => {
+                      collaboratorsQuery.refresh();
+                      assignableUsersQuery.refresh();
+                    }}
                   />
                 </div>
               </div>

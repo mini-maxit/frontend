@@ -9,7 +9,7 @@
   const userService = getUserInstance();
   const userProfileQuery = createQuery(async () => {
     if (!userService) throw new Error('Service unavailable');
-    const result = await userService.getUserProfile();
+    const result = await userService.getCurrentUser();
     if (!result.success) throw new Error(result.error || 'Failed to fetch profile');
     return result.data!;
   });

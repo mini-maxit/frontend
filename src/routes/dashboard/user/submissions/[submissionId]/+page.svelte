@@ -22,11 +22,48 @@
   const submissionService = getSubmissionInstance();
   const submissionId = $derived(Number(page.params.submissionId));
 
-  const submissionQuery = createParameterizedQuery(submissionId, async (id) => {
-    if (!submissionService) throw new Error('Service unavailable');
-    const result = await submissionService.getSubmissionDetails(id);
-    if (!result.success) throw new Error(result.error || 'Failed to fetch submission');
-    return result.data!;
+  const submissionQuery = createParameterizedQuery(
+    () => submissionId,
+    async (id) => {
+      if (!submissionService) throw new Error('Service unavailable');
+      const result = await submissionService.getSubmissionById(id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch submission');
+      return result.data!;
+    }
+  );
+
+  let fileContent = $state('');
+
+  $effect(() => {
+    const url = submissionQuery.current?.fileUrl;
+    if (!url) {
+      fileContent = '';
+      return;
+    }
+
+    let active = true;
+    (async () => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          fileContent = '';
+          return;
+        }
+        const text = await response.text();
+        if (active) {
+          fileContent = text;
+        }
+      } catch (error) {
+        console.error('Failed to load submission file content:', error);
+        if (active) {
+          fileContent = '';
+        }
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
   });
 
   const statusConfig = {
@@ -291,7 +328,7 @@
         <Card.Title>{m.submission_details_code_title()}</Card.Title>
       </Card.Header>
       <Card.Content class="mx-6 overflow-auto px-0">
-        <FilePreview content={submission.fileContent} />
+        <FilePreview content={fileContent} />
       </Card.Content>
     </Card.Root>
   {/if}

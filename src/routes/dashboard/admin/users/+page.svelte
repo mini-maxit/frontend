@@ -19,9 +19,9 @@
   let sortKey = $state<UserSortKey>(UserSortKey.Id);
   let sortDir = $state<SortDirection>(SortDirection.Asc);
 
-  const queryParams = $derived({ limit, offset, sort: `${sortKey}:${sortDir}` });
+  const getQueryParams = () => ({ limit, offset, sort: `${sortKey}:${sortDir}` });
 
-  const usersQuery = createParameterizedQuery(queryParams, async (params) => {
+  const usersQuery = createParameterizedQuery(getQueryParams, async (params) => {
     if (!userService) throw new Error('Service unavailable');
     const result = await userService.getUsers(params);
     if (!result.success) throw new Error(result.error || 'Failed to fetch users');
