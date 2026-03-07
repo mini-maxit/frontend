@@ -5,9 +5,10 @@
   interface Props {
     selectedFiles: FileList | null;
     disabled?: boolean;
+    onChange?: (files: FileList | null) => void;
   }
 
-  let { selectedFiles = $bindable(), disabled = false }: Props = $props();
+  let { selectedFiles = $bindable(), disabled = false, onChange }: Props = $props();
 
   let fileInput = $state<HTMLInputElement | null>(null);
 
@@ -26,6 +27,7 @@
     onchange={(e) => {
       const target = e.target as HTMLInputElement;
       selectedFiles = target.files;
+      onChange?.(target.files);
     }}
     id="solution"
     name="solution"

@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getGroup, getGroupMembers, updateGroup } from './group.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getGroupsManagementInstance } from '$lib/services';
   import {
     EditGroupDialog,
     AddUsersToGroupButton,
@@ -20,9 +21,24 @@
   }
 
   let { data }: Props = $props();
+  const groupId = $derived(data.groupId);
+  const groupsService = getGroupsManagementInstance();
 
-  const groupQuery = getGroup(data.groupId);
-  const membersQuery = getGroupMembers(data.groupId);
+  const groupQuery = createParameterizedQuery(
+    () => groupId,
+    async (id) => {
+      if (!groupsService) throw new Error('Service unavailable');
+      return await groupsService.getGroupById(id);
+    }
+  );
+
+  const membersQuery = createParameterizedQuery(
+    () => groupId,
+    async (id) => {
+      if (!groupsService) throw new Error('Service unavailable');
+      return await groupsService.getGroupMembers(id);
+    }
+  );
 
   let editDialogOpen = $state(false);
 </script>
@@ -50,7 +66,7 @@
   <div class="space-y-4">
     <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_quick_actions()}</h2>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <AddUsersToGroupButton groupId={data.groupId} />
+      <AddUsersToGroupButton {groupId} onSuccess={() => membersQuery.refresh()} />
       <a
         href={localizeHref(`${AppRoutes.TeacherGroups}/${data.groupId}/collaborators`)}
         class="group relative overflow-hidden rounded-2xl border border-border bg-linear-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
@@ -109,9 +125,10 @@
                   </p>
                 </div>
                 <RemoveUserFromGroupButton
-                  groupId={data.groupId}
+                  {groupId}
                   userId={member.id}
                   userName={member.username}
+                  onSuccess={() => membersQuery.refresh()}
                 />
               </div>
               <Card.Description class="flex items-center gap-1.5">
@@ -127,5 +144,9 @@
 </div>
 
 {#if groupQuery.current}
-  <EditGroupDialog group={groupQuery.current} bind:dialogOpen={editDialogOpen} {updateGroup} />
+  <EditGroupDialog
+    group={groupQuery.current}
+    bind:dialogOpen={editDialogOpen}
+    onSuccess={() => groupQuery.refresh()}
+  />
 {/if}

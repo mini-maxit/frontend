@@ -186,9 +186,23 @@ export interface TaskResult {
   bestSubmissionId: number;
 }
 
+export interface ContestLeaderboardEntry {
+  user: UserInfo;
+  tasksSolved: number;
+  tasksPartiallySolved: number;
+  tasksAttempted: number;
+  taskBreakdown: TaskResult[];
+}
+
+export interface ContestMyResults {
+  taskResults: TaskResult[];
+}
+
 export interface ContestResults {
   contest: BaseContest;
   taskResults: TaskResult[];
+  leaderboard?: ContestLeaderboardEntry[];
+  myResults?: ContestMyResults;
 }
 
 export interface UserTaskPerformance {

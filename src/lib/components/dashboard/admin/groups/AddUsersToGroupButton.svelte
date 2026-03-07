@@ -4,40 +4,48 @@
   import { Label } from '$lib/components/ui/label';
   import { Checkbox } from '$lib/components/ui/checkbox';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import UserPlus from '@lucide/svelte/icons/user-plus';
   import { toast } from 'svelte-sonner';
   import * as m from '$lib/paraglide/messages';
   import { SvelteSet } from 'svelte/reactivity';
-  import {
-    addUsersToGroup,
-    getAllUsers,
-    getGroupMembers
-  } from '$routes/dashboard/teacher/groups/[groupId]/group.remote';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getAccessControlInstance, getGroupsManagementInstance } from '$lib/services';
+  import { ResourceType } from '$lib/dto/accessControl';
+  import type { User } from '$lib/dto/user';
 
   interface Props {
     groupId: number;
+    onSuccess?: () => void;
   }
 
-  let { groupId }: Props = $props();
+  let { groupId, onSuccess }: Props = $props();
 
   let dialogOpen = $state(false);
   let searchQuery = $state('');
   let selectedUserIds = $state(new SvelteSet<number>());
+  let submitting = $state(false);
 
-  const usersQuery = getAllUsers();
-  const membersQuery = getGroupMembers(groupId);
+  const groupsService = getGroupsManagementInstance();
+  const accessControlService = getAccessControlInstance();
 
-  let availableUsers = $derived.by(() => {
-    if (!usersQuery.current?.items || !membersQuery.current) return [];
-    const memberIds = new SvelteSet(membersQuery.current.map((m) => m.id));
-    return usersQuery.current.items.filter((user) => !memberIds.has(user.id));
-  });
+  const assignableUsersQuery = createParameterizedQuery(
+    () => groupId,
+    async (id) => {
+      if (!accessControlService) throw new Error('Access control service unavailable');
+      const result = await accessControlService.getAssignableUsers(ResourceType.Groups, id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch assignable users');
+      return result.data!;
+    }
+  );
 
+  // Filter by search query
   let filteredUsers = $derived.by(() => {
-    if (!searchQuery.trim()) return availableUsers;
+    const users = assignableUsersQuery.current?.items ?? [];
+    if (!searchQuery.trim()) return users;
     const query = searchQuery.toLowerCase();
-    return availableUsers.filter(
-      (user) =>
+    return users.filter(
+      (user: User) =>
         user.username.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query) ||
         user.name.toLowerCase().includes(query) ||
@@ -56,19 +64,27 @@
   }
 
   async function handleSubmit() {
-    if (selectedUserIds.size === 0) {
+    if (!groupsService || selectedUserIds.size === 0) {
       toast.error(m.group_members_add_error());
       return;
     }
 
+    submitting = true;
     try {
-      await addUsersToGroup({ groupId, userIDs: Array.from(selectedUserIds) });
+      await groupsService.addUsersToGroup(groupId, Array.from(selectedUserIds));
       toast.success(m.group_members_add_success());
       dialogOpen = false;
       selectedUserIds = new SvelteSet();
       searchQuery = '';
-    } catch {
+
+      await assignableUsersQuery.refresh();
+
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error('Add users error:', error);
       toast.error(m.group_members_add_error());
+    } finally {
+      submitting = false;
     }
   }
 
@@ -81,10 +97,10 @@
 <Dialog.Root bind:open={dialogOpen} onOpenChange={(open) => !open && resetForm()}>
   <button
     onclick={() => (dialogOpen = true)}
-    class="group relative overflow-hidden rounded-2xl border border-border bg-linear-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+    class="group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
   >
     <div
-      class="absolute inset-0 bg-linear-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
     ></div>
 
     <div class="relative flex flex-col items-center gap-4 text-center">
@@ -133,10 +149,16 @@
       </div>
 
       <!-- User List -->
-      {#if usersQuery.error}
-        <p class="text-sm text-destructive">{m.group_members_users_load_error()}</p>
-      {:else if usersQuery.loading}
-        <p class="text-sm text-muted-foreground">{m.groups_loading()}</p>
+      {#if assignableUsersQuery.error}
+        <ErrorCard
+          title={m.error_loading_data()}
+          error={assignableUsersQuery.error}
+          onRetry={() => {
+            assignableUsersQuery.refresh();
+          }}
+        />
+      {:else if assignableUsersQuery.loading}
+        <LoadingSpinner message={m.groups_loading()} />
       {:else if filteredUsers.length === 0}
         <p class="text-sm text-muted-foreground">{m.group_members_no_users_found()}</p>
       {:else}
@@ -165,11 +187,20 @@
     </div>
 
     <Dialog.Footer>
-      <Button type="button" variant="outline" onclick={() => (dialogOpen = false)}>
+      <Button
+        type="button"
+        variant="outline"
+        onclick={() => (dialogOpen = false)}
+        disabled={submitting}
+      >
         {m.group_members_add_cancel()}
       </Button>
-      <Button type="button" onclick={handleSubmit} disabled={selectedUserIds.size === 0}>
-        {m.group_members_add_submit()}
+      <Button
+        type="button"
+        onclick={handleSubmit}
+        disabled={selectedUserIds.size === 0 || submitting}
+      >
+        {submitting ? 'Adding...' : m.group_members_add_submit()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

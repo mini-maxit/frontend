@@ -9,18 +9,22 @@
   import * as m from '$lib/paraglide/messages';
   import { SvelteSet } from 'svelte/reactivity';
   import type { Group } from '$lib/dto/group';
-  import { addGroupsToContest } from '$routes/dashboard/teacher/contests/[contestId]/groups/groups.remote';
+  import { getContestsManagementInstance } from '$lib/services';
 
   interface Props {
     contestId: number;
     assignableGroups: Group[];
+    onSuccess?: () => void;
   }
 
-  let { contestId, assignableGroups }: Props = $props();
+  let { contestId, assignableGroups, onSuccess }: Props = $props();
 
   let dialogOpen = $state(false);
   let searchQuery = $state('');
   let selectedGroupIds = $state(new SvelteSet<number>());
+  let submitting = $state(false);
+
+  const contestsService = getContestsManagementInstance();
 
   let filteredGroups = $derived.by(() => {
     if (!searchQuery.trim()) return assignableGroups;
@@ -39,19 +43,24 @@
   }
 
   async function handleSubmit() {
-    if (selectedGroupIds.size === 0) {
+    if (!contestsService || selectedGroupIds.size === 0) {
       toast.error(m.contest_groups_add_error());
       return;
     }
 
+    submitting = true;
     try {
-      await addGroupsToContest({ contestId, groupIds: Array.from(selectedGroupIds) });
+      await contestsService.addGroupsToContest(contestId, Array.from(selectedGroupIds));
       toast.success(m.contest_groups_add_success());
       dialogOpen = false;
       selectedGroupIds = new SvelteSet();
       searchQuery = '';
-    } catch {
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error('Add groups to contest error:', error);
       toast.error(m.contest_groups_add_error());
+    } finally {
+      submitting = false;
     }
   }
 
@@ -141,11 +150,20 @@
     </div>
 
     <Dialog.Footer>
-      <Button type="button" variant="outline" onclick={() => (dialogOpen = false)}>
+      <Button
+        type="button"
+        variant="outline"
+        onclick={() => (dialogOpen = false)}
+        disabled={submitting}
+      >
         {m.contest_groups_add_cancel()}
       </Button>
-      <Button type="button" onclick={handleSubmit} disabled={selectedGroupIds.size === 0}>
-        {m.contest_groups_add_submit()}
+      <Button
+        type="button"
+        onclick={handleSubmit}
+        disabled={selectedGroupIds.size === 0 || submitting}
+      >
+        {submitting ? 'Adding...' : m.contest_groups_add_submit()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

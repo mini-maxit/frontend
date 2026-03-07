@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getContestTasks, removeTaskFromContest } from './tasks.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
   import { RemoveTaskFromContestButton } from '$lib/components/dashboard/admin/contests';
   import { Button } from '$lib/components/ui/button';
   import * as m from '$lib/paraglide/messages';
@@ -17,7 +18,16 @@
     data: { contestId: number };
   }
   let { data }: Props = $props();
-  const tasksQuery = getContestTasks(data.contestId);
+  const contestId = $derived(data.contestId);
+  const contestsService = getContestsManagementInstance();
+
+  const tasksQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getContestTasks(id);
+    }
+  );
 </script>
 
 <div class="space-y-6">
@@ -26,7 +36,7 @@
       {m.admin_contest_tasks_page_title({ contestId: data.contestId })}
     </h1>
     <Button
-      href="/dashboard/teacher/contests/{data.contestId}/user-stats"
+      href={`/dashboard/teacher/contests/${contestId}/user-stats`}
       variant="default"
       class="gap-2"
     >
@@ -92,10 +102,10 @@
                     {m.admin_contest_tasks_view_user_stats()}
                   </Button>
                   <RemoveTaskFromContestButton
-                    contestId={data.contestId}
+                    {contestId}
                     taskId={contestTask.task.id}
                     taskTitle={contestTask.task.title}
-                    {removeTaskFromContest}
+                    onSuccess={() => tasksQuery.refresh()}
                   />
                 </div>
               </div>

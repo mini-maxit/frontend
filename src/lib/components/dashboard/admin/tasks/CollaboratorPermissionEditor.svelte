@@ -6,36 +6,65 @@
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
-  import { Permission } from '$lib/dto/accessControl';
-  import type { UpdateCollaboratorForm } from '$routes/dashboard/teacher/tasks/[taskId]/collaborators/collaborators.remote';
+  import { Permission, ResourceType } from '$lib/dto/accessControl';
+  import { getAccessControlInstance } from '$lib/services';
+  import { UpdateCollaboratorSchema } from '$lib/schemas';
+  import { defaults, superForm } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
 
   interface Props {
     taskId: number;
     userId: number;
     userName: string;
     currentPermission: Permission;
-    updateCollaborator: UpdateCollaboratorForm;
     canEdit?: boolean;
+    onSuccess?: () => void;
   }
 
-  let {
-    taskId,
-    userId,
-    userName,
-    currentPermission,
-    updateCollaborator,
-    canEdit = false
-  }: Props = $props();
+  let { taskId, userId, userName, currentPermission, canEdit = false, onSuccess }: Props = $props();
+
+  const accessControlService = getAccessControlInstance();
 
   let popoverOpen = $state(false);
   let dialogOpen = $state(false);
   let selectedPermission = $state<Permission | null>(null);
-  let isUpdating = $state(false);
 
   // Owner permission cannot be changed, and user needs canEdit permission
   const isEditable = $derived(canEdit && currentPermission !== Permission.Owner);
+
+  const { form, errors, enhance, submitting } = superForm(
+    defaults(
+      { resourceId: taskId, userId, permission: currentPermission },
+      valibot(UpdateCollaboratorSchema)
+    ),
+    {
+      id: `task-collab-perm-${taskId}-${userId}`,
+      validators: valibot(UpdateCollaboratorSchema),
+      SPA: true,
+      dataType: 'json',
+      resetForm: false,
+      async onUpdate({ form }) {
+        if (!accessControlService || !form.valid) return;
+
+        try {
+          await accessControlService.updateCollaborator(
+            ResourceType.Tasks,
+            form.data.resourceId,
+            form.data.userId,
+            { permission: form.data.permission as Permission.Edit | Permission.Manage }
+          );
+          toast.success(m.task_collaborators_update_success());
+          dialogOpen = false;
+          selectedPermission = null;
+          if (onSuccess) onSuccess();
+        } catch (error) {
+          console.error('Update task collaborator error:', error);
+          toast.error(m.task_collaborators_update_error());
+        }
+      }
+    }
+  );
 
   function getPermissionLabel(permission: Permission): string {
     switch (permission) {
@@ -72,6 +101,7 @@
 
     // Different permission selected, show confirmation dialog
     selectedPermission = permission;
+    $form.permission = permission;
     popoverOpen = false;
     dialogOpen = true;
   }
@@ -151,35 +181,13 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      {...updateCollaborator.enhance(async ({ submit }) => {
-        isUpdating = true;
-        try {
-          await submit();
-          toast.success(m.task_collaborators_update_success());
-          dialogOpen = false;
-          selectedPermission = null;
-        } catch (error: unknown) {
-          if (isHttpError(error)) {
-            toast.error(error.body.message);
-          } else {
-            toast.error(m.task_collaborators_update_error());
-          }
-        } finally {
-          isUpdating = false;
-        }
-      })}
-    >
-      <input type="hidden" name="taskId" value={taskId} />
-      <input type="hidden" name="userId" value={userId} />
-      <input type="hidden" name="permission" value={selectedPermission ?? ''} />
-
+    <form method="POST" use:enhance>
       <Dialog.Footer>
-        <Button type="button" variant="outline" onclick={handleCancel} disabled={isUpdating}>
+        <Button type="button" variant="outline" onclick={handleCancel} disabled={$submitting}>
           {m.task_collaborators_update_cancel()}
         </Button>
-        <Button type="submit" disabled={isUpdating || !selectedPermission}>
-          {m.task_collaborators_update_confirm()}
+        <Button type="submit" disabled={$submitting || !selectedPermission}>
+          {$submitting ? 'Updating...' : m.task_collaborators_update_confirm()}
         </Button>
       </Dialog.Footer>
     </form>

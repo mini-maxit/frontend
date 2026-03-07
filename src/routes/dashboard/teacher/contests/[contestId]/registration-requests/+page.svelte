@@ -1,10 +1,7 @@
 <script lang="ts">
-  import {
-    getRegistrationRequests,
-    approveRequest,
-    rejectRequest
-  } from './registration-requests.remote';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
   import {
     Card,
     CardHeader,
@@ -26,15 +23,25 @@
   }
 
   let { data }: Props = $props();
+  const contestId = $derived(data.contestId);
 
-  const requestsQuery = getRegistrationRequests(data.contestId);
+  const contestsService = getContestsManagementInstance();
+  const requestsQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getRegistrationRequests(id, 'pending');
+    }
+  );
 
   let processingUserId = $state<number | null>(null);
 
   async function handleApprove(userId: number) {
     processingUserId = userId;
     try {
-      await approveRequest({ contestId: data.contestId, userId });
+      if (!contestsService) throw new Error('Service unavailable');
+      await contestsService.approveRegistrationRequest(contestId, userId);
+      await requestsQuery.refresh();
     } catch (error) {
       console.error('Failed to approve request:', error);
     } finally {
@@ -45,7 +52,9 @@
   async function handleReject(userId: number) {
     processingUserId = userId;
     try {
-      await rejectRequest({ contestId: data.contestId, userId });
+      if (!contestsService) throw new Error('Service unavailable');
+      await contestsService.rejectRegistrationRequest(contestId, userId);
+      await requestsQuery.refresh();
     } catch (error) {
       console.error('Failed to reject request:', error);
     } finally {

@@ -1,11 +1,18 @@
 <script lang="ts">
-  import { getSubmissions } from './submissions.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getSubmissionInstance } from '$lib/services';
   import { SubmissionsList } from '$lib/components/dashboard/submissions';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import FileQuestion from '@lucide/svelte/icons/file-question';
   import * as m from '$lib/paraglide/messages';
 
-  const submissionsQuery = getSubmissions();
+  const submissionService = getSubmissionInstance();
+  const submissionsQuery = createQuery(async () => {
+    if (!submissionService) throw new Error('Service unavailable');
+    const result = await submissionService.getMySubmissions();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch submissions');
+    return result.data!;
+  });
 </script>
 
 <div class="space-y-8 p-4 sm:p-6 lg:p-8">

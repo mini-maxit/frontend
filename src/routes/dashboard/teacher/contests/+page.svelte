@@ -1,11 +1,17 @@
 <script lang="ts">
-  import { createContest, getAllContests } from './contests.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getContestsManagementInstance } from '$lib/services';
   import { CreateContestButton, ContestsList } from '$lib/components/dashboard/admin/contests';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import Trophy from '@lucide/svelte/icons/trophy';
   import * as m from '$lib/paraglide/messages';
 
-  const contestsQuery = getAllContests();
+  const contestsManagementService = getContestsManagementInstance();
+
+  const contestsQuery = createQuery(async () => {
+    if (!contestsManagementService) throw new Error('Service unavailable');
+    return await contestsManagementService.getManagedContests();
+  });
 </script>
 
 <div class="space-y-6">
@@ -17,7 +23,7 @@
     <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_quick_actions()}</h2>
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <CreateContestButton {createContest} />
+      <CreateContestButton onSuccess={() => contestsQuery.refresh()} />
     </div>
   </div>
 

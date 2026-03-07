@@ -1,12 +1,19 @@
 <script lang="ts">
   import UserTaskCard from '$lib/components/dashboard/tasks/UserTaskCard.svelte';
-  import { getMyTasks } from './tasks.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getTaskInstance } from '$lib/services';
   import * as m from '$lib/paraglide/messages';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import { formatDate } from '$lib/utils';
 
-  const tasksQuery = getMyTasks();
+  const taskService = getTaskInstance();
+  const tasksQuery = createQuery(async () => {
+    if (!taskService) throw new Error('Service unavailable');
+    const result = await taskService.getMyTasks();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
+    return result.data!;
+  });
 </script>
 
 <svelte:boundary onerror={(error) => console.error('User tasks page error:', error)}>

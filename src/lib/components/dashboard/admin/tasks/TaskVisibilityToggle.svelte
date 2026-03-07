@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { toggleTaskVisibility } from '$routes/dashboard/teacher/tasks/tasks.remote';
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Label } from '$lib/components/ui/label';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
   import * as m from '$lib/paraglide/messages';
+  import { getTasksManagementInstance } from '$lib/services';
 
   interface TaskVisibilityToggleProps {
     taskId: number;
@@ -14,6 +14,8 @@
   }
 
   let { taskId, taskTitle, initialVisibility }: TaskVisibilityToggleProps = $props();
+
+  const tasksManagementService = getTasksManagementInstance();
 
   let isVisible = $state(initialVisibility);
   let showConfirmDialog = $state(false);
@@ -26,13 +28,24 @@
   }
 
   async function confirmToggle() {
+    if (!tasksManagementService) {
+      toast.error(m.admin_tasks_visibility_error());
+      return;
+    }
+
     try {
-      await toggleTaskVisibility({ taskId, isVisible: pendingVisibility });
-      isVisible = pendingVisibility;
-      showConfirmDialog = false;
-      toast.success(
-        pendingVisibility ? m.admin_tasks_visibility_enabled() : m.admin_tasks_visibility_disabled()
-      );
+      const result = await tasksManagementService.toggleTaskVisibility(taskId, pendingVisibility);
+      if (result.success) {
+        isVisible = pendingVisibility;
+        showConfirmDialog = false;
+        toast.success(
+          pendingVisibility
+            ? m.admin_tasks_visibility_enabled()
+            : m.admin_tasks_visibility_disabled()
+        );
+      } else {
+        toast.error(result.error || m.admin_tasks_visibility_error());
+      }
     } catch (error) {
       toast.error(m.admin_tasks_visibility_error());
       console.error('Failed to toggle visibility:', error);

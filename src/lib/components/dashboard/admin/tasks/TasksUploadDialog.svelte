@@ -1,13 +1,16 @@
 <script lang="ts">
-  import { uploadTask, getUploadLimit } from '$routes/dashboard/teacher/tasks/upload.remote';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import { Checkbox } from '$lib/components/ui/checkbox';
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
-  import { isHttpError } from '@sveltejs/kit';
   import * as m from '$lib/paraglide/messages';
+  import { getTasksManagementInstance } from '$lib/services';
+  import { UploadTaskSchema } from '$lib/schemas';
+  import { defaults, superForm } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import Loader from '@lucide/svelte/icons/loader-circle';
 
   interface TasksUploadDialogProps {
     open: boolean;
@@ -16,38 +19,45 @@
 
   let { open = $bindable(), onSuccess }: TasksUploadDialogProps = $props();
 
-  let fileInput = $state<HTMLInputElement | null>(null);
-  let selectedFile = $state<File | null>(null);
+  const tasksManagementService = getTasksManagementInstance();
 
-  // Read upload limit from server via remote query (single source of truth)
-  const uploadLimit = getUploadLimit();
+  const MAX_UPLOAD_MB = 50; // Default limit
 
-  let MAX_UPLOAD_BYTES = $derived(uploadLimit.current?.bytes ?? 512 * 1024);
-  let MAX_UPLOAD_MB = $derived(Number((MAX_UPLOAD_BYTES / (1024 * 1024)).toFixed(2)));
+  // Initialize superform for SPA mode with file upload support
+  const { form, errors, enhance, submitting } = superForm(defaults(valibot(UploadTaskSchema)), {
+    id: 'upload-task',
+    validators: valibot(UploadTaskSchema),
+    SPA: true,
+    dataType: 'form', // Use 'form' for file uploads, not 'json'
+    resetForm: true,
+    async onUpdate({ form }) {
+      if (!tasksManagementService || !form.valid) {
+        return;
+      }
 
-  function handleFileChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      selectedFile = input.files[0];
+      try {
+        const result = await tasksManagementService.uploadTask({
+          title: form.data.title.trim(),
+          archive: form.data.archive,
+          isVisible: form.data.isVisible ?? false
+        });
+
+        if (result.success) {
+          toast.success(m.admin_tasks_upload_success());
+          open = false;
+          onSuccess();
+        } else {
+          toast.error(result.error || m.admin_tasks_upload_error());
+        }
+      } catch (error) {
+        console.error('Upload task error:', error);
+        toast.error(m.admin_tasks_upload_error());
+      }
     }
-  }
-
-  async function handleTaskUploadSuccess() {
-    toast.success(m.admin_tasks_upload_success());
-    open = false;
-    selectedFile = null;
-    if (fileInput) {
-      fileInput.value = '';
-    }
-    onSuccess();
-  }
+  });
 
   function handleCancel() {
     open = false;
-    selectedFile = null;
-    if (fileInput) {
-      fileInput.value = '';
-    }
   }
 </script>
 
@@ -57,98 +67,82 @@
       <Dialog.Title>{m.admin_tasks_dialog_title()}</Dialog.Title>
       <Dialog.Description>
         {m.admin_tasks_dialog_description()}
-        {#if uploadLimit.loading}
-          <span class="ml-1 text-sm text-muted-foreground"
-            >({m.admin_tasks_upload_limit_loading()})</span
-          >
-        {:else if uploadLimit.error}
-          <span class="ml-1 text-sm text-muted-foreground"
-            >({m.admin_tasks_upload_limit_unavailable()})</span
-          >
-        {:else if uploadLimit.current}
-          <span class="ml-1 text-sm text-muted-foreground"
-            >({m.admin_tasks_upload_limit({ limit: MAX_UPLOAD_MB })})</span
-          >
-        {/if}
+        <span class="ml-1 text-sm text-muted-foreground"
+          >({m.admin_tasks_upload_limit({ limit: MAX_UPLOAD_MB })})</span
+        >
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      enctype="multipart/form-data"
-      {...uploadTask.enhance(async ({ submit }) => {
-        try {
-          await submit();
-          await handleTaskUploadSuccess();
-        } catch (error) {
-          if (isHttpError(error)) {
-            toast.error(error?.body?.message || m.admin_tasks_upload_error());
-          } else {
-            toast.error(m.admin_tasks_upload_error());
-          }
-        }
-      })}
-      class="space-y-6"
-    >
+    <form method="POST" enctype="multipart/form-data" use:enhance class="space-y-6">
       <div class="space-y-2">
         <Label for="title">{m.admin_tasks_form_title_label()}</Label>
         <Input
-          {...uploadTask.fields.title.as('text')}
           id="title"
           name="title"
           type="text"
+          bind:value={$form.title}
           placeholder={m.admin_tasks_form_title_placeholder()}
-          required
-          class="transition-all duration-200 focus:ring-2 focus:ring-primary"
+          disabled={$submitting}
+          aria-invalid={$errors.title ? 'true' : undefined}
         />
+        {#if $errors.title}
+          <p class="text-sm text-destructive">{$errors.title}</p>
+        {/if}
       </div>
 
       <div class="space-y-2">
-        <Label for="archive">{m.admin_tasks_form_archive_label()}</Label>
+        <Label for="archive">{m.admin_tasks_form_file_label()}</Label>
         <Input
-          bind:ref={fileInput}
           id="archive"
           name="archive"
           type="file"
-          required
-          accept=".zip,.tar,.tar.gz,.tgz"
-          onchange={handleFileChange}
-          class="cursor-pointer transition-all duration-200 focus:ring-2 focus:ring-primary"
+          accept=".zip"
+          disabled={$submitting}
+          aria-invalid={$errors.archive ? 'true' : undefined}
+          onchange={(e) => {
+            const input = e.currentTarget;
+            if (input.files && input.files.length > 0) {
+              $form.archive = input.files[0];
+            }
+          }}
         />
-        {#if selectedFile}
+        {#if $errors.archive}
+          <p class="text-sm text-destructive">{$errors.archive}</p>
+        {/if}
+        {#if $form.archive}
           <p class="text-sm text-muted-foreground">
-            {m.admin_tasks_form_selected_file({
-              filename: selectedFile.name,
-              size: (selectedFile.size / 1024 / 1024).toFixed(2)
+            {m.task_file_selected({
+              filename: $form.archive.name,
+              size: ($form.archive.size / 1024).toFixed(2)
             })}
           </p>
         {/if}
       </div>
 
-      <div class="flex items-start space-x-2">
-        <Checkbox {...uploadTask.fields.isVisible.as('checkbox')} />
-        <div class="grid gap-1.5 leading-none">
-          <Label
-            for="isVisible"
-            class="cursor-pointer text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            {m.admin_tasks_form_visible_label()}
-          </Label>
-          <p class="text-sm text-muted-foreground">
-            {m.admin_tasks_form_visible_description()}
-          </p>
-        </div>
+      <div class="flex items-center space-x-2">
+        <Checkbox
+          id="isVisible"
+          checked={$form.isVisible}
+          onCheckedChange={(checked) => ($form.isVisible = checked === true)}
+          disabled={$submitting}
+        />
+        <Label
+          for="isVisible"
+          class="cursor-pointer text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          {m.admin_tasks_card_visible_to_users()}
+        </Label>
       </div>
 
       <Dialog.Footer>
-        <Button type="button" variant="outline" onclick={handleCancel}>
+        <Button type="button" variant="outline" onclick={handleCancel} disabled={$submitting}>
           {m.admin_tasks_form_cancel()}
         </Button>
-        <Button
-          type="submit"
-          disabled={uploadLimit.loading}
-          class="transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-        >
-          {m.admin_tasks_form_upload()}
+        <Button type="submit" disabled={$submitting}>
+          {#if $submitting}
+            <Loader class="mr-2 h-4 w-4 animate-spin" />
+          {/if}
+          {$submitting ? m.admin_tasks_upload_uploading() : m.admin_tasks_upload_button()}
         </Button>
       </Dialog.Footer>
     </form>

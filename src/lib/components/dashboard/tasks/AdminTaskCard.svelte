@@ -14,14 +14,13 @@
   import ManageTestCasesLimitsDialog from '$lib/components/dashboard/admin/tasks/ManageTestCasesLimitsDialog.svelte';
   import TaskVisibilityToggle from '$lib/components/dashboard/admin/tasks/TaskVisibilityToggle.svelte';
   import RemoveTaskButton from '$lib/components/dashboard/admin/tasks/RemoveTaskButton.svelte';
-  import type { DeleteTaskForm } from '$routes/dashboard/teacher/tasks/tasks.remote';
 
   interface AdminTaskCardProps {
     task: Task;
-    deleteTask: DeleteTaskForm;
+    onTaskDeleted?: () => void;
   }
 
-  let { task, deleteTask }: AdminTaskCardProps = $props();
+  let { task, onTaskDeleted }: AdminTaskCardProps = $props();
 
   let manageDialogOpen = $state(false);
 </script>
@@ -41,7 +40,7 @@
       >
         {m.admin_tasks_card_id_prefix()}{task.id}
       </span>
-      <RemoveTaskButton taskId={task.id} taskTitle={task.title} {deleteTask} />
+      <RemoveTaskButton taskId={task.id} taskTitle={task.title} onSuccess={onTaskDeleted} />
     </div>
     <Card.Title
       class="mt-3 flex items-start gap-2 text-lg transition-colors group-hover:text-primary"

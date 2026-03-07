@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { getTasks, deleteTask } from './tasks.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getTasksManagementInstance } from '$lib/services';
   import {
     TasksList,
     TasksUploadDialog,
@@ -8,9 +9,28 @@
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import Upload from '@lucide/svelte/icons/upload';
   import * as m from '$lib/paraglide/messages';
+  import { toast } from 'svelte-sonner';
+
+  const tasksManagementService = getTasksManagementInstance();
 
   let dialogOpen = $state(false);
-  const tasksQuery = getTasks();
+  const tasksQuery = createQuery(async () => {
+    if (!tasksManagementService) throw new Error('Service unavailable');
+    const result = await tasksManagementService.getCreatedTasks();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
+    return result.data!;
+  });
+
+  async function handleDelete(taskId: number) {
+    if (!tasksManagementService) return;
+    const result = await tasksManagementService.deleteTask(taskId);
+    if (result.success) {
+      toast.success('Task deleted successfully');
+      tasksQuery.refresh();
+    } else {
+      toast.error(result.error || 'Failed to delete task');
+    }
+  }
 </script>
 
 <div class="space-y-6">
@@ -47,7 +67,7 @@
         icon={Upload}
       />
     {:else if tasksQuery.current}
-      <TasksList tasks={tasksQuery.current} {deleteTask} />
+      <TasksList tasks={tasksQuery.current} onTaskDeleted={() => tasksQuery.refresh()} />
     {/if}
   </div>
 </div>

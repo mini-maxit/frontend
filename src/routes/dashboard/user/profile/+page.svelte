@@ -3,9 +3,16 @@
   import QuickActions from '$lib/components/dashboard/profile/QuickActions.svelte';
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as m from '$lib/paraglide/messages';
-  import { getUserProfile } from './profile.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getUserInstance } from '$lib/services';
 
-  const userProfileQuery = getUserProfile();
+  const userService = getUserInstance();
+  const userProfileQuery = createQuery(async () => {
+    if (!userService) throw new Error('Service unavailable');
+    const result = await userService.getCurrentUser();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch profile');
+    return result.data!;
+  });
 </script>
 
 <div class="space-y-8 p-4 sm:p-6 lg:p-8">

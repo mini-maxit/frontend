@@ -1,12 +1,20 @@
 <script lang="ts">
-  import { createGroup, getAllGroups } from './groups.remote';
+  import { createQuery } from '$lib/utils/query.svelte';
+  import { getGroupsManagementInstance } from '$lib/services';
   import { CreateGroupButton } from '$lib/components/dashboard/admin/groups';
   import GroupCard from '$lib/components/dashboard/admin/groups/GroupCard.svelte';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import Users from '@lucide/svelte/icons/users';
   import * as m from '$lib/paraglide/messages';
 
-  const groupsQuery = getAllGroups();
+  const groupsManagementService = getGroupsManagementInstance();
+
+  const groupsQuery = createQuery(async () => {
+    if (!groupsManagementService) throw new Error('Service unavailable');
+    const result = await groupsManagementService.getAllGroups();
+    if (!result.success) throw new Error(result.error || 'Failed to fetch groups');
+    return result.data!;
+  });
 </script>
 
 <div class="space-y-6">
@@ -18,7 +26,7 @@
     <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_quick_actions()}</h2>
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <CreateGroupButton {createGroup} />
+      <CreateGroupButton onSuccess={() => groupsQuery.refresh()} />
     </div>
   </div>
 

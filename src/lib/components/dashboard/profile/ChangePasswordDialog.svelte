@@ -3,8 +3,11 @@
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
-  import { changePassword } from '../../../../routes/dashboard/user/profile/password.remote';
   import { toast } from 'svelte-sonner';
+  import { getUserInstance } from '$lib/services';
+  import { superForm, defaults } from 'sveltekit-superforms';
+  import { valibot } from 'sveltekit-superforms/adapters';
+  import { ChangePasswordSchema } from '$lib/schemas';
   import Lock from '@lucide/svelte/icons/lock';
   import Eye from '@lucide/svelte/icons/eye';
   import EyeOff from '@lucide/svelte/icons/eye-off';
@@ -17,6 +20,36 @@
 
   let { open = $bindable(), onOpenChange }: ChangePasswordDialogProps = $props();
 
+  const userService = getUserInstance();
+
+  const { form, errors, enhance, submitting, reset } = superForm(
+    defaults(valibot(ChangePasswordSchema)),
+    {
+      id: 'change-password',
+      validators: valibot(ChangePasswordSchema),
+      SPA: true,
+      resetForm: true,
+      async onUpdate({ form }) {
+        if (!userService || !form.valid) return;
+
+        // Get current user first to get their ID
+        const userResult = await userService.getCurrentUser();
+        if (!userResult.success || !userResult.data) {
+          toast.error(userResult.error || 'Failed to get current user');
+          return;
+        }
+
+        const result = await userService.changePassword(userResult.data.id, form.data);
+        if (result.success) {
+          toast.success(m.profile_password_change_success());
+          handleClose();
+        } else {
+          toast.error(result.error || m.profile_password_change_error());
+        }
+      }
+    }
+  );
+
   let showCurrentPassword = $state(false);
   let showNewPassword = $state(false);
   let showConfirmPassword = $state(false);
@@ -24,35 +57,13 @@
   function handleClose() {
     open = false;
     onOpenChange(false);
-    // Reset form when closing
-    changePassword.fields.set({
-      oldPassword: '',
-      newPassword: '',
-      newPasswordConfirm: ''
-    });
+    reset();
   }
 
   // Helper function to get the first error for a field
-  function getFirstError(issues: unknown) {
-    if (!issues || !Array.isArray(issues) || issues.length === 0) return null;
-    return issues[0] || null;
-  }
-
-  // Helper function to get first general form error (excluding password mismatch)
-  function getFirstGeneralError() {
-    const allIssues = changePassword.fields.allIssues();
-    if (!allIssues || !Array.isArray(allIssues) || allIssues.length === 0) return null;
-
-    // Filter out password mismatch error to avoid duplication (it's already shown on confirm field)
-    const generalErrors = allIssues.filter(
-      (issue) =>
-        issue &&
-        typeof issue === 'object' &&
-        'message' in issue &&
-        issue.message !== m.validation_passwords_match()
-    );
-
-    return generalErrors.length > 0 ? generalErrors[0] : null;
+  function getFirstError(fieldErrors: string[] | undefined) {
+    if (!fieldErrors || fieldErrors.length === 0) return null;
+    return fieldErrors[0];
   }
 </script>
 
@@ -70,29 +81,14 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form
-      {...changePassword.enhance(async ({ submit }) => {
-        try {
-          await submit();
-          // Check if form was actually successful by looking at the result
-          if (changePassword.result?.success) {
-            toast.success(m.profile_password_change_success());
-            handleClose();
-          }
-          // If there are validation errors or no success, keep dialog open
-        } catch {
-          toast.error(m.profile_password_change_error());
-        }
-      })}
-      class="space-y-4"
-      oninput={() => changePassword.validate()}
-    >
+    <form method="POST" use:enhance class="space-y-4">
       <!-- Current Password -->
       <div class="space-y-2">
         <Label for="current-password">{m.profile_current_password_label()}</Label>
         <div class="relative">
           <Input
-            {...changePassword.fields.oldPassword.as('password')}
+            name="oldPassword"
+            bind:value={$form.oldPassword}
             id="current-password"
             type={showCurrentPassword ? 'text' : 'password'}
             placeholder={m.profile_current_password_placeholder()}
@@ -112,9 +108,9 @@
             {/if}
           </Button>
         </div>
-        {#if getFirstError(changePassword.fields.oldPassword.issues())}
+        {#if getFirstError($errors.oldPassword)}
           <p class="text-sm text-destructive">
-            {getFirstError(changePassword.fields.oldPassword.issues())?.message}
+            {getFirstError($errors.oldPassword)}
           </p>
         {/if}
       </div>
@@ -124,7 +120,8 @@
         <Label for="new-password">{m.profile_new_password_label()}</Label>
         <div class="relative">
           <Input
-            {...changePassword.fields.newPassword.as('password')}
+            name="newPassword"
+            bind:value={$form.newPassword}
             id="new-password"
             type={showNewPassword ? 'text' : 'password'}
             placeholder={m.profile_new_password_placeholder()}
@@ -144,9 +141,9 @@
             {/if}
           </Button>
         </div>
-        {#if getFirstError(changePassword.fields.newPassword.issues())}
+        {#if getFirstError($errors.newPassword)}
           <p class="text-sm text-destructive">
-            {getFirstError(changePassword.fields.newPassword.issues())?.message}
+            {getFirstError($errors.newPassword)}
           </p>
         {/if}
       </div>
@@ -156,7 +153,8 @@
         <Label for="confirm-password">{m.profile_confirm_password_label()}</Label>
         <div class="relative">
           <Input
-            {...changePassword.fields.newPasswordConfirm.as('password')}
+            name="newPasswordConfirm"
+            bind:value={$form.newPasswordConfirm}
             id="confirm-password"
             type={showConfirmPassword ? 'text' : 'password'}
             placeholder={m.profile_confirm_password_placeholder()}
@@ -176,9 +174,9 @@
             {/if}
           </Button>
         </div>
-        {#if getFirstError(changePassword.fields.newPasswordConfirm.issues())}
+        {#if getFirstError($errors.newPasswordConfirm)}
           <p class="text-sm text-destructive">
-            {getFirstError(changePassword.fields.newPasswordConfirm.issues())?.message}
+            {getFirstError($errors.newPasswordConfirm)}
           </p>
         {/if}
       </div>
@@ -188,8 +186,8 @@
         <Button type="button" variant="outline" onclick={handleClose}
           >{m.profile_password_change_cancel()}</Button
         >
-        <Button type="submit" disabled={!!changePassword.pending}>
-          {#if changePassword.pending}
+        <Button type="submit" disabled={$submitting}>
+          {#if $submitting}
             {m.profile_password_changing()}
           {:else}
             {m.profile_password_change_submit()}

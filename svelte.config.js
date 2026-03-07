@@ -10,9 +10,6 @@ const config = {
     adapter: adapter(),
     alias: {
       $routes: './src/routes'
-    },
-    experimental: {
-      remoteFunctions: true
     }
   },
   compilerOptions: {
