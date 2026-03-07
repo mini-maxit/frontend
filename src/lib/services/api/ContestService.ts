@@ -22,45 +22,31 @@ export class ContestService {
     status: number;
     data?: {
       active: ContestWithStats[];
-      upcoming: ContestWithStats[];
       past: PastContestWithStats[];
     };
     error?: string;
   }> {
-    try {
-      const response = await this.apiClient.get<
-        ApiResponse<{
-          ongoing: ContestWithStats[];
-          upcoming: ContestWithStats[];
-          past: PastContestWithStats[];
-        }>
-      >({
-        url: '/contests/my'
-      });
+    const [activeResult, pastResult] = await Promise.allSettled([
+      this.getMyActiveContests(),
+      this.getMyPastContests()
+    ]);
 
-      const ongoing = response.data.ongoing ?? [];
-      const upcoming = response.data.upcoming ?? [];
-      const past = response.data.past ?? [];
-
-      return {
-        success: true,
-        status: 200,
-        data: {
-          active: [...ongoing, ...upcoming],
-          upcoming,
-          past
-        }
-      };
-    } catch (error) {
+    if (activeResult.status === 'rejected' && pastResult.status === 'rejected') {
+      const error = activeResult.reason;
       if (error instanceof ApiError) {
-        return {
-          success: false,
-          error: error.getApiMessage(),
-          status: error.getStatus()
-        };
+        return { success: false, error: error.getApiMessage(), status: error.getStatus() };
       }
       throw error;
     }
+
+    return {
+      success: true,
+      status: 200,
+      data: {
+        active: activeResult.status === 'fulfilled' ? activeResult.value : [],
+        past: pastResult.status === 'fulfilled' ? pastResult.value : []
+      }
+    };
   }
 
   async getOngoing(): Promise<Contest[]> {
@@ -218,21 +204,6 @@ export class ContestService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to get contest:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
-  }
-
-  async getMyResults(contestId: number): Promise<ContestResults> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<ContestResults>>({
-        url: `/contests/${contestId}/results/my`
-      });
-      return response.data;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get contest results:', error.toJSON());
         throw error;
       }
       throw error;

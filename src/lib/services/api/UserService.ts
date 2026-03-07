@@ -51,14 +51,14 @@ export class UserService {
    */
   async changePassword(
     userId: number,
-    data: { oldPassword: string; newPassword: string }
+    data: { oldPassword: string; newPassword: string; newPasswordConfirm: string }
   ): Promise<{
     success: boolean;
     status: number;
     error?: string;
   }> {
     try {
-      await this.apiClient.put<ApiResponse<void>>({
+      await this.apiClient.patch<ApiResponse<void>>({
         url: `/users/${userId}/password`,
         body: JSON.stringify(data),
         contentType: RequestContentType.Json
@@ -83,7 +83,6 @@ export class UserService {
     limit?: number;
     offset?: number;
     sort?: string;
-    role?: string;
   }): Promise<{
     success: boolean;
     status: number;
@@ -94,7 +93,6 @@ export class UserService {
     if (params?.limit) queryParams.set('limit', params.limit.toString());
     if (params?.offset) queryParams.set('offset', params.offset.toString());
     if (params?.sort) queryParams.set('sort', params.sort);
-    if (params?.role) queryParams.set('role', params.role);
 
     const url = queryParams.toString() ? `/users?${queryParams.toString()}` : '/users';
 
