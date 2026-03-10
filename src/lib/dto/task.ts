@@ -14,7 +14,6 @@ export interface TaskDetail {
   createdBy: number;
   createdByName: string;
   descriptionUrl: string;
-  pdfDataUrl?: string | null;
 }
 
 export interface TaskLimit {
@@ -48,7 +47,6 @@ export interface UserContestTask {
   createdBy: number;
   createdByName: string;
   descriptionUrl: string;
-  pdfDataUrl?: string | null;
   attemptCount: number;
   bestScore: number;
   maxScore: number;

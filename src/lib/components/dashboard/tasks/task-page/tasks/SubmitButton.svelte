@@ -13,7 +13,7 @@
   let { disabled = false, loading = false, onclick }: Props = $props();
 </script>
 
-<Button class="w-full" {disabled} {onclick}>
+<Button type="submit" class="w-full" {disabled} {onclick}>
   {#if loading}
     <Loader class="mr-2 h-4 w-4 animate-spin" />
     {m.task_submit_loading()}

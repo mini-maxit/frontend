@@ -53,7 +53,7 @@
     />
 
     <div class="grid h-screen gap-6 lg:grid-cols-2">
-      <TaskPdfViewer pdfDataUrl={taskQuery.current.pdfDataUrl} />
+      <TaskPdfViewer pdfDataUrl={taskQuery.current.descriptionUrl} />
 
       <div class="flex flex-col gap-6 overflow-hidden lg:space-y-6">
         <TaskSubmissionForm
