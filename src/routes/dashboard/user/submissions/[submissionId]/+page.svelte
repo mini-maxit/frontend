@@ -44,7 +44,8 @@
     let active = true;
     (async () => {
       try {
-        const response = await fetch(url);
+        const proxyUrl = `/api/file-proxy?url=${encodeURIComponent(url)}`;
+        const response = await fetch(proxyUrl);
         if (!response.ok) {
           fileContent = '';
           return;
