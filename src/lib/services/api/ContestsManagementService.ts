@@ -1,5 +1,5 @@
 import type { ApiService } from './ApiService';
-import { ApiError } from '../ApiService';
+import { ApiError } from './ApiService';
 import type {
   CreatedContest,
   CreateContestDto,

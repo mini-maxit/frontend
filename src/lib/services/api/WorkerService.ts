@@ -1,5 +1,5 @@
 import type { ApiService } from './ApiService';
-import { ApiError } from '../ApiService';
+import { ApiError } from './ApiService';
 import type { ApiResponse } from '$lib/dto/response';
 import type { WorkerStatus } from '$lib/dto/worker';
 

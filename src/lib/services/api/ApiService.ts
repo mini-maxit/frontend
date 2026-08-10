@@ -3,10 +3,69 @@ import { browser } from '$app/environment';
 import { RequestMethod, RequestContentType, type Request } from '../../dto/request';
 import { isApiErrorResponse } from '../../dto/error';
 import { AppRoutes } from '$lib/routes';
-import { ApiError } from '../ApiService';
 import { tokenStore } from '$lib/stores/token-store.svelte';
 import type { ApiResponse } from '../../dto/response';
 import type { AuthTokenData } from '../../dto/auth';
+
+export class ApiError extends Error {
+  public readonly status: number;
+  public readonly statusText: string;
+  public readonly url: string;
+  public readonly method: string;
+  public readonly code?: string;
+  public readonly body?: unknown;
+
+  constructor(status: number, statusText: string, url: string, method: string, body?: unknown) {
+    const message = isApiErrorResponse(body)
+      ? `${body.data.code}: ${body.data.message}`
+      : `${method} ${url} failed: ${status} ${statusText}`;
+
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.statusText = statusText;
+    this.url = url;
+    this.method = method;
+    this.body = body;
+
+    if (isApiErrorResponse(body)) {
+      this.code = body.data.code;
+    }
+  }
+
+  getApiMessage(): string {
+    if (isApiErrorResponse(this.body)) {
+      return this.body.data.message;
+    }
+    return this.statusText || 'An unexpected error occurred';
+  }
+
+  getStatus(): number {
+    return this.status;
+  }
+
+  toJSON(): {
+    name: string;
+    message: string;
+    status: number;
+    statusText: string;
+    url: string;
+    method: string;
+    code?: string;
+    body?: unknown;
+  } {
+    return {
+      name: this.name,
+      message: this.message,
+      status: this.status,
+      statusText: this.statusText,
+      url: this.url,
+      method: this.method,
+      code: this.code,
+      body: this.body
+    };
+  }
+}
 
 /**
  * Client-side API service for browser contexts

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { userStore } from '$lib/stores/user-store.svelte';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getContestInstance } from '$lib/services';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
@@ -14,17 +15,9 @@
   import * as m from '$lib/paraglide/messages';
   import type { TaskResult } from '$lib/dto/contest';
 
-  interface Props {
-    data: {
-      contestId: number;
-      currentUserId: number;
-    };
-  }
-
-  let { data }: Props = $props();
-
   const contestService = getContestInstance();
   const contestId = $derived(Number(page.params.contestId));
+  const currentUserId = $derived(userStore.getUserUnsafe().id);
 
   const resultsQuery = createParameterizedQuery(
     () => contestId,
@@ -53,7 +46,7 @@
 
   // Find current user's position
   let currentUserPosition = $derived.by(() => {
-    const position = sortedLeaderboard.findIndex((user) => user.user.id === data.currentUserId);
+    const position = sortedLeaderboard.findIndex((user) => user.user.id === currentUserId);
     return position >= 0 ? position + 1 : null;
   });
 
@@ -368,7 +361,7 @@
                 {#each paginatedLeaderboard as userStats, index (userStats.user.id)}
                   {@const rank = (currentPage - 1) * pageSize + index + 1}
                   {@const RankIcon = getRankIcon(rank)}
-                  {@const isCurrentUser = userStats.user.id === data.currentUserId}
+                  {@const isCurrentUser = userStats.user.id === currentUserId}
                   <Table.Row class={isCurrentUser ? 'bg-primary/5 font-semibold' : ''}>
                     <Table.Cell>
                       <div class="flex items-center gap-2">

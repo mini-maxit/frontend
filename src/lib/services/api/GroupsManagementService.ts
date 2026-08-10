@@ -1,5 +1,5 @@
 import type { ApiService } from './ApiService';
-import { ApiError } from '../ApiService';
+import { ApiError } from './ApiService';
 import type { Group, CreateGroupDto, EditGroupDto } from '$lib/dto/group';
 import type { User } from '$lib/dto/user';
 import type { ApiResponse, PaginatedData } from '$lib/dto/response';
