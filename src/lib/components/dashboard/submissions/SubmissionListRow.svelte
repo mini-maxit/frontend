@@ -119,6 +119,10 @@
               </a>
             </div>
             <div class="mt-1 flex flex-wrap items-center gap-2">
+              <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <UserIcon class="h-3.5 w-3.5" />
+                {submission.user.name} {submission.user.surname}
+              </span>
               {#if submission.status === SubmissionStatus.Evaluated && submission.result?.code}
                 <span
                   class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
@@ -139,19 +143,7 @@
       </div>
 
       <!-- Middle Section: Stats Grid -->
-      <div class="grid w-full grid-cols-2 gap-3 lg:w-auto lg:min-w-[520px] lg:grid-cols-4">
-        <!-- Submitter -->
-        <div class="rounded-lg border border-border bg-card p-2">
-          <div class="flex items-center gap-1.5">
-            <UserIcon class="h-3.5 w-3.5 text-primary" />
-            <span class="text-xs text-muted-foreground">{m.submissions_submitter_label()}</span>
-          </div>
-          <p class="mt-1 text-sm font-semibold text-foreground">
-            {submission.user.name}
-            {submission.user.surname}
-          </p>
-        </div>
-
+      <div class="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 lg:w-auto lg:grid-cols-3">
         <!-- Language -->
         <div class="rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
