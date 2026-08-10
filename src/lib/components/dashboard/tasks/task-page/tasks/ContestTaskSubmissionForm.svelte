@@ -63,10 +63,10 @@
           selectedFiles = null;
           selectedLanguageId = null;
           fileUploader?.clear();
-          onSuccess?.();
           if (result.data) {
-            goto(`${AppRoutes.UserSubmissions}/${result.data}`);
+            await goto(`${AppRoutes.UserSubmissions}/${result.data}`);
           }
+          onSuccess?.();
         } else {
           toast.error(result.error || m.task_submit_error());
         }
