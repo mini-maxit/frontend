@@ -118,11 +118,11 @@
                 {submission.task.title}
               </a>
             </div>
-            <div class="mt-1 flex flex-wrap items-center gap-2">
-              <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <UserIcon class="h-3.5 w-3.5" />
-                {submission.user.name} {submission.user.surname}
-              </span>
+            <div class="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+              <UserIcon class="h-3.5 w-3.5" />
+              {submission.user.name} {submission.user.surname}
+            </div>
+            <div class="mt-2 flex flex-wrap items-center gap-2">
               {#if submission.status === SubmissionStatus.Evaluated && submission.result?.code}
                 <span
                   class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
@@ -145,7 +145,7 @@
       <!-- Middle Section: Stats Grid -->
       <div class="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 lg:w-auto lg:grid-cols-3">
         <!-- Language -->
-        <div class="rounded-lg border border-border bg-card p-2">
+        <div class="min-w-32 rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
             <Code class="h-3.5 w-3.5 text-primary" />
             <span class="text-xs text-muted-foreground">{m.submissions_language_label()}</span>
@@ -156,7 +156,7 @@
         </div>
 
         <!-- Submitted Date -->
-        <div class="rounded-lg border border-border bg-card p-2">
+        <div class="min-w-32 rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
             <Calendar class="h-3.5 w-3.5 text-primary" />
             <span class="text-xs text-muted-foreground">{m.submissions_submitted_label()}</span>
@@ -167,7 +167,7 @@
         </div>
 
         <!-- Order -->
-        <div class="rounded-lg border border-border bg-card p-2">
+        <div class="min-w-32 rounded-lg border border-border bg-card p-2">
           <div class="flex items-center gap-1.5">
             <Clock class="h-3.5 w-3.5 text-primary" />
             <span class="text-xs text-muted-foreground">{m.submissions_attempt_label()}</span>
