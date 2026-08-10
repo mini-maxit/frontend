@@ -86,7 +86,7 @@ export interface Submission {
   submittedAt: string;
   task: SubmissionTask;
   user: SubmissionUser;
-  contest: Contest;
+  contest?: Contest;
 }
 
 export interface SubmissionDetailed extends Submission {

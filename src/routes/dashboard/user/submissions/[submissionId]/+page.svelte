@@ -234,7 +234,7 @@
               <span class="text-sm text-muted-foreground">{m.submission_details_contest()}</span>
             </div>
             <p class="mt-2 text-lg font-semibold text-foreground">
-              {submission.contest.id
+              {submission.contest?.id
                 ? `${submission.contest.name}`
                 : m.submission_details_no_contest()}
             </p>
