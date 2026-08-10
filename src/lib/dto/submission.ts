@@ -29,6 +29,7 @@ export interface Language {
   language: string;
   version: string;
   fileExtension: string;
+  isDisabled: boolean;
 }
 
 export interface SubmitSolutionDto {

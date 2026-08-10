@@ -11,6 +11,7 @@ import { ContestsManagementService } from '../services/api/ContestsManagementSer
 import { GroupsManagementService } from '../services/api/GroupsManagementService';
 import { AccessControlService } from '../services/api/AccessControlService';
 import { WorkerService } from '../services/api/WorkerService';
+import { LanguagesManagementService } from '../services/api/LanguagesManagementService';
 import { env } from '$env/dynamic/public';
 
 /**
@@ -76,6 +77,11 @@ let accessControlInstance: AccessControlService | null = $state(null);
  * Global singleton instance of WorkerService
  */
 let workerInstance: WorkerService | null = $state(null);
+
+/**
+ * Global singleton instance of LanguagesManagementService
+ */
+let languagesManagementInstance: LanguagesManagementService | null = $state(null);
 
 /**
  * Get or create the global ApiService instance
@@ -308,4 +314,23 @@ export function getWorkerInstance(): WorkerService | null {
   }
 
   return workerInstance;
+}
+
+/**
+ * Get or create the global LanguagesManagementService instance
+ */
+export function getLanguagesManagementInstance(): LanguagesManagementService | null {
+  if (!browser) {
+    return null;
+  }
+
+  if (!languagesManagementInstance) {
+    const apiClient = getApiInstance();
+    if (!apiClient) {
+      return null;
+    }
+    languagesManagementInstance = new LanguagesManagementService(apiClient);
+  }
+
+  return languagesManagementInstance;
 }
