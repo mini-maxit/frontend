@@ -122,22 +122,6 @@
               <UserIcon class="h-3.5 w-3.5" />
               {submission.user.name} {submission.user.surname}
             </div>
-            <div class="mt-2 flex flex-wrap items-center gap-2">
-              {#if submission.status === SubmissionStatus.Evaluated && submission.result?.code}
-                <span
-                  class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
-                >
-                  {getResultCodeLabel(submission.result.code as SubmissionResultCode)}
-                </span>
-              {:else}
-                <span
-                  class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
-                >
-                  {config.label}
-                </span>
-              {/if}
-              <span class="text-sm font-medium text-foreground">{getScore()}</span>
-            </div>
           </div>
         </div>
       </div>
@@ -177,31 +161,48 @@
       </div>
     </div>
 
-    <!-- Test Cases Section -->
-    {#if submission.result?.testResults && submission.result.testResults.length > 0}
-      <div class="mt-4 border-t border-border pt-4">
-        <button
-          onclick={toggleTestCases}
-          class="flex w-full items-center justify-between text-left transition-colors hover:text-primary"
-        >
-          <h4 class="text-sm font-semibold text-foreground">
-            {m.admin_contest_submissions_test_cases()}
-          </h4>
-          {#if testCasesExpanded}
-            <ChevronUp class="h-4 w-4 text-muted-foreground" />
+    <!-- Test Cases Summary -->
+    <div class="mt-4 border-t border-border pt-4">
+      <div class="flex w-full items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          {#if submission.status === SubmissionStatus.Evaluated && submission.result?.code}
+            <span
+              class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+            >
+              {getResultCodeLabel(submission.result.code as SubmissionResultCode)}
+            </span>
           {:else}
-            <ChevronDown class="h-4 w-4 text-muted-foreground" />
+            <span
+              class="inline-flex items-center rounded-full {config.bgColor} px-2.5 py-0.5 text-xs font-medium {config.textColor}"
+            >
+              {config.label}
+            </span>
           {/if}
-        </button>
+          <span class="text-sm font-medium text-foreground">{getScore()}</span>
+        </div>
 
-        {#if testCasesExpanded}
-          <div class="mt-3 space-y-2">
-            {#each submission.result.testResults as testResult, index (testResult.id)}
-              <TestCaseResult {testResult} testNumber={index + 1} />
-            {/each}
-          </div>
+        {#if submission.result?.testResults && submission.result.testResults.length > 0}
+          <button
+            onclick={toggleTestCases}
+            class="flex items-center gap-1 text-left text-sm font-semibold text-foreground transition-colors hover:text-primary"
+          >
+            {m.admin_contest_submissions_test_cases()}
+            {#if testCasesExpanded}
+              <ChevronUp class="h-4 w-4 text-muted-foreground" />
+            {:else}
+              <ChevronDown class="h-4 w-4 text-muted-foreground" />
+            {/if}
+          </button>
         {/if}
       </div>
-    {/if}
+
+      {#if testCasesExpanded && submission.result?.testResults}
+        <div class="mt-3 space-y-2">
+          {#each submission.result.testResults as testResult, index (testResult.id)}
+            <TestCaseResult {testResult} testNumber={index + 1} />
+          {/each}
+        </div>
+      {/if}
+    </div>
   </Card.Content>
 </Card.Root>
