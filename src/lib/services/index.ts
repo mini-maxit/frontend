@@ -12,6 +12,7 @@ export {
   GroupsManagementService,
   AccessControlService,
   WorkerService,
+  LanguagesManagementService,
   getApiInstance,
   getAuthInstance,
   getUserInstance,
@@ -23,5 +24,6 @@ export {
   getContestsManagementInstance,
   getGroupsManagementInstance,
   getAccessControlInstance,
-  getWorkerInstance
+  getWorkerInstance,
+  getLanguagesManagementInstance
 } from './api';

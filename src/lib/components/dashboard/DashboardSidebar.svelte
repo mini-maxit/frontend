@@ -94,6 +94,11 @@
       title: () => m.sidebar_admin_users(),
       href: localizeHref(AppRoutes.AdminUsers),
       icon: Users
+    },
+    {
+      title: () => m.sidebar_admin_languages(),
+      href: localizeHref(AppRoutes.AdminLanguages),
+      icon: Languages
     }
   ];
 

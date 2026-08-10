@@ -15,6 +15,7 @@ export { ContestsManagementService } from './ContestsManagementService';
 export { GroupsManagementService } from './GroupsManagementService';
 export { AccessControlService } from './AccessControlService';
 export { WorkerService } from './WorkerService';
+export { LanguagesManagementService } from './LanguagesManagementService';
 
 // Re-export service instance getters for convenience
 export {
@@ -29,5 +30,6 @@ export {
   getContestsManagementInstance,
   getGroupsManagementInstance,
   getAccessControlInstance,
-  getWorkerInstance
+  getWorkerInstance,
+  getLanguagesManagementInstance
 } from '$lib/stores/service-instances.svelte';
