@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { page } from '$app/state';
+  import { userStore } from '$lib/stores/user-store.svelte';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getAccessControlInstance } from '$lib/services';
@@ -23,15 +25,8 @@
   import type { PaginatedData } from '$lib/dto/response';
   import type { User } from '$lib/dto/user';
 
-  interface Props {
-    data: {
-      taskId: number;
-      currentUserId: number;
-    };
-  }
-
-  let { data }: Props = $props();
-  const taskId = $derived(data.taskId);
+  const taskId = $derived(Number(page.params.taskId));
+  const currentUserId = $derived(userStore.getUserUnsafe().id);
   const accessControlService = getAccessControlInstance();
 
   const collaboratorsQuery = createParameterizedQuery(
@@ -60,7 +55,7 @@
   const currentUserPermission = $derived.by(() => {
     if (!collaboratorsQuery.current) return Permission.Edit;
     const currentUserCollaborator = collaboratorsQuery.current.find(
-      (c: Collaborator) => c.userId === data.currentUserId
+      (c: Collaborator) => c.userId === currentUserId
     );
     return currentUserCollaborator?.permission ?? Permission.Edit;
   });
@@ -74,7 +69,7 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <h1 class="text-3xl font-bold text-foreground">
-      {m.task_collaborators_page_title({ taskId: data.taskId.toString() })}
+      {m.task_collaborators_page_title({ taskId: taskId.toString() })}
     </h1>
   </div>
 

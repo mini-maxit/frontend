@@ -3,9 +3,10 @@
  * All services for browser-based API calls
  */
 
-export { ApiService } from './ApiService';
+export { ApiService, ApiError } from './ApiService';
 export { AuthService } from './AuthService';
 export { UserService } from './UserService';
+export { UserManagementService } from './UserManagementService';
 export { TaskService } from './TaskService';
 export { ContestService } from './ContestService';
 export { SubmissionService } from './SubmissionService';
@@ -20,6 +21,7 @@ export {
   getApiInstance,
   getAuthInstance,
   getUserInstance,
+  getUserManagementInstance,
   getTaskInstance,
   getContestInstance,
   getSubmissionInstance,

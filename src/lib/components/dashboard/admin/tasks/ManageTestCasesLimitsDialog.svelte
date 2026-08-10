@@ -26,7 +26,7 @@
 
   const tasksManagementService = getTasksManagementInstance();
 
-  let taskLimitsQuery = createParameterizedQuery(taskId, async (id) => {
+  let taskLimitsQuery = createParameterizedQuery(() => taskId, async (id) => {
     if (!tasksManagementService) throw new Error('Service unavailable');
     const result = await tasksManagementService.getTaskLimits(id);
     if (!result.success) throw new Error(result.error || 'Failed to fetch task limits');

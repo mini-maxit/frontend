@@ -1,4 +1,4 @@
-import { ApiError } from '../ApiService';
+import { ApiError } from './ApiService';
 import type { ApiService } from './ApiService';
 import type { AuthTokenData } from '../../dto/auth';
 import type { UserLoginDto, UserRegisterDto } from '../../dto/user';

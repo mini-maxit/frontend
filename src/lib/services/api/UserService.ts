@@ -1,4 +1,4 @@
-import { ApiError } from '../ApiService';
+import { ApiError } from './ApiService';
 import type { ApiService } from './ApiService';
 import type { User } from '../../dto/user';
 import type { ApiResponse, PaginatedData } from '../../dto/response';

@@ -4,27 +4,26 @@ Frontend application for the programming contest platform built with SvelteKit a
 
 ## Architecture
 
-This application uses **SvelteKit with remote functions** for server-side operations and data fetching. Additionally, it provides a **client-side API** for scenarios requiring direct browser-to-backend communication.
+This application uses a **direct client-to-backend API** model. All data fetching happens in the browser via service classes; there are no server-proxied remote functions.
 
-### Client API
+- **Client API**: Service classes in `src/lib/services/api/` call the backend directly.
+- **Authentication**: Access token kept in memory (`tokenStore`); refresh token in an HttpOnly cookie set by the backend. Silent refresh on page load via `/auth/refresh`.
+- **Security**: HttpOnly refresh cookie, SameSite=Strict, automatic token refresh on 401.
 
-For use cases requiring direct client-to-backend communication (e.g., real-time features, SPA-like interactions):
-
-- **Global Instance**: Use `getClientApiInstance()` for a singleton API client
-- **Authentication**: `ClientAuthService` for login, register, logout
-- **Security**: HttpOnly cookies, automatic token refresh, CSRF protection via SameSite=Strict
-
-Example usage:
+### Example usage
 
 ```typescript
-import { getClientApiInstance, ClientAuthService } from '$lib/services';
+import { getAuthInstance } from '$lib/services';
 
-const apiClient = getClientApiInstance();
-if (apiClient) {
-  const authService = new ClientAuthService(apiClient);
+const authService = getAuthInstance();
+if (authService) {
   const result = await authService.login({ email, password });
 }
 ```
+
+### Data fetching
+
+Components use `createQuery` / `createParameterizedQuery` from `$lib/utils/query.svelte` for reactive queries with loading/error state.
 
 ## Quick Start
 
@@ -49,10 +48,7 @@ pnpm build
 ## Environment Variables
 
 ```env
-# Server-side (private)
-BACKEND_API_URL=http://localhost:8000
-
-# Client-side (public) - for direct client API usage
+# Client-side (public) - backend API base URL
 PUBLIC_BACKEND_API_URL=http://localhost:8000/api/v1
 ```
 
@@ -111,12 +107,15 @@ src/
 │   ├── components/        # Reusable components
 │   │   └── auth/         # Auth-specific components
 │   ├── dto/              # Data transfer objects
+│   ├── schemas/          # Valibot schemas
 │   ├── services/         # API services
-│   │   ├── ApiService.ts          # Server-side API client
-│   │   ├── ClientApiService.ts    # Browser-side API client
-│   │   ├── client-api-instance.ts # Global singleton instance
-│   │   ├── AuthService.ts         # Server-side auth
-│   │   └── ClientAuthService.ts   # Browser-side auth
-│   └── token.ts          # Token management
+│   │   ├── api/          # Client-side API services (browser)
+│   │   │   ├── ApiService.ts        # Base HTTP client (token refresh, 401 retry)
+│   │   │   ├── AuthService.ts
+│   │   │   └── ...
+│   │   └── index.ts      # Public exports + singleton getters
+│   ├── stores/           # Svelte runes stores (token, user, service instances)
+│   ├── utils/            # createQuery/createParameterizedQuery, helpers
+│   └── routes.ts         # Route constants
 └── routes/               # SvelteKit routes
 ```

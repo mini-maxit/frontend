@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/state';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getGroupsManagementInstance } from '$lib/services';
@@ -16,12 +17,7 @@
   import { localizeHref } from '$lib/paraglide/runtime';
   import { AppRoutes } from '$lib/routes';
 
-  interface Props {
-    data: { groupId: number };
-  }
-
-  let { data }: Props = $props();
-  const groupId = $derived(data.groupId);
+  const groupId = $derived(Number(page.params.groupId));
   const groupsService = getGroupsManagementInstance();
 
   const groupQuery = createParameterizedQuery(
@@ -52,7 +48,7 @@
           {groupQuery.current.name}
         </h1>
         <p class="text-muted-foreground">
-          {m.group_details_subtitle({ groupId: data.groupId.toString() })}
+          {m.group_details_subtitle({ groupId: groupId.toString() })}
         </p>
       </div>
       <Button onclick={() => (editDialogOpen = true)}>
@@ -68,7 +64,7 @@
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <AddUsersToGroupButton {groupId} onSuccess={() => membersQuery.refresh()} />
       <a
-        href={localizeHref(`${AppRoutes.TeacherGroups}/${data.groupId}/collaborators`)}
+        href={localizeHref(`${AppRoutes.TeacherGroups}/${groupId}/collaborators`)}
         class="group relative overflow-hidden rounded-2xl border border-border bg-linear-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
       >
         <div

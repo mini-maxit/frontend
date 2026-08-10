@@ -1,5 +1,5 @@
 import type { ApiService } from './ApiService';
-import { ApiError } from '../ApiService';
+import { ApiError } from './ApiService';
 import type { User, UserEditDto } from '$lib/dto/user';
 import type { ApiResponse } from '$lib/dto/response';
 import { RequestContentType } from '$lib/dto/request';
