@@ -7,10 +7,12 @@
   import FileUploader from './FileUploader.svelte';
   import SubmitButton from './SubmitButton.svelte';
   import { toast } from 'svelte-sonner';
+  import { goto } from '$app/navigation';
   import { getSubmissionInstance } from '$lib/services';
   import { superForm, defaults } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
   import { SubmitSolutionSchema } from '$lib/schemas';
+  import { AppRoutes } from '$lib/routes';
 
   interface Language {
     id: number;
@@ -62,6 +64,9 @@
           selectedLanguageId = null;
           fileUploader?.clear();
           onSuccess?.();
+          if (result.data) {
+            goto(`${AppRoutes.UserSubmissions}/${result.data}`);
+          }
         } else {
           toast.error(result.error || m.task_submit_error());
         }

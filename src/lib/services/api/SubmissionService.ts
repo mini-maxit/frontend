@@ -18,7 +18,7 @@ export class SubmissionService {
   async submitSolution(body: SubmitSolutionDto): Promise<{
     success: boolean;
     status: number;
-    data?: null;
+    data?: number | null;
     error?: string;
   }> {
     const formData = new FormData();
@@ -30,11 +30,11 @@ export class SubmissionService {
     }
 
     try {
-      const response = await this.apiClient.post<ApiResponse<null>>({
+      const response = await this.apiClient.post<ApiResponse<{ submissionId?: number }>>({
         url: '/submissions/submit',
         body: formData
       });
-      return { success: true, data: response.data, status: 200 };
+      return { success: true, data: response.data?.submissionId ?? null, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {
