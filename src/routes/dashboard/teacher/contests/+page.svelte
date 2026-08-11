@@ -46,7 +46,7 @@
         icon={Trophy}
       />
     {:else if contestsQuery.current}
-      <ContestsList contests={contestsQuery.current} />
+      <ContestsList contests={contestsQuery.current} onContestUpdated={() => contestsQuery.refresh()} />
     {/if}
   </div>
 </div>
