@@ -6,6 +6,7 @@
   import * as Card from '$lib/components/ui/card';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
+  import { buildDocumentTitle } from '$lib/title';
   import TestCaseResult from '$lib/components/dashboard/submissions/TestCaseResult.svelte';
   import { SubmissionStatus, SubmissionResultCode, type TestResult } from '$lib/dto/submission';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
@@ -143,7 +144,17 @@
     const total = submissionQuery.current.result.testResults.length;
     return `${passed}/${total}`;
   };
+
+  const documentTitle = $derived(
+    buildDocumentTitle(submissionQuery.current?.task?.title, m.title_type_submission())
+  );
 </script>
+
+<svelte:head>
+  {#if submissionQuery.current?.task?.title}
+    <title>{documentTitle}</title>
+  {/if}
+</svelte:head>
 
 <div class="space-y-8 p-4 sm:p-6 lg:p-8">
   <!-- Page Header -->

@@ -6,6 +6,7 @@
   import { page } from '$app/state';
   import { getApiInstance } from '$lib/services';
   import { isProtectedRoute } from '$lib/routes';
+  import { buildDocumentTitle } from '$lib/title';
 
   let { children } = $props();
 
@@ -25,6 +26,10 @@
     }
   });
 </script>
+
+<svelte:head>
+  <title>{buildDocumentTitle()}</title>
+</svelte:head>
 
 <Toaster />
 

@@ -11,6 +11,7 @@
   import { format } from 'date-fns';
   import * as m from '$lib/paraglide/messages';
   import type { TaskResult } from '$lib/dto/contest';
+  import { buildDocumentTitle } from '$lib/title';
 
   const contestService = getContestInstance();
   const contestId = $derived(Number(page.params.contestId));
@@ -44,7 +45,17 @@
     const date = new Date(dateString);
     return format(date, 'MMM dd, yyyy');
   }
+
+  const documentTitle = $derived(
+    buildDocumentTitle(resultsQuery.current?.contest?.name, m.title_type_results())
+  );
 </script>
+
+<svelte:head>
+  {#if resultsQuery.current?.contest?.name}
+    <title>{documentTitle}</title>
+  {/if}
+</svelte:head>
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">
   <div class="space-y-2">
