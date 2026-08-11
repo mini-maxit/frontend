@@ -7,8 +7,10 @@
   import TrendingUp from '@lucide/svelte/icons/trending-up';
   import Eye from '@lucide/svelte/icons/eye';
   import * as m from '$lib/paraglide/messages';
+  import { AppRoutes } from '$lib/routes';
 
   interface PastContestCardProps {
+    contestId: number;
     name: string;
     score: number;
     maxScore: number;
@@ -17,8 +19,15 @@
     participants: number;
   }
 
-  let { name, score, maxScore, completionPercentage, date, participants }: PastContestCardProps =
-    $props();
+  let {
+    contestId,
+    name,
+    score,
+    maxScore,
+    completionPercentage,
+    date,
+    participants
+  }: PastContestCardProps = $props();
 </script>
 
 <Card.Root
@@ -93,6 +102,7 @@
     <Button
       variant="outline"
       class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+      href={`${AppRoutes.UserContests}/${contestId}/results`}
     >
       <Eye class="mr-2 h-4 w-4" />
       {m.past_contest_view_details()}

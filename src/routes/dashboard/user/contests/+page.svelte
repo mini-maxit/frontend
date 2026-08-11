@@ -120,6 +120,7 @@
         <div class="grid gap-6 sm:grid-cols-2">
           {#each contestsQuery.current.past as contest (contest.id)}
             <PastContestCard
+              contestId={contest.id}
               name={contest.name}
               score={contest.score}
               maxScore={contest.maximumScore}
