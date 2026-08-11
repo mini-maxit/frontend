@@ -12,12 +12,12 @@
   import { getUserInstance, getApiInstance } from '$lib/services';
   import { LoadingSpinner } from '$lib/components/common';
   import Footer from '$lib/components/Footer.svelte';
+  import { buildDocumentTitle } from '$lib/title';
 
   let { children } = $props();
 
   const pageTitle = $derived(getDashboardTitleTranslationFromPathname(page.url.pathname));
   const isLoading = $derived(userStore.isLoading());
-
   // Client-side authentication guard and user fetch
   onMount(async () => {
     if (!browser) return;
@@ -57,6 +57,10 @@
     }
   });
 </script>
+
+<svelte:head>
+  <title>{buildDocumentTitle(pageTitle)}</title>
+</svelte:head>
 
 {#if isLoading || !userStore.tryGetUser()}
   <div class="flex h-screen items-center justify-center">

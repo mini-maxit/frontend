@@ -87,7 +87,7 @@
   const adminMenuItems = [
     {
       title: () => m.sidebar_admin_monitoring(),
-      href: localizeHref(AppRoutes.Admin),
+      href: localizeHref(AppRoutes.AdminWorkerMonitoring),
       icon: Activity
     },
     {

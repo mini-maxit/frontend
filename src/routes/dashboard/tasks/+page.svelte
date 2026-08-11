@@ -18,10 +18,6 @@
   });
 </script>
 
-<svelte:head>
-  <title>{m.tasks_page_title()}</title>
-</svelte:head>
-
 <div class="container mx-auto p-6">
   <div class="mb-8">
     <h1 class="mb-2 text-4xl font-bold text-foreground">{m.tasks_title()}</h1>

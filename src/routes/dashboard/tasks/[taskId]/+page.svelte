@@ -8,6 +8,7 @@
   import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
   import * as m from '$lib/paraglide/messages';
+  import { buildDocumentTitle } from '$lib/title';
 
   const taskService = getTaskInstance();
   const submissionService = getSubmissionInstance();
@@ -32,7 +33,17 @@
   });
 
   let fileContent = $state<string>('');
+
+  const documentTitle = $derived(
+    buildDocumentTitle(taskQuery.current?.title, m.title_type_task())
+  );
 </script>
+
+<svelte:head>
+  {#if taskQuery.current?.title}
+    <title>{documentTitle}</title>
+  {/if}
+</svelte:head>
 
 <div class="space-y-6">
   {#if taskQuery.error}

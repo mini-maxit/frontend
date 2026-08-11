@@ -30,6 +30,7 @@ export enum AppRoutes {
   Admin = `${AppRoutes.Dashboard}/admin`,
   AdminUsers = `${AppRoutes.Admin}/users`,
   AdminLanguages = `${AppRoutes.Admin}/languages`,
+  AdminWorkerMonitoring = `${AppRoutes.Admin}/worker-monitoring`,
 
   Error = '/error'
 }

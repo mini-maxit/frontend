@@ -11,9 +11,19 @@
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getContestInstance } from '$lib/services';
   import { AppRoutes } from '$lib/routes';
+  import { buildDocumentTitle } from '$lib/title';
 
   const contestService = getContestInstance();
   const contestId = $derived(Number(page.params.contestId));
+
+  const contestQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestService) throw new Error('Service unavailable');
+      if (!Number.isFinite(id)) throw new Error('Invalid contest ID');
+      return await contestService.getContest(id);
+    }
+  );
 
   const tasksQuery = createParameterizedQuery(
     () => contestId,
@@ -25,7 +35,17 @@
       return result.data!;
     }
   );
+
+  const documentTitle = $derived(
+    buildDocumentTitle(contestQuery.current?.name, m.title_type_contest())
+  );
 </script>
+
+<svelte:head>
+  {#if contestQuery.current?.name}
+    <title>{documentTitle}</title>
+  {/if}
+</svelte:head>
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">
   <div class="space-y-2">
