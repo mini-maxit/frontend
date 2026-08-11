@@ -53,6 +53,11 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     return m.contest_groups_title();
   }
 
+  // Check for contest participants pages (e.g., /dashboard/teacher/contests/[contestId]/participants)
+  if (path.match(/^\/dashboard\/teacher\/contests\/\d+\/participants/)) {
+    return m.contest_participants_title();
+  }
+
   // Return the translation for the route, or default to main dashboard title
   return routeTitleMap[path]?.() ?? m.header_dashboard();
 }

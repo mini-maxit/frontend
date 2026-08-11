@@ -1,0 +1,277 @@
+<script lang="ts">
+  import type { User } from '$lib/dto/user';
+  import { SortDirection, UserSortKey } from '$lib/dto/pagination';
+  import * as Table from '$lib/components/ui/table';
+  import * as Pagination from '$lib/components/ui/pagination';
+  import UserIcon from '@lucide/svelte/icons/user';
+  import Mail from '@lucide/svelte/icons/mail';
+  import ArrowUp from '@lucide/svelte/icons/arrow-up';
+  import ArrowDown from '@lucide/svelte/icons/arrow-down';
+  import * as m from '$lib/paraglide/messages';
+  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '$lib/utils';
+  import RemoveParticipantFromContestButton from './RemoveParticipantFromContestButton.svelte';
+
+  interface ParticipantsListProps {
+    participants: User[];
+    total: number;
+    contestId: number;
+    limit: number;
+    offset: number;
+    sortKey: UserSortKey;
+    sortDir: SortDirection;
+    onSuccess?: () => void;
+  }
+
+  let {
+    participants,
+    total,
+    contestId,
+    limit = $bindable(),
+    offset = $bindable(),
+    sortKey = $bindable(),
+    sortDir = $bindable(),
+    onSuccess
+  }: ParticipantsListProps = $props();
+
+  let currentPage = $derived(getCurrentPage(offset, limit));
+  let totalPages = $derived(getTotalPages(total, limit));
+
+  let paginationPages = $derived(getPaginationPages(currentPage, totalPages));
+
+  function handleHeaderSort(key: UserSortKey) {
+    const dir =
+      sortKey === key
+        ? sortDir === SortDirection.Asc
+          ? SortDirection.Desc
+          : SortDirection.Asc
+        : SortDirection.Asc;
+
+    sortKey = key;
+    sortDir = dir;
+    offset = 0;
+  }
+
+  function handleLimitChange(newLimit: number) {
+    limit = newLimit;
+    offset = 0;
+  }
+
+  function getRoleBadgeClass(role: string): string {
+    switch (role) {
+      case 'admin':
+        return 'bg-primary/10 text-primary border border-primary/20';
+      case 'teacher':
+        return 'bg-secondary/10 text-secondary border border-secondary/20';
+      case 'student':
+        return 'bg-muted text-muted-foreground border border-border';
+      default:
+        return 'bg-muted text-muted-foreground border border-border';
+    }
+  }
+
+  function getRoleBadgeLabel(role: string): string {
+    switch (role) {
+      case 'admin':
+        return m.admin_users_role_admin();
+      case 'teacher':
+        return m.admin_users_role_teacher();
+      case 'student':
+        return m.admin_users_role_student();
+      default:
+        return role;
+    }
+  }
+
+  function getAriaSortValue(key: UserSortKey): 'ascending' | 'descending' | 'none' {
+    if (sortKey !== key) return 'none';
+    return sortDir === SortDirection.Asc ? 'ascending' : 'descending';
+  }
+
+  const perPageOptions = [10, 20, 50, 100];
+</script>
+
+<div class="space-y-3">
+  <!-- Top bar: range + page size -->
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div class="text-xs text-muted-foreground">
+      {m.contest_participants_pagination_showing_range({
+        from: total === 0 ? 0 : offset + 1,
+        to: Math.min(offset + participants.length, total),
+        total
+      })}
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="flex items-center gap-1 text-xs">
+        <span class="text-muted-foreground">{m.contest_participants_pagination_rows_per_page()}:</span>
+        <select
+          class="rounded-md border bg-background px-2 py-1 text-xs"
+          value={limit}
+          onchange={(e) => handleLimitChange(Number((e.target as HTMLSelectElement).value))}
+        >
+          {#each perPageOptions as opt (opt)}
+            <option value={opt}>{opt}</option>
+          {/each}
+        </select>
+      </div>
+      <div class="text-xs font-medium">
+        {m.contest_participants_pagination_page()}
+        {currentPage}
+        {m.contest_participants_pagination_of()}
+        {totalPages}
+      </div>
+    </div>
+  </div>
+
+  <!-- Data table -->
+  <Table.Root class="mt-1">
+    <Table.Header>
+      <Table.Row>
+        <Table.Head class="w-14" aria-sort={getAriaSortValue(UserSortKey.Id)}>
+          <button
+            class="flex items-center gap-1"
+            type="button"
+            onclick={() => handleHeaderSort(UserSortKey.Id)}
+          >
+            {m.contest_participants_column_id()}
+            {#if sortKey === UserSortKey.Id}{#if sortDir === SortDirection.Asc}<ArrowUp
+                  class="h-3 w-3 text-muted-foreground"
+                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
+          </button>
+        </Table.Head>
+        <Table.Head aria-sort={getAriaSortValue(UserSortKey.Name)}>
+          <button
+            class="flex items-center gap-1"
+            type="button"
+            onclick={() => handleHeaderSort(UserSortKey.Name)}
+          >
+            {m.contest_participants_column_name()}
+            {#if sortKey === UserSortKey.Name}{#if sortDir === SortDirection.Asc}<ArrowUp
+                  class="h-3 w-3 text-muted-foreground"
+                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
+          </button>
+        </Table.Head>
+        <Table.Head class="hidden sm:table-cell" aria-sort={getAriaSortValue(UserSortKey.Username)}>
+          <button
+            class="flex items-center gap-1"
+            type="button"
+            onclick={() => handleHeaderSort(UserSortKey.Username)}
+          >
+            {m.contest_participants_column_username()}
+            {#if sortKey === UserSortKey.Username}{#if sortDir === SortDirection.Asc}<ArrowUp
+                  class="h-3 w-3 text-muted-foreground"
+                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
+          </button>
+        </Table.Head>
+        <Table.Head class="hidden lg:table-cell" aria-sort={getAriaSortValue(UserSortKey.Email)}>
+          <button
+            class="flex items-center gap-1"
+            type="button"
+            onclick={() => handleHeaderSort(UserSortKey.Email)}
+          >
+            {m.contest_participants_column_email()}
+            {#if sortKey === UserSortKey.Email}{#if sortDir === SortDirection.Asc}<ArrowUp
+                  class="h-3 w-3 text-muted-foreground"
+                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
+          </button>
+        </Table.Head>
+        <Table.Head class="hidden xl:table-cell" aria-sort={getAriaSortValue(UserSortKey.Role)}>
+          <button
+            class="flex items-center gap-1"
+            type="button"
+            onclick={() => handleHeaderSort(UserSortKey.Role)}
+          >
+            {m.contest_participants_column_role()}
+            {#if sortKey === UserSortKey.Role}{#if sortDir === SortDirection.Asc}<ArrowUp
+                  class="h-3 w-3 text-muted-foreground"
+                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
+          </button>
+        </Table.Head>
+        <Table.Head class="text-right">{m.contest_participants_column_actions()}</Table.Head>
+      </Table.Row>
+    </Table.Header>
+
+    <Table.Body>
+      {#each participants as user (user.id)}
+        <Table.Row>
+          <Table.Cell class="font-mono text-xs">{user.id}</Table.Cell>
+          <Table.Cell>
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                <UserIcon class="h-4 w-4 text-primary" />
+              </div>
+              <div class="flex min-w-0 flex-col">
+                <span class="truncate font-medium text-foreground">{user.name} {user.surname}</span>
+                <span class="text-xs text-muted-foreground sm:hidden">@{user.username}</span>
+              </div>
+            </div>
+          </Table.Cell>
+          <Table.Cell class="hidden text-muted-foreground sm:table-cell"
+            >@{user.username}</Table.Cell
+          >
+          <Table.Cell class="hidden lg:table-cell">
+            <div class="flex items-center gap-2">
+              <Mail class="h-4 w-4 shrink-0 text-muted-foreground" />
+              <span class="max-w-[180px] truncate">{user.email}</span>
+            </div>
+          </Table.Cell>
+          <Table.Cell class="hidden xl:table-cell">
+            <span
+              class="{getRoleBadgeClass(
+                user.role
+              )} inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold"
+            >
+              {getRoleBadgeLabel(user.role)}
+            </span>
+          </Table.Cell>
+          <Table.Cell class="text-right">
+            <RemoveParticipantFromContestButton
+              {contestId}
+              userId={user.id}
+              userName={user.username}
+              onSuccess={onSuccess}
+            />
+          </Table.Cell>
+        </Table.Row>
+      {/each}
+    </Table.Body>
+  </Table.Root>
+
+  <div class="flex flex-col items-center gap-2 pt-2">
+    <Pagination.Root
+      count={total}
+      perPage={limit}
+      page={currentPage}
+      siblingCount={1}
+      onPageChange={(p) => {
+        if (p && p !== currentPage) offset = getOffset(p, limit);
+      }}
+    >
+      <Pagination.Content>
+        <Pagination.PrevButton disabled={currentPage === 1}>
+          {m.contest_participants_pagination_prev()}
+        </Pagination.PrevButton>
+
+        {#each paginationPages as p (p)}
+          {#if p === 'ellipsis'}
+            <Pagination.Item>
+              <Pagination.Ellipsis />
+            </Pagination.Item>
+          {:else}
+            <Pagination.Item>
+              <Pagination.Link page={{ type: 'page', value: p }} isActive={p === currentPage} />
+            </Pagination.Item>
+          {/if}
+        {/each}
+
+        <Pagination.NextButton disabled={currentPage === totalPages}>
+          {m.contest_participants_pagination_next()}
+        </Pagination.NextButton>
+      </Pagination.Content>
+    </Pagination.Root>
+
+    <div class="text-xs text-muted-foreground">
+      {m.contest_participants_pagination_total({ total })}
+    </div>
+  </div>
+</div>

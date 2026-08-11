@@ -159,6 +159,14 @@
       <Button
         variant="default"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+        href={localizeHref(`${AppRoutes.TeacherContests}/${contest.id}/participants`)}
+      >
+        <Users class="mr-2 h-4 w-4" />
+        {m.admin_contests_card_view_participants()}
+      </Button>
+      <Button
+        variant="default"
+        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
         href={localizeHref(`${AppRoutes.TeacherContests}/${contest.id}/submissions`)}
       >
         <FileText class="mr-2 h-4 w-4" />

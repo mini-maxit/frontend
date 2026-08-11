@@ -7,3 +7,6 @@ export { default as RemoveContestCollaboratorButton } from './RemoveContestColla
 export { default as RemoveTaskFromContestButton } from './RemoveTaskFromContestButton.svelte';
 export { default as AddGroupToContestButton } from './AddGroupToContestButton.svelte';
 export { default as RemoveGroupFromContestButton } from './RemoveGroupFromContestButton.svelte';
+export { default as AddParticipantsToContestButton } from './AddParticipantsToContestButton.svelte';
+export { default as RemoveParticipantFromContestButton } from './RemoveParticipantFromContestButton.svelte';
+export { default as ParticipantsList } from './ParticipantsList.svelte';
