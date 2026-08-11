@@ -13,8 +13,8 @@
 
   let { testResult, testNumber }: TestCaseResultProps = $props();
 
-  const formatExecutionTime = (timeMs: number): string => {
-    if (!isFinite(timeMs) || timeMs < 0) return 'N/A';
+  const formatExecutionTime = (timeMs: number | null): string => {
+    if (timeMs === null || timeMs === undefined || !isFinite(timeMs) || timeMs < 0) return 'N/A';
     if (timeMs < 1000) {
       return `${timeMs.toFixed(2)}ms`;
     } else {
@@ -22,8 +22,9 @@
     }
   };
 
-  const formatPeakMemory = (memoryKb: number): string => {
-    if (!isFinite(memoryKb) || memoryKb < 0) return 'N/A';
+  const formatPeakMemory = (memoryKb: number | null): string => {
+    if (memoryKb === null || memoryKb === undefined || !isFinite(memoryKb) || memoryKb < 0)
+      return 'N/A';
     if (memoryKb < 1024) {
       return `${memoryKb.toFixed(2)} KB`;
     } else {

@@ -46,8 +46,8 @@ export interface TestResult {
   submissionResultId: number;
   code: TestResultCode;
   errorMessage: string;
-  executionTimeMs: number;
-  peakMemoryKb: number;
+  executionTimeMs: number | null;
+  peakMemoryKb: number | null;
 }
 
 export interface SubmissionResult {

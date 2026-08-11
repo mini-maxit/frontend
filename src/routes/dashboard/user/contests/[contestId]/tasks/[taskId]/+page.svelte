@@ -18,6 +18,9 @@
 
   const taskQuery = createParameterizedQuery(getParams, async (p) => {
     if (!taskService) throw new Error('Service unavailable');
+    if (!Number.isFinite(p.contestId) || !Number.isFinite(p.taskId)) {
+      throw new Error('Invalid task ID');
+    }
     const result = await taskService.getContestTask(p.contestId, p.taskId);
     if (!result.success) throw new Error(result.error || 'Failed to fetch task');
     return result.data!;

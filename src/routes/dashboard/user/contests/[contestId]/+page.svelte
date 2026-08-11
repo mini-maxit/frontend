@@ -19,6 +19,7 @@
     () => contestId,
     async (id) => {
       if (!contestService) throw new Error('Service unavailable');
+      if (!Number.isFinite(id)) throw new Error('Invalid contest ID');
       const result = await contestService.getContestTasksWithStatistics(id);
       if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
       return result.data!;
