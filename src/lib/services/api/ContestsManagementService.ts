@@ -15,6 +15,7 @@ import type { Task, ContestTask } from '$lib/dto/task';
 import type { Group } from '$lib/dto/group';
 import type { ApiResponse, PaginatedData } from '$lib/dto/response';
 import type { Submission, GetContestSubmissionsParams } from '$lib/dto/submission';
+import type { User } from '$lib/dto/user';
 
 /**
  * Client-side service for contest management API calls
@@ -317,6 +318,90 @@ export class ContestsManagementService {
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Failed to remove groups from contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getContestParticipants(
+    contestId: number,
+    params?: { limit?: number; offset?: number; sort?: string }
+  ): Promise<PaginatedData<User>> {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+      if (params?.sort) queryParams.append('sort', params.sort);
+
+      const url = `/contests-management/contests/${contestId}/participants${
+        queryParams.toString() ? `?${queryParams.toString()}` : ''
+      }`;
+
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<User>>>({
+        url
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get contest participants:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async getAssignableParticipants(
+    contestId: number,
+    params?: { limit?: number; offset?: number; sort?: string }
+  ): Promise<PaginatedData<User>> {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+      if (params?.sort) queryParams.append('sort', params.sort);
+
+      const url = `/contests-management/contests/${contestId}/participants/assignable${
+        queryParams.toString() ? `?${queryParams.toString()}` : ''
+      }`;
+
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<User>>>({
+        url
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to get assignable participants:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async addParticipantsToContest(contestId: number, userIds: number[]): Promise<void> {
+    try {
+      await this.apiClient.post<ApiResponse<{ message: string }>>({
+        url: `/contests-management/contests/${contestId}/participants`,
+        body: JSON.stringify({ userIds })
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to add participants to contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
+  async removeParticipantsFromContest(contestId: number, userIds: number[]): Promise<void> {
+    try {
+      await this.apiClient.delete<ApiResponse<{ message: string }>>({
+        url: `/contests-management/contests/${contestId}/participants`,
+        body: JSON.stringify({ userIds })
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to remove participants from contest:', error.toJSON());
         throw error;
       }
       throw error;
