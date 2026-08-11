@@ -114,10 +114,19 @@ export function createParameterizedQuery<T, P>(
     // Access param to establish reactivity
     if (!browser) return;
 
+    const value = param();
+
+    // Skip fetch for missing/invalid numeric params (e.g. NaN before hydration)
+    if (typeof value === 'number' && !Number.isFinite(value)) {
+      loading = false;
+      error = null;
+      return;
+    }
+
     loading = true;
     error = null;
 
-    fetcher(param())
+    fetcher(value)
       .then((data) => {
         current = data;
         loading = false;
@@ -134,11 +143,18 @@ export function createParameterizedQuery<T, P>(
   async function refresh(): Promise<void> {
     if (!browser) return;
 
+    const value = param();
+    if (typeof value === 'number' && !Number.isFinite(value)) {
+      loading = false;
+      error = null;
+      return;
+    }
+
     loading = true;
     error = null;
 
     try {
-      const data = await fetcher(param());
+      const data = await fetcher(value);
       current = data;
     } catch (e) {
       error = e instanceof Error ? e : new Error('Unknown error occurred');
