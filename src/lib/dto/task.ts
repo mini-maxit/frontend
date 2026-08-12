@@ -4,6 +4,7 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   createdBy: number;
+  creatorName: string;
   isVisible: boolean;
 }
 

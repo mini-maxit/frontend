@@ -129,10 +129,22 @@ export class ContestsManagementService {
     }
   }
 
-  async getAssignableTasks(contestId: number): Promise<Task[]> {
+  async getAssignableTasks(
+    contestId: number,
+    params?: { limit?: number; offset?: number; sort?: string; search?: string }
+  ): Promise<PaginatedData<Task>> {
     try {
-      const response = await this.apiClient.get<ApiResponse<Task[]>>({
-        url: `/contests-management/contests/${contestId}/tasks/assignable-tasks`
+      const queryParams = new URLSearchParams();
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+      if (params?.sort) queryParams.append('sort', params.sort);
+      if (params?.search) queryParams.append('search', params.search);
+
+      const url = `/contests-management/contests/${contestId}/tasks/assignable-tasks${
+        queryParams.toString() ? `?${queryParams.toString()}` : ''
+      }`;
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Task>>>({
+        url
       });
       return response.data;
     } catch (error) {
@@ -165,6 +177,25 @@ export class ContestsManagementService {
     }
   }
 
+  async updateTaskInContest(
+    contestId: number,
+    taskId: number,
+    data: { startAt: string; endAt: string | null }
+  ): Promise<void> {
+    try {
+      await this.apiClient.put<ApiResponse<{ message: string }>>({
+        url: `/contests-management/contests/${contestId}/tasks/${taskId}`,
+        body: JSON.stringify({ startAt: data.startAt, endAt: data.endAt })
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Failed to update task in contest:', error.toJSON());
+        throw error;
+      }
+      throw error;
+    }
+  }
+
   async removeTaskFromContest(contestId: number, taskIds: number | number[]): Promise<void> {
     try {
       const requestData = {
@@ -183,10 +214,23 @@ export class ContestsManagementService {
     }
   }
 
-  async getContestTasks(contestId: number): Promise<ContestTask[]> {
+  async getContestTasks(
+    contestId: number,
+    params?: { limit?: number; offset?: number; sort?: string; search?: string }
+  ): Promise<PaginatedData<ContestTask>> {
     try {
-      const response = await this.apiClient.get<ApiResponse<ContestTask[]>>({
-        url: `/contests-management/contests/${contestId}/tasks`
+      const queryParams = new URLSearchParams();
+      if (params?.limit) queryParams.append('limit', params.limit.toString());
+      if (params?.offset) queryParams.append('offset', params.offset.toString());
+      if (params?.sort) queryParams.append('sort', params.sort);
+      if (params?.search) queryParams.append('search', params.search);
+
+      const url = `/contests-management/contests/${contestId}/tasks${
+        queryParams.toString() ? `?${queryParams.toString()}` : ''
+      }`;
+
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<ContestTask>>>({
+        url
       });
       return response.data;
     } catch (error) {
