@@ -1,5 +1,6 @@
 <script lang="ts">
   import AvailableContestsStats from '$lib/components/dashboard/available-contests/AvailableContestsStats.svelte';
+  import { showApiError } from '$lib/errors/backend-error';
   import AvailableContestCard from '$lib/components/dashboard/available-contests/AvailableContestCard.svelte';
   import { createQuery } from '$lib/utils/query.svelte';
   import { getContestInstance } from '$lib/services';
@@ -48,9 +49,9 @@
       toast.success(m.contests_registration_success());
       // Refresh queries to show updated registration status
       await Promise.all([ongoingContestsQuery.refresh(), upcomingContestsQuery.refresh()]);
-    } catch (error) {
+    } catch (error){
       console.error('Registration failed:', error);
-      toast.error(m.contests_registration_error());
+      showApiError(error, m.contests_registration_error());
     } finally {
       registering = null;
     }

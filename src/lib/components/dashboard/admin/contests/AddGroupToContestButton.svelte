@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import { Checkbox } from '$lib/components/ui/checkbox';
@@ -56,9 +57,9 @@
       selectedGroupIds = new SvelteSet();
       searchQuery = '';
       if (onSuccess) onSuccess();
-    } catch (error) {
+    } catch (error){
       console.error('Add groups to contest error:', error);
-      toast.error(m.contest_groups_add_error());
+      showApiError(error, m.contest_groups_add_error());
     } finally {
       submitting = false;
     }

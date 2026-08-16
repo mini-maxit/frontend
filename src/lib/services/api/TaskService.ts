@@ -1,4 +1,5 @@
 import type { ApiService } from './ApiService';
+import { resolveErrorMessage } from '$lib/errors/backend-error';
 import { ApiError } from './ApiService';
 import type { Task, TaskDetail, MyTasksResponse } from '$lib/dto/task';
 import type { ApiResponse } from '$lib/dto/response';
@@ -29,7 +30,7 @@ export class TaskService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -57,7 +58,7 @@ export class TaskService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -91,7 +92,7 @@ export class TaskService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -120,7 +121,7 @@ export class TaskService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }

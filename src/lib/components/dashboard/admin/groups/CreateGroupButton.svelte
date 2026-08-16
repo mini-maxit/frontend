@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -38,9 +39,9 @@
         toast.success(m.groups_create_success());
         dialogOpen = false;
         if (onSuccess) onSuccess();
-      } catch (error) {
+      } catch (error){
         console.error('Create group error:', error);
-        toast.error(m.groups_create_error());
+        showApiError(error, m.groups_create_error());
       }
     }
   });

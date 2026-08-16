@@ -2,6 +2,7 @@
   import { Button } from '$lib/components/ui/button';
   import AlertCircle from '@lucide/svelte/icons/alert-circle';
   import * as m from '$lib/paraglide/messages';
+  import { isApiErrorLike, resolveErrorMessage } from '$lib/errors/backend-error';
 
   interface ErrorCardProps {
     title: string;
@@ -24,7 +25,11 @@
   }: ErrorCardProps = $props();
 
   const errorMessage = $derived(
-    typeof error === 'string' ? error : error?.message || m.error_unknown_error()
+    typeof error === 'string'
+      ? error
+      : isApiErrorLike(error)
+        ? resolveErrorMessage(error)
+        : error?.message || m.error_unknown_error()
   );
 </script>
 

@@ -1,4 +1,5 @@
 import type { ApiService } from './ApiService';
+import { resolveErrorMessage } from '$lib/errors/backend-error';
 import { ApiError } from './ApiService';
 import type { ApiResponse } from '$lib/dto/response';
 import type { Language } from '$lib/dto/submission';
@@ -24,7 +25,7 @@ export class LanguagesManagementService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -46,7 +47,7 @@ export class LanguagesManagementService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }

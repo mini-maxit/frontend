@@ -6,6 +6,7 @@ import { AppRoutes } from '$lib/routes';
 import { tokenStore } from '$lib/stores/token-store.svelte';
 import type { ApiResponse } from '../../dto/response';
 import type { AuthTokenData } from '../../dto/auth';
+import { resolveErrorMessage } from '$lib/errors/backend-error';
 
 export class ApiError extends Error {
   public readonly status: number;
@@ -38,6 +39,13 @@ export class ApiError extends Error {
       return this.body.data.message;
     }
     return this.statusText || 'An unexpected error occurred';
+  }
+
+  /**
+   * Returns a user-facing, localized message resolved from the backend error code/status.
+   */
+  getLocalizedMessage(): string {
+    return resolveErrorMessage(this);
   }
 
   getStatus(): number {

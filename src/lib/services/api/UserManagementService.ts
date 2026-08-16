@@ -1,4 +1,5 @@
 import type { ApiService } from './ApiService';
+import { resolveErrorMessage } from '$lib/errors/backend-error';
 import { ApiError } from './ApiService';
 import type { User, UserEditDto } from '$lib/dto/user';
 import type { ApiResponse } from '$lib/dto/response';
@@ -25,7 +26,7 @@ export class UserManagementService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -51,7 +52,7 @@ export class UserManagementService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }

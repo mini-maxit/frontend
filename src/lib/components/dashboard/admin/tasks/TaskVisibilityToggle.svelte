@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Checkbox } from '$lib/components/ui/checkbox';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Label } from '$lib/components/ui/label';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -46,8 +47,8 @@
       } else {
         toast.error(result.error || m.admin_tasks_visibility_error());
       }
-    } catch (error) {
-      toast.error(m.admin_tasks_visibility_error());
+    } catch (error){
+      showApiError(error, m.admin_tasks_visibility_error());
       console.error('Failed to toggle visibility:', error);
     }
   }

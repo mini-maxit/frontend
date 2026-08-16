@@ -1,4 +1,5 @@
 import type { ApiService } from './ApiService';
+import { resolveErrorMessage } from '$lib/errors/backend-error';
 import { ApiError } from './ApiService';
 import type {
   Contest,
@@ -34,7 +35,7 @@ export class ContestService {
     if (activeResult.status === 'rejected' && pastResult.status === 'rejected') {
       const error = activeResult.reason;
       if (error instanceof ApiError) {
-        return { success: false, error: error.getApiMessage(), status: error.getStatus() };
+        return { success: false, error: resolveErrorMessage(error), status: error.getStatus() };
       }
       throw error;
     }
@@ -138,7 +139,7 @@ export class ContestService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -161,7 +162,7 @@ export class ContestService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -187,7 +188,7 @@ export class ContestService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -225,7 +226,7 @@ export class ContestService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }

@@ -1,4 +1,5 @@
 import { ApiError } from './ApiService';
+import { resolveErrorMessage } from '$lib/errors/backend-error';
 import type { ApiService } from './ApiService';
 import type { AuthTokenData } from '../../dto/auth';
 import type { UserLoginDto, UserRegisterDto } from '../../dto/user';
@@ -36,7 +37,7 @@ export class AuthService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -64,7 +65,7 @@ export class AuthService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -86,7 +87,7 @@ export class AuthService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
@@ -109,7 +110,7 @@ export class AuthService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }

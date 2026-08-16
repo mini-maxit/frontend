@@ -1,4 +1,5 @@
 import type { ApiService } from './ApiService';
+import { resolveErrorMessage } from '$lib/errors/backend-error';
 import { ApiError } from './ApiService';
 import type { ApiResponse } from '$lib/dto/response';
 import type { WorkerStatus } from '$lib/dto/worker';
@@ -25,7 +26,7 @@ export class WorkerService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }
