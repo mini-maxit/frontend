@@ -228,6 +228,7 @@
   "error_404_title": "Strona Nie Znaleziona",
   "error_500_description": "Nasze serwery mają chwilę słabości. Spróbuj ponownie później.",
   "error_500_title": "Błąd Serwera",
+  "common_back": "Wstecz",
   "error_default_message": "Coś poszło nie tak",
   "error_generic_title": "Błąd",
   "error_go_home": "Strona Główna",

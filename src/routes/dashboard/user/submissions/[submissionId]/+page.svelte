@@ -2,7 +2,7 @@
   import { page } from '$app/state';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getSubmissionInstance } from '$lib/services';
-  import { LoadingSpinner, ErrorCard } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, BackButton } from '$lib/components/common';
   import * as Card from '$lib/components/ui/card';
   import * as m from '$lib/paraglide/messages';
   import { formatDate } from '$lib/utils';
@@ -157,6 +157,7 @@
 </svelte:head>
 
 <div class="space-y-8 p-4 sm:p-6 lg:p-8">
+  <BackButton href="/dashboard/user/submissions" />
   <!-- Page Header -->
   <div class="space-y-2">
     <h1 class="text-4xl font-bold tracking-tight text-foreground">

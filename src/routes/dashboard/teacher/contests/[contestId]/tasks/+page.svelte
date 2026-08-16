@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, BackButton } from '$lib/components/common';
   import { showApiError } from '$lib/errors/backend-error';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -27,9 +27,11 @@
     today
   } from '@internationalized/date';
   import { cn, toLocalRFC3339 } from '$lib/utils';
+  import { readIntParam, readParam, writeSearchParams } from '$lib/utils/url-state';
   import { SvelteDate } from 'svelte/reactivity';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getContestsManagementInstance } from '$lib/services';
+  import { page } from '$app/state';
 
   interface Props {
     data: {
@@ -40,13 +42,26 @@
   const contestId = $derived(data.contestId);
   const contestsService = getContestsManagementInstance();
 
+  const initialAddedSort = readParam(page.url, 'a_sort');
+  const [initialAddedSortKey, initialAddedSortDir] = initialAddedSort.split(':');
+  const initialAssignableSort = readParam(page.url, 'x_sort');
+  const [initialAssignableSortKey, initialAssignableSortDir] = initialAssignableSort.split(':');
+
   // Added tasks query (server-side pagination + sorting + search)
-  let addedLimit = $state(5);
-  let addedOffset = $state(0);
-  let addedSortKey = $state<ContestTaskSortKey>(ContestTaskSortKey.StartAt);
-  let addedSortDir = $state<SortDirection>(SortDirection.Asc);
-  let addedSearch = $state('');
-  let addedSearchApplied = $state('');
+  let addedLimit = $state(readIntParam(page.url, 'a_limit', 5));
+  let addedOffset = $state(readIntParam(page.url, 'a_offset', 0));
+  let addedSortKey = $state<ContestTaskSortKey>(
+    Object.values(ContestTaskSortKey).includes(initialAddedSortKey as ContestTaskSortKey)
+      ? (initialAddedSortKey as ContestTaskSortKey)
+      : ContestTaskSortKey.StartAt
+  );
+  let addedSortDir = $state<SortDirection>(
+    Object.values(SortDirection).includes(initialAddedSortDir as SortDirection)
+      ? (initialAddedSortDir as SortDirection)
+      : SortDirection.Asc
+  );
+  let addedSearch = $state(readParam(page.url, 'a_search'));
+  let addedSearchApplied = $state(readParam(page.url, 'a_search'));
 
   let addedSearchTimer: ReturnType<typeof setTimeout> | undefined;
   $effect(() => {
@@ -71,12 +86,35 @@
   });
 
   // Assignable tasks query (server-side pagination + sorting + search)
-  let assignableLimit = $state(5);
-  let assignableOffset = $state(0);
-  let assignableSortKey = $state<AssignableTaskSortKey>(AssignableTaskSortKey.Title);
-  let assignableSortDir = $state<SortDirection>(SortDirection.Asc);
-  let assignableSearch = $state('');
-  let assignableSearchApplied = $state('');
+  let assignableLimit = $state(readIntParam(page.url, 'x_limit', 5));
+  let assignableOffset = $state(readIntParam(page.url, 'x_offset', 0));
+  let assignableSortKey = $state<AssignableTaskSortKey>(
+    Object.values(AssignableTaskSortKey).includes(
+      initialAssignableSortKey as AssignableTaskSortKey
+    )
+      ? (initialAssignableSortKey as AssignableTaskSortKey)
+      : AssignableTaskSortKey.Title
+  );
+  let assignableSortDir = $state<SortDirection>(
+    Object.values(SortDirection).includes(initialAssignableSortDir as SortDirection)
+      ? (initialAssignableSortDir as SortDirection)
+      : SortDirection.Asc
+  );
+  let assignableSearch = $state(readParam(page.url, 'x_search'));
+  let assignableSearchApplied = $state(readParam(page.url, 'x_search'));
+
+  $effect(() => {
+    writeSearchParams({
+      a_limit: addedLimit,
+      a_offset: addedOffset,
+      a_sort: `${addedSortKey}:${addedSortDir}`,
+      a_search: addedSearchApplied || null,
+      x_limit: assignableLimit,
+      x_offset: assignableOffset,
+      x_sort: `${assignableSortKey}:${assignableSortDir}`,
+      x_search: assignableSearchApplied || null
+    });
+  });
 
   let assignableSearchTimer: ReturnType<typeof setTimeout> | undefined;
   $effect(() => {
@@ -229,6 +267,7 @@
 </script>
 
 <div class="space-y-6">
+  <BackButton href="/dashboard/teacher/contests" />
   <div class="flex items-center justify-between">
     <h1 class="text-3xl font-bold text-foreground">
       {m.admin_contest_tasks_page_title({ contestId: data.contestId })}
