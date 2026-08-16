@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as Dialog from '$lib/components/ui/dialog';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Button } from '$lib/components/ui/button';
   import Trash2 from '@lucide/svelte/icons/trash-2';
   import { toast } from 'svelte-sonner';
@@ -37,9 +38,9 @@
       toast.success(m.admin_tasks_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error) {
+    } catch (error){
       console.error('Delete task error:', error);
-      toast.error(m.admin_tasks_remove_error());
+      showApiError(error, m.admin_tasks_remove_error());
     } finally {
       isDeleting = false;
     }

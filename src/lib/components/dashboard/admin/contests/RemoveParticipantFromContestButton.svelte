@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
+  import { showApiError } from '$lib/errors/backend-error';
   import * as Dialog from '$lib/components/ui/dialog';
   import UserX from '@lucide/svelte/icons/user-x';
   import { toast } from 'svelte-sonner';
@@ -32,9 +33,9 @@
       toast.success(m.contest_participants_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error) {
+    } catch (error){
       console.error('Remove participant from contest error:', error);
-      toast.error(m.contest_participants_remove_error());
+      showApiError(error, m.contest_participants_remove_error());
     } finally {
       submitting = false;
     }

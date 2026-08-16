@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as Popover from '$lib/components/ui/popover';
+  import { showApiError } from '$lib/errors/backend-error';
   import * as Dialog from '$lib/components/ui/dialog';
   import { Button } from '$lib/components/ui/button';
   import Shield from '@lucide/svelte/icons/shield';
@@ -65,9 +66,9 @@
           dialogOpen = false;
           selectedPermission = null;
           if (onSuccess) onSuccess();
-        } catch (error) {
+        } catch (error){
           console.error('Update contest collaborator error:', error);
-          toast.error(m.contest_collaborators_update_error());
+          showApiError(error, m.contest_collaborators_update_error());
         }
       }
     }

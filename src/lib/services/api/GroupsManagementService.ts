@@ -1,4 +1,5 @@
 import type { ApiService } from './ApiService';
+import { resolveErrorMessage } from '$lib/errors/backend-error';
 import { ApiError } from './ApiService';
 import type { Group, CreateGroupDto, EditGroupDto } from '$lib/dto/group';
 import type { User } from '$lib/dto/user';
@@ -28,7 +29,7 @@ export class GroupsManagementService {
       if (error instanceof ApiError) {
         return {
           success: false,
-          error: error.getApiMessage(),
+          error: resolveErrorMessage(error),
           status: error.getStatus()
         };
       }

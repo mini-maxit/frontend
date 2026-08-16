@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -75,9 +76,9 @@
           dialogOpen = false;
           resetForm();
           if (onSuccess) onSuccess();
-        } catch (error) {
+        } catch (error){
           console.error('Add contest collaborator error:', error);
-          toast.error(m.contest_collaborators_add_error());
+          showApiError(error, m.contest_collaborators_add_error());
         }
       }
     }

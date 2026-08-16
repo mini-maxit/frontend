@@ -1,5 +1,6 @@
 <script lang="ts">
   import { LoadingSpinner, ErrorCard } from '$lib/components/common';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
@@ -209,9 +210,9 @@
       selectedTaskId = null;
       await addedTasksQuery.refresh();
       await assignableTasksQuery.refresh();
-    } catch (error) {
+    } catch (error){
       console.error('Save task schedule error:', error);
-      toast.error(
+      showApiError(error,
         dialogMode === 'edit'
           ? m.admin_contest_tasks_update_error()
           : m.admin_contest_tasks_add_error()

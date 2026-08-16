@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createQuery } from '$lib/utils/query.svelte';
+  import { showApiError } from '$lib/errors/backend-error';
   import { getLanguagesManagementInstance } from '$lib/services';
   import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
   import * as Card from '$lib/components/ui/card';
@@ -33,9 +34,9 @@
       } else {
         toast.error(result.error || m.admin_languages_toggle_error());
       }
-    } catch (error) {
+    } catch (error){
       console.error('Toggle language error:', error);
-      toast.error(m.admin_languages_toggle_error());
+      showApiError(error, m.admin_languages_toggle_error());
     } finally {
       togglingId = null;
     }

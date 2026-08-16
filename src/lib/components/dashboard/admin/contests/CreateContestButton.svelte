@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button, buttonVariants } from '$lib/components/ui/button';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import { Calendar } from '$lib/components/ui/calendar';
@@ -64,9 +65,9 @@
           toast.success(m.admin_contests_create_success());
           dialogOpen = false;
           if (onSuccess) onSuccess();
-        } catch (error) {
+        } catch (error){
           console.error('Create contest error:', error);
-          toast.error(m.admin_contests_create_error());
+          showApiError(error, m.admin_contests_create_error());
         }
       }
     }

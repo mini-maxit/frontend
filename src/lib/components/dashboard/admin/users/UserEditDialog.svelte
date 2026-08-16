@@ -1,5 +1,6 @@
 <script lang="ts">
   import { superForm, defaults } from 'sveltekit-superforms';
+  import { showApiError } from '$lib/errors/backend-error';
   import { valibot } from 'sveltekit-superforms/adapters';
   import { UpdateUserSchema } from '$lib/schemas';
   import { getUserManagementInstance } from '$lib/services';
@@ -63,9 +64,9 @@
           } else {
             toast.error(result.error || m.admin_users_edit_error());
           }
-        } catch (error) {
+        } catch (error){
           console.error('Update user error:', error);
-          toast.error(m.admin_users_edit_error());
+          showApiError(error, m.admin_users_edit_error());
         }
       }
     }

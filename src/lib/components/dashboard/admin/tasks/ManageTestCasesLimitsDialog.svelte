@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
@@ -62,9 +63,9 @@
       } else {
         toast.error(result.error || m.admin_tasks_test_cases_update_error());
       }
-    } catch (error) {
+    } catch (error){
       console.error('Update task limits error:', error);
-      toast.error(m.admin_tasks_test_cases_update_error());
+      showApiError(error, m.admin_tasks_test_cases_update_error());
     } finally {
       submitting = false;
     }

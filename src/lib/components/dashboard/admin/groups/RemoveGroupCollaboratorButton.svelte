@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as Dialog from '$lib/components/ui/dialog';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Button } from '$lib/components/ui/button';
   import X from '@lucide/svelte/icons/x';
   import { toast } from 'svelte-sonner';
@@ -65,9 +66,9 @@
       toast.success(m.group_collaborators_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error) {
+    } catch (error){
       console.error('Remove group collaborator error:', error);
-      toast.error(m.group_collaborators_remove_error());
+      showApiError(error, m.group_collaborators_remove_error());
     } finally {
       isRemoving = false;
     }

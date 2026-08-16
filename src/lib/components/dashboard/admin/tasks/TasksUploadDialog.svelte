@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
+  import { showApiError } from '$lib/errors/backend-error';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import { Checkbox } from '$lib/components/ui/checkbox';
@@ -49,9 +50,9 @@
         } else {
           toast.error(result.error || m.admin_tasks_upload_error());
         }
-      } catch (error) {
+      } catch (error){
         console.error('Upload task error:', error);
-        toast.error(m.admin_tasks_upload_error());
+        showApiError(error, m.admin_tasks_upload_error());
       }
     }
   });

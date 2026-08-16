@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { showApiError } from '$lib/errors/backend-error';
   import * as m from '$lib/paraglide/messages.js';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -57,9 +58,9 @@
         } else {
           toast.error(loginResult.error || m.error_default_message());
         }
-      } catch (error) {
+      } catch (error){
         console.error('Login error:', error);
-        toast.error(m.error_default_message());
+        showApiError(error, m.error_default_message());
       }
     }
   });
