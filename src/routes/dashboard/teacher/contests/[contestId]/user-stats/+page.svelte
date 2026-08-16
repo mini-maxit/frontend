@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getContestsManagementInstance } from '$lib/services';
   import * as Table from '$lib/components/ui/table';
@@ -130,6 +130,7 @@
 </script>
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">
+  <BackButton href="/dashboard/teacher/contests" />
   <div class="space-y-2">
     <h1 class="text-4xl font-bold tracking-tight text-foreground">
       {m.contest_user_stats_title()}

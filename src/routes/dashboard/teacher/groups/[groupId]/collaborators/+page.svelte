@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { userStore } from '$lib/stores/user-store.svelte';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getAccessControlInstance } from '$lib/services';
   import {
@@ -67,6 +67,7 @@
 </script>
 
 <div class="space-y-6">
+  <BackButton href="/dashboard/teacher/groups" />
   <div class="flex items-center justify-between">
     <h1 class="text-3xl font-bold text-foreground">
       {m.group_collaborators_page_title({ groupId: groupId.toString() })}

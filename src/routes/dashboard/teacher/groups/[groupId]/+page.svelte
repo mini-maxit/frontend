@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getGroupsManagementInstance } from '$lib/services';
   import {
@@ -40,6 +40,7 @@
 </script>
 
 <div class="space-y-6">
+  <BackButton href="/dashboard/teacher/groups" />
   <!-- Group Header -->
   {#if groupQuery.current}
     <div class="flex items-center justify-between">

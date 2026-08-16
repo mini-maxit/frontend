@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getContestsManagementInstance } from '$lib/services';
   import type { Submission } from '$lib/dto/submission';
@@ -13,6 +13,8 @@
   import * as m from '$lib/paraglide/messages';
   import Label from '$lib/components/ui/label/label.svelte';
   import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '$lib/utils';
+  import { readIntParam, readParam, writeSearchParams } from '$lib/utils/url-state';
+  import { page } from '$app/state';
 
   interface Props {
     data: {
@@ -25,12 +27,21 @@
   const contestsService = getContestsManagementInstance();
 
   // Pagination state
-  let limit = $state(20);
-  let offset = $state(0);
+  let limit = $state(readIntParam(page.url, 'limit', 20));
+  let offset = $state(readIntParam(page.url, 'offset', 0));
 
   // Filters
-  let userFilter = $state('');
-  let taskFilter = $state('');
+  let userFilter = $state(readParam(page.url, 'user'));
+  let taskFilter = $state(readParam(page.url, 'task'));
+
+  $effect(() => {
+    writeSearchParams({
+      limit,
+      offset,
+      user: userFilter || null,
+      task: taskFilter || null
+    });
+  });
 
   // Query submissions with pagination
   const getQueryParams = () => ({
@@ -90,6 +101,7 @@
 </script>
 
 <div class="space-y-6">
+  <BackButton href="/dashboard/teacher/contests" />
   <div class="flex items-center justify-between">
     <div>
       <h1 class="text-3xl font-bold text-foreground">

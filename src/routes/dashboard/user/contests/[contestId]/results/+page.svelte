@@ -2,7 +2,7 @@
   import { page } from '$app/state';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getContestInstance } from '$lib/services';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
   import * as Table from '$lib/components/ui/table';
   import * as Card from '$lib/components/ui/card';
   import Trophy from '@lucide/svelte/icons/trophy';
@@ -58,6 +58,7 @@
 </svelte:head>
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">
+  <BackButton href={`/dashboard/user/contests/${contestId}`} />
   <div class="space-y-2">
     <h1 class="text-4xl font-bold tracking-tight text-foreground">{m.contest_results_title()}</h1>
     {#if resultsQuery.current?.contest}

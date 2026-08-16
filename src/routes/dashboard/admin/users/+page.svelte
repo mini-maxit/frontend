@@ -8,16 +8,37 @@
   import type { User } from '$lib/dto/user';
   import { UserRole } from '$lib/dto/jwt';
   import { SortDirection, UserSortKey } from '$lib/dto/pagination';
+  import { readIntParam, readParam, writeSearchParams } from '$lib/utils/url-state';
+  import { page } from '$app/state';
   import Users from '@lucide/svelte/icons/users';
   import Search from '@lucide/svelte/icons/search';
   import * as m from '$lib/paraglide/messages';
 
   const userService = getUserInstance();
 
-  let limit = $state(20);
-  let offset = $state(0);
-  let sortKey = $state<UserSortKey>(UserSortKey.Id);
-  let sortDir = $state<SortDirection>(SortDirection.Asc);
+  const initialSort = readParam(page.url, 'sort');
+  const [initialSortKey, initialSortDir] = initialSort.split(':');
+  const isValidSortKey = Object.values(UserSortKey).includes(initialSortKey as UserSortKey);
+  const isValidSortDir = Object.values(SortDirection).includes(initialSortDir as SortDirection);
+
+  let limit = $state(readIntParam(page.url, 'limit', 20));
+  let offset = $state(readIntParam(page.url, 'offset', 0));
+  let sortKey = $state<UserSortKey>(
+    isValidSortKey ? (initialSortKey as UserSortKey) : UserSortKey.Id
+  );
+  let sortDir = $state<SortDirection>(
+    isValidSortDir ? (initialSortDir as SortDirection) : SortDirection.Asc
+  );
+
+  $effect(() => {
+    writeSearchParams({
+      limit,
+      offset,
+      sort: `${sortKey}:${sortDir}`,
+      q: searchQuery || null,
+      role: roleFilterValue === 'all' ? null : roleFilterValue
+    });
+  });
 
   const getQueryParams = () => ({ limit, offset, sort: `${sortKey}:${sortDir}` });
 
@@ -30,8 +51,8 @@
 
   let editDialogOpen = $state(false);
   let selectedUser = $state<User | null>(null);
-  let searchQuery = $state('');
-  let roleFilterValue = $state<string>('all');
+  let searchQuery = $state(readParam(page.url, 'q'));
+  let roleFilterValue = $state(readParam(page.url, 'role') || 'all');
 
   const roleFilterOptions = [
     { value: 'all', label: m.admin_users_filter_all_roles() },

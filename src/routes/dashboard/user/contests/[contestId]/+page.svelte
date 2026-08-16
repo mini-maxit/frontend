@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
   import * as m from '$lib/paraglide/messages';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
@@ -48,6 +48,7 @@
 </svelte:head>
 
 <div class="space-y-6 p-4 sm:p-6 lg:p-8">
+  <BackButton href="/dashboard/user/contests" />
   <div class="space-y-2">
     <h1 class="text-4xl font-bold tracking-tight text-foreground">
       {m.user_contest_tasks_title()}

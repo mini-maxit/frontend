@@ -6,7 +6,7 @@
   import TaskPdfViewer from '$lib/components/dashboard/tasks/task-page/tasks/TaskPdfViewer.svelte';
   import TaskSubmissionForm from '$lib/components/dashboard/tasks/task-page/tasks/TaskSubmissionForm.svelte';
   import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
-  import { LoadingSpinner, ErrorCard } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, BackButton } from '$lib/components/common';
   import * as m from '$lib/paraglide/messages';
   import { buildDocumentTitle } from '$lib/title';
 
@@ -46,6 +46,7 @@
 </svelte:head>
 
 <div class="space-y-6">
+  <BackButton href="/dashboard/tasks" />
   {#if taskQuery.error}
     <ErrorCard
       title={m.task_error_title()}

@@ -228,6 +228,7 @@
   "error_404_title": "Page Not Found",
   "error_500_description": "Our servers are having a moment. Please try again later.",
   "error_500_title": "Server Error",
+  "common_back": "Back",
   "error_default_message": "Something went wrong",
   "error_generic_title": "Error",
   "error_go_home": "Go Home",

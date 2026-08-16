@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
   import { createParameterizedQuery } from '$lib/utils/query.svelte';
   import { getContestsManagementInstance } from '$lib/services';
   import {
@@ -36,6 +36,7 @@
 </script>
 
 <div class="space-y-6">
+  <BackButton href="/dashboard/teacher/contests" />
   <div class="flex items-center justify-between">
     <h1 class="text-3xl font-bold text-foreground">
       {m.contest_groups_page_title({ contestId: data.contestId.toString() })}
