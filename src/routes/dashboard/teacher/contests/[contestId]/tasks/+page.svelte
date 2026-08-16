@@ -212,7 +212,7 @@
       await assignableTasksQuery.refresh();
     } catch (error){
       console.error('Save task schedule error:', error);
-      showApiError(error, 
+      showApiError(error,
         dialogMode === 'edit'
           ? m.admin_contest_tasks_update_error()
           : m.admin_contest_tasks_add_error()
