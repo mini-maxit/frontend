@@ -78,14 +78,17 @@ const BACKEND_ERROR_MESSAGES: Record<string, () => string> = {
 
 /** Duck-typed shape of ApiError so this module stays dependency-free. */
 interface ApiErrorLike {
-  status?: number;
+  status: number;
   code?: string;
-  getApiMessage?: () => string;
   message?: string;
 }
 
 function isApiErrorLike(err: unknown): err is ApiErrorLike {
-  return typeof err === 'object' && err !== null && 'status' in err && 'getApiMessage' in err;
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    typeof (err as { status?: unknown }).status === 'number'
+  );
 }
 
 export { isApiErrorLike };
