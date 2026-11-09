@@ -1,24 +1,24 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, BackButton } from '$lib/components/common';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import { Calendar } from '$lib/components/ui/calendar';
-  import { Checkbox } from '$lib/components/ui/checkbox';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Popover from '$lib/components/ui/popover';
-  import { buttonVariants } from '$lib/components/ui/button';
+  import { LoadingSpinner, ErrorCard, BackButton } from '#lib/components/common/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import { Calendar } from '#lib/components/ui/calendar/index.js';
+  import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
+  import * as Popover from '#lib/components/ui/popover/index.js';
+  import { buttonVariants } from '#lib/components/ui/button/index.js';
   import {
     AddedContestTasksList,
     AssignableContestTasksList
-  } from '$lib/components/dashboard/admin/contests';
-  import { SortDirection, ContestTaskSortKey, AssignableTaskSortKey } from '$lib/dto/pagination';
-  import type { ContestTask } from '$lib/dto/task';
+  } from '#lib/components/dashboard/admin/contests/index.js';
+  import { SortDirection, ContestTaskSortKey, AssignableTaskSortKey } from '#lib/dto/pagination.js';
+  import type { ContestTask } from '#lib/dto/task.js';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import ChartBar from '@lucide/svelte/icons/chart-bar';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import {
     DateFormatter,
     type DateValue,
@@ -26,11 +26,11 @@
     getLocalTimeZone,
     today
   } from '@internationalized/date';
-  import { cn, toLocalRFC3339 } from '$lib/utils';
-  import { readIntParam, readParam, writeSearchParams } from '$lib/utils/url-state';
+  import { cn, toLocalRFC3339 } from '#lib/utils.js';
+  import { readIntParam, readParam, writeSearchParams } from '#lib/utils/url-state.js';
   import { SvelteDate } from 'svelte/reactivity';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestsManagementInstance } from '$lib/services';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
   import { page } from '$app/state';
 
   interface Props {
@@ -89,9 +89,7 @@
   let assignableLimit = $state(readIntParam(page.url, 'x_limit', 5));
   let assignableOffset = $state(readIntParam(page.url, 'x_offset', 0));
   let assignableSortKey = $state<AssignableTaskSortKey>(
-    Object.values(AssignableTaskSortKey).includes(
-      initialAssignableSortKey as AssignableTaskSortKey
-    )
+    Object.values(AssignableTaskSortKey).includes(initialAssignableSortKey as AssignableTaskSortKey)
       ? (initialAssignableSortKey as AssignableTaskSortKey)
       : AssignableTaskSortKey.Title
   );
@@ -248,9 +246,10 @@
       selectedTaskId = null;
       await addedTasksQuery.refresh();
       await assignableTasksQuery.refresh();
-    } catch (error){
+    } catch (error) {
       console.error('Save task schedule error:', error);
-      showApiError(error,
+      showApiError(
+        error,
         dialogMode === 'edit'
           ? m.admin_contest_tasks_update_error()
           : m.admin_contest_tasks_add_error()

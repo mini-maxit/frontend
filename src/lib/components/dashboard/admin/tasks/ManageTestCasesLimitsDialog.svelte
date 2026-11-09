@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import Loader from '@lucide/svelte/icons/loader-circle';
-  import { getTasksManagementInstance } from '$lib/services';
+  import { getTasksManagementInstance } from '#lib/services/index.js';
 
   interface ManageTestCasesDialogProps {
     open: boolean;
@@ -27,12 +27,15 @@
 
   const tasksManagementService = getTasksManagementInstance();
 
-  let taskLimitsQuery = createParameterizedQuery(() => taskId, async (id) => {
-    if (!tasksManagementService) throw new Error('Service unavailable');
-    const result = await tasksManagementService.getTaskLimits(id);
-    if (!result.success) throw new Error(result.error || 'Failed to fetch task limits');
-    return result.data || [];
-  });
+  let taskLimitsQuery = createParameterizedQuery(
+    () => taskId,
+    async (id) => {
+      if (!tasksManagementService) throw new Error('Service unavailable');
+      const result = await tasksManagementService.getTaskLimits(id);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch task limits');
+      return result.data || [];
+    }
+  );
 
   let editedLimits = $state<Array<{ order: number; memoryLimit: number; timeLimit: number }>>([]);
   let submitting = $state(false);
@@ -63,7 +66,7 @@
       } else {
         toast.error(result.error || m.admin_tasks_test_cases_update_error());
       }
-    } catch (error){
+    } catch (error) {
       console.error('Update task limits error:', error);
       showApiError(error, m.admin_tasks_test_cases_update_error());
     } finally {

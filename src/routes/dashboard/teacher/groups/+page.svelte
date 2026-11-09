@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getGroupsManagementInstance } from '$lib/services';
-  import { CreateGroupButton } from '$lib/components/dashboard/admin/groups';
-  import GroupCard from '$lib/components/dashboard/admin/groups/GroupCard.svelte';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getGroupsManagementInstance } from '#lib/services/index.js';
+  import { CreateGroupButton } from '#lib/components/dashboard/admin/groups/index.js';
+  import GroupCard from '#lib/components/dashboard/admin/groups/GroupCard.svelte';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
   import Users from '@lucide/svelte/icons/users';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   const groupsManagementService = getGroupsManagementInstance();
 

@@ -2,7 +2,7 @@
   import Code from '@lucide/svelte/icons/code';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Users from '@lucide/svelte/icons/users';
-  import { m } from '$lib/paraglide/messages.js';
+  import { m } from '#lib/paraglide/messages.js';
 
   const features = [
     {

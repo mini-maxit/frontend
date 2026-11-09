@@ -1,13 +1,13 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
+  import * as Card from '#lib/components/ui/card/index.js';
   import UserCircle from '@lucide/svelte/icons/user-circle';
   import Mail from '@lucide/svelte/icons/mail';
   import AtSign from '@lucide/svelte/icons/at-sign';
   import Calendar from '@lucide/svelte/icons/calendar';
-  import * as m from '$lib/paraglide/messages';
-  import type { User } from '$lib/dto/user';
-  import { UserRole } from '$lib/dto/jwt';
-  import { formatDate } from '$lib/utils';
+  import * as m from '#lib/paraglide/messages.js';
+  import type { User } from '#lib/dto/user.js';
+  import { UserRole } from '#lib/dto/jwt.js';
+  import { formatDate } from '#lib/utils.js';
 
   export let user: User;
 

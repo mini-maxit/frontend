@@ -1,19 +1,19 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
+  import * as Card from '#lib/components/ui/card/index.js';
   import Code from '@lucide/svelte/icons/code';
   import Loader from '@lucide/svelte/icons/loader-circle';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import LanguageSelector from './LanguageSelector.svelte';
   import FileUploader from './FileUploader.svelte';
   import SubmitButton from './SubmitButton.svelte';
   import { toast } from 'svelte-sonner';
   import { goto } from '$app/navigation';
-  import { getSubmissionInstance } from '$lib/services';
+  import { getSubmissionInstance } from '#lib/services/index.js';
   import { superForm, defaults } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
-  import { SubmitContestSolutionSchema } from '$lib/schemas';
-  import { AppRoutes } from '$lib/routes';
-  import type { Language } from '$lib/dto/submission';
+  import { SubmitContestSolutionSchema } from '#lib/schemas/index.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import type { Language } from '#lib/dto/submission.js';
 
   interface Props {
     languages: Language[];

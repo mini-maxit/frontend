@@ -2,7 +2,7 @@
   import Settings from '@lucide/svelte/icons/settings';
   import Zap from '@lucide/svelte/icons/zap';
   import Award from '@lucide/svelte/icons/award';
-  import { m } from '$lib/paraglide/messages.js';
+  import { m } from '#lib/paraglide/messages.js';
 
   const steps = [
     {

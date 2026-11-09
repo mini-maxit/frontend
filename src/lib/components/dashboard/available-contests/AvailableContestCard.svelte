@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Users from '@lucide/svelte/icons/users';
   import ListTodo from '@lucide/svelte/icons/list-todo';
@@ -12,10 +12,10 @@
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Eye from '@lucide/svelte/icons/eye';
 
-  import { ContestRegistrationStatus, ContestStatus, type Contest } from '$lib/dto/contest';
-  import { getFormattedStartDate, getFormattedEndDate } from '$lib/utils/contest';
-  import * as m from '$lib/paraglide/messages';
-  import { AppRoutes } from '$lib/routes';
+  import { ContestRegistrationStatus, ContestStatus, type Contest } from '#lib/dto/contest.js';
+  import { getFormattedStartDate, getFormattedEndDate } from '#lib/utils/contest.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { AppRoutes } from '#lib/routes.js';
 
   interface AvailableContestCardProps {
     contest: Contest;

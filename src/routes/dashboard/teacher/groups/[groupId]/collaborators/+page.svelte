@@ -1,29 +1,34 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { userStore } from '$lib/stores/user-store.svelte';
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getAccessControlInstance } from '$lib/services';
+  import { userStore } from '#lib/stores/user-store.svelte.js';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    BackButton
+  } from '#lib/components/common/index.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getAccessControlInstance } from '#lib/services/index.js';
   import {
     AddGroupCollaboratorButton,
     GroupCollaboratorPermissionEditor,
     RemoveGroupCollaboratorButton
-  } from '$lib/components/dashboard/admin/groups';
+  } from '#lib/components/dashboard/admin/groups/index.js';
   import {
     Card,
     CardHeader,
     CardTitle,
     CardDescription,
     CardContent
-  } from '$lib/components/ui/card';
+  } from '#lib/components/ui/card/index.js';
   import Users from '@lucide/svelte/icons/users';
   import Mail from '@lucide/svelte/icons/mail';
   import Calendar from '@lucide/svelte/icons/calendar';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import { formatDistanceToNow } from 'date-fns';
-  import { Permission, ResourceType, type Collaborator } from '$lib/dto/accessControl';
-  import type { PaginatedData } from '$lib/dto/response';
-  import type { User } from '$lib/dto/user';
+  import { Permission, ResourceType, type Collaborator } from '#lib/dto/accessControl.js';
+  import type { PaginatedData } from '#lib/dto/response.js';
+  import type { User } from '#lib/dto/user.js';
 
   const groupId = $derived(Number(page.params.groupId));
   const currentUserId = $derived(userStore.getUserUnsafe().id);

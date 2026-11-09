@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getWorkerInstance } from '$lib/services';
-  import { LoadingSpinner, ErrorCard } from '$lib/components/common';
-  import * as Card from '$lib/components/ui/card';
-  import * as m from '$lib/paraglide/messages';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getWorkerInstance } from '#lib/services/index.js';
+  import { LoadingSpinner, ErrorCard } from '#lib/components/common/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import * as m from '#lib/paraglide/messages.js';
   import { formatDistanceToNow } from 'date-fns';
   import Server from '@lucide/svelte/icons/server';
   import Activity from '@lucide/svelte/icons/activity';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import Clock from '@lucide/svelte/icons/clock';
-  import { WorkerStatusType } from '$lib/dto/worker';
+  import { WorkerStatusType } from '#lib/dto/worker.js';
 
   const workerService = getWorkerInstance();
   const workerStatusQuery = createQuery(async () => {

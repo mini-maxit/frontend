@@ -1,14 +1,14 @@
 <script lang="ts">
-  import type { User } from '$lib/dto/user';
-  import { SortDirection, UserSortKey } from '$lib/dto/pagination';
-  import * as Table from '$lib/components/ui/table';
-  import * as Pagination from '$lib/components/ui/pagination';
+  import type { User } from '#lib/dto/user.js';
+  import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
+  import * as Table from '#lib/components/ui/table/index.js';
+  import * as Pagination from '#lib/components/ui/pagination/index.js';
   import UserIcon from '@lucide/svelte/icons/user';
   import Mail from '@lucide/svelte/icons/mail';
   import ArrowUp from '@lucide/svelte/icons/arrow-up';
   import ArrowDown from '@lucide/svelte/icons/arrow-down';
-  import * as m from '$lib/paraglide/messages';
-  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '$lib/utils';
+  import * as m from '#lib/paraglide/messages.js';
+  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '#lib/utils.js';
   import RemoveParticipantFromContestButton from './RemoveParticipantFromContestButton.svelte';
 
   interface ParticipantsListProps {
@@ -103,7 +103,9 @@
 
     <div class="flex flex-wrap items-center gap-2">
       <div class="flex items-center gap-1 text-xs">
-        <span class="text-muted-foreground">{m.contest_participants_pagination_rows_per_page()}:</span>
+        <span class="text-muted-foreground"
+          >{m.contest_participants_pagination_rows_per_page()}:</span
+        >
         <select
           class="rounded-md border bg-background px-2 py-1 text-xs"
           value={limit}
@@ -229,7 +231,7 @@
               {contestId}
               userId={user.id}
               userName={user.username}
-              onSuccess={onSuccess}
+              {onSuccess}
             />
           </Table.Cell>
         </Table.Row>

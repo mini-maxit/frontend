@@ -1,8 +1,8 @@
 <script>
-  import { Button } from '$lib/components/ui/button';
-  import { m } from '$lib/paraglide/messages.js';
-  import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
-  import { AppRoutes } from '$lib/routes';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { m } from '#lib/paraglide/messages.js';
+  import BackgroundDecoration from '#lib/components/BackgroundDecoration.svelte';
+  import { AppRoutes } from '#lib/routes.js';
 </script>
 
 <section

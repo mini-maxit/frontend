@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { ApiService } from '../services/api/ApiService';
 import { AuthService } from '../services/api/AuthService';
 import { UserService } from '../services/api/UserService';
@@ -12,7 +12,7 @@ import { GroupsManagementService } from '../services/api/GroupsManagementService
 import { AccessControlService } from '../services/api/AccessControlService';
 import { WorkerService } from '../services/api/WorkerService';
 import { LanguagesManagementService } from '../services/api/LanguagesManagementService';
-import { env } from '$env/dynamic/public';
+import { PUBLIC_BACKEND_API_URL } from '$app/env/public';
 
 /**
  * Global singleton instance of ApiService
@@ -93,7 +93,7 @@ export function getApiInstance(): ApiService | null {
   }
 
   if (!apiInstance) {
-    const apiUrl = env.PUBLIC_BACKEND_API_URL;
+    const apiUrl = PUBLIC_BACKEND_API_URL;
     if (!apiUrl) {
       console.error('PUBLIC_BACKEND_API_URL is not defined');
       return null;

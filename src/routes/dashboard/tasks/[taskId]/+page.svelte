@@ -1,14 +1,14 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { createParameterizedQuery, createQuery } from '$lib/utils/query.svelte';
-  import { getTaskInstance, getSubmissionInstance } from '$lib/services';
-  import TaskHeader from '$lib/components/dashboard/tasks/task-page/tasks/TaskHeader.svelte';
-  import TaskPdfViewer from '$lib/components/dashboard/tasks/task-page/tasks/TaskPdfViewer.svelte';
-  import TaskSubmissionForm from '$lib/components/dashboard/tasks/task-page/tasks/TaskSubmissionForm.svelte';
-  import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
-  import { LoadingSpinner, ErrorCard, BackButton } from '$lib/components/common';
-  import * as m from '$lib/paraglide/messages';
-  import { buildDocumentTitle } from '$lib/title';
+  import { createParameterizedQuery, createQuery } from '#lib/utils/query.svelte.js';
+  import { getTaskInstance, getSubmissionInstance } from '#lib/services/index.js';
+  import TaskHeader from '#lib/components/dashboard/tasks/task-page/tasks/TaskHeader.svelte';
+  import TaskPdfViewer from '#lib/components/dashboard/tasks/task-page/tasks/TaskPdfViewer.svelte';
+  import TaskSubmissionForm from '#lib/components/dashboard/tasks/task-page/tasks/TaskSubmissionForm.svelte';
+  import FilePreview from '#lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
+  import { LoadingSpinner, ErrorCard, BackButton } from '#lib/components/common/index.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { buildDocumentTitle } from '#lib/title.js';
 
   const taskService = getTaskInstance();
   const submissionService = getSubmissionInstance();
@@ -34,9 +34,7 @@
 
   let fileContent = $state<string>('');
 
-  const documentTitle = $derived(
-    buildDocumentTitle(taskQuery.current?.title, m.title_type_task())
-  );
+  const documentTitle = $derived(buildDocumentTitle(taskQuery.current?.title, m.title_type_task()));
 </script>
 
 <svelte:head>

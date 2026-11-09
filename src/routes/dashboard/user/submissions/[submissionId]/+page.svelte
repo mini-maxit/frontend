@@ -1,14 +1,14 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getSubmissionInstance } from '$lib/services';
-  import { LoadingSpinner, ErrorCard, BackButton } from '$lib/components/common';
-  import * as Card from '$lib/components/ui/card';
-  import * as m from '$lib/paraglide/messages';
-  import { formatDate } from '$lib/utils';
-  import { buildDocumentTitle } from '$lib/title';
-  import TestCaseResult from '$lib/components/dashboard/submissions/TestCaseResult.svelte';
-  import { SubmissionStatus, SubmissionResultCode, type TestResult } from '$lib/dto/submission';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getSubmissionInstance } from '#lib/services/index.js';
+  import { LoadingSpinner, ErrorCard, BackButton } from '#lib/components/common/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { formatDate } from '#lib/utils.js';
+  import { buildDocumentTitle } from '#lib/title.js';
+  import TestCaseResult from '#lib/components/dashboard/submissions/TestCaseResult.svelte';
+  import { SubmissionStatus, SubmissionResultCode, type TestResult } from '#lib/dto/submission.js';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Clock from '@lucide/svelte/icons/clock';
@@ -18,7 +18,7 @@
   import FileText from '@lucide/svelte/icons/file-text';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Hash from '@lucide/svelte/icons/hash';
-  import FilePreview from '$lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
+  import FilePreview from '#lib/components/dashboard/tasks/task-page/tasks/FilePreview.svelte';
 
   const submissionService = getSubmissionInstance();
   const submissionId = $derived(Number(page.params.submissionId));

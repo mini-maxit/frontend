@@ -1,11 +1,11 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
+  import * as Card from '#lib/components/ui/card/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Zap from '@lucide/svelte/icons/zap';
   import Calendar from '@lucide/svelte/icons/calendar';
-  import { calculateContestStats } from '$lib/utils/contest';
-  import type { Contest } from '$lib/dto/contest';
-  import * as m from '$lib/paraglide/messages';
+  import { calculateContestStats } from '#lib/utils/contest.js';
+  import type { Contest } from '#lib/dto/contest.js';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface AvailableContestsStatsProps {
     contests: Contest[];

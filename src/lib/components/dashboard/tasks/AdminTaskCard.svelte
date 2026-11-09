@@ -1,19 +1,19 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import FileText from '@lucide/svelte/icons/file-text';
   import Calendar from '@lucide/svelte/icons/calendar';
   import User from '@lucide/svelte/icons/user';
   import Clock from '@lucide/svelte/icons/clock';
   import Users from '@lucide/svelte/icons/users';
-  import type { Task } from '$lib/dto/task';
-  import * as m from '$lib/paraglide/messages';
-  import { formatDate } from '$lib/utils';
-  import { localizeHref } from '$lib/paraglide/runtime';
-  import { AppRoutes } from '$lib/routes';
-  import ManageTestCasesLimitsDialog from '$lib/components/dashboard/admin/tasks/ManageTestCasesLimitsDialog.svelte';
-  import TaskVisibilityToggle from '$lib/components/dashboard/admin/tasks/TaskVisibilityToggle.svelte';
-  import RemoveTaskButton from '$lib/components/dashboard/admin/tasks/RemoveTaskButton.svelte';
+  import type { Task } from '#lib/dto/task.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { formatDate } from '#lib/utils.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import ManageTestCasesLimitsDialog from '#lib/components/dashboard/admin/tasks/ManageTestCasesLimitsDialog.svelte';
+  import TaskVisibilityToggle from '#lib/components/dashboard/admin/tasks/TaskVisibilityToggle.svelte';
+  import RemoveTaskButton from '#lib/components/dashboard/admin/tasks/RemoveTaskButton.svelte';
 
   interface AdminTaskCardProps {
     task: Task;

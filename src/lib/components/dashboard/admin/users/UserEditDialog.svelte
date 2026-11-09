@@ -1,18 +1,18 @@
 <script lang="ts">
   import { superForm, defaults } from 'sveltekit-superforms';
-  import { showApiError } from '$lib/errors/backend-error';
+  import { showApiError } from '#lib/errors/backend-error.js';
   import { valibot } from 'sveltekit-superforms/adapters';
-  import { UpdateUserSchema } from '$lib/schemas';
-  import { getUserManagementInstance } from '$lib/services';
+  import { UpdateUserSchema } from '#lib/schemas/index.js';
+  import { getUserManagementInstance } from '#lib/services/index.js';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
-  import type { User } from '$lib/dto/user';
-  import { UserRole } from '$lib/dto/jwt';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
+  import * as m from '#lib/paraglide/messages.js';
+  import type { User } from '#lib/dto/user.js';
+  import { UserRole } from '#lib/dto/jwt.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
+  import * as Select from '#lib/components/ui/select/index.js';
 
   interface Props {
     open: boolean;
@@ -64,7 +64,7 @@
           } else {
             toast.error(result.error || m.admin_users_edit_error());
           }
-        } catch (error){
+        } catch (error) {
           console.error('Update user error:', error);
           showApiError(error, m.admin_users_edit_error());
         }

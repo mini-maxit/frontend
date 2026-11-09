@@ -1,17 +1,22 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import * as m from '$lib/paraglide/messages';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    BackButton
+  } from '#lib/components/common/index.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Target from '@lucide/svelte/icons/target';
   import ChevronRight from '@lucide/svelte/icons/chevron-right';
   import { page } from '$app/state';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestInstance } from '$lib/services';
-  import { AppRoutes } from '$lib/routes';
-  import { buildDocumentTitle } from '$lib/title';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestInstance } from '#lib/services/index.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import { buildDocumentTitle } from '#lib/title.js';
 
   const contestService = getContestInstance();
   const contestId = $derived(Number(page.params.contestId));

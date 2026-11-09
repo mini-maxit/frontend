@@ -1,17 +1,17 @@
 <script lang="ts">
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
   import { toast } from 'svelte-sonner';
-  import { getUserInstance } from '$lib/services';
+  import { getUserInstance } from '#lib/services/index.js';
   import { superForm, defaults } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
-  import { ChangePasswordSchema } from '$lib/schemas';
+  import { ChangePasswordSchema } from '#lib/schemas/index.js';
   import Lock from '@lucide/svelte/icons/lock';
   import Eye from '@lucide/svelte/icons/eye';
   import EyeOff from '@lucide/svelte/icons/eye-off';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface ChangePasswordDialogProps {
     open: boolean;

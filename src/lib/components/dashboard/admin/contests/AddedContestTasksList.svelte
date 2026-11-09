@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { ContestTask } from '$lib/dto/task';
-  import { SortDirection, ContestTaskSortKey } from '$lib/dto/pagination';
-  import * as Table from '$lib/components/ui/table';
-  import * as Pagination from '$lib/components/ui/pagination';
-  import * as Tooltip from '$lib/components/ui/tooltip';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
+  import type { ContestTask } from '#lib/dto/task.js';
+  import { SortDirection, ContestTaskSortKey } from '#lib/dto/pagination.js';
+  import * as Table from '#lib/components/ui/table/index.js';
+  import * as Pagination from '#lib/components/ui/pagination/index.js';
+  import * as Tooltip from '#lib/components/ui/tooltip/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import User from '@lucide/svelte/icons/user';
   import Calendar from '@lucide/svelte/icons/calendar';
@@ -13,8 +13,14 @@
   import Pencil from '@lucide/svelte/icons/pencil';
   import ArrowUp from '@lucide/svelte/icons/arrow-up';
   import ArrowDown from '@lucide/svelte/icons/arrow-down';
-  import * as m from '$lib/paraglide/messages';
-  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset, formatDate } from '$lib/utils';
+  import * as m from '#lib/paraglide/messages.js';
+  import {
+    getPaginationPages,
+    getCurrentPage,
+    getTotalPages,
+    getOffset,
+    formatDate
+  } from '#lib/utils.js';
   import RemoveTaskFromContestButton from './RemoveTaskFromContestButton.svelte';
 
   interface AddedContestTasksListProps {
@@ -96,7 +102,9 @@
         })}
       </div>
       <div class="flex items-center gap-1 text-xs">
-        <span class="text-muted-foreground">{m.admin_contest_tasks_pagination_rows_per_page()}:</span>
+        <span class="text-muted-foreground"
+          >{m.admin_contest_tasks_pagination_rows_per_page()}:</span
+        >
         <select
           class="rounded-md border bg-background px-2 py-1 text-xs"
           value={limit}
@@ -184,63 +192,63 @@
         </Table.Row>
       {:else}
         {#each contestTasks as contestTask (contestTask.task.id)}
-        <Table.Row>
-          <Table.Cell class="font-mono text-xs">{contestTask.task.id}</Table.Cell>
-          <Table.Cell>
-            <div class="flex min-w-0 items-center gap-2">
-              <ListTodo class="h-4 w-4 shrink-0 text-primary" />
-              <Tooltip.Root>
-                <Tooltip.Trigger class="min-w-0">
-                  <span class="block max-w-48 truncate font-medium text-foreground">
-                    {contestTask.task.title}
-                  </span>
-                </Tooltip.Trigger>
-                <Tooltip.Content side="top">{contestTask.task.title}</Tooltip.Content>
-              </Tooltip.Root>
-            </div>
-          </Table.Cell>
-          <Table.Cell class="hidden md:table-cell">
-            <div class="flex items-center gap-1.5 text-muted-foreground">
-              <User class="h-3.5 w-3.5 shrink-0" />
-              <span class="max-w-[160px] truncate">{contestTask.creatorName}</span>
-            </div>
-          </Table.Cell>
-          <Table.Cell>
-            <div class="flex items-center gap-1.5 text-muted-foreground">
-              <Calendar class="h-3.5 w-3.5 shrink-0" />
-              <span class="whitespace-nowrap">{formatDate(contestTask.startAt)}</span>
-            </div>
-          </Table.Cell>
-          <Table.Cell class="text-muted-foreground">
-            {#if contestTask.endAt}
-              <div class="flex items-center gap-1.5">
-                <Calendar class="h-3.5 w-3.5 shrink-0" />
-                <span class="whitespace-nowrap">{formatDate(contestTask.endAt)}</span>
+          <Table.Row>
+            <Table.Cell class="font-mono text-xs">{contestTask.task.id}</Table.Cell>
+            <Table.Cell>
+              <div class="flex min-w-0 items-center gap-2">
+                <ListTodo class="h-4 w-4 shrink-0 text-primary" />
+                <Tooltip.Root>
+                  <Tooltip.Trigger class="min-w-0">
+                    <span class="block max-w-48 truncate font-medium text-foreground">
+                      {contestTask.task.title}
+                    </span>
+                  </Tooltip.Trigger>
+                  <Tooltip.Content side="top">{contestTask.task.title}</Tooltip.Content>
+                </Tooltip.Root>
               </div>
-            {:else}
-              <span>{m.admin_contest_tasks_no_end_date()}</span>
-            {/if}
-          </Table.Cell>
-          <Table.Cell class="text-right">
-            <div class="flex items-center justify-end gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                class="h-8 w-8 text-muted-foreground"
-                title={m.admin_contest_tasks_edit_schedule_title()}
-                onclick={() => onEdit(contestTask)}
-              >
-                <Pencil class="h-4 w-4" />
-              </Button>
-              <RemoveTaskFromContestButton
-                {contestId}
-                taskId={contestTask.task.id}
-                taskTitle={contestTask.task.title}
-                onSuccess={onSuccess}
-              />
-            </div>
-          </Table.Cell>
-        </Table.Row>
+            </Table.Cell>
+            <Table.Cell class="hidden md:table-cell">
+              <div class="flex items-center gap-1.5 text-muted-foreground">
+                <User class="h-3.5 w-3.5 shrink-0" />
+                <span class="max-w-[160px] truncate">{contestTask.creatorName}</span>
+              </div>
+            </Table.Cell>
+            <Table.Cell>
+              <div class="flex items-center gap-1.5 text-muted-foreground">
+                <Calendar class="h-3.5 w-3.5 shrink-0" />
+                <span class="whitespace-nowrap">{formatDate(contestTask.startAt)}</span>
+              </div>
+            </Table.Cell>
+            <Table.Cell class="text-muted-foreground">
+              {#if contestTask.endAt}
+                <div class="flex items-center gap-1.5">
+                  <Calendar class="h-3.5 w-3.5 shrink-0" />
+                  <span class="whitespace-nowrap">{formatDate(contestTask.endAt)}</span>
+                </div>
+              {:else}
+                <span>{m.admin_contest_tasks_no_end_date()}</span>
+              {/if}
+            </Table.Cell>
+            <Table.Cell class="text-right">
+              <div class="flex items-center justify-end gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  class="h-8 w-8 text-muted-foreground"
+                  title={m.admin_contest_tasks_edit_schedule_title()}
+                  onclick={() => onEdit(contestTask)}
+                >
+                  <Pencil class="h-4 w-4" />
+                </Button>
+                <RemoveTaskFromContestButton
+                  {contestId}
+                  taskId={contestTask.task.id}
+                  taskTitle={contestTask.task.title}
+                  {onSuccess}
+                />
+              </div>
+            </Table.Cell>
+          </Table.Row>
         {/each}
       {/if}
     </Table.Body>
@@ -248,41 +256,41 @@
 
   {#if total > 0}
     <div class="flex flex-col items-center gap-2 pt-2">
-    <Pagination.Root
-      count={total}
-      perPage={limit}
-      page={currentPage}
-      siblingCount={1}
-      onPageChange={(p) => {
-        if (p && p !== currentPage) offset = getOffset(p, limit);
-      }}
-    >
-      <Pagination.Content>
-        <Pagination.PrevButton disabled={currentPage === 1}>
-          {m.admin_contest_tasks_pagination_prev()}
-        </Pagination.PrevButton>
+      <Pagination.Root
+        count={total}
+        perPage={limit}
+        page={currentPage}
+        siblingCount={1}
+        onPageChange={(p) => {
+          if (p && p !== currentPage) offset = getOffset(p, limit);
+        }}
+      >
+        <Pagination.Content>
+          <Pagination.PrevButton disabled={currentPage === 1}>
+            {m.admin_contest_tasks_pagination_prev()}
+          </Pagination.PrevButton>
 
-        {#each paginationPages as p (p)}
-          {#if p === 'ellipsis'}
-            <Pagination.Item>
-              <Pagination.Ellipsis />
-            </Pagination.Item>
-          {:else}
-            <Pagination.Item>
-              <Pagination.Link page={{ type: 'page', value: p }} isActive={p === currentPage} />
-            </Pagination.Item>
-          {/if}
-        {/each}
+          {#each paginationPages as p (p)}
+            {#if p === 'ellipsis'}
+              <Pagination.Item>
+                <Pagination.Ellipsis />
+              </Pagination.Item>
+            {:else}
+              <Pagination.Item>
+                <Pagination.Link page={{ type: 'page', value: p }} isActive={p === currentPage} />
+              </Pagination.Item>
+            {/if}
+          {/each}
 
-        <Pagination.NextButton disabled={currentPage === totalPages}>
-          {m.admin_contest_tasks_pagination_next()}
-        </Pagination.NextButton>
-      </Pagination.Content>
-    </Pagination.Root>
+          <Pagination.NextButton disabled={currentPage === totalPages}>
+            {m.admin_contest_tasks_pagination_next()}
+          </Pagination.NextButton>
+        </Pagination.Content>
+      </Pagination.Root>
 
-    <div class="text-xs text-muted-foreground">
-      {m.admin_contest_tasks_pagination_total({ total })}
-    </div>
+      <div class="text-xs text-muted-foreground">
+        {m.admin_contest_tasks_pagination_total({ total })}
+      </div>
     </div>
   {/if}
 </div>

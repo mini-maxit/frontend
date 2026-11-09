@@ -1,18 +1,22 @@
 <script lang="ts">
-  import { SidebarProvider, SidebarInset, SidebarTrigger } from '$lib/components/ui/sidebar';
-  import DashboardSidebar from '$lib/components/dashboard/DashboardSidebar.svelte';
-  import { getDashboardTitleTranslationFromPathname } from '$lib/components/dashboard/utils';
+  import {
+    SidebarProvider,
+    SidebarInset,
+    SidebarTrigger
+  } from '#lib/components/ui/sidebar/index.js';
+  import DashboardSidebar from '#lib/components/dashboard/DashboardSidebar.svelte';
+  import { getDashboardTitleTranslationFromPathname } from '#lib/components/dashboard/utils.js';
   import { page } from '$app/state';
   import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { goto } from '$app/navigation';
-  import { AppRoutes } from '$lib/routes';
-  import { userStore } from '$lib/stores/user-store.svelte';
-  import { tokenStore } from '$lib/stores/token-store.svelte';
-  import { getUserInstance, getApiInstance } from '$lib/services';
-  import { LoadingSpinner } from '$lib/components/common';
-  import Footer from '$lib/components/Footer.svelte';
-  import { buildDocumentTitle } from '$lib/title';
+  import { AppRoutes } from '#lib/routes.js';
+  import { userStore } from '#lib/stores/user-store.svelte.js';
+  import { tokenStore } from '#lib/stores/token-store.svelte.js';
+  import { getUserInstance, getApiInstance } from '#lib/services/index.js';
+  import { LoadingSpinner } from '#lib/components/common/index.js';
+  import Footer from '#lib/components/Footer.svelte';
+  import { buildDocumentTitle } from '#lib/title.js';
 
   let { children } = $props();
 
@@ -71,7 +75,7 @@
     <DashboardSidebar />
     <SidebarInset class="flex flex-col">
       <div class="flex items-center justify-center gap-4 border-b p-4">
-        <SidebarTrigger class={`absolute left-4`} hiddable={true} />
+        <SidebarTrigger class="absolute left-4" hiddable={true} />
         <h1 class="text-xl font-semibold">{pageTitle}</h1>
       </div>
       <main class="flex-1 p-4">

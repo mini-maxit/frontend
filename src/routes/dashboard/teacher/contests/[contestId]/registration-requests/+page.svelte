@@ -1,19 +1,24 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestsManagementInstance } from '$lib/services';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    BackButton
+  } from '#lib/components/common/index.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
   import {
     Card,
     CardHeader,
     CardTitle,
     CardDescription,
     CardContent
-  } from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  } from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import UserCheck from '@lucide/svelte/icons/user-check';
   import UserX from '@lucide/svelte/icons/user-x';
   import Users from '@lucide/svelte/icons/users';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import { formatDistanceToNow } from 'date-fns';
 
   interface Props {

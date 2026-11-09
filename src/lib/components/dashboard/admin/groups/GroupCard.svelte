@@ -1,15 +1,15 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Users from '@lucide/svelte/icons/users';
   import Clock from '@lucide/svelte/icons/clock';
   import User from '@lucide/svelte/icons/user';
   import Eye from '@lucide/svelte/icons/eye';
-  import type { Group } from '$lib/dto/group';
-  import * as m from '$lib/paraglide/messages';
-  import { localizeHref } from '$lib/paraglide/runtime';
-  import { formatDate } from '$lib/utils';
-  import { AppRoutes } from '$lib/routes';
+  import type { Group } from '#lib/dto/group.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
+  import { formatDate } from '#lib/utils.js';
+  import { AppRoutes } from '#lib/routes.js';
 
   interface GroupCardProps {
     group: Group;

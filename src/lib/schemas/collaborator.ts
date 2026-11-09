@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { Permission } from '$lib/dto/accessControl';
+import { Permission } from '#lib/dto/accessControl.js';
 
 /**
  * Schema for adding a collaborator to task/contest/group

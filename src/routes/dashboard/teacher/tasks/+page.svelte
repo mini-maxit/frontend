@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getTasksManagementInstance } from '$lib/services';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getTasksManagementInstance } from '#lib/services/index.js';
   import {
     TasksList,
     TasksUploadDialog,
     TasksUploadButton
-  } from '$lib/components/dashboard/admin/tasks';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  } from '#lib/components/dashboard/admin/tasks/index.js';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
   import Upload from '@lucide/svelte/icons/upload';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import { toast } from 'svelte-sonner';
 
   const tasksManagementService = getTasksManagementInstance();

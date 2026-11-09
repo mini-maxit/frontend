@@ -1,15 +1,15 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { showApiError } from '$lib/errors/backend-error';
-  import * as m from '$lib/paraglide/messages.js';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
   import { toast } from 'svelte-sonner';
-  import { AppRoutes } from '$lib/routes';
-  import { getAuthInstance, getUserInstance } from '$lib/services';
-  import { browser } from '$app/environment';
-  import { RegisterSchema } from '$lib/schemas';
+  import { AppRoutes } from '#lib/routes.js';
+  import { getAuthInstance, getUserInstance } from '#lib/services/index.js';
+  import { browser } from '$app/env';
+  import { RegisterSchema } from '#lib/schemas/index.js';
   import { superForm, defaults } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
 
@@ -61,7 +61,7 @@
         } else {
           toast.error(registerResult.error || m.error_default_message());
         }
-      } catch (error){
+      } catch (error) {
         console.error('Register error:', error);
         showApiError(error, m.error_default_message());
       }

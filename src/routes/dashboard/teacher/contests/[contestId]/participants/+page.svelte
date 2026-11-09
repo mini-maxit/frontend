@@ -1,16 +1,21 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestsManagementInstance } from '$lib/services';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    BackButton
+  } from '#lib/components/common/index.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
   import {
     AddParticipantsToContestButton,
     ParticipantsList
-  } from '$lib/components/dashboard/admin/contests';
-  import { SortDirection, UserSortKey } from '$lib/dto/pagination';
-  import { readIntParam, readParam, writeSearchParams } from '$lib/utils/url-state';
+  } from '#lib/components/dashboard/admin/contests/index.js';
+  import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
+  import { readIntParam, readParam, writeSearchParams } from '#lib/utils/url-state.js';
   import { page } from '$app/state';
   import Users from '@lucide/svelte/icons/users';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface Props {
     data: { contestId: number };

@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import { Checkbox } from '$lib/components/ui/checkbox';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
   import UserPlus from '@lucide/svelte/icons/user-plus';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import { SvelteSet } from 'svelte/reactivity';
-  import type { User } from '$lib/dto/user';
-  import { getContestsManagementInstance } from '$lib/services';
+  import type { User } from '#lib/dto/user.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
 
   interface Props {
     contestId: number;
@@ -60,7 +60,7 @@
       selectedUserIds.clear();
       searchQuery = '';
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Add participants to contest error:', error);
       showApiError(error, m.contest_participants_add_error());
     } finally {
@@ -148,7 +148,8 @@
               >
                 <div class="font-medium">{user.username}</div>
                 <div class="text-muted-foreground">
-                  {user.name} {user.surname} · {user.email}
+                  {user.name}
+                  {user.surname} · {user.email}
                 </div>
               </label>
             </div>

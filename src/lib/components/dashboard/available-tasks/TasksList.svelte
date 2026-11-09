@@ -1,6 +1,6 @@
 <script lang="ts">
   import TaskCard from './TaskCard.svelte';
-  import type { Task } from '$lib/dto/task';
+  import type { Task } from '#lib/dto/task.js';
 
   interface Props {
     tasks: Task[];

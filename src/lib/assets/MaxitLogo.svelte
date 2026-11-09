@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { localizeHref } from '$lib/paraglide/runtime';
-  import { AppRoutes } from '$lib/routes';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
+  import { AppRoutes } from '#lib/routes.js';
 
   let { width = 24, height = 24, primaryColor = false, clickable = true } = $props();
 

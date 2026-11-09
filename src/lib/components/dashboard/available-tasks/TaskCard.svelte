@@ -1,11 +1,11 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Calendar from '@lucide/svelte/icons/calendar';
   import Code from '@lucide/svelte/icons/code';
-  import type { Task } from '$lib/dto/task';
-  import * as m from '$lib/paraglide/messages';
-  import { formatDate } from '$lib/utils';
+  import type { Task } from '#lib/dto/task.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { formatDate } from '#lib/utils.js';
 
   interface Props {
     task: Task;

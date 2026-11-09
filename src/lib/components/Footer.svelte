@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { m } from '$lib/paraglide/messages.js';
+  import { m } from '#lib/paraglide/messages.js';
 </script>
 
 <footer class="border-t border-border bg-muted/30 px-4 py-8">

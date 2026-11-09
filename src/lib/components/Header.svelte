@@ -1,11 +1,11 @@
 <script lang="ts">
-  import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
-  import { getLocale, localizeHref, setLocale } from '$lib/paraglide/runtime';
-  import { Button } from '$lib/components/ui/button';
+  import MaxitLogo from '#lib/assets/MaxitLogo.svelte';
+  import { getLocale, localizeHref, setLocale } from '#lib/paraglide/runtime.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import { onMount } from 'svelte';
-  import { isMobile } from '$lib/hooks/is-mobile.svelte';
-  import { m } from '$lib/paraglide/messages.js';
-  import { AppRoutes } from '$lib/routes';
+  import { isMobile } from '#lib/hooks/is-mobile.svelte.js';
+  import { m } from '#lib/paraglide/messages.js';
+  import { AppRoutes } from '#lib/routes.js';
 
   let isScrolled = $state(false);
 

@@ -16,17 +16,17 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install pnpm (pinned version)
         run: |
-          npm install -g pnpm@10.15.1
+          npm install -g pnpm@12.18.0
           pnpm -v
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '26'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -87,7 +87,7 @@ jobs:
           exit 1
 
       - name: Save build artifacts (optional)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: build
           key: build-output-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}

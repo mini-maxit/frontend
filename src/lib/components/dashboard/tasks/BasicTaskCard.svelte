@@ -1,13 +1,13 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import FileText from '@lucide/svelte/icons/file-text';
   import Calendar from '@lucide/svelte/icons/calendar';
-  import type { Task } from '$lib/dto/task';
-  import { formatDate } from '$lib/utils';
-  import { localizeHref } from '$lib/paraglide/runtime';
-  import { AppRoutes } from '$lib/routes';
-  import * as m from '$lib/paraglide/messages';
+  import type { Task } from '#lib/dto/task.js';
+  import { formatDate } from '#lib/utils.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface BasicTaskCardProps {
     task: Task;

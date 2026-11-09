@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
-  import type { Group } from '$lib/dto/group';
+  import * as m from '#lib/paraglide/messages.js';
+  import type { Group } from '#lib/dto/group.js';
   import { superForm, defaults } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
-  import { UpdateGroupSchema } from '$lib/schemas';
-  import { getGroupsManagementInstance } from '$lib/services';
+  import { UpdateGroupSchema } from '#lib/schemas/index.js';
+  import { getGroupsManagementInstance } from '#lib/services/index.js';
 
   interface Props {
     group: Group;
@@ -47,7 +47,7 @@
           toast.success(m.groups_edit_success());
           dialogOpen = false;
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Update group error:', error);
           showApiError(error, m.groups_edit_error());
         }

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import Clock from '@lucide/svelte/icons/clock';
   import CircleDashed from '@lucide/svelte/icons/circle-dashed';

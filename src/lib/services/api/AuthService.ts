@@ -1,12 +1,12 @@
 import { ApiError } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import type { ApiService } from './ApiService';
 import type { AuthTokenData } from '../../dto/auth';
 import type { UserLoginDto, UserRegisterDto } from '../../dto/user';
 import { RequestContentType } from '../../dto/request';
 import type { ApiResponse } from '../../dto/response';
-import { tokenStore } from '$lib/stores/token-store.svelte';
-import { userStore } from '$lib/stores/user-store.svelte';
+import { tokenStore } from '#lib/stores/token-store.svelte.js';
+import { userStore } from '#lib/stores/user-store.svelte.js';
 
 /**
  * Client-side authentication service

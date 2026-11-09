@@ -1,17 +1,22 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestInstance } from '$lib/services';
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import * as Table from '$lib/components/ui/table';
-  import * as Card from '$lib/components/ui/card';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestInstance } from '#lib/services/index.js';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    BackButton
+  } from '#lib/components/common/index.js';
+  import * as Table from '#lib/components/ui/table/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Target from '@lucide/svelte/icons/target';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import { format } from 'date-fns';
-  import * as m from '$lib/paraglide/messages';
-  import type { TaskResult } from '$lib/dto/contest';
-  import { buildDocumentTitle } from '$lib/title';
+  import * as m from '#lib/paraglide/messages.js';
+  import type { TaskResult } from '#lib/dto/contest.js';
+  import { buildDocumentTitle } from '#lib/title.js';
 
   const contestService = getContestInstance();
   const contestId = $derived(Number(page.params.contestId));
@@ -140,7 +145,9 @@
             <Table.Header>
               <Table.Row>
                 <Table.Head>{m.contest_results_task()}</Table.Head>
-                <Table.Head class="hidden sm:table-cell">{m.contest_results_best_score()}</Table.Head>
+                <Table.Head class="hidden sm:table-cell"
+                  >{m.contest_results_best_score()}</Table.Head
+                >
                 <Table.Head class="hidden md:table-cell"
                   >{m.contest_results_submissions()}</Table.Head
                 >
@@ -152,19 +159,13 @@
                 <Table.Row>
                   <Table.Cell class="font-medium">{taskResult.task.title}</Table.Cell>
                   <Table.Cell class="hidden sm:table-cell">
-                    <span
-                      class="font-semibold"
-                      class:text-primary={taskResult.bestScore === 100}
-                    >
+                    <span class="font-semibold" class:text-primary={taskResult.bestScore === 100}>
                       {taskResult.bestScore.toFixed(1)}%
                     </span>
                   </Table.Cell>
                   <Table.Cell class="hidden md:table-cell">{taskResult.submissionCount}</Table.Cell>
                   <Table.Cell class="sm:hidden">
-                    <span
-                      class="font-semibold"
-                      class:text-primary={taskResult.bestScore === 100}
-                    >
+                    <span class="font-semibold" class:text-primary={taskResult.bestScore === 100}>
                       {taskResult.bestScore.toFixed(1)}%
                     </span>
                     <span class="text-muted-foreground">

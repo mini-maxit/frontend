@@ -1,15 +1,15 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Users from '@lucide/svelte/icons/users';
   import Clock from '@lucide/svelte/icons/clock';
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import Zap from '@lucide/svelte/icons/zap';
   import { onMount, onDestroy } from 'svelte';
-  import * as m from '$lib/paraglide/messages';
-  import { ContestStatus } from '$lib/dto/contest';
-  import { localizeHref } from '$lib/paraglide/runtime';
-  import { AppRoutes } from '$lib/routes';
+  import * as m from '#lib/paraglide/messages.js';
+  import { ContestStatus } from '#lib/dto/contest.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
+  import { AppRoutes } from '#lib/routes.js';
 
   interface ActiveContestCardProps {
     contestId: number;

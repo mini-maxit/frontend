@@ -2,9 +2,9 @@
   import FileText from '@lucide/svelte/icons/file-text';
   import User from '@lucide/svelte/icons/user';
   import Calendar from '@lucide/svelte/icons/calendar';
-  import * as m from '$lib/paraglide/messages';
-  import { getLocale } from '$lib/paraglide/runtime';
-  import { formatDate } from '$lib/utils';
+  import * as m from '#lib/paraglide/messages.js';
+  import { getLocale } from '#lib/paraglide/runtime.js';
+  import { formatDate } from '#lib/utils.js';
 
   interface Props {
     id: number;

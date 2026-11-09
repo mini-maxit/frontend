@@ -1,6 +1,6 @@
 <script lang="ts">
-  import AdminContestCard from '$lib/components/dashboard/contests/AdminContestCard.svelte';
-  import type { CreatedContest } from '$lib/dto/contest';
+  import AdminContestCard from '#lib/components/dashboard/contests/AdminContestCard.svelte';
+  import type { CreatedContest } from '#lib/dto/contest.js';
 
   interface Props {
     contests: CreatedContest[];

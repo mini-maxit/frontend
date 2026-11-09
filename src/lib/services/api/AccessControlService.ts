@@ -1,14 +1,14 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { ApiResponse, PaginatedData } from '$lib/dto/response';
+import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
 import type {
   Collaborator,
   AddCollaboratorRequest,
   UpdateCollaboratorRequest
-} from '$lib/dto/accessControl';
-import { ResourceType, Permission } from '$lib/dto/accessControl';
-import type { User } from '$lib/dto/user';
+} from '#lib/dto/accessControl.js';
+import { ResourceType, Permission } from '#lib/dto/accessControl.js';
+import type { User } from '#lib/dto/user.js';
 
 /**
  * Client-side service for access control API calls

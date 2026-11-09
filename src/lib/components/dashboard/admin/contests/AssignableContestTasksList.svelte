@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Task } from '$lib/dto/task';
-  import { SortDirection, AssignableTaskSortKey } from '$lib/dto/pagination';
-  import * as Table from '$lib/components/ui/table';
-  import * as Pagination from '$lib/components/ui/pagination';
-  import * as Tooltip from '$lib/components/ui/tooltip';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
+  import type { Task } from '#lib/dto/task.js';
+  import { SortDirection, AssignableTaskSortKey } from '#lib/dto/pagination.js';
+  import * as Table from '#lib/components/ui/table/index.js';
+  import * as Pagination from '#lib/components/ui/pagination/index.js';
+  import * as Tooltip from '#lib/components/ui/tooltip/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import User from '@lucide/svelte/icons/user';
   import Calendar from '@lucide/svelte/icons/calendar';
@@ -13,8 +13,14 @@
   import Plus from '@lucide/svelte/icons/plus';
   import ArrowUp from '@lucide/svelte/icons/arrow-up';
   import ArrowDown from '@lucide/svelte/icons/arrow-down';
-  import * as m from '$lib/paraglide/messages';
-  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset, formatDate } from '$lib/utils';
+  import * as m from '#lib/paraglide/messages.js';
+  import {
+    getPaginationPages,
+    getCurrentPage,
+    getTotalPages,
+    getOffset,
+    formatDate
+  } from '#lib/utils.js';
 
   interface AssignableContestTasksListProps {
     tasks: Task[];
@@ -91,7 +97,9 @@
         })}
       </div>
       <div class="flex items-center gap-1 text-xs">
-        <span class="text-muted-foreground">{m.admin_contest_tasks_pagination_rows_per_page()}:</span>
+        <span class="text-muted-foreground"
+          >{m.admin_contest_tasks_pagination_rows_per_page()}:</span
+        >
         <select
           class="rounded-md border bg-background px-2 py-1 text-xs"
           value={limit}
@@ -170,45 +178,45 @@
         </Table.Row>
       {:else}
         {#each tasks as task (task.id)}
-        <Table.Row>
-          <Table.Cell class="font-mono text-xs">{task.id}</Table.Cell>
-          <Table.Cell>
-            <div class="flex min-w-0 items-center gap-2">
-              <ListTodo class="h-4 w-4 shrink-0 text-primary" />
-              <Tooltip.Root>
-                <Tooltip.Trigger class="min-w-0">
-                  <span class="block max-w-48 truncate font-medium text-foreground">
-                    {task.title}
-                  </span>
-                </Tooltip.Trigger>
-                <Tooltip.Content side="top">{task.title}</Tooltip.Content>
-              </Tooltip.Root>
-            </div>
-          </Table.Cell>
-          <Table.Cell class="hidden md:table-cell">
-            <div class="flex items-center gap-1.5 text-muted-foreground">
-              <User class="h-3.5 w-3.5 shrink-0" />
-              <span class="max-w-[160px] truncate">{task.creatorName}</span>
-            </div>
-          </Table.Cell>
-          <Table.Cell class="hidden text-muted-foreground lg:table-cell">
-            <div class="flex items-center gap-1.5">
-              <Calendar class="h-3.5 w-3.5 shrink-0" />
-              <span class="whitespace-nowrap">{formatDate(task.createdAt)}</span>
-            </div>
-          </Table.Cell>
-          <Table.Cell class="text-right">
-            <Button
-              size="icon"
-              variant="outline"
-              class="h-8 w-8"
-              title={m.admin_contest_tasks_add_button()}
-              onclick={() => onAdd(task.id)}
-            >
-              <Plus class="h-4 w-4" />
-            </Button>
-          </Table.Cell>
-        </Table.Row>
+          <Table.Row>
+            <Table.Cell class="font-mono text-xs">{task.id}</Table.Cell>
+            <Table.Cell>
+              <div class="flex min-w-0 items-center gap-2">
+                <ListTodo class="h-4 w-4 shrink-0 text-primary" />
+                <Tooltip.Root>
+                  <Tooltip.Trigger class="min-w-0">
+                    <span class="block max-w-48 truncate font-medium text-foreground">
+                      {task.title}
+                    </span>
+                  </Tooltip.Trigger>
+                  <Tooltip.Content side="top">{task.title}</Tooltip.Content>
+                </Tooltip.Root>
+              </div>
+            </Table.Cell>
+            <Table.Cell class="hidden md:table-cell">
+              <div class="flex items-center gap-1.5 text-muted-foreground">
+                <User class="h-3.5 w-3.5 shrink-0" />
+                <span class="max-w-[160px] truncate">{task.creatorName}</span>
+              </div>
+            </Table.Cell>
+            <Table.Cell class="hidden text-muted-foreground lg:table-cell">
+              <div class="flex items-center gap-1.5">
+                <Calendar class="h-3.5 w-3.5 shrink-0" />
+                <span class="whitespace-nowrap">{formatDate(task.createdAt)}</span>
+              </div>
+            </Table.Cell>
+            <Table.Cell class="text-right">
+              <Button
+                size="icon"
+                variant="outline"
+                class="h-8 w-8"
+                title={m.admin_contest_tasks_add_button()}
+                onclick={() => onAdd(task.id)}
+              >
+                <Plus class="h-4 w-4" />
+              </Button>
+            </Table.Cell>
+          </Table.Row>
         {/each}
       {/if}
     </Table.Body>
@@ -216,41 +224,41 @@
 
   {#if total > 0}
     <div class="flex flex-col items-center gap-2 pt-2">
-    <Pagination.Root
-      count={total}
-      perPage={limit}
-      page={currentPage}
-      siblingCount={1}
-      onPageChange={(p) => {
-        if (p && p !== currentPage) offset = getOffset(p, limit);
-      }}
-    >
-      <Pagination.Content>
-        <Pagination.PrevButton disabled={currentPage === 1}>
-          {m.admin_contest_tasks_pagination_prev()}
-        </Pagination.PrevButton>
+      <Pagination.Root
+        count={total}
+        perPage={limit}
+        page={currentPage}
+        siblingCount={1}
+        onPageChange={(p) => {
+          if (p && p !== currentPage) offset = getOffset(p, limit);
+        }}
+      >
+        <Pagination.Content>
+          <Pagination.PrevButton disabled={currentPage === 1}>
+            {m.admin_contest_tasks_pagination_prev()}
+          </Pagination.PrevButton>
 
-        {#each paginationPages as p (p)}
-          {#if p === 'ellipsis'}
-            <Pagination.Item>
-              <Pagination.Ellipsis />
-            </Pagination.Item>
-          {:else}
-            <Pagination.Item>
-              <Pagination.Link page={{ type: 'page', value: p }} isActive={p === currentPage} />
-            </Pagination.Item>
-          {/if}
-        {/each}
+          {#each paginationPages as p (p)}
+            {#if p === 'ellipsis'}
+              <Pagination.Item>
+                <Pagination.Ellipsis />
+              </Pagination.Item>
+            {:else}
+              <Pagination.Item>
+                <Pagination.Link page={{ type: 'page', value: p }} isActive={p === currentPage} />
+              </Pagination.Item>
+            {/if}
+          {/each}
 
-        <Pagination.NextButton disabled={currentPage === totalPages}>
-          {m.admin_contest_tasks_pagination_next()}
-        </Pagination.NextButton>
-      </Pagination.Content>
-    </Pagination.Root>
+          <Pagination.NextButton disabled={currentPage === totalPages}>
+            {m.admin_contest_tasks_pagination_next()}
+          </Pagination.NextButton>
+        </Pagination.Content>
+      </Pagination.Root>
 
-    <div class="text-xs text-muted-foreground">
-      {m.admin_contest_tasks_pagination_total({ total })}
-    </div>
+      <div class="text-xs text-muted-foreground">
+        {m.admin_contest_tasks_pagination_total({ total })}
+      </div>
     </div>
   {/if}
 </div>

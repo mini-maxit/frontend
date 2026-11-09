@@ -1,12 +1,12 @@
 import { goto } from '$app/navigation';
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { RequestMethod, RequestContentType, type Request } from '../../dto/request';
 import { isApiErrorResponse } from '../../dto/error';
-import { AppRoutes } from '$lib/routes';
-import { tokenStore } from '$lib/stores/token-store.svelte';
+import { AppRoutes } from '#lib/routes.js';
+import { tokenStore } from '#lib/stores/token-store.svelte.js';
 import type { ApiResponse } from '../../dto/response';
 import type { AuthTokenData } from '../../dto/auth';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 
 export class ApiError extends Error {
   public readonly status: number;
@@ -179,26 +179,22 @@ export class ApiService {
     // Handle 401 Unauthorized - try to refresh token
     // Skip refresh for auth endpoints to prevent infinite loops
     if (response.status === 401 && !request.url.includes('/auth')) {
-      try {
-        await this.refreshToken();
+      // If refresh fails, the user will be redirected to login
+      await this.refreshToken();
 
-        // Retry the original request with new token
-        const newToken = tokenStore.getAccessToken();
-        if (newToken) {
-          headers.set('Authorization', `Bearer ${newToken}`);
-        }
-
-        response = await fetch(`${this.baseUrl}${request.url}`, {
-          method: request.method,
-          body: request.body,
-          ...request.options,
-          headers,
-          credentials: 'include'
-        });
-      } catch (error) {
-        // If refresh fails, the user will be redirected to login
-        throw error;
+      // Retry the original request with new token
+      const newToken = tokenStore.getAccessToken();
+      if (newToken) {
+        headers.set('Authorization', `Bearer ${newToken}`);
       }
+
+      response = await fetch(`${this.baseUrl}${request.url}`, {
+        method: request.method,
+        body: request.body,
+        ...request.options,
+        headers,
+        credentials: 'include'
+      });
     }
 
     return response;

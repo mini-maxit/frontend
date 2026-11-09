@@ -1,6 +1,6 @@
 <script lang="ts">
-  import AdminTaskCard from '$lib/components/dashboard/tasks/AdminTaskCard.svelte';
-  import type { Task } from '$lib/dto/task';
+  import AdminTaskCard from '#lib/components/dashboard/tasks/AdminTaskCard.svelte';
+  import type { Task } from '#lib/dto/task.js';
 
   interface TasksListProps {
     tasks: Task[];

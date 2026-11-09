@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { getLanguagesManagementInstance } from '$lib/services';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { getLanguagesManagementInstance } from '#lib/services/index.js';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import { toast } from 'svelte-sonner';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Code from '@lucide/svelte/icons/code';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   const languagesManagementService = getLanguagesManagementInstance();
 
@@ -34,7 +34,7 @@
       } else {
         toast.error(result.error || m.admin_languages_toggle_error());
       }
-    } catch (error){
+    } catch (error) {
       console.error('Toggle language error:', error);
       showApiError(error, m.admin_languages_toggle_error());
     } finally {
@@ -71,7 +71,9 @@
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
+              <tr
+                class="border-b border-border text-left text-xs tracking-wide text-muted-foreground uppercase"
+              >
                 <th class="px-4 py-3">{m.admin_languages_column_language()}</th>
                 <th class="px-4 py-3">{m.admin_languages_column_version()}</th>
                 <th class="px-4 py-3">{m.admin_languages_column_extension()}</th>
@@ -109,9 +111,11 @@
                       onclick={() => toggleLanguage(lang.id)}
                       disabled={togglingId !== null}
                     >
-                      {togglingId === lang.id ? '...' : lang.isDisabled
-                        ? m.admin_languages_status_enabled()
-                        : m.admin_languages_status_disabled()}
+                      {togglingId === lang.id
+                        ? '...'
+                        : lang.isDisabled
+                          ? m.admin_languages_status_enabled()
+                          : m.admin_languages_status_disabled()}
                     </Button>
                   </td>
                 </tr>

@@ -1,11 +1,11 @@
 <script lang="ts">
-  import ActiveContestCard from '$lib/components/dashboard/contests/ActiveContestCard.svelte';
-  import PastContestCard from '$lib/components/dashboard/contests/PastContestCard.svelte';
-  import { calculateTimeInMinutes, formatRelativeDate } from '$lib/utils/contest';
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getContestInstance } from '$lib/services';
-  import * as m from '$lib/paraglide/messages';
-  import { Button } from '$lib/components/ui/button';
+  import ActiveContestCard from '#lib/components/dashboard/contests/ActiveContestCard.svelte';
+  import PastContestCard from '#lib/components/dashboard/contests/PastContestCard.svelte';
+  import { calculateTimeInMinutes, formatRelativeDate } from '#lib/utils/contest.js';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getContestInstance } from '#lib/services/index.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { Button } from '#lib/components/ui/button/index.js';
 
   const contestService = getContestInstance();
   const contestsQuery = createQuery(async () => {

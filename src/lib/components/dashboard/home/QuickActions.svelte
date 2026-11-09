@@ -1,14 +1,14 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { AppRoutes } from '$lib/routes';
-  import { localizeHref } from '$lib/paraglide/runtime';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
   import Code from '@lucide/svelte/icons/code';
   import Trophy from '@lucide/svelte/icons/trophy';
   import BarChart from '@lucide/svelte/icons/bar-chart';
   import Users from '@lucide/svelte/icons/users';
   import User from '@lucide/svelte/icons/user';
   import FileText from '@lucide/svelte/icons/file-text';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   const quickActions = [
     {

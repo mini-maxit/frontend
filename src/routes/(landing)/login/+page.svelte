@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { m } from '$lib/paraglide/messages.js';
-  import * as Card from '$lib/components/ui/card';
-  import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
-  import { isMobile } from '$lib/hooks/is-mobile.svelte';
-  import { AppRoutes } from '$lib/routes';
-  import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
-  import { ClientLoginForm } from '$lib/components/auth';
-  import { page } from '$app/stores';
+  import { m } from '#lib/paraglide/messages.js';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import MaxitLogo from '#lib/assets/MaxitLogo.svelte';
+  import { isMobile } from '#lib/hooks/is-mobile.svelte.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import BackgroundDecoration from '#lib/components/BackgroundDecoration.svelte';
+  import { ClientLoginForm } from '#lib/components/auth/index.js';
+  import { page } from '$app/state';
 
   // Get redirect parameter from URL
-  const redirectTo = $page.url.searchParams.get('redirectTo') || undefined;
+  const redirectTo = page.url.searchParams.get('redirectTo') || undefined;
 </script>
 
 <div

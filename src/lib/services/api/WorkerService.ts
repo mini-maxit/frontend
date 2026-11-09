@@ -1,8 +1,8 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { ApiResponse } from '$lib/dto/response';
-import type { WorkerStatus } from '$lib/dto/worker';
+import type { ApiResponse } from '#lib/dto/response.js';
+import type { WorkerStatus } from '#lib/dto/worker.js';
 
 /**
  * Client-side service for worker status API calls

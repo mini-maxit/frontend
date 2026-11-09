@@ -1,16 +1,16 @@
 <script lang="ts">
-  import * as Popover from '$lib/components/ui/popover';
-  import { showApiError } from '$lib/errors/backend-error';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Button } from '$lib/components/ui/button';
+  import * as Popover from '#lib/components/ui/popover/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Shield from '@lucide/svelte/icons/shield';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
-  import { Permission, ResourceType } from '$lib/dto/accessControl';
-  import { getAccessControlInstance } from '$lib/services';
-  import { UpdateCollaboratorSchema } from '$lib/schemas';
+  import * as m from '#lib/paraglide/messages.js';
+  import { Permission, ResourceType } from '#lib/dto/accessControl.js';
+  import { getAccessControlInstance } from '#lib/services/index.js';
+  import { UpdateCollaboratorSchema } from '#lib/schemas/index.js';
   import { defaults, superForm } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
 
@@ -66,7 +66,7 @@
           dialogOpen = false;
           selectedPermission = null;
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Update contest collaborator error:', error);
           showApiError(error, m.contest_collaborators_update_error());
         }

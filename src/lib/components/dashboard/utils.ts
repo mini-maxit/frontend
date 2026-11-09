@@ -1,6 +1,6 @@
-import { AppRoutes } from '$lib/routes';
-import { delocalizePath } from '$lib/routes';
-import { m } from '$lib/paraglide/messages.js';
+import { AppRoutes } from '#lib/routes.js';
+import { delocalizePath } from '#lib/routes.js';
+import { m } from '#lib/paraglide/messages.js';
 
 export function getDashboardTitleTranslationFromPathname(pathname: string): string {
   const path = delocalizePath(pathname);
