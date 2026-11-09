@@ -1,8 +1,8 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { Task, TaskDetail, MyTasksResponse } from '$lib/dto/task';
-import type { ApiResponse } from '$lib/dto/response';
+import type { Task, TaskDetail, MyTasksResponse } from '#lib/dto/task.js';
+import type { ApiResponse } from '#lib/dto/response.js';
 
 /**
  * Client-side service for task-related API calls

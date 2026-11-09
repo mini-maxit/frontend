@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Task } from '$lib/dto/task';
-  import { SortDirection, AssignableTaskSortKey } from '$lib/dto/pagination';
-  import * as Table from '$lib/components/ui/table';
-  import * as Pagination from '$lib/components/ui/pagination';
-  import * as Tooltip from '$lib/components/ui/tooltip';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
+  import type { Task } from '#lib/dto/task.js';
+  import { SortDirection, AssignableTaskSortKey } from '#lib/dto/pagination.js';
+  import * as Table from '#lib/components/ui/table/index.js';
+  import * as Pagination from '#lib/components/ui/pagination/index.js';
+  import * as Tooltip from '#lib/components/ui/tooltip/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import User from '@lucide/svelte/icons/user';
   import Calendar from '@lucide/svelte/icons/calendar';
@@ -13,14 +13,14 @@
   import Plus from '@lucide/svelte/icons/plus';
   import ArrowUp from '@lucide/svelte/icons/arrow-up';
   import ArrowDown from '@lucide/svelte/icons/arrow-down';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import {
     getPaginationPages,
     getCurrentPage,
     getTotalPages,
     getOffset,
     formatDate
-  } from '$lib/utils';
+  } from '#lib/utils.js';
 
   interface AssignableContestTasksListProps {
     tasks: Task[];

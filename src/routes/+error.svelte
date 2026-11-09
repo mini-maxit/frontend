@@ -1,13 +1,13 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { Button } from '$lib/components/ui/button';
-  import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
-  import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import MaxitLogo from '#lib/assets/MaxitLogo.svelte';
+  import BackgroundDecoration from '#lib/components/BackgroundDecoration.svelte';
   import AlertTriangle from '@lucide/svelte/icons/alert-triangle';
   import Home from '@lucide/svelte/icons/home';
   import RefreshCw from '@lucide/svelte/icons/refresh-cw';
-  import { m } from '$lib/paraglide/messages.js';
-  import { AppRoutes } from '$lib/routes';
+  import { m } from '#lib/paraglide/messages.js';
+  import { AppRoutes } from '#lib/routes.js';
 
   const status = page.status;
   const message = page.error?.message || m.error_default_message();

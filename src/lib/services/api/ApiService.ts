@@ -2,11 +2,11 @@ import { goto } from '$app/navigation';
 import { browser } from '$app/env';
 import { RequestMethod, RequestContentType, type Request } from '../../dto/request';
 import { isApiErrorResponse } from '../../dto/error';
-import { AppRoutes } from '$lib/routes';
-import { tokenStore } from '$lib/stores/token-store.svelte';
+import { AppRoutes } from '#lib/routes.js';
+import { tokenStore } from '#lib/stores/token-store.svelte.js';
 import type { ApiResponse } from '../../dto/response';
 import type { AuthTokenData } from '../../dto/auth';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 
 export class ApiError extends Error {
   public readonly status: number;

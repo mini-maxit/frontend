@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getContestsManagementInstance } from '$lib/services';
-  import { CreateContestButton, ContestsList } from '$lib/components/dashboard/admin/contests';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
+  import {
+    CreateContestButton,
+    ContestsList
+  } from '#lib/components/dashboard/admin/contests/index.js';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   const contestsManagementService = getContestsManagementInstance();
 

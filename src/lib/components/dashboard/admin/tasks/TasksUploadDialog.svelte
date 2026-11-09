@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import { Checkbox } from '$lib/components/ui/checkbox';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
-  import { getTasksManagementInstance } from '$lib/services';
-  import { UploadTaskSchema } from '$lib/schemas';
+  import * as m from '#lib/paraglide/messages.js';
+  import { getTasksManagementInstance } from '#lib/services/index.js';
+  import { UploadTaskSchema } from '#lib/schemas/index.js';
   import { defaults, superForm } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
   import Loader from '@lucide/svelte/icons/loader-circle';

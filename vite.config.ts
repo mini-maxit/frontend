@@ -11,11 +11,6 @@ export default defineConfig({
     sveltekit({
       adapter: adapter(),
       preprocess: vitePreprocess(),
-      // Escape hatch from kit 3's $lib removal (message: "To keep using $lib, add alias").
-      // Full #lib subpath-import migration is deferred to the kit 4 upgrade.
-      alias: {
-        $lib: 'src/lib'
-      },
       compilerOptions: {
         experimental: {
           async: true

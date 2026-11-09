@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
+  import * as Select from '#lib/components/ui/select/index.js';
   import UserPlus from '@lucide/svelte/icons/user-plus';
   import Search from '@lucide/svelte/icons/search';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
-  import { Permission, ResourceType } from '$lib/dto/accessControl';
-  import type { User } from '$lib/dto/user';
-  import { getAccessControlInstance } from '$lib/services';
-  import { LoadingSpinner } from '$lib/components/common';
-  import type { PaginatedData } from '$lib/dto/response';
-  import { AddCollaboratorSchema } from '$lib/schemas';
+  import * as m from '#lib/paraglide/messages.js';
+  import { Permission, ResourceType } from '#lib/dto/accessControl.js';
+  import type { User } from '#lib/dto/user.js';
+  import { getAccessControlInstance } from '#lib/services/index.js';
+  import { LoadingSpinner } from '#lib/components/common/index.js';
+  import type { PaginatedData } from '#lib/dto/response.js';
+  import { AddCollaboratorSchema } from '#lib/schemas/index.js';
   import { defaults, superForm } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
 

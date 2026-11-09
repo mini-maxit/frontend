@@ -1,7 +1,7 @@
 <script lang="ts">
   import Lock from '@lucide/svelte/icons/lock';
   import UserCog from '@lucide/svelte/icons/user-cog';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   import ChangePasswordDialog from './ChangePasswordDialog.svelte';
 

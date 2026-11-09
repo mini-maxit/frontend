@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Label } from '$lib/components/ui/label';
-  import * as Select from '$lib/components/ui/select';
-  import * as m from '$lib/paraglide/messages';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import * as Select from '#lib/components/ui/select/index.js';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface Language {
     id: number;

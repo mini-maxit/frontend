@@ -1,9 +1,9 @@
 import { ApiError } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import type { ApiService } from './ApiService';
 import type { User } from '../../dto/user';
 import type { ApiResponse, PaginatedData } from '../../dto/response';
-import { userStore } from '$lib/stores/user-store.svelte';
+import { userStore } from '#lib/stores/user-store.svelte.js';
 import { RequestContentType } from '../../dto/request';
 
 /**

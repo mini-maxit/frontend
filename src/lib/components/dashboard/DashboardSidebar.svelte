@@ -9,13 +9,13 @@
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem
-  } from '$lib/components/ui/sidebar';
-  import { m } from '$lib/paraglide/messages.js';
-  import { AppRoutes } from '$lib/routes.js';
-  import { getLocale, setLocale, localizeHref } from '$lib/paraglide/runtime';
+  } from '#lib/components/ui/sidebar/index.js';
+  import { m } from '#lib/paraglide/messages.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import { getLocale, setLocale, localizeHref } from '#lib/paraglide/runtime.js';
   import { page } from '$app/state';
-  import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
-  import { UserRole } from '$lib/dto/jwt';
+  import MaxitLogo from '#lib/assets/MaxitLogo.svelte';
+  import { UserRole } from '#lib/dto/jwt.js';
 
   // Lucide icons
   import FileText from '@lucide/svelte/icons/file-text';
@@ -29,8 +29,8 @@
   import Activity from '@lucide/svelte/icons/activity';
   import LogOut from '@lucide/svelte/icons/log-out';
   import SidebarTrigger from '../ui/sidebar/sidebar-trigger.svelte';
-  import { userStore } from '$lib/stores/user-store.svelte';
-  import { getAuthInstance } from '$lib/services';
+  import { userStore } from '#lib/stores/user-store.svelte.js';
+  import { getAuthInstance } from '#lib/services/index.js';
   import { goto } from '$app/navigation';
   import { browser } from '$app/env';
 

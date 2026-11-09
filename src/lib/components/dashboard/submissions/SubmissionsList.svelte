@@ -1,6 +1,6 @@
 <script lang="ts">
   import SubmissionListRow from './SubmissionListRow.svelte';
-  import type { Submission } from '$lib/dto/submission';
+  import type { Submission } from '#lib/dto/submission.js';
 
   interface SubmissionsListProps {
     submissions: Submission[];

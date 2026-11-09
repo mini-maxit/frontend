@@ -1,7 +1,7 @@
 import { goto } from '$app/navigation';
 import { browser } from '$app/env';
-import { AppRoutes } from '$lib/routes';
-import { getAuthInstance } from '$lib/services';
+import { AppRoutes } from '#lib/routes.js';
+import { getAuthInstance } from '#lib/services/index.js';
 
 /**
  * Client-side logout function

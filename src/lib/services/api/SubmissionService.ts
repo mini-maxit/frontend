@@ -1,13 +1,13 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { ApiResponse, PaginatedData } from '$lib/dto/response';
+import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
 import type {
   Language,
   SubmitSolutionDto,
   Submission,
   SubmissionDetailed
-} from '$lib/dto/submission';
+} from '#lib/dto/submission.js';
 
 /**
  * Client-side service for submission-related API calls

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import * as m from '$lib/paraglide/messages';
-  import BasicTaskCard from '$lib/components/dashboard/tasks/BasicTaskCard.svelte';
-  import { LoadingSpinner } from '$lib/components/common';
-  import ErrorCard from '$lib/components/common/ErrorCard.svelte';
-  import EmptyState from '$lib/components/common/EmptyState.svelte';
+  import * as m from '#lib/paraglide/messages.js';
+  import BasicTaskCard from '#lib/components/dashboard/tasks/BasicTaskCard.svelte';
+  import { LoadingSpinner } from '#lib/components/common/index.js';
+  import ErrorCard from '#lib/components/common/ErrorCard.svelte';
+  import EmptyState from '#lib/components/common/EmptyState.svelte';
   import FileSearch from '@lucide/svelte/icons/file-search';
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getTaskInstance } from '$lib/services';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getTaskInstance } from '#lib/services/index.js';
 
   const taskService = getTaskInstance();
 

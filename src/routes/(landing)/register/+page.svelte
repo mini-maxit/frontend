@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { m } from '$lib/paraglide/messages.js';
-  import * as Card from '$lib/components/ui/card';
-  import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
-  import { isMobile } from '$lib/hooks/is-mobile.svelte';
-  import { AppRoutes } from '$lib/routes';
-  import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
-  import { ClientRegisterForm } from '$lib/components/auth';
+  import { m } from '#lib/paraglide/messages.js';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import MaxitLogo from '#lib/assets/MaxitLogo.svelte';
+  import { isMobile } from '#lib/hooks/is-mobile.svelte.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import BackgroundDecoration from '#lib/components/BackgroundDecoration.svelte';
+  import { ClientRegisterForm } from '#lib/components/auth/index.js';
 </script>
 
 <div

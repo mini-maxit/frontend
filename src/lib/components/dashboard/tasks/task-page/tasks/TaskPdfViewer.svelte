@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import * as m from '$lib/paraglide/messages';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface Props {
     pdfDataUrl?: string | null;

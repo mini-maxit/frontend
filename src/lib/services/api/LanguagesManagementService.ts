@@ -1,8 +1,8 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { ApiResponse } from '$lib/dto/response';
-import type { Language } from '$lib/dto/submission';
+import type { ApiResponse } from '#lib/dto/response.js';
+import type { Language } from '#lib/dto/submission.js';
 
 /**
  * Client-side service for language management API calls (admin only)

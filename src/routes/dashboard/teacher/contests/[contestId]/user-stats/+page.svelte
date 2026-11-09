@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestsManagementInstance } from '$lib/services';
-  import * as Table from '$lib/components/ui/table';
-  import * as Card from '$lib/components/ui/card';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '#lib/components/common/index.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
+  import * as Table from '#lib/components/ui/table/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Medal from '@lucide/svelte/icons/medal';
   import Target from '@lucide/svelte/icons/target';
@@ -11,8 +11,8 @@
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
-  import * as m from '$lib/paraglide/messages';
-  import type { UserTaskPerformance } from '$lib/dto/contest';
+  import * as m from '#lib/paraglide/messages.js';
+  import type { UserTaskPerformance } from '#lib/dto/contest.js';
 
   interface Props {
     data: {

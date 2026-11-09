@@ -1,16 +1,16 @@
 <script lang="ts">
-  import AvailableContestsStats from '$lib/components/dashboard/available-contests/AvailableContestsStats.svelte';
-  import { showApiError } from '$lib/errors/backend-error';
-  import AvailableContestCard from '$lib/components/dashboard/available-contests/AvailableContestCard.svelte';
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getContestInstance } from '$lib/services';
+  import AvailableContestsStats from '#lib/components/dashboard/available-contests/AvailableContestsStats.svelte';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import AvailableContestCard from '#lib/components/dashboard/available-contests/AvailableContestCard.svelte';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getContestInstance } from '#lib/services/index.js';
   import { toast } from 'svelte-sonner';
-  import { ContestRegistrationStatus, type Contest } from '$lib/dto/contest';
+  import { ContestRegistrationStatus, type Contest } from '#lib/dto/contest.js';
   import { goto } from '$app/navigation';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Loader from '@lucide/svelte/icons/loader-circle';
 
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   const contestService = getContestInstance();
 

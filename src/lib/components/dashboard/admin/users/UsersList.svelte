@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { User } from '$lib/dto/user';
-  import { SortDirection, UserSortKey } from '$lib/dto/pagination';
-  import * as Table from '$lib/components/ui/table';
-  import { Button } from '$lib/components/ui/button';
-  import * as Tooltip from '$lib/components/ui/tooltip';
-  import * as Pagination from '$lib/components/ui/pagination';
+  import type { User } from '#lib/dto/user.js';
+  import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
+  import * as Table from '#lib/components/ui/table/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import * as Tooltip from '#lib/components/ui/tooltip/index.js';
+  import * as Pagination from '#lib/components/ui/pagination/index.js';
   import UserIcon from '@lucide/svelte/icons/user';
   import Mail from '@lucide/svelte/icons/mail';
   import Calendar from '@lucide/svelte/icons/calendar';
@@ -12,8 +12,8 @@
   import ArrowUp from '@lucide/svelte/icons/arrow-up';
   import ArrowDown from '@lucide/svelte/icons/arrow-down';
   import { formatDistanceToNow, format, isSameDay } from 'date-fns';
-  import * as m from '$lib/paraglide/messages';
-  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '$lib/utils';
+  import * as m from '#lib/paraglide/messages.js';
+  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '#lib/utils.js';
 
   interface UsersListProps {
     users: User[];

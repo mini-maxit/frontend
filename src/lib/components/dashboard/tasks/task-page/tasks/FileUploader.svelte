@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Label } from '$lib/components/ui/label';
-  import * as m from '$lib/paraglide/messages';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface Props {
     selectedFiles: FileList | null;

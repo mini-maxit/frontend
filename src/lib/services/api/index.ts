@@ -32,4 +32,4 @@ export {
   getAccessControlInstance,
   getWorkerInstance,
   getLanguagesManagementInstance
-} from '$lib/stores/service-instances.svelte';
+} from '#lib/stores/service-instances.svelte.js';

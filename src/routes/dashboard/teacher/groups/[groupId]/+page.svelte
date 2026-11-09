@@ -1,21 +1,21 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getGroupsManagementInstance } from '$lib/services';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '#lib/components/common/index.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getGroupsManagementInstance } from '#lib/services/index.js';
   import {
     EditGroupDialog,
     AddUsersToGroupButton,
     RemoveUserFromGroupButton
-  } from '$lib/components/dashboard/admin/groups';
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  } from '#lib/components/dashboard/admin/groups/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Users from '@lucide/svelte/icons/users';
   import Mail from '@lucide/svelte/icons/mail';
   import Edit from '@lucide/svelte/icons/pencil';
-  import * as m from '$lib/paraglide/messages';
-  import { localizeHref } from '$lib/paraglide/runtime';
-  import { AppRoutes } from '$lib/routes';
+  import * as m from '#lib/paraglide/messages.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
+  import { AppRoutes } from '#lib/routes.js';
 
   const groupId = $derived(Number(page.params.groupId));
   const groupsService = getGroupsManagementInstance();

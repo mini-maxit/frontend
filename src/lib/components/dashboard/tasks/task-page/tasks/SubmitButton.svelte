@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Send from '@lucide/svelte/icons/send';
   import Loader from '@lucide/svelte/icons/loader-circle';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface Props {
     disabled?: boolean;

@@ -1,6 +1,6 @@
-import { ContestStatus, type Contest } from '$lib/dto/contest';
-import * as m from '$lib/paraglide/messages';
-import { formatDate } from '$lib/utils';
+import { ContestStatus, type Contest } from '#lib/dto/contest.js';
+import * as m from '#lib/paraglide/messages.js';
+import { formatDate } from '#lib/utils.js';
 
 /**
  * Formats a contest's start date for display

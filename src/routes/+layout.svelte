@@ -1,12 +1,12 @@
 <script lang="ts">
   import '../app.css';
-  import { Toaster } from '$lib/components/ui/sonner/index.js';
+  import { Toaster } from '#lib/components/ui/sonner/index.js';
   import { onMount } from 'svelte';
   import { browser } from '$app/env';
   import { page } from '$app/state';
-  import { getApiInstance } from '$lib/services';
-  import { isProtectedRoute } from '$lib/routes';
-  import { buildDocumentTitle } from '$lib/title';
+  import { getApiInstance } from '#lib/services/index.js';
+  import { isProtectedRoute } from '#lib/routes.js';
+  import { buildDocumentTitle } from '#lib/title.js';
 
   let { children } = $props();
 

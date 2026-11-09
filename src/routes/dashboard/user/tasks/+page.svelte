@@ -1,11 +1,11 @@
 <script lang="ts">
-  import UserTaskCard from '$lib/components/dashboard/tasks/UserTaskCard.svelte';
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getTaskInstance } from '$lib/services';
-  import * as m from '$lib/paraglide/messages';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import UserTaskCard from '#lib/components/dashboard/tasks/UserTaskCard.svelte';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getTaskInstance } from '#lib/services/index.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
   import ListTodo from '@lucide/svelte/icons/list-todo';
-  import { formatDate } from '$lib/utils';
+  import { formatDate } from '#lib/utils.js';
 
   const taskService = getTaskInstance();
   const tasksQuery = createQuery(async () => {

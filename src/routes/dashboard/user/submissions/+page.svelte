@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { getSubmissionInstance } from '$lib/services';
-  import { SubmissionsList } from '$lib/components/dashboard/submissions';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { getSubmissionInstance } from '#lib/services/index.js';
+  import { SubmissionsList } from '#lib/components/dashboard/submissions/index.js';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
   import FileQuestion from '@lucide/svelte/icons/file-question';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   const submissionService = getSubmissionInstance();
   const submissionsQuery = createQuery(async () => {

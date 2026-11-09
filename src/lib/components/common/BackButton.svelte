@@ -1,10 +1,10 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '#lib/components/ui/button/index.js';
   import ArrowLeft from '@lucide/svelte/icons/arrow-left';
-  import * as m from '$lib/paraglide/messages';
-  import { localizeHref } from '$lib/paraglide/runtime';
+  import * as m from '#lib/paraglide/messages.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
 
   interface Props {
     /** Fallback destination when there is no browser history to go back to. */

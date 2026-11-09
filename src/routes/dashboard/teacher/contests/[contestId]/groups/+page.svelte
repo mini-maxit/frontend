@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestsManagementInstance } from '$lib/services';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '#lib/components/common/index.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
   import {
     AddGroupToContestButton,
     RemoveGroupFromContestButton
-  } from '$lib/components/dashboard/admin/contests';
-  import * as Card from '$lib/components/ui/card';
+  } from '#lib/components/dashboard/admin/contests/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
   import Users from '@lucide/svelte/icons/users';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface Props {
     data: { contestId: number };

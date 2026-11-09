@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import Loader from '@lucide/svelte/icons/loader-circle';
-  import { getTasksManagementInstance } from '$lib/services';
+  import { getTasksManagementInstance } from '#lib/services/index.js';
 
   interface ManageTestCasesDialogProps {
     open: boolean;

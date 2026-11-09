@@ -1,10 +1,10 @@
 <script>
-  import MaxitLogo from '$lib/assets/MaxitLogo.svelte';
-  import { isMobile } from '$lib/hooks/is-mobile.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { m } from '$lib/paraglide/messages.js';
-  import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
-  import { AppRoutes } from '$lib/routes';
+  import MaxitLogo from '#lib/assets/MaxitLogo.svelte';
+  import { isMobile } from '#lib/hooks/is-mobile.svelte.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { m } from '#lib/paraglide/messages.js';
+  import BackgroundDecoration from '#lib/components/BackgroundDecoration.svelte';
+  import { AppRoutes } from '#lib/routes.js';
 </script>
 
 <section

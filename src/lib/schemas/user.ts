@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { UserRole } from '$lib/dto/jwt';
+import { UserRole } from '#lib/dto/jwt.js';
 
 /**
  * Schema for changing user password

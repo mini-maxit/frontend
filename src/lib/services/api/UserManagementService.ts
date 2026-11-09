@@ -1,9 +1,9 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { User, UserEditDto } from '$lib/dto/user';
-import type { ApiResponse } from '$lib/dto/response';
-import { RequestContentType } from '$lib/dto/request';
+import type { User, UserEditDto } from '#lib/dto/user.js';
+import type { ApiResponse } from '#lib/dto/response.js';
+import { RequestContentType } from '#lib/dto/request.js';
 
 /**
  * Client-side service for user management (admin operations)

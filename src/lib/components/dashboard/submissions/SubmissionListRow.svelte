@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
+  import * as Card from '#lib/components/ui/card/index.js';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Clock from '@lucide/svelte/icons/clock';
@@ -8,11 +8,11 @@
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import ChevronUp from '@lucide/svelte/icons/chevron-up';
   import UserIcon from '@lucide/svelte/icons/user';
-  import { SubmissionStatus, type Submission, SubmissionResultCode } from '$lib/dto/submission';
-  import * as m from '$lib/paraglide/messages';
-  import { formatDate } from '$lib/utils';
+  import { SubmissionStatus, type Submission, SubmissionResultCode } from '#lib/dto/submission.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { formatDate } from '#lib/utils.js';
   import TestCaseResult from './TestCaseResult.svelte';
-  import { localizeHref } from '$lib/paraglide/runtime';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
 
   interface SubmissionListRowProps {
     submission: Submission;

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import UserInfoCard from '$lib/components/dashboard/profile/UserInfoCard.svelte';
-  import QuickActions from '$lib/components/dashboard/profile/QuickActions.svelte';
-  import { userStore } from '$lib/stores/user-store.svelte';
-  import * as m from '$lib/paraglide/messages';
-  import { buildDocumentTitle } from '$lib/title';
+  import UserInfoCard from '#lib/components/dashboard/profile/UserInfoCard.svelte';
+  import QuickActions from '#lib/components/dashboard/profile/QuickActions.svelte';
+  import { userStore } from '#lib/stores/user-store.svelte.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { buildDocumentTitle } from '#lib/title.js';
 
   const user = $derived(userStore.getUserUnsafe());
   const documentTitle = $derived(

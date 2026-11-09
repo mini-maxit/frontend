@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Calendar from '@lucide/svelte/icons/calendar';
   import User from '@lucide/svelte/icons/user';
@@ -10,12 +10,12 @@
   import UserCheck from '@lucide/svelte/icons/user-check';
   import FileText from '@lucide/svelte/icons/file-text';
   import Edit from '@lucide/svelte/icons/pencil';
-  import type { CreatedContest } from '$lib/dto/contest';
-  import * as m from '$lib/paraglide/messages';
-  import { localizeHref } from '$lib/paraglide/runtime';
-  import { formatDate } from '$lib/utils';
-  import { AppRoutes } from '$lib/routes';
-  import EditContestDialog from '$lib/components/dashboard/admin/contests/EditContestDialog.svelte';
+  import type { CreatedContest } from '#lib/dto/contest.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
+  import { formatDate } from '#lib/utils.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import EditContestDialog from '#lib/components/dashboard/admin/contests/EditContestDialog.svelte';
 
   interface AdminContestCardProps {
     contest: CreatedContest;

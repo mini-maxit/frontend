@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { createQuery } from '$lib/utils/query.svelte';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { getLanguagesManagementInstance } from '$lib/services';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { getLanguagesManagementInstance } from '#lib/services/index.js';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import { toast } from 'svelte-sonner';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Code from '@lucide/svelte/icons/code';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   const languagesManagementService = getLanguagesManagementInstance();
 

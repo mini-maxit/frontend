@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { Checkbox } from '$lib/components/ui/checkbox';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Label } from '$lib/components/ui/label';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
-  import { getTasksManagementInstance } from '$lib/services';
+  import * as m from '#lib/paraglide/messages.js';
+  import { getTasksManagementInstance } from '#lib/services/index.js';
 
   interface TaskVisibilityToggleProps {
     taskId: number;

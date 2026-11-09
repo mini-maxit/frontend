@@ -1,4 +1,4 @@
-import { deLocalizeUrl } from '$lib/paraglide/runtime';
+import { deLocalizeUrl } from '#lib/paraglide/runtime.js';
 
 export enum AppRoutes {
   Home = '/',

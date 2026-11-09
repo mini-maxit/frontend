@@ -1,6 +1,6 @@
 <script lang="ts">
   import Upload from '@lucide/svelte/icons/upload';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface TasksUploadButtonProps {
     onclick: () => void;

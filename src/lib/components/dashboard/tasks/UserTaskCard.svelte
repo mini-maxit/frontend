@@ -1,12 +1,12 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Target from '@lucide/svelte/icons/target';
   import TrendingUp from '@lucide/svelte/icons/trending-up';
   import Code from '@lucide/svelte/icons/code';
-  import * as m from '$lib/paraglide/messages';
-  import { AppRoutes } from '$lib/routes';
-  import { localizeHref } from '$lib/paraglide/runtime';
+  import * as m from '#lib/paraglide/messages.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
 
   interface UserTaskCardProps {
     contestId: number;

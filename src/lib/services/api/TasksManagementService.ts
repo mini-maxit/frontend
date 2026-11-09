@@ -1,15 +1,15 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { ApiResponse, PaginatedData } from '$lib/dto/response';
+import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
 import type {
   Task,
   UploadTaskResponse,
   UploadTaskDto,
   TaskLimit,
   UpdateTaskLimitsDto
-} from '$lib/dto/task';
-import { RequestContentType } from '$lib/dto/request';
+} from '#lib/dto/task.js';
+import { RequestContentType } from '#lib/dto/request.js';
 
 /**
  * Client-side service for task management API calls

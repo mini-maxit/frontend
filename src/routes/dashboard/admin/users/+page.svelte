@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getUserInstance } from '$lib/services';
-  import { UsersList, UserEditDialog } from '$lib/components/dashboard/admin/users';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '$lib/components/common';
-  import { Input } from '$lib/components/ui/input';
-  import * as Select from '$lib/components/ui/select';
-  import type { User } from '$lib/dto/user';
-  import { UserRole } from '$lib/dto/jwt';
-  import { SortDirection, UserSortKey } from '$lib/dto/pagination';
-  import { readIntParam, readParam, writeSearchParams } from '$lib/utils/url-state';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getUserInstance } from '#lib/services/index.js';
+  import { UsersList, UserEditDialog } from '#lib/components/dashboard/admin/users/index.js';
+  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import * as Select from '#lib/components/ui/select/index.js';
+  import type { User } from '#lib/dto/user.js';
+  import { UserRole } from '#lib/dto/jwt.js';
+  import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
+  import { readIntParam, readParam, writeSearchParams } from '#lib/utils/url-state.js';
   import { page } from '$app/state';
   import Users from '@lucide/svelte/icons/users';
   import Search from '@lucide/svelte/icons/search';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   const userService = getUserInstance();
 

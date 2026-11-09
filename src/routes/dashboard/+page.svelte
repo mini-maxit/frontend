@@ -1,8 +1,8 @@
 <script lang="ts">
-  import QuickActions from '$lib/components/dashboard/home/QuickActions.svelte';
-  import { userStore } from '$lib/stores/user-store.svelte';
-  import * as m from '$lib/paraglide/messages';
-  import { getLocale } from '$lib/paraglide/runtime';
+  import QuickActions from '#lib/components/dashboard/home/QuickActions.svelte';
+  import { userStore } from '#lib/stores/user-store.svelte.js';
+  import * as m from '#lib/paraglide/messages.js';
+  import { getLocale } from '#lib/paraglide/runtime.js';
 
   // User is already fetched by dashboard layout, just read from store
   const user = $derived(userStore.getUserUnsafe());

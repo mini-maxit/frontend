@@ -1,9 +1,9 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { Group, CreateGroupDto, EditGroupDto } from '$lib/dto/group';
-import type { User } from '$lib/dto/user';
-import type { ApiResponse, PaginatedData } from '$lib/dto/response';
+import type { Group, CreateGroupDto, EditGroupDto } from '#lib/dto/group.js';
+import type { User } from '#lib/dto/user.js';
+import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
 
 /**
  * Client-side service for group management API calls

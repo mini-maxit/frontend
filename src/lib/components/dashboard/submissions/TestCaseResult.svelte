@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { TestResult } from '$lib/dto/submission';
+  import type { TestResult } from '#lib/dto/submission.js';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
   import Clock from '@lucide/svelte/icons/clock';
   import Activity from '@lucide/svelte/icons/activity';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
 
   interface TestCaseResultProps {
     testResult: TestResult;

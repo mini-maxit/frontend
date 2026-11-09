@@ -1,13 +1,13 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Users from '@lucide/svelte/icons/users';
   import Calendar from '@lucide/svelte/icons/calendar';
   import TrendingUp from '@lucide/svelte/icons/trending-up';
   import Eye from '@lucide/svelte/icons/eye';
-  import * as m from '$lib/paraglide/messages';
-  import { AppRoutes } from '$lib/routes';
+  import * as m from '#lib/paraglide/messages.js';
+  import { AppRoutes } from '#lib/routes.js';
 
   interface PastContestCardProps {
     contestId: number;

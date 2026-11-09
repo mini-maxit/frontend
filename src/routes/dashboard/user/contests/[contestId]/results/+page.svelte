@@ -1,17 +1,17 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestInstance } from '$lib/services';
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import * as Table from '$lib/components/ui/table';
-  import * as Card from '$lib/components/ui/card';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestInstance } from '#lib/services/index.js';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '#lib/components/common/index.js';
+  import * as Table from '#lib/components/ui/table/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
   import Target from '@lucide/svelte/icons/target';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import { format } from 'date-fns';
-  import * as m from '$lib/paraglide/messages';
-  import type { TaskResult } from '$lib/dto/contest';
-  import { buildDocumentTitle } from '$lib/title';
+  import * as m from '#lib/paraglide/messages.js';
+  import type { TaskResult } from '#lib/dto/contest.js';
+  import { buildDocumentTitle } from '#lib/title.js';
 
   const contestService = getContestInstance();
   const contestId = $derived(Number(page.params.contestId));

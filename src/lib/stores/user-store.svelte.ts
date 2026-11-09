@@ -1,4 +1,4 @@
-import type { User } from '$lib/dto/user';
+import type { User } from '#lib/dto/user.js';
 
 /**
  * In-memory user storage for client-side authentication

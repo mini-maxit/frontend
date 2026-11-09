@@ -1,27 +1,27 @@
 <script lang="ts">
-  import { Button, buttonVariants } from '$lib/components/ui/button';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
-  import { Calendar } from '$lib/components/ui/calendar';
-  import { Checkbox } from '$lib/components/ui/checkbox';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Popover from '$lib/components/ui/popover';
+  import { Button, buttonVariants } from '#lib/components/ui/button/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import { Label } from '#lib/components/ui/label/index.js';
+  import { Calendar } from '#lib/components/ui/calendar/index.js';
+  import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
+  import * as Popover from '#lib/components/ui/popover/index.js';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
+  import * as m from '#lib/paraglide/messages.js';
   import {
     DateFormatter,
     type DateValue,
     getLocalTimeZone,
     parseDate
   } from '@internationalized/date';
-  import { cn, toLocalRFC3339 } from '$lib/utils';
-  import type { CreatedContest } from '$lib/dto/contest';
+  import { cn, toLocalRFC3339 } from '#lib/utils.js';
+  import type { CreatedContest } from '#lib/dto/contest.js';
   import { superForm, defaults } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';
-  import { UpdateContestSchema } from '$lib/schemas';
-  import { getContestsManagementInstance } from '$lib/services';
+  import { UpdateContestSchema } from '#lib/schemas/index.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
 
   interface Props {
     contest: CreatedContest;

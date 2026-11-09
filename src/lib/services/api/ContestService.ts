@@ -1,5 +1,5 @@
 import type { ApiService } from './ApiService';
-import { resolveErrorMessage } from '$lib/errors/backend-error';
+import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
 import type {
   Contest,
@@ -7,9 +7,9 @@ import type {
   PastContestWithStats,
   ContestResults,
   ContestDetailed
-} from '$lib/dto/contest';
-import type { ContestTaskWithStatistics, TaskDetail } from '$lib/dto/task';
-import type { ApiResponse, PaginatedData } from '$lib/dto/response';
+} from '#lib/dto/contest.js';
+import type { ContestTaskWithStatistics, TaskDetail } from '#lib/dto/task.js';
+import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
 
 /**
  * Client-side service for contest-related API calls

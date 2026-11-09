@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '$lib/components/common';
-  import { createParameterizedQuery } from '$lib/utils/query.svelte';
-  import { getContestsManagementInstance } from '$lib/services';
-  import type { Submission } from '$lib/dto/submission';
-  import { SubmissionsList } from '$lib/components/dashboard/submissions';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import * as Card from '$lib/components/ui/card';
-  import * as Pagination from '$lib/components/ui/pagination';
+  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '#lib/components/common/index.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { getContestsManagementInstance } from '#lib/services/index.js';
+  import type { Submission } from '#lib/dto/submission.js';
+  import { SubmissionsList } from '#lib/components/dashboard/submissions/index.js';
+  import { Button } from '#lib/components/ui/button/index.js';
+  import { Input } from '#lib/components/ui/input/index.js';
+  import * as Card from '#lib/components/ui/card/index.js';
+  import * as Pagination from '#lib/components/ui/pagination/index.js';
   import FileText from '@lucide/svelte/icons/file-text';
   import X from '@lucide/svelte/icons/x';
-  import * as m from '$lib/paraglide/messages';
-  import Label from '$lib/components/ui/label/label.svelte';
-  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '$lib/utils';
-  import { readIntParam, readParam, writeSearchParams } from '$lib/utils/url-state';
+  import * as m from '#lib/paraglide/messages.js';
+  import Label from '#lib/components/ui/label/label.svelte';
+  import { getPaginationPages, getCurrentPage, getTotalPages, getOffset } from '#lib/utils.js';
+  import { readIntParam, readParam, writeSearchParams } from '#lib/utils/url-state.js';
   import { page } from '$app/state';
 
   interface Props {

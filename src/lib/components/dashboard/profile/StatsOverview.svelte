@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as Card from '$lib/components/ui/card';
+  import * as Card from '#lib/components/ui/card/index.js';
   import FileText from '@lucide/svelte/icons/file-text';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import ListTodo from '@lucide/svelte/icons/list-todo';

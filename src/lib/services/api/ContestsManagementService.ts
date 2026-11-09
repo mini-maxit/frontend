@@ -10,12 +10,12 @@ import type {
   ManagedContest,
   UserContestStats,
   TaskUserStats
-} from '$lib/dto/contest';
-import type { Task, ContestTask } from '$lib/dto/task';
-import type { Group } from '$lib/dto/group';
-import type { ApiResponse, PaginatedData } from '$lib/dto/response';
-import type { Submission, GetContestSubmissionsParams } from '$lib/dto/submission';
-import type { User } from '$lib/dto/user';
+} from '#lib/dto/contest.js';
+import type { Task, ContestTask } from '#lib/dto/task.js';
+import type { Group } from '#lib/dto/group.js';
+import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
+import type { Submission, GetContestSubmissionsParams } from '#lib/dto/submission.js';
+import type { User } from '#lib/dto/user.js';
 
 /**
  * Client-side service for contest management API calls

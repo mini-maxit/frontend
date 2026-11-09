@@ -1,12 +1,12 @@
 <script lang="ts">
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { showApiError } from '$lib/errors/backend-error';
-  import { Button } from '$lib/components/ui/button';
+  import * as Dialog from '#lib/components/ui/dialog/index.js';
+  import { showApiError } from '#lib/errors/backend-error.js';
+  import { Button } from '#lib/components/ui/button/index.js';
   import X from '@lucide/svelte/icons/x';
   import { toast } from 'svelte-sonner';
-  import * as m from '$lib/paraglide/messages';
-  import { Permission, ResourceType } from '$lib/dto/accessControl';
-  import { getAccessControlInstance } from '$lib/services';
+  import * as m from '#lib/paraglide/messages.js';
+  import { Permission, ResourceType } from '#lib/dto/accessControl.js';
+  import { getAccessControlInstance } from '#lib/services/index.js';
 
   interface Props {
     groupId: number;
