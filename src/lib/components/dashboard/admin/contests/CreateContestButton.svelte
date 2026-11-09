@@ -65,7 +65,7 @@
           toast.success(m.admin_contests_create_success());
           dialogOpen = false;
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Create contest error:', error);
           showApiError(error, m.admin_contests_create_error());
         }

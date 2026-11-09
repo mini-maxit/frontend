@@ -76,7 +76,7 @@
           dialogOpen = false;
           resetForm();
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Add task collaborator error:', error);
           showApiError(error, m.task_collaborators_add_error());
         }

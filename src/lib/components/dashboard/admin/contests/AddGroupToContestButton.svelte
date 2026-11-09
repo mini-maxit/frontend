@@ -57,7 +57,7 @@
       selectedGroupIds = new SvelteSet();
       searchQuery = '';
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Add groups to contest error:', error);
       showApiError(error, m.contest_groups_add_error());
     } finally {

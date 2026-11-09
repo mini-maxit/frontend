@@ -66,7 +66,7 @@
       toast.success(m.task_collaborators_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Remove task collaborator error:', error);
       showApiError(error, m.task_collaborators_remove_error());
     } finally {

@@ -59,7 +59,7 @@
           dialogOpen = false;
           selectedPermission = null;
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Update task collaborator error:', error);
           showApiError(error, m.task_collaborators_update_error());
         }

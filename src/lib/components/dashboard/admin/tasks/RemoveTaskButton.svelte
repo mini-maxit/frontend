@@ -38,7 +38,7 @@
       toast.success(m.admin_tasks_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Delete task error:', error);
       showApiError(error, m.admin_tasks_remove_error());
     } finally {

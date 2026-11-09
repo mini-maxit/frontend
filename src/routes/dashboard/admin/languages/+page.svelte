@@ -34,7 +34,7 @@
       } else {
         toast.error(result.error || m.admin_languages_toggle_error());
       }
-    } catch (error){
+    } catch (error) {
       console.error('Toggle language error:', error);
       showApiError(error, m.admin_languages_toggle_error());
     } finally {

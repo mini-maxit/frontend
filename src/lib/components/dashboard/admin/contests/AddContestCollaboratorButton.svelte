@@ -76,7 +76,7 @@
           dialogOpen = false;
           resetForm();
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Add contest collaborator error:', error);
           showApiError(error, m.contest_collaborators_add_error());
         }

@@ -1,10 +1,14 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { goto } from '$app/navigation';
 
 /**
  * Read an integer query parameter with a default fallback.
  */
-export function readIntParam(url: URL, key: string, fallback: number): number {
+export function readIntParam(
+  url: { searchParams: { get(name: string): string | null } },
+  key: string,
+  fallback: number
+): number {
   const raw = url.searchParams.get(key);
   if (raw === null || raw === '') return fallback;
   const parsed = Number.parseInt(raw, 10);
@@ -14,7 +18,11 @@ export function readIntParam(url: URL, key: string, fallback: number): number {
 /**
  * Read a string query parameter with a default fallback.
  */
-export function readParam(url: URL, key: string, fallback = ''): string {
+export function readParam(
+  url: { searchParams: { get(name: string): string | null } },
+  key: string,
+  fallback = ''
+): string {
   return url.searchParams.get(key) ?? fallback;
 }
 
@@ -41,5 +49,7 @@ export function writeSearchParams(
     }
   }
 
-  goto(url.pathname + url.search, { replaceState: true, keepFocus: true, noScroll: true });
+  // kit 3: shallow updates the URL without navigating (no scroll, no focus change,
+  // no load re-run) — replaces the old replaceState+keepFocus+noScroll combo.
+  goto(url.pathname + url.search, { replace: true, shallow: true });
 }

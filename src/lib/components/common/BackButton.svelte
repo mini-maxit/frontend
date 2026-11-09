@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { goto } from '$app/navigation';
   import { Button } from '#lib/components/ui/button/index.js';
   import ArrowLeft from '@lucide/svelte/icons/arrow-left';

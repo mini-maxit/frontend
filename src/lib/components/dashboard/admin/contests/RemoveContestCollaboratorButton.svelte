@@ -66,7 +66,7 @@
       toast.success(m.contest_collaborators_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Remove contest collaborator error:', error);
       showApiError(error, m.contest_collaborators_remove_error());
     } finally {

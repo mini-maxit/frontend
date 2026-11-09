@@ -33,7 +33,7 @@
       toast.success(m.contest_groups_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Remove group from contest error:', error);
       showApiError(error, m.contest_groups_remove_error());
     } finally {

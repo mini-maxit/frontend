@@ -33,7 +33,7 @@
       toast.success(m.group_members_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Remove user error:', error);
       showApiError(error, m.group_members_remove_error());
     } finally {

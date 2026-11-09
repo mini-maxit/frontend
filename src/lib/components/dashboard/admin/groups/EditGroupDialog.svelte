@@ -47,7 +47,7 @@
           toast.success(m.groups_edit_success());
           dialogOpen = false;
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Update group error:', error);
           showApiError(error, m.groups_edit_error());
         }

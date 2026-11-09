@@ -66,7 +66,7 @@
       toast.success(m.group_collaborators_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Remove group collaborator error:', error);
       showApiError(error, m.group_collaborators_remove_error());
     } finally {

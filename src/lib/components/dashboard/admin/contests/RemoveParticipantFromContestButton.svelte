@@ -33,7 +33,7 @@
       toast.success(m.contest_participants_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Remove participant from contest error:', error);
       showApiError(error, m.contest_participants_remove_error());
     } finally {

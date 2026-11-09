@@ -49,7 +49,7 @@
       toast.success(m.contests_registration_success());
       // Refresh queries to show updated registration status
       await Promise.all([ongoingContestsQuery.refresh(), upcomingContestsQuery.refresh()]);
-    } catch (error){
+    } catch (error) {
       console.error('Registration failed:', error);
       showApiError(error, m.contests_registration_error());
     } finally {

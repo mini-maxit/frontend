@@ -47,7 +47,7 @@
       } else {
         toast.error(result.error || m.admin_tasks_visibility_error());
       }
-    } catch (error){
+    } catch (error) {
       showApiError(error, m.admin_tasks_visibility_error());
       console.error('Failed to toggle visibility:', error);
     }

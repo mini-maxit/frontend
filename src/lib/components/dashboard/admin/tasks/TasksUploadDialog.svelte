@@ -50,7 +50,7 @@
         } else {
           toast.error(result.error || m.admin_tasks_upload_error());
         }
-      } catch (error){
+      } catch (error) {
         console.error('Upload task error:', error);
         showApiError(error, m.admin_tasks_upload_error());
       }

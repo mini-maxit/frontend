@@ -58,7 +58,7 @@
         } else {
           toast.error(loginResult.error || m.error_default_message());
         }
-      } catch (error){
+      } catch (error) {
         console.error('Login error:', error);
         showApiError(error, m.error_default_message());
       }

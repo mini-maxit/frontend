@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '#lib/components/common/index.js';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    BackButton
+  } from '#lib/components/common/index.js';
   import * as m from '#lib/paraglide/messages.js';
   import { Button } from '#lib/components/ui/button/index.js';
   import * as Card from '#lib/components/ui/card/index.js';

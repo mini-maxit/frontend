@@ -39,7 +39,7 @@
         toast.success(m.groups_create_success());
         dialogOpen = false;
         if (onSuccess) onSuccess();
-      } catch (error){
+      } catch (error) {
         console.error('Create group error:', error);
         showApiError(error, m.groups_create_error());
       }

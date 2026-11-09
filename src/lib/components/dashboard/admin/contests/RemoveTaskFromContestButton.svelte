@@ -39,7 +39,7 @@
       toast.success(m.admin_contest_tasks_remove_success());
       dialogOpen = false;
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Remove task from contest error:', error);
       showApiError(error, m.admin_contest_tasks_remove_error());
     } finally {

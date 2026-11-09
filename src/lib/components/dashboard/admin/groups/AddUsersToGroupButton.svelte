@@ -81,7 +81,7 @@
       await assignableUsersQuery.refresh();
 
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Add users error:', error);
       showApiError(error, m.group_members_add_error());
     } finally {

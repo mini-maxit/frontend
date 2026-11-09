@@ -1,6 +1,11 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '#lib/components/common/index.js';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    BackButton
+  } from '#lib/components/common/index.js';
   import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
   import { getGroupsManagementInstance } from '#lib/services/index.js';
   import {

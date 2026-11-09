@@ -89,9 +89,7 @@
   let assignableLimit = $state(readIntParam(page.url, 'x_limit', 5));
   let assignableOffset = $state(readIntParam(page.url, 'x_offset', 0));
   let assignableSortKey = $state<AssignableTaskSortKey>(
-    Object.values(AssignableTaskSortKey).includes(
-      initialAssignableSortKey as AssignableTaskSortKey
-    )
+    Object.values(AssignableTaskSortKey).includes(initialAssignableSortKey as AssignableTaskSortKey)
       ? (initialAssignableSortKey as AssignableTaskSortKey)
       : AssignableTaskSortKey.Title
   );
@@ -248,9 +246,10 @@
       selectedTaskId = null;
       await addedTasksQuery.refresh();
       await assignableTasksQuery.refresh();
-    } catch (error){
+    } catch (error) {
       console.error('Save task schedule error:', error);
-      showApiError(error,
+      showApiError(
+        error,
         dialogMode === 'edit'
           ? m.admin_contest_tasks_update_error()
           : m.admin_contest_tasks_add_error()

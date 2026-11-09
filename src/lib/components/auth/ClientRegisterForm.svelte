@@ -61,7 +61,7 @@
         } else {
           toast.error(registerResult.error || m.error_default_message());
         }
-      } catch (error){
+      } catch (error) {
         console.error('Register error:', error);
         showApiError(error, m.error_default_message());
       }

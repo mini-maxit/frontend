@@ -70,7 +70,7 @@
           toast.success(m.admin_contests_edit_success());
           dialogOpen = false;
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Update contest error:', error);
           showApiError(error, m.admin_contests_edit_error());
         }

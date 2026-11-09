@@ -66,7 +66,7 @@
           dialogOpen = false;
           selectedPermission = null;
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Update contest collaborator error:', error);
           showApiError(error, m.contest_collaborators_update_error());
         }

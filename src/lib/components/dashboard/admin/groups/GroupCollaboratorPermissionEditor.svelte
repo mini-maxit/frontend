@@ -66,7 +66,7 @@
           dialogOpen = false;
           selectedPermission = null;
           if (onSuccess) onSuccess();
-        } catch (error){
+        } catch (error) {
           console.error('Update group collaborator error:', error);
           showApiError(error, m.group_collaborators_update_error());
         }

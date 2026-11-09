@@ -60,7 +60,7 @@
       selectedUserIds.clear();
       searchQuery = '';
       if (onSuccess) onSuccess();
-    } catch (error){
+    } catch (error) {
       console.error('Add participants to contest error:', error);
       showApiError(error, m.contest_participants_add_error());
     } finally {

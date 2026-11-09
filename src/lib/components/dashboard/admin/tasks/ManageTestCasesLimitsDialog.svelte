@@ -66,7 +66,7 @@
       } else {
         toast.error(result.error || m.admin_tasks_test_cases_update_error());
       }
-    } catch (error){
+    } catch (error) {
       console.error('Update task limits error:', error);
       showApiError(error, m.admin_tasks_test_cases_update_error());
     } finally {

@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { LoadingSpinner, ErrorCard, EmptyState, BackButton } from '#lib/components/common/index.js';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    BackButton
+  } from '#lib/components/common/index.js';
   import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
   import { getAccessControlInstance } from '#lib/services/index.js';
   import {
