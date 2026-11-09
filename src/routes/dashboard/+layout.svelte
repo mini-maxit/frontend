@@ -4,7 +4,7 @@
   import { getDashboardTitleTranslationFromPathname } from '$lib/components/dashboard/utils';
   import { page } from '$app/state';
   import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { goto } from '$app/navigation';
   import { AppRoutes } from '$lib/routes';
   import { userStore } from '$lib/stores/user-store.svelte';
@@ -71,7 +71,7 @@
     <DashboardSidebar />
     <SidebarInset class="flex flex-col">
       <div class="flex items-center justify-center gap-4 border-b p-4">
-        <SidebarTrigger class={`absolute left-4`} hiddable={true} />
+        <SidebarTrigger class="absolute left-4" hiddable={true} />
         <h1 class="text-xl font-semibold">{pageTitle}</h1>
       </div>
       <main class="flex-1 p-4">

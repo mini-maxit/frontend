@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation';
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { AppRoutes } from '$lib/routes';
 import { getAuthInstance } from '$lib/services';
 

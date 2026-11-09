@@ -103,7 +103,9 @@
 
     <div class="flex flex-wrap items-center gap-2">
       <div class="flex items-center gap-1 text-xs">
-        <span class="text-muted-foreground">{m.contest_participants_pagination_rows_per_page()}:</span>
+        <span class="text-muted-foreground"
+          >{m.contest_participants_pagination_rows_per_page()}:</span
+        >
         <select
           class="rounded-md border bg-background px-2 py-1 text-xs"
           value={limit}
@@ -229,7 +231,7 @@
               {contestId}
               userId={user.id}
               userName={user.username}
-              onSuccess={onSuccess}
+              {onSuccess}
             />
           </Table.Cell>
         </Table.Row>

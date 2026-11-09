@@ -148,7 +148,8 @@
               >
                 <div class="font-medium">{user.username}</div>
                 <div class="text-muted-foreground">
-                  {user.name} {user.surname} · {user.email}
+                  {user.name}
+                  {user.surname} · {user.email}
                 </div>
               </label>
             </div>

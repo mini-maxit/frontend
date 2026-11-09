@@ -71,7 +71,9 @@
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
+              <tr
+                class="border-b border-border text-left text-xs tracking-wide text-muted-foreground uppercase"
+              >
                 <th class="px-4 py-3">{m.admin_languages_column_language()}</th>
                 <th class="px-4 py-3">{m.admin_languages_column_version()}</th>
                 <th class="px-4 py-3">{m.admin_languages_column_extension()}</th>
@@ -109,9 +111,11 @@
                       onclick={() => toggleLanguage(lang.id)}
                       disabled={togglingId !== null}
                     >
-                      {togglingId === lang.id ? '...' : lang.isDisabled
-                        ? m.admin_languages_status_enabled()
-                        : m.admin_languages_status_disabled()}
+                      {togglingId === lang.id
+                        ? '...'
+                        : lang.isDisabled
+                          ? m.admin_languages_status_enabled()
+                          : m.admin_languages_status_disabled()}
                     </Button>
                   </td>
                 </tr>

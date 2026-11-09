@@ -2,7 +2,7 @@
   import '../app.css';
   import { Toaster } from '$lib/components/ui/sonner/index.js';
   import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { page } from '$app/state';
   import { getApiInstance } from '$lib/services';
   import { isProtectedRoute } from '$lib/routes';

@@ -36,9 +36,7 @@
 
   let fileContent = $state<string>('');
 
-  const documentTitle = $derived(
-    buildDocumentTitle(taskQuery.current?.title, m.title_type_task())
-  );
+  const documentTitle = $derived(buildDocumentTitle(taskQuery.current?.title, m.title_type_task()));
 </script>
 
 <svelte:head>

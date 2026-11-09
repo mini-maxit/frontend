@@ -80,11 +80,7 @@ export class UserService {
   /**
    * Get all users (admin only) with pagination
    */
-  async getUsers(params?: {
-    limit?: number;
-    offset?: number;
-    sort?: string;
-  }): Promise<{
+  async getUsers(params?: { limit?: number; offset?: number; sort?: string }): Promise<{
     success: boolean;
     status: number;
     data?: PaginatedData<User>;

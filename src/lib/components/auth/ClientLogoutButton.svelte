@@ -1,6 +1,6 @@
 <script lang="ts">
   import { clientLogout } from '$lib/auth/client-logout';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import type { Snippet } from 'svelte';
 
   interface Props {

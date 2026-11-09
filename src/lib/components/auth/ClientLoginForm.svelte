@@ -8,7 +8,7 @@
   import { toast } from 'svelte-sonner';
   import { AppRoutes } from '$lib/routes';
   import { getAuthInstance, getUserInstance } from '$lib/services';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { LoginSchema } from '$lib/schemas';
   import { defaults, superForm } from 'sveltekit-superforms';
   import { valibot } from 'sveltekit-superforms/adapters';

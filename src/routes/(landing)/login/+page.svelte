@@ -6,10 +6,10 @@
   import { AppRoutes } from '$lib/routes';
   import BackgroundDecoration from '$lib/components/BackgroundDecoration.svelte';
   import { ClientLoginForm } from '$lib/components/auth';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
   // Get redirect parameter from URL
-  const redirectTo = $page.url.searchParams.get('redirectTo') || undefined;
+  const redirectTo = page.url.searchParams.get('redirectTo') || undefined;
 </script>
 
 <div

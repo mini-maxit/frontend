@@ -27,7 +27,7 @@
   <!-- Top Section: User Info + Quick Actions -->
   <div class="grid gap-6 lg:grid-cols-3">
     <div class="lg:col-span-2">
-      <UserInfoCard user={user} />
+      <UserInfoCard {user} />
     </div>
     <div class="lg:col-span-1">
       <QuickActions />

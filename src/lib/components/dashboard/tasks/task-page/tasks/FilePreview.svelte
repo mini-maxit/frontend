@@ -22,6 +22,7 @@
     <Card.Title>{m.task_preview_title()}</Card.Title>
   </Card.Header>
   <Card.Content class="mx-6 overflow-auto px-0">
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -- highlight.js output, not user input -->
     <pre class="rounded-lg text-xs"><code>{@html highlighted()}</code></pre>
   </Card.Content>
 </Card.Root>

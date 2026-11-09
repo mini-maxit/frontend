@@ -32,7 +32,7 @@
   import { userStore } from '$lib/stores/user-store.svelte';
   import { getAuthInstance } from '$lib/services';
   import { goto } from '$app/navigation';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
 
   const user = $derived(userStore.getUserUnsafe());
   const userMenuItems = [

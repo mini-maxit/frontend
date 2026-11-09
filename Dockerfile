@@ -1,14 +1,14 @@
-FROM node:22-alpine3.19 AS deps
+FROM node:26.13.0-alpine3.24 AS deps
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@12.18.0
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --prod --frozen-lockfile
 
-FROM node:22-alpine3.19 AS builder
+FROM node:26.13.0-alpine3.24 AS builder
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@12.18.0
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
@@ -16,7 +16,7 @@ COPY . .
 
 RUN pnpm run build
 
-FROM node:22-alpine3.19 AS runner
+FROM node:26.13.0-alpine3.24 AS runner
 WORKDIR /app
 
 RUN addgroup --system --gid 1001 nodejs && \

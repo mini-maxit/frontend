@@ -140,7 +140,9 @@
             <Table.Header>
               <Table.Row>
                 <Table.Head>{m.contest_results_task()}</Table.Head>
-                <Table.Head class="hidden sm:table-cell">{m.contest_results_best_score()}</Table.Head>
+                <Table.Head class="hidden sm:table-cell"
+                  >{m.contest_results_best_score()}</Table.Head
+                >
                 <Table.Head class="hidden md:table-cell"
                   >{m.contest_results_submissions()}</Table.Head
                 >
@@ -152,19 +154,13 @@
                 <Table.Row>
                   <Table.Cell class="font-medium">{taskResult.task.title}</Table.Cell>
                   <Table.Cell class="hidden sm:table-cell">
-                    <span
-                      class="font-semibold"
-                      class:text-primary={taskResult.bestScore === 100}
-                    >
+                    <span class="font-semibold" class:text-primary={taskResult.bestScore === 100}>
                       {taskResult.bestScore.toFixed(1)}%
                     </span>
                   </Table.Cell>
                   <Table.Cell class="hidden md:table-cell">{taskResult.submissionCount}</Table.Cell>
                   <Table.Cell class="sm:hidden">
-                    <span
-                      class="font-semibold"
-                      class:text-primary={taskResult.bestScore === 100}
-                    >
+                    <span class="font-semibold" class:text-primary={taskResult.bestScore === 100}>
                       {taskResult.bestScore.toFixed(1)}%
                     </span>
                     <span class="text-muted-foreground">
