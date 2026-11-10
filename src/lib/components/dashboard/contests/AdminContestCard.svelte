@@ -15,6 +15,7 @@
   import { localizeHref } from '#lib/paraglide/runtime.js';
   import { formatDate } from '#lib/utils.js';
   import { AppRoutes } from '#lib/routes.js';
+  import RemoveContestButton from '#lib/components/dashboard/admin/contests/RemoveContestButton.svelte';
   import EditContestDialog from '#lib/components/dashboard/admin/contests/EditContestDialog.svelte';
 
   interface AdminContestCardProps {
@@ -50,6 +51,22 @@
       >
         #{contest.id}
       </span>
+      <div class="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          class="h-8 w-8"
+          onclick={() => (editDialogOpen = true)}
+          title={m.admin_contests_edit_button()}
+        >
+          <Edit class="h-4 w-4" />
+        </Button>
+        <RemoveContestButton
+          contestId={contest.id}
+          contestName={contest.name}
+          onSuccess={onContestUpdated}
+        />
+      </div>
       <span
         class="inline-flex items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
       >
@@ -123,14 +140,6 @@
 
     <!-- Action Buttons -->
     <div class="space-y-2">
-      <Button
-        variant="outline"
-        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        onclick={() => (editDialogOpen = true)}
-      >
-        <Edit class="mr-2 h-4 w-4" />
-        {m.admin_contests_edit_button()}
-      </Button>
       <Button
         variant="outline"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"

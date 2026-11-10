@@ -1049,5 +1049,12 @@
   "error_internal": "Coś poszło nie tak. Spróbuj ponownie później.",
   "error_network": "Nie można połączyć się z serwerem. Sprawdź połączenie.",
   "error_timeout": "Żądanie przekroczyło czas. Spróbuj ponownie.",
-  "error_bad_gateway": "Serwer jest chwilowo niedostępny. Spróbuj później."
+  "error_bad_gateway": "Serwer jest chwilowo niedostępny. Spróbuj później.",
+  "admin_contests_remove_button": "Usuń konkurs",
+  "admin_contests_remove_confirm_title": "Potwierdź usunięcie konkursu",
+  "admin_contests_remove_confirm_description": "Czy na pewno chcesz usunąć \"{contestName}\"? Tej operacji nie można cofnąć.",
+  "admin_contests_remove_confirm_button": "Usuń",
+  "admin_contests_remove_cancel_button": "Anuluj",
+  "admin_contests_remove_success": "Konkurs został usunięty!",
+  "admin_contests_remove_error": "Nie udało się usunąć konkursu"
 }

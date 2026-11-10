@@ -196,6 +196,12 @@ export class ContestsManagementService {
     }
   }
 
+  async deleteContest(contestId: number): Promise<void> {
+    await this.apiClient.delete<ApiResponse<{ message: string }>>({
+      url: `/contests-management/contests/${contestId}`
+    });
+  }
+
   async removeTaskFromContest(contestId: number, taskIds: number | number[]): Promise<void> {
     try {
       const requestData = {
