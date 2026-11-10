@@ -5,8 +5,7 @@ import * as v from 'valibot';
  */
 export const UploadTaskSchema = v.object({
   title: v.pipe(v.string('Title is required'), v.nonEmpty('Title cannot be empty')),
-  archive: v.instance(File, 'Task archive is required'),
-  isVisible: v.optional(v.boolean(), false)
+  archive: v.instance(File, 'Task archive is required')
 });
 
 export type UploadTaskInput = v.InferOutput<typeof UploadTaskSchema>;

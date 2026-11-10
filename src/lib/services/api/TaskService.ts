@@ -1,7 +1,7 @@
 import type { ApiService } from './ApiService';
 import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { Task, TaskDetail, MyTasksResponse } from '#lib/dto/task.js';
+import type { TaskDetail, MyTasksResponse } from '#lib/dto/task.js';
 import type { ApiResponse } from '#lib/dto/response.js';
 
 /**
@@ -10,33 +10,6 @@ import type { ApiResponse } from '#lib/dto/response.js';
  */
 export class TaskService {
   constructor(private apiClient: ApiService) {}
-
-  /**
-   * Get all available tasks
-   * @returns List of all tasks
-   */
-  async getAllTasks(): Promise<{
-    success: boolean;
-    status: number;
-    data?: Task[];
-    error?: string;
-  }> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<Task[]>>({
-        url: '/tasks'
-      });
-      return { success: true, data: response.data, status: 200 };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          success: false,
-          error: resolveErrorMessage(error),
-          status: error.getStatus()
-        };
-      }
-      throw error;
-    }
-  }
 
   /**
    * Get task details by ID

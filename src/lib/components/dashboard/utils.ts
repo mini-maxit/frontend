@@ -12,8 +12,6 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.UserContests]: () => m.sidebar_your_contests(),
     [AppRoutes.UserTasks]: () => m.sidebar_your_tasks(),
     [AppRoutes.UserProfile]: () => m.sidebar_profile(),
-    [AppRoutes.AvailableContests]: () => m.sidebar_available_contests(),
-    [AppRoutes.AvailableTasks]: () => m.sidebar_available_tasks(),
     [AppRoutes.Admin]: () => m.sidebar_admin(),
     [AppRoutes.TeacherContests]: () => m.sidebar_admin_contests(),
     [AppRoutes.TeacherGroups]: () => m.groups_management_title(),
@@ -23,8 +21,8 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.AdminWorkerMonitoring]: () => m.sidebar_admin_monitoring()
   };
 
-  // Check for dynamic routes (e.g., /dashboard/tasks/[taskId])
-  if (path.startsWith(AppRoutes.TaskDetails)) {
+  // Check for dynamic routes (e.g., /dashboard/teacher/tasks/[taskId])
+  if (path.match(/^\/dashboard\/teacher\/tasks\/\d+$/)) {
     return m.header_task_details();
   }
 
@@ -36,11 +34,6 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
   // Check for teacher contest user stats (e.g., /dashboard/teacher/contests/[contestId]/user-stats)
   if (path.match(/^\/dashboard\/teacher\/contests\/\d+\/user-stats/)) {
     return m.contest_user_stats_title();
-  }
-
-  // Check for admin contest registration requests (e.g., /dashboard/admin/contests/[contestId]/registration-requests)
-  if (path.match(/^\/dashboard\/admin\/contests\/\d+\/registration-requests/)) {
-    return m.admin_registration_requests_title();
   }
 
   // Check for teacher groups detail pages (e.g., /dashboard/teacher/groups/[groupId])

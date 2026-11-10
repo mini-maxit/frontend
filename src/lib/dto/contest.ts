@@ -1,12 +1,5 @@
 import { Permission } from './accessControl';
 
-export enum ContestRegistrationStatus {
-  Registered = 'registered',
-  AwaitingApproval = 'awaitingApproval',
-  RegistrationClosed = 'registrationClosed',
-  CanRegister = 'canRegister'
-}
-
 export interface Contest {
   id: number;
   name: string;
@@ -19,10 +12,9 @@ export interface Contest {
   participantCount: number;
   taskCount: number;
   status: ContestStatus;
-  registrationStatus: ContestRegistrationStatus;
 }
 
-// Contest data for creators/teachers (without registrationStatus)
+// Contest data for creators/teachers
 export interface CreatedContest {
   id: number;
   name: string;
@@ -35,9 +27,7 @@ export interface CreatedContest {
   participantCount: number;
   taskCount: number;
   status: ContestStatus;
-  isRegistrationOpen: boolean;
   isSubmissionOpen: boolean;
-  isVisible: boolean;
 }
 
 export interface ManagedContest extends CreatedContest {
@@ -109,9 +99,7 @@ export interface CreateContestDto {
   description: string;
   startAt: string;
   endAt: string | null;
-  isRegistrationOpen: boolean;
   isSubmissionOpen: boolean;
-  isVisible: boolean;
 }
 
 export interface EditContestDto {
@@ -119,32 +107,7 @@ export interface EditContestDto {
   description: string;
   startAt: string;
   endAt: string | null;
-  isRegistrationOpen: boolean;
   isSubmissionOpen: boolean;
-  isVisible: boolean;
-}
-
-export enum RegistrationRequestStatus {
-  Approved = 'approved',
-  Pending = 'pending',
-  Rejected = 'rejected'
-}
-
-export interface RegistrationRequest {
-  id: number;
-  contestId: number;
-  userId: number;
-  status: RegistrationRequestStatus;
-  createdAt: string;
-  user: {
-    id: number;
-    email: string;
-    name: string;
-    surname: string;
-    username: string;
-    role: string;
-    createdAt: string;
-  };
 }
 
 export interface AddContestTaskDto {

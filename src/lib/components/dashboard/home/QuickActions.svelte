@@ -2,8 +2,6 @@
   import * as Card from '#lib/components/ui/card/index.js';
   import { AppRoutes } from '#lib/routes.js';
   import { localizeHref } from '#lib/paraglide/runtime.js';
-  import Code from '@lucide/svelte/icons/code';
-  import Trophy from '@lucide/svelte/icons/trophy';
   import BarChart from '@lucide/svelte/icons/bar-chart';
   import Users from '@lucide/svelte/icons/users';
   import User from '@lucide/svelte/icons/user';
@@ -11,18 +9,6 @@
   import * as m from '#lib/paraglide/messages.js';
 
   const quickActions = [
-    {
-      icon: Code,
-      title: m.quick_actions_solve_task(),
-      description: m.quick_actions_solve_task_description(),
-      href: localizeHref(AppRoutes.AvailableTasks)
-    },
-    {
-      icon: Trophy,
-      title: m.quick_actions_join_contest(),
-      description: m.quick_actions_join_contest_description(),
-      href: localizeHref(AppRoutes.AvailableContests)
-    },
     {
       icon: FileText,
       title: m.quick_actions_my_submissions(),

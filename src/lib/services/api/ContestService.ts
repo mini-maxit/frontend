@@ -2,14 +2,13 @@ import type { ApiService } from './ApiService';
 import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
 import type {
-  Contest,
   ContestWithStats,
   PastContestWithStats,
   ContestResults,
   ContestDetailed
 } from '#lib/dto/contest.js';
 import type { ContestTaskWithStatistics, TaskDetail } from '#lib/dto/task.js';
-import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
+import type { ApiResponse } from '#lib/dto/response.js';
 
 /**
  * Client-side service for contest-related API calls
@@ -50,51 +49,6 @@ export class ContestService {
     };
   }
 
-  async getOngoing(): Promise<Contest[]> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<PaginatedData<Contest>>>({
-        url: '/contests?status=ongoing'
-      });
-      return response.data.items;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get ongoing contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
-  }
-
-  async getUpcoming(): Promise<Contest[]> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<PaginatedData<Contest>>>({
-        url: '/contests?status=upcoming'
-      });
-      return response.data.items;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get upcoming contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
-  }
-
-  async getPast(): Promise<Contest[]> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<PaginatedData<Contest>>>({
-        url: '/contests?status=past'
-      });
-      return response.data.items;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        console.error('Failed to get past contests:', error.toJSON());
-        throw error;
-      }
-      throw error;
-    }
-  }
-
   async getMyActiveContests(): Promise<ContestWithStats[]> {
     try {
       const response = await this.apiClient.get<ApiResponse<ContestWithStats[]>>({
@@ -120,28 +74,6 @@ export class ContestService {
       if (error instanceof ApiError) {
         console.error('Failed to get past contests:', error.toJSON());
         throw error;
-      }
-      throw error;
-    }
-  }
-
-  async registerForContest(contestId: number): Promise<{
-    success: boolean;
-    status: number;
-    error?: string;
-  }> {
-    try {
-      await this.apiClient.post<ApiResponse<void>>({
-        url: `/contests/${contestId}/register`
-      });
-      return { success: true, status: 200 };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          success: false,
-          error: resolveErrorMessage(error),
-          status: error.getStatus()
-        };
       }
       throw error;
     }

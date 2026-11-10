@@ -7,7 +7,6 @@ export interface Task {
   updatedAt: string;
   createdBy: number;
   creatorName: string;
-  isVisible: boolean;
 }
 
 export interface ManagedTask extends Task {
@@ -44,7 +43,6 @@ export interface UploadTaskResponse {
 export interface UploadTaskDto {
   title: string;
   archive: File;
-  isVisible: boolean;
 }
 
 export interface UserContestTask {

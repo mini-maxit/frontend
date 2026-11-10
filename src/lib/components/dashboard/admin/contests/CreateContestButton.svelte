@@ -37,9 +37,7 @@
         description: '',
         startAt: '',
         endAt: '',
-        isRegistrationOpen: false,
-        isSubmissionOpen: false,
-        isVisible: false
+        isSubmissionOpen: false
       },
       valibot(CreateContestSchema)
     ),
@@ -58,9 +56,7 @@
             description: form.data.description,
             startAt: form.data.startAt,
             endAt: form.data.endAt || null,
-            isRegistrationOpen: form.data.isRegistrationOpen,
-            isSubmissionOpen: form.data.isSubmissionOpen,
-            isVisible: form.data.isVisible
+            isSubmissionOpen: form.data.isSubmissionOpen
           });
           toast.success(m.admin_contests_create_success());
           dialogOpen = false;
@@ -302,18 +298,6 @@
 
         <div class="flex items-center gap-3">
           <Checkbox
-            id="isRegistrationOpen"
-            name="isRegistrationOpen"
-            bind:checked={$form.isRegistrationOpen}
-            disabled={$submitting}
-          />
-          <Label for="isRegistrationOpen" class="cursor-pointer text-sm font-normal">
-            {m.admin_contests_form_registration_open()}
-          </Label>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <Checkbox
             id="isSubmissionOpen"
             name="isSubmissionOpen"
             bind:checked={$form.isSubmissionOpen}
@@ -321,18 +305,6 @@
           />
           <Label for="isSubmissionOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_submission_open()}
-          </Label>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <Checkbox
-            id="isVisible"
-            name="isVisible"
-            bind:checked={$form.isVisible}
-            disabled={$submitting}
-          />
-          <Label for="isVisible" class="cursor-pointer text-sm font-normal">
-            {m.admin_contests_form_visible()}
           </Label>
         </div>
       </div>

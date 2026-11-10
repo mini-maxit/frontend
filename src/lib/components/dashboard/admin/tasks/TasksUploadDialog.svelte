@@ -3,7 +3,6 @@
   import { showApiError } from '#lib/errors/backend-error.js';
   import { Input } from '#lib/components/ui/input/index.js';
   import { Label } from '#lib/components/ui/label/index.js';
-  import { Checkbox } from '#lib/components/ui/checkbox/index.js';
   import * as Dialog from '#lib/components/ui/dialog/index.js';
   import { toast } from 'svelte-sonner';
   import * as m from '#lib/paraglide/messages.js';
@@ -39,8 +38,7 @@
       try {
         const result = await tasksManagementService.uploadTask({
           title: form.data.title.trim(),
-          archive: form.data.archive,
-          isVisible: form.data.isVisible ?? false
+          archive: form.data.archive
         });
 
         if (result.success) {
@@ -118,21 +116,6 @@
             })}
           </p>
         {/if}
-      </div>
-
-      <div class="flex items-center space-x-2">
-        <Checkbox
-          id="isVisible"
-          checked={$form.isVisible}
-          onCheckedChange={(checked) => ($form.isVisible = checked === true)}
-          disabled={$submitting}
-        />
-        <Label
-          for="isVisible"
-          class="cursor-pointer text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          {m.admin_tasks_card_visible_to_users()}
-        </Label>
       </div>
 
       <Dialog.Footer>

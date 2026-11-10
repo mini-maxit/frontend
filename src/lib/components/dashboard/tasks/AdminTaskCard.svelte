@@ -12,7 +12,6 @@
   import { localizeHref } from '#lib/paraglide/runtime.js';
   import { AppRoutes } from '#lib/routes.js';
   import ManageTestCasesLimitsDialog from '#lib/components/dashboard/admin/tasks/ManageTestCasesLimitsDialog.svelte';
-  import TaskVisibilityToggle from '#lib/components/dashboard/admin/tasks/TaskVisibilityToggle.svelte';
   import RemoveTaskButton from '#lib/components/dashboard/admin/tasks/RemoveTaskButton.svelte';
 
   interface AdminTaskCardProps {
@@ -72,15 +71,6 @@
           >{m.admin_tasks_card_user_prefix()}{task.createdBy}</span
         >
       </div>
-    </div>
-
-    <!-- Visibility Toggle -->
-    <div class="rounded-lg border border-border bg-muted/30 p-3">
-      <TaskVisibilityToggle
-        taskId={task.id}
-        taskTitle={task.title}
-        initialVisibility={task.isVisible}
-      />
     </div>
 
     <!-- Action Buttons -->
