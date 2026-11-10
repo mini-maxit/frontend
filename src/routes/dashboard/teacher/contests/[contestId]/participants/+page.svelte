@@ -9,6 +9,8 @@
   import { getContestsManagementInstance } from '#lib/services/index.js';
   import {
     AddParticipantsToContestButton,
+    AddGroupToContestButton,
+    AssignedGroupsList,
     ParticipantsList
   } from '#lib/components/dashboard/admin/contests/index.js';
   import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
@@ -54,7 +56,7 @@
     return await contestsService.getContestParticipants(contestId, params);
   });
 
-  const assignableQuery = createParameterizedQuery(
+  const assignableParticipantsQuery = createParameterizedQuery(
     () => contestId,
     async (id) => {
       if (!contestsService) throw new Error('Service unavailable');
@@ -62,6 +64,37 @@
       return result.items;
     }
   );
+
+  const groupsQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getContestGroups(id);
+    }
+  );
+
+  const assignableGroupsQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getAssignableGroups(id);
+    }
+  );
+
+  function refreshParticipants() {
+    participantsQuery.refresh();
+    assignableParticipantsQuery.refresh();
+  }
+
+  function refreshGroups() {
+    groupsQuery.refresh();
+    assignableGroupsQuery.refresh();
+  }
+
+  function refreshAll() {
+    refreshParticipants();
+    refreshGroups();
+  }
 </script>
 
 <div class="space-y-6">
@@ -76,17 +109,52 @@
   <div class="space-y-4">
     <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_quick_actions()}</h2>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {#if assignableQuery.current}
+      {#if assignableParticipantsQuery.current}
         <AddParticipantsToContestButton
           {contestId}
-          assignableUsers={assignableQuery.current}
+          assignableUsers={assignableParticipantsQuery.current}
           onSuccess={() => {
-            participantsQuery.refresh();
-            assignableQuery.refresh();
+            refreshParticipants();
+          }}
+        />
+      {/if}
+      {#if assignableGroupsQuery.current}
+        <AddGroupToContestButton
+          {contestId}
+          assignableGroups={assignableGroupsQuery.current}
+          onSuccess={() => {
+            refreshAll();
           }}
         />
       {/if}
     </div>
+  </div>
+
+  <!-- Assigned Groups -->
+  <div class="space-y-4">
+    {#if groupsQuery.error}
+      <ErrorCard
+        title={m.contest_groups_load_error()}
+        error={groupsQuery.error}
+        onRetry={() => groupsQuery.refresh()}
+      />
+    {:else if groupsQuery.loading}
+      <LoadingSpinner message={m.contest_groups_loading()} />
+    {:else if groupsQuery.current && groupsQuery.current.length === 0}
+      <EmptyState
+        title={m.contest_groups_no_groups_title()}
+        description={m.contest_groups_no_groups_description()}
+        icon={Users}
+      />
+    {:else if groupsQuery.current}
+      <AssignedGroupsList
+        {contestId}
+        groups={groupsQuery.current}
+        onSuccess={() => {
+          refreshAll();
+        }}
+      />
+    {/if}
   </div>
 
   <!-- Contest Participants Table -->
@@ -117,8 +185,7 @@
         bind:sortKey
         bind:sortDir
         onSuccess={() => {
-          participantsQuery.refresh();
-          assignableQuery.refresh();
+          refreshParticipants();
         }}
       />
     {/if}

@@ -891,7 +891,6 @@
   "contest_participants_pagination_prev": "Poprzednia",
   "contest_participants_pagination_next": "Następna",
   "contest_participants_pagination_showing_range": "Wyświetlanie {from}-{to} z {total} uczestników",
-  "admin_contests_card_view_groups": "Zarządzaj Grupami",
   "admin_contests_card_view_participants": "Zarządzaj Uczestnikami",
   "sidebar_groups": "Grupy",
   "sidebar_admin_languages": "Języki",
