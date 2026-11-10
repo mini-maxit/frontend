@@ -17,9 +17,6 @@ export enum AppRoutes {
   UserContestTask = `${AppRoutes.Dashboard}/user/contests/`,
   UserTasks = `${AppRoutes.Dashboard}/user/tasks`,
   UserProfile = `${AppRoutes.Dashboard}/user/profile`,
-  AvailableContests = `${AppRoutes.Dashboard}/contests`,
-  AvailableTasks = `${AppRoutes.Dashboard}/tasks`,
-  TaskDetails = `${AppRoutes.Dashboard}/tasks/`,
 
   Teacher = `${AppRoutes.Dashboard}/teacher`,
   TeacherContests = `${AppRoutes.Teacher}/contests`,
@@ -27,6 +24,7 @@ export enum AppRoutes {
   TeacherGroups = `${AppRoutes.Teacher}/groups`,
   TeacherTasks = `${AppRoutes.Teacher}/tasks`,
   TeacherTaskCollaborators = `${AppRoutes.TeacherTasks}/`,
+  TaskDetails = `${AppRoutes.TeacherTasks}/`,
 
   Admin = `${AppRoutes.Dashboard}/admin`,
   AdminUsers = `${AppRoutes.Admin}/users`,

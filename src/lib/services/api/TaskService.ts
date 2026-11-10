@@ -12,33 +12,6 @@ export class TaskService {
   constructor(private apiClient: ApiService) {}
 
   /**
-   * Get all available tasks
-   * @returns List of all tasks
-   */
-  async getAllTasks(): Promise<{
-    success: boolean;
-    status: number;
-    data?: Task[];
-    error?: string;
-  }> {
-    try {
-      const response = await this.apiClient.get<ApiResponse<Task[]>>({
-        url: '/tasks'
-      });
-      return { success: true, data: response.data, status: 200 };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          success: false,
-          error: resolveErrorMessage(error),
-          status: error.getStatus()
-        };
-      }
-      throw error;
-    }
-  }
-
-  /**
    * Get task details by ID
    * @param id - Task ID
    * @returns Task details

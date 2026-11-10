@@ -21,7 +21,6 @@
   import FileText from '@lucide/svelte/icons/file-text';
   import Trophy from '@lucide/svelte/icons/trophy';
   import ListTodo from '@lucide/svelte/icons/list-todo';
-  import Globe from '@lucide/svelte/icons/globe';
   import UserCircle from '@lucide/svelte/icons/user-circle';
   import Users from '@lucide/svelte/icons/users';
   import Languages from '@lucide/svelte/icons/languages';
@@ -52,19 +51,6 @@
       title: () => m.sidebar_your_tasks(),
       href: localizeHref(AppRoutes.UserTasks),
       icon: ListTodo
-    }
-  ];
-
-  const publicMenuItems = [
-    {
-      title: () => m.sidebar_available_contests(),
-      href: localizeHref(AppRoutes.AvailableContests),
-      icon: Trophy
-    },
-    {
-      title: () => m.sidebar_available_tasks(),
-      href: localizeHref(AppRoutes.AvailableTasks),
-      icon: Globe
     }
   ];
 
@@ -143,8 +129,7 @@
     const groups = {
       admin: adminMenuItems,
       teacher: teacherMenuItems,
-      user: userMenuItems,
-      public: publicMenuItems
+      user: userMenuItems
     };
     for (const [key, items] of Object.entries(groups)) {
       if (items.some((item) => isActive(item.href))) collapsed[key] = false;
@@ -252,7 +237,6 @@
     {/if}
 
     {@render menuGroup('user', m.sidebar_your_section(), userMenuItems)}
-    {@render menuGroup('public', m.sidebar_public_section(), publicMenuItems)}
   </SidebarContent>
 
   <!-- Footer with Profile Link -->

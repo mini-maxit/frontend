@@ -9,6 +9,8 @@
   import { LoadingSpinner, ErrorCard, BackButton } from '#lib/components/common/index.js';
   import * as m from '#lib/paraglide/messages.js';
   import { buildDocumentTitle } from '#lib/title.js';
+  import { AppRoutes } from '#lib/routes.js';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
 
   const taskService = getTaskInstance();
   const submissionService = getSubmissionInstance();
@@ -44,7 +46,7 @@
 </svelte:head>
 
 <div class="space-y-6">
-  <BackButton href="/dashboard/tasks" />
+  <BackButton href={localizeHref(AppRoutes.TeacherTasks)} />
   {#if taskQuery.error}
     <ErrorCard
       title={m.task_error_title()}

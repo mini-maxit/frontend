@@ -22,7 +22,7 @@ export interface Query<T> {
  * const tasksQuery = createQuery(async () => {
  *   const service = getClientTaskInstance();
  *   if (!service) throw new Error('Service unavailable');
- *   const result = await service.getAllTasks();
+ *   const result = await service.getMyTasks();
  *   if (!result.success) throw new Error(result.error || 'Failed to fetch');
  *   return result.data!;
  * });
