@@ -2,14 +2,13 @@ import type { ApiService } from './ApiService';
 import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
 import type {
-  Contest,
   ContestWithStats,
   PastContestWithStats,
   ContestResults,
   ContestDetailed
 } from '#lib/dto/contest.js';
 import type { ContestTaskWithStatistics, TaskDetail } from '#lib/dto/task.js';
-import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
+import type { ApiResponse } from '#lib/dto/response.js';
 
 /**
  * Client-side service for contest-related API calls

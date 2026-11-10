@@ -1,7 +1,7 @@
 import type { ApiService } from './ApiService';
 import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
-import type { Task, TaskDetail, MyTasksResponse } from '#lib/dto/task.js';
+import type { TaskDetail, MyTasksResponse } from '#lib/dto/task.js';
 import type { ApiResponse } from '#lib/dto/response.js';
 
 /**

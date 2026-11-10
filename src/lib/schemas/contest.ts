@@ -8,9 +8,7 @@ export const CreateContestSchema = v.object({
   description: v.pipe(v.string(), v.nonEmpty('Description is required')),
   startAt: v.pipe(v.string(), v.nonEmpty('Start date is required')),
   endAt: v.optional(v.string()),
-  isRegistrationOpen: v.boolean(),
-  isSubmissionOpen: v.boolean(),
-  isVisible: v.boolean()
+  isSubmissionOpen: v.boolean()
 });
 
 /**
@@ -22,9 +20,7 @@ export const UpdateContestSchema = v.object({
   description: v.pipe(v.string(), v.nonEmpty('Description is required')),
   startAt: v.pipe(v.string(), v.nonEmpty('Start date is required')),
   endAt: v.optional(v.string()),
-  isRegistrationOpen: v.boolean(),
-  isSubmissionOpen: v.boolean(),
-  isVisible: v.boolean()
+  isSubmissionOpen: v.boolean()
 });
 
 export type CreateContestInput = v.InferOutput<typeof CreateContestSchema>;

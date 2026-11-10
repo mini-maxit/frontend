@@ -36,11 +36,6 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     return m.contest_user_stats_title();
   }
 
-  // Check for admin contest registration requests (e.g., /dashboard/admin/contests/[contestId]/registration-requests)
-  if (path.match(/^\/dashboard\/admin\/contests\/\d+\/registration-requests/)) {
-    return m.admin_registration_requests_title();
-  }
-
   // Check for teacher groups detail pages (e.g., /dashboard/teacher/groups/[groupId])
   if (path.match(/^\/dashboard\/teacher\/groups\/\d+/)) {
     return m.groups_management_title();
