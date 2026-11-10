@@ -52,6 +52,11 @@
         #{contest.id}
       </span>
       <div class="flex items-center gap-1">
+        <span
+          class="inline-flex items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
+        >
+          {contest.status}
+        </span>
         <Button
           variant="ghost"
           size="icon"
@@ -67,11 +72,6 @@
           onSuccess={onContestUpdated}
         />
       </div>
-      <span
-        class="inline-flex items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
-      >
-        {contest.status}
-      </span>
     </div>
     <Card.Title
       class="mt-3 flex items-start gap-2 text-lg transition-colors group-hover:text-primary"
