@@ -26,6 +26,14 @@
   let { contest, onContestUpdated }: AdminContestCardProps = $props();
 
   let editDialogOpen = $state(false);
+
+  const statusColors = {
+    ongoing: 'bg-primary/10 text-primary',
+    upcoming: 'bg-secondary/10 text-secondary-foreground',
+    past: 'bg-muted text-muted-foreground'
+  };
+
+  const statusColor = $derived(statusColors[contest.status] || statusColors.past);
 </script>
 
 <Card.Root
@@ -67,6 +75,11 @@
         />
       </div>
     </div>
+    <span
+      class="mt-2 inline-flex w-fit items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
+    >
+      {contest.status}
+    </span>
     <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">{contest.description}</p>
   </Card.Header>
 
