@@ -89,7 +89,7 @@
     <div class="flex items-center justify-between">
       <Label for="password">{m.login_password_label()}</Label>
       <a
-        href="/forgot-password"
+        href={AppRoutes.ForgotPassword}
         class="text-sm text-primary transition-colors hover:text-primary/80 hover:underline"
       >
         {m.login_forgot_password()}
