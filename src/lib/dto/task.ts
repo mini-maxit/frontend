@@ -1,3 +1,5 @@
+import type { Permission } from './accessControl';
+
 export interface Task {
   id: number;
   title: string;
@@ -6,6 +8,10 @@ export interface Task {
   createdBy: number;
   creatorName: string;
   isVisible: boolean;
+}
+
+export interface ManagedTask extends Task {
+  permissionType: Permission;
 }
 
 export interface TaskDetail {

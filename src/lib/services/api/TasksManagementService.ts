@@ -3,7 +3,7 @@ import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
 import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
 import type {
-  Task,
+  ManagedTask,
   UploadTaskResponse,
   UploadTaskDto,
   TaskLimit,
@@ -44,15 +44,16 @@ export class TasksManagementService {
     }
   }
 
-  async getCreatedTasks(): Promise<{
+  /** @param all admin only: list every task in the system instead of only the ones the user manages */
+  async getManagedTasks(all = false): Promise<{
     success: boolean;
     status: number;
-    data?: Task[];
+    data?: ManagedTask[];
     error?: string;
   }> {
     try {
-      const response = await this.apiClient.get<ApiResponse<PaginatedData<Task>>>({
-        url: '/tasks-management/tasks/created?limit=100&sort=title:asc'
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<ManagedTask>>>({
+        url: `/tasks-management/tasks/managed?limit=100&sort=title:asc${all ? '&scope=all' : ''}`
       });
       return { success: true, data: response.data.items, status: 200 };
     } catch (error) {

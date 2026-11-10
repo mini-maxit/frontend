@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { page } from '$app/state';
   import { getContestsManagementInstance } from '#lib/services/index.js';
   import {
     CreateContestButton,
@@ -11,10 +12,16 @@
 
   const contestsManagementService = getContestsManagementInstance();
 
-  const contestsQuery = createQuery(async () => {
-    if (!contestsManagementService) throw new Error('Service unavailable');
-    return await contestsManagementService.getManagedContests();
-  });
+  // Admin "All Contests" sidebar entry opens this page with ?scope=all
+  const showAll = $derived(page.url.searchParams.get('scope') === 'all');
+
+  const contestsQuery = createParameterizedQuery(
+    () => showAll,
+    async (all) => {
+      if (!contestsManagementService) throw new Error('Service unavailable');
+      return await contestsManagementService.getManagedContests(all);
+    }
+  );
 </script>
 
 <div class="space-y-6">

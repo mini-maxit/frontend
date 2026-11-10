@@ -24,10 +24,11 @@ import type { User } from '#lib/dto/user.js';
 export class ContestsManagementService {
   constructor(private apiClient: ApiService) {}
 
-  async getManagedContests(): Promise<ManagedContest[]> {
+  /** @param all admin only: list every contest in the system instead of only the ones the user manages */
+  async getManagedContests(all = false): Promise<ManagedContest[]> {
     try {
       const contests = await this.apiClient.get<ApiResponse<PaginatedData<ManagedContest>>>({
-        url: '/contests-management/contests/managed'
+        url: `/contests-management/contests/managed?limit=100${all ? '&scope=all' : ''}`
       });
       return contests.data.items;
     } catch (error) {

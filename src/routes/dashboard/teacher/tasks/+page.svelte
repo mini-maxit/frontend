@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { createQuery } from '#lib/utils/query.svelte.js';
+  import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
+  import { page } from '$app/state';
   import { getTasksManagementInstance } from '#lib/services/index.js';
   import {
     TasksList,
@@ -14,12 +15,18 @@
   const tasksManagementService = getTasksManagementInstance();
 
   let dialogOpen = $state(false);
-  const tasksQuery = createQuery(async () => {
-    if (!tasksManagementService) throw new Error('Service unavailable');
-    const result = await tasksManagementService.getCreatedTasks();
-    if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
-    return result.data!;
-  });
+  // Admin "All Tasks" sidebar entry opens this page with ?scope=all
+  const showAll = $derived(page.url.searchParams.get('scope') === 'all');
+
+  const tasksQuery = createParameterizedQuery(
+    () => showAll,
+    async (all) => {
+      if (!tasksManagementService) throw new Error('Service unavailable');
+      const result = await tasksManagementService.getManagedTasks(all);
+      if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
+      return result.data!;
+    }
+  );
 
   async function handleDelete(taskId: number) {
     if (!tasksManagementService) return;

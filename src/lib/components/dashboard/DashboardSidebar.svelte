@@ -28,11 +28,13 @@
   import LayoutDashboard from '@lucide/svelte/icons/layout-dashboard';
   import Activity from '@lucide/svelte/icons/activity';
   import LogOut from '@lucide/svelte/icons/log-out';
+  import ChevronRight from '@lucide/svelte/icons/chevron-right';
   import SidebarTrigger from '../ui/sidebar/sidebar-trigger.svelte';
   import { userStore } from '#lib/stores/user-store.svelte.js';
   import { getAuthInstance } from '#lib/services/index.js';
   import { goto } from '$app/navigation';
   import { browser } from '$app/env';
+  import { onMount } from 'svelte';
 
   const user = $derived(userStore.getUserUnsafe());
   const userMenuItems = [
@@ -86,6 +88,16 @@
 
   const adminMenuItems = [
     {
+      title: () => m.admin_contests_all_contests(),
+      href: localizeHref(`${AppRoutes.TeacherContests}?scope=all`),
+      icon: Trophy
+    },
+    {
+      title: () => m.admin_tasks_all_tasks(),
+      href: localizeHref(`${AppRoutes.TeacherTasks}?scope=all`),
+      icon: ListTodo
+    },
+    {
       title: () => m.sidebar_admin_monitoring(),
       href: localizeHref(AppRoutes.AdminWorkerMonitoring),
       icon: Activity
@@ -102,12 +114,88 @@
     }
   ];
 
+  // Compare scope too, so "Contests" and admin "All Contests" (?scope=all) aren't both active;
+  // other query params (pagination, sort) must not affect highlighting
   function isActive(href: string): boolean {
-    return page.url.pathname === href;
+    const target = new URL(href, page.url.origin);
+    return (
+      page.url.pathname === target.pathname &&
+      page.url.searchParams.get('scope') === target.searchParams.get('scope')
+    );
   }
 
   const currentLang = $derived(getLocale());
+
+  type MenuItem = { title: () => string; href: string; icon: typeof Trophy };
+
+  const COLLAPSED_STORAGE_KEY = 'sidebar-collapsed';
+
+  // Admin starts folded; the user's saved choice is applied on mount (SSR can't read localStorage)
+  const collapsed = $state<Record<string, boolean>>({ admin: true });
+
+  onMount(() => {
+    try {
+      Object.assign(collapsed, JSON.parse(localStorage.getItem(COLLAPSED_STORAGE_KEY) ?? '{}'));
+    } catch {
+      // unreadable or blocked storage: keep defaults
+    }
+    // Never hide the link for the page we landed on (not saved, so the preference is kept)
+    const groups = {
+      admin: adminMenuItems,
+      teacher: teacherMenuItems,
+      user: userMenuItems,
+      public: publicMenuItems
+    };
+    for (const [key, items] of Object.entries(groups)) {
+      if (items.some((item) => isActive(item.href))) collapsed[key] = false;
+    }
+  });
+
+  function toggleGroup(key: string) {
+    collapsed[key] = !collapsed[key];
+    try {
+      localStorage.setItem(COLLAPSED_STORAGE_KEY, JSON.stringify(collapsed));
+    } catch {
+      // storage unavailable (private mode etc.): folding still works for this session
+    }
+  }
 </script>
+
+{#snippet menuGroup(key: string, label: string, items: MenuItem[])}
+  <SidebarGroup>
+    <SidebarGroupLabel>
+      {#snippet child({ props })}
+        <button
+          type="button"
+          {...props}
+          class="{props.class} w-full cursor-pointer justify-between hover:text-sidebar-primary-foreground"
+          aria-expanded={!collapsed[key]}
+          aria-controls="sidebar-group-{key}"
+          onclick={() => toggleGroup(key)}
+        >
+          <span>{label}</span>
+          <ChevronRight class="transition-transform {collapsed[key] ? '' : 'rotate-90'}" />
+        </button>
+      {/snippet}
+    </SidebarGroupLabel>
+    {#if !collapsed[key]}
+      <SidebarMenu id="sidebar-group-{key}">
+        {#each items as item (item.href)}
+          <SidebarMenuItem>
+            <SidebarMenuButton isActive={isActive(item.href)}>
+              {#snippet child({ props })}
+                <a href={item.href} {...props}>
+                  <item.icon />
+                  <span>{item.title()}</span>
+                </a>
+              {/snippet}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        {/each}
+      </SidebarMenu>
+    {/if}
+  </SidebarGroup>
+{/snippet}
 
 <Sidebar>
   <SidebarHeader>
@@ -155,84 +243,16 @@
   </SidebarHeader>
 
   <SidebarContent>
-    <!-- Admin Dashboard Section -->
     {#if user.role === UserRole.Admin}
-      <SidebarGroup>
-        <SidebarGroupLabel>{m.sidebar_admin()}</SidebarGroupLabel>
-        <SidebarMenu>
-          {#each adminMenuItems as item (item.href)}
-            <SidebarMenuItem>
-              <SidebarMenuButton isActive={isActive(item.href)}>
-                {#snippet child({ props })}
-                  <a href={item.href} {...props}>
-                    <item.icon />
-                    <span>{item.title()}</span>
-                  </a>
-                {/snippet}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          {/each}
-        </SidebarMenu>
-      </SidebarGroup>
+      {@render menuGroup('admin', m.sidebar_admin(), adminMenuItems)}
     {/if}
 
     {#if user.role === UserRole.Teacher || user.role === UserRole.Admin}
-      <SidebarGroup>
-        <SidebarGroupLabel>{m.sidebar_teacher()}</SidebarGroupLabel>
-        <SidebarMenu>
-          {#each teacherMenuItems as item (item.href)}
-            <SidebarMenuItem>
-              <SidebarMenuButton isActive={isActive(item.href)}>
-                {#snippet child({ props })}
-                  <a href={item.href} {...props}>
-                    <item.icon />
-                    <span>{item.title()}</span>
-                  </a>
-                {/snippet}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          {/each}
-        </SidebarMenu>
-      </SidebarGroup>
+      {@render menuGroup('teacher', m.sidebar_teacher(), teacherMenuItems)}
     {/if}
 
-    <!-- User Activity Section -->
-    <SidebarGroup>
-      <SidebarGroupLabel>{m.sidebar_your_section()}</SidebarGroupLabel>
-      <SidebarMenu>
-        {#each userMenuItems as item (item.href)}
-          <SidebarMenuItem>
-            <SidebarMenuButton isActive={isActive(item.href)}>
-              {#snippet child({ props })}
-                <a href={item.href} {...props}>
-                  <item.icon />
-                  <span>{item.title()}</span>
-                </a>
-              {/snippet}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        {/each}
-      </SidebarMenu>
-    </SidebarGroup>
-
-    <!-- Public Section -->
-    <SidebarGroup>
-      <SidebarGroupLabel>{m.sidebar_public_section()}</SidebarGroupLabel>
-      <SidebarMenu>
-        {#each publicMenuItems as item (item.href)}
-          <SidebarMenuItem>
-            <SidebarMenuButton isActive={isActive(item.href)}>
-              {#snippet child({ props })}
-                <a href={item.href} {...props}>
-                  <item.icon />
-                  <span>{item.title()}</span>
-                </a>
-              {/snippet}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        {/each}
-      </SidebarMenu>
-    </SidebarGroup>
+    {@render menuGroup('user', m.sidebar_your_section(), userMenuItems)}
+    {@render menuGroup('public', m.sidebar_public_section(), publicMenuItems)}
   </SidebarContent>
 
   <!-- Footer with Profile Link -->
