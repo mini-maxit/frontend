@@ -7,7 +7,13 @@
     TasksUploadDialog,
     TasksUploadButton
   } from '#lib/components/dashboard/admin/tasks/index.js';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    ListPagination
+  } from '#lib/components/common/index.js';
+  import { readIntParam, writeSearchParams } from '#lib/utils/url-state.js';
   import Upload from '@lucide/svelte/icons/upload';
   import * as m from '#lib/paraglide/messages.js';
   import { toast } from 'svelte-sonner';
@@ -17,16 +23,27 @@
   let dialogOpen = $state(false);
   // Admin "All Tasks" sidebar entry opens this page with ?scope=all
   const showAll = $derived(page.url.searchParams.get('scope') === 'all');
+  // Read from the URL so reloads keep the page and switching scope (a real navigation) resets it.
+  // Page clicks only shallow-update the URL, which doesn't change page.url, so offset is
+  // overridden locally (writable $derived) and re-derived on the next real navigation.
+  const limit = $derived(readIntParam(page.url, 'limit', 20));
+  let offset = $derived(readIntParam(page.url, 'offset', 0));
 
   const tasksQuery = createParameterizedQuery(
-    () => showAll,
-    async (all) => {
+    () => ({ all: showAll, limit, offset }),
+    async (params) => {
       if (!tasksManagementService) throw new Error('Service unavailable');
-      const result = await tasksManagementService.getManagedTasks(all);
+      const result = await tasksManagementService.getManagedTasks(params);
       if (!result.success) throw new Error(result.error || 'Failed to fetch tasks');
       return result.data!;
     }
   );
+
+  function goToOffset(newOffset: number) {
+    offset = newOffset;
+    writeSearchParams({ offset: newOffset || null });
+    window.scrollTo({ top: 0 });
+  }
 
   async function handleDelete(taskId: number) {
     if (!tasksManagementService) return;
@@ -67,14 +84,23 @@
       />
     {:else if tasksQuery.loading}
       <LoadingSpinner />
-    {:else if tasksQuery.current && tasksQuery.current.length === 0}
+    {:else if tasksQuery.current && tasksQuery.current.pagination.totalItems === 0}
       <EmptyState
         title={m.admin_tasks_no_tasks_title()}
         description={m.admin_tasks_no_tasks_description()}
         icon={Upload}
       />
     {:else if tasksQuery.current}
-      <TasksList tasks={tasksQuery.current} onTaskDeleted={() => tasksQuery.refresh()} />
+      <TasksList tasks={tasksQuery.current.items} onTaskDeleted={() => tasksQuery.refresh()} />
+      <ListPagination
+        total={tasksQuery.current.pagination.totalItems}
+        {limit}
+        {offset}
+        totalLabel={m.admin_tasks_pagination_total({
+          total: tasksQuery.current.pagination.totalItems
+        })}
+        onOffsetChange={goToOffset}
+      />
     {/if}
   </div>
 </div>

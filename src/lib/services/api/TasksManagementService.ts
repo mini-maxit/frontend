@@ -44,18 +44,24 @@ export class TasksManagementService {
     }
   }
 
-  /** @param all admin only: list every task in the system instead of only the ones the user manages */
-  async getManagedTasks(all = false): Promise<{
+  /** `all` (admin only) lists every task in the system instead of only the ones the user manages */
+  async getManagedTasks(params: { all?: boolean; limit: number; offset: number }): Promise<{
     success: boolean;
     status: number;
-    data?: ManagedTask[];
+    data?: PaginatedData<ManagedTask>;
     error?: string;
   }> {
     try {
-      const response = await this.apiClient.get<ApiResponse<PaginatedData<ManagedTask>>>({
-        url: `/tasks-management/tasks/managed?limit=100&sort=title:asc${all ? '&scope=all' : ''}`
+      const query = new URLSearchParams({
+        limit: String(params.limit),
+        offset: String(params.offset),
+        sort: 'title:asc'
       });
-      return { success: true, data: response.data.items, status: 200 };
+      if (params.all) query.set('scope', 'all');
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<ManagedTask>>>({
+        url: `/tasks-management/tasks/managed?${query}`
+      });
+      return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {
