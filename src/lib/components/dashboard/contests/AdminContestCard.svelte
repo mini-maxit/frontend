@@ -45,33 +45,33 @@
   ></div>
 
   <Card.Header class="relative">
-    <div class="flex items-start justify-between gap-2">
+    <div class="flex items-center gap-2 pr-20">
       <span
         class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary"
       >
         #{contest.id}
       </span>
-      <div class="flex items-center gap-1">
-        <span
-          class="inline-flex items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
-        >
-          {contest.status}
-        </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          class="h-8 w-8"
-          onclick={() => (editDialogOpen = true)}
-          title={m.admin_contests_edit_button()}
-        >
-          <Edit class="h-4 w-4" />
-        </Button>
-        <RemoveContestButton
-          contestId={contest.id}
-          contestName={contest.name}
-          onSuccess={onContestUpdated}
-        />
-      </div>
+      <span
+        class="inline-flex items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
+      >
+        {contest.status}
+      </span>
+    </div>
+    <div class="absolute top-0 right-4 flex items-center gap-1">
+      <Button
+        variant="ghost"
+        size="icon"
+        class="h-8 w-8"
+        onclick={() => (editDialogOpen = true)}
+        title={m.admin_contests_edit_button()}
+      >
+        <Edit class="h-4 w-4" />
+      </Button>
+      <RemoveContestButton
+        contestId={contest.id}
+        contestName={contest.name}
+        onSuccess={onContestUpdated}
+      />
     </div>
     <Card.Title
       class="mt-3 flex items-start gap-2 text-lg transition-colors group-hover:text-primary"
