@@ -45,43 +45,41 @@
   ></div>
 
   <Card.Header class="relative">
-    <div class="flex items-center gap-2 pr-20">
+    <div class="flex items-center gap-2">
       <span
-        class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary"
+        class="inline-flex shrink-0 items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary"
       >
         #{contest.id}
       </span>
-      <span
-        class="inline-flex items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
-      >
-        {contest.status}
-      </span>
+      <Card.Title class="min-w-0 flex-1 text-lg transition-colors group-hover:text-primary">
+        <a
+          href={localizeHref(`${AppRoutes.UserContests}/${contest.id}`)}
+          title={contest.name}
+          class="block truncate hover:underline">{contest.name}</a
+        >
+      </Card.Title>
+      <div class="flex shrink-0 items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          class="h-8 w-8"
+          onclick={() => (editDialogOpen = true)}
+          title={m.admin_contests_edit_button()}
+        >
+          <Edit class="h-4 w-4" />
+        </Button>
+        <RemoveContestButton
+          contestId={contest.id}
+          contestName={contest.name}
+          onSuccess={onContestUpdated}
+        />
+      </div>
     </div>
-    <div class="absolute top-0 right-4 flex items-center gap-1">
-      <Button
-        variant="ghost"
-        size="icon"
-        class="h-8 w-8"
-        onclick={() => (editDialogOpen = true)}
-        title={m.admin_contests_edit_button()}
-      >
-        <Edit class="h-4 w-4" />
-      </Button>
-      <RemoveContestButton
-        contestId={contest.id}
-        contestName={contest.name}
-        onSuccess={onContestUpdated}
-      />
-    </div>
-    <Card.Title
-      class="mt-3 flex items-start gap-2 text-lg transition-colors group-hover:text-primary"
+    <span
+      class="inline-flex w-fit items-center rounded-full {statusColor} mt-2 px-2.5 py-0.5 text-xs font-bold"
     >
-      <Trophy class="mt-0.5 h-5 w-5 shrink-0" />
-      <a
-        href={localizeHref(`${AppRoutes.UserContests}/${contest.id}`)}
-        class="wrap-break-word hover:underline">{contest.name}</a
-      >
-    </Card.Title>
+      {contest.status}
+    </span>
     <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">{contest.description}</p>
   </Card.Header>
 
