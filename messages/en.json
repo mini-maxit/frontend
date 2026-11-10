@@ -1059,5 +1059,9 @@
   "admin_contests_remove_confirm_button": "Delete",
   "admin_contests_remove_cancel_button": "Cancel",
   "admin_contests_remove_success": "Contest deleted successfully!",
-  "admin_contests_remove_error": "Failed to delete contest"
+  "admin_contests_remove_error": "Failed to delete contest",
+  "common_pagination_prev": "Previous",
+  "common_pagination_next": "Next",
+  "admin_contests_pagination_total": "{total} total contests",
+  "admin_tasks_pagination_total": "{total} total tasks"
 }

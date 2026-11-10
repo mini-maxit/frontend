@@ -1059,5 +1059,9 @@
   "admin_contests_remove_confirm_button": "Usuń",
   "admin_contests_remove_cancel_button": "Anuluj",
   "admin_contests_remove_success": "Konkurs został usunięty!",
-  "admin_contests_remove_error": "Nie udało się usunąć konkursu"
+  "admin_contests_remove_error": "Nie udało się usunąć konkursu",
+  "common_pagination_prev": "Poprzednia",
+  "common_pagination_next": "Następna",
+  "admin_contests_pagination_total": "{total} konkursów łącznie",
+  "admin_tasks_pagination_total": "{total} zadań łącznie"
 }
