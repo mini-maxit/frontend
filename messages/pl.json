@@ -841,7 +841,7 @@
   "contest_groups_no_members": "—",
   "contest_groups_remove_title": "Usuń Grupę",
   "contest_groups_remove_confirm_title": "Potwierdź Usunięcie",
-  "contest_groups_remove_confirm_description": "Czy na pewno chcesz usunąć grupę \"{groupName}\" z tego konkursu? To usunie wszystkich członków grupy z uczestników konkursu.",
+  "contest_groups_remove_confirm_description": "Czy na pewno chcesz usunąć grupę \"{groupName}\" z tego konkursu? Członkowie stracą dostęp przez tę grupę, ale zachowają bezpośrednie przypisanie lub dostęp przez inne przypisane grupy. Członkostwo w grupie nie zostanie zmienione.",
   "contest_groups_remove_confirm": "Usuń",
   "contest_groups_remove_cancel": "Anuluj",
   "contest_groups_remove_success": "Grupa została usunięta pomyślnie!",

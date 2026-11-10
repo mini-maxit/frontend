@@ -841,7 +841,7 @@
   "contest_groups_no_members": "—",
   "contest_groups_remove_title": "Remove Group",
   "contest_groups_remove_confirm_title": "Confirm Removal",
-  "contest_groups_remove_confirm_description": "Are you sure you want to remove the group \"{groupName}\" from this contest? This will remove all group members from contest participants.",
+  "contest_groups_remove_confirm_description": "Are you sure you want to remove the group \"{groupName}\" from this contest? Members will lose access through this group, but keep any direct assignment or access through other assigned groups. Group membership is not changed.",
   "contest_groups_remove_confirm": "Remove",
   "contest_groups_remove_cancel": "Cancel",
   "contest_groups_remove_success": "Group removed successfully!",

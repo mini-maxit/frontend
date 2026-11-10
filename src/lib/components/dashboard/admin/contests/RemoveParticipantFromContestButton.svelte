@@ -52,16 +52,16 @@
     <Dialog.Header>
       <Dialog.Title>{m.contest_participants_remove_confirm_title()}</Dialog.Title>
       <Dialog.Description>
-        {m.contest_participants_remove_confirm_description({ userName })}
+        <span class="block">{m.contest_participants_remove_confirm_description({ userName })}</span>
+        {#if remainingGroupNames.length > 0}
+          <span class="mt-2 block text-amber-600 dark:text-amber-400">
+            {m.contest_participants_remove_keeps_access({
+              userName,
+              groupNames: remainingGroupNames.join(', ')
+            })}
+          </span>
+        {/if}
       </Dialog.Description>
-      {#if remainingGroupNames.length > 0}
-        <Dialog.Description class="mt-2 text-amber-600 dark:text-amber-400">
-          {m.contest_participants_remove_keeps_access({
-            userName,
-            groupNames: remainingGroupNames.join(', ')
-          })}
-        </Dialog.Description>
-      {/if}
     </Dialog.Header>
 
     <Dialog.Footer>

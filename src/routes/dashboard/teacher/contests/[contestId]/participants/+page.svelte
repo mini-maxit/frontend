@@ -95,6 +95,14 @@
     refreshParticipants();
     refreshGroups();
   }
+
+  // A removal can shrink the effective set below the current offset; snap back to the last real page.
+  $effect(() => {
+    const result = participantsQuery.current;
+    if (!result || result.items.length > 0 || offset === 0) return;
+    const total = result.pagination.totalItems;
+    offset = total > 0 ? Math.floor((total - 1) / limit) * limit : 0;
+  });
 </script>
 
 <div class="space-y-6">
