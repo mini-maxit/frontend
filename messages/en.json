@@ -1049,5 +1049,12 @@
   "error_internal": "Something went wrong. Please try again later.",
   "error_network": "Cannot reach the server. Check your connection.",
   "error_timeout": "The request timed out. Please try again.",
-  "error_bad_gateway": "The server is temporarily unavailable. Try again later."
+  "error_bad_gateway": "The server is temporarily unavailable. Try again later.",
+  "admin_contests_remove_button": "Delete Contest",
+  "admin_contests_remove_confirm_title": "Confirm Contest Deletion",
+  "admin_contests_remove_confirm_description": "Are you sure you want to delete \"{contestName}\"? This action cannot be undone.",
+  "admin_contests_remove_confirm_button": "Delete",
+  "admin_contests_remove_cancel_button": "Cancel",
+  "admin_contests_remove_success": "Contest deleted successfully!",
+  "admin_contests_remove_error": "Failed to delete contest"
 }

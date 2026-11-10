@@ -15,6 +15,7 @@
   import { localizeHref } from '#lib/paraglide/runtime.js';
   import { formatDate } from '#lib/utils.js';
   import { AppRoutes } from '#lib/routes.js';
+  import RemoveContestButton from '#lib/components/dashboard/admin/contests/RemoveContestButton.svelte';
   import EditContestDialog from '#lib/components/dashboard/admin/contests/EditContestDialog.svelte';
 
   interface AdminContestCardProps {
@@ -44,27 +45,41 @@
   ></div>
 
   <Card.Header class="relative">
-    <div class="flex items-start justify-between gap-2">
+    <div class="flex items-center gap-2">
       <span
-        class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary"
+        class="inline-flex shrink-0 items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary"
       >
         #{contest.id}
       </span>
-      <span
-        class="inline-flex items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
-      >
-        {contest.status}
-      </span>
+      <Card.Title class="min-w-0 flex-1 text-lg transition-colors group-hover:text-primary">
+        <a
+          href={localizeHref(`${AppRoutes.UserContests}/${contest.id}`)}
+          title={contest.name}
+          class="block truncate hover:underline">{contest.name}</a
+        >
+      </Card.Title>
+      <div class="flex shrink-0 items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          class="h-8 w-8"
+          onclick={() => (editDialogOpen = true)}
+          title={m.admin_contests_edit_button()}
+        >
+          <Edit class="h-4 w-4" />
+        </Button>
+        <RemoveContestButton
+          contestId={contest.id}
+          contestName={contest.name}
+          onSuccess={onContestUpdated}
+        />
+      </div>
     </div>
-    <Card.Title
-      class="mt-3 flex items-start gap-2 text-lg transition-colors group-hover:text-primary"
+    <span
+      class="mt-2 inline-flex w-fit items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
     >
-      <Trophy class="mt-0.5 h-5 w-5 shrink-0" />
-      <a
-        href={localizeHref(`${AppRoutes.UserContests}/${contest.id}`)}
-        class="wrap-break-word hover:underline">{contest.name}</a
-      >
-    </Card.Title>
+      {contest.status}
+    </span>
     <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">{contest.description}</p>
   </Card.Header>
 
@@ -123,14 +138,6 @@
 
     <!-- Action Buttons -->
     <div class="space-y-2">
-      <Button
-        variant="outline"
-        class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-        onclick={() => (editDialogOpen = true)}
-      >
-        <Edit class="mr-2 h-4 w-4" />
-        {m.admin_contests_edit_button()}
-      </Button>
       <Button
         variant="outline"
         class="w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
