@@ -4,6 +4,7 @@ export enum AppRoutes {
   Home = '/',
   Login = '/login',
   Register = '/register',
+  ForgotPassword = '/forgot-password',
 
   Hero = '/#hero',
   Features = '/#features',
@@ -49,7 +50,12 @@ export function isProtectedRoute(pathname: string): boolean {
 
 export function isPublicRoute(pathname: string): boolean {
   const delocalized = delocalizePath(pathname);
-  const publicRoutes = [AppRoutes.Home, AppRoutes.Login, AppRoutes.Register];
+  const publicRoutes = [
+    AppRoutes.Home,
+    AppRoutes.Login,
+    AppRoutes.Register,
+    AppRoutes.ForgotPassword
+  ];
 
   return publicRoutes.some((route) => delocalized === route || delocalized.startsWith(route));
 }
