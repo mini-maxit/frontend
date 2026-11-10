@@ -11,10 +11,11 @@
     contestId: number;
     userId: number;
     userName: string;
+    remainingGroupNames?: string[];
     onSuccess?: () => void;
   }
 
-  let { contestId, userId, userName, onSuccess }: Props = $props();
+  let { contestId, userId, userName, remainingGroupNames = [], onSuccess }: Props = $props();
 
   let dialogOpen = $state(false);
   let submitting = $state(false);
@@ -53,6 +54,14 @@
       <Dialog.Description>
         {m.contest_participants_remove_confirm_description({ userName })}
       </Dialog.Description>
+      {#if remainingGroupNames.length > 0}
+        <Dialog.Description class="mt-2 text-amber-600 dark:text-amber-400">
+          {m.contest_participants_remove_keeps_access({
+            userName,
+            groupNames: remainingGroupNames.join(', ')
+          })}
+        </Dialog.Description>
+      {/if}
     </Dialog.Header>
 
     <Dialog.Footer>
