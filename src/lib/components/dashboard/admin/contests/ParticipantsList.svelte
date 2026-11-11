@@ -56,32 +56,6 @@
     offset = 0;
   }
 
-  function getRoleBadgeClass(role: string): string {
-    switch (role) {
-      case 'admin':
-        return 'bg-primary/10 text-primary border border-primary/20';
-      case 'teacher':
-        return 'bg-secondary/10 text-secondary border border-secondary/20';
-      case 'student':
-        return 'bg-muted text-muted-foreground border border-border';
-      default:
-        return 'bg-muted text-muted-foreground border border-border';
-    }
-  }
-
-  function getRoleBadgeLabel(role: string): string {
-    switch (role) {
-      case 'admin':
-        return m.admin_users_role_admin();
-      case 'teacher':
-        return m.admin_users_role_teacher();
-      case 'student':
-        return m.admin_users_role_student();
-      default:
-        return role;
-    }
-  }
-
   function getAriaSortValue(key: UserSortKey): 'ascending' | 'descending' | 'none' {
     if (sortKey !== key) return 'none';
     return sortDir === SortDirection.Asc ? 'ascending' : 'descending';
@@ -131,7 +105,7 @@
   <!-- Data table -->
   <Table.Root class="mt-1">
     <Table.Header>
-      <Table.Row>
+      <Table.Row class="hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent">
         <Table.Head class="w-14" aria-sort={getAriaSortValue(UserSortKey.Id)}>
           <button
             class="flex items-center gap-1"
@@ -180,18 +154,6 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head class="hidden xl:table-cell" aria-sort={getAriaSortValue(UserSortKey.Role)}>
-          <button
-            class="flex items-center gap-1"
-            type="button"
-            onclick={() => handleHeaderSort(UserSortKey.Role)}
-          >
-            {m.contest_participants_column_role()}
-            {#if sortKey === UserSortKey.Role}{#if sortDir === SortDirection.Asc}<ArrowUp
-                  class="h-3 w-3 text-muted-foreground"
-                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
-          </button>
-        </Table.Head>
         <Table.Head>{m.contest_participants_access_column()}</Table.Head>
         <Table.Head class="text-right">{m.contest_participants_column_actions()}</Table.Head>
       </Table.Row>
@@ -199,7 +161,7 @@
 
     <Table.Body>
       {#each participants as participant (participant.id)}
-        <Table.Row>
+        <Table.Row class="hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent">
           <Table.Cell class="font-mono text-xs">{participant.id}</Table.Cell>
           <Table.Cell>
             <div class="flex items-center gap-2">
@@ -222,15 +184,6 @@
               <Mail class="h-4 w-4 shrink-0 text-muted-foreground" />
               <span class="max-w-[180px] truncate">{participant.email}</span>
             </div>
-          </Table.Cell>
-          <Table.Cell class="hidden xl:table-cell">
-            <span
-              class="{getRoleBadgeClass(
-                participant.role
-              )} inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold"
-            >
-              {getRoleBadgeLabel(participant.role)}
-            </span>
           </Table.Cell>
           <Table.Cell>
             <div class="flex flex-wrap items-center gap-1">
@@ -258,7 +211,9 @@
                 {onSuccess}
               />
             {:else}
-              <span class="text-muted-foreground">—</span>
+              <span class="inline-flex size-9 items-center justify-center text-muted-foreground"
+                >—</span
+              >
             {/if}
           </Table.Cell>
         </Table.Row>

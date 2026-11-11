@@ -2,7 +2,7 @@
   import { Button } from '#lib/components/ui/button/index.js';
   import { showApiError } from '#lib/errors/backend-error.js';
   import * as Dialog from '#lib/components/ui/dialog/index.js';
-  import UserX from '@lucide/svelte/icons/user-x';
+  import Trash2 from '@lucide/svelte/icons/trash-2';
   import { toast } from 'svelte-sonner';
   import * as m from '#lib/paraglide/messages.js';
   import { getContestsManagementInstance } from '#lib/services/index.js';
@@ -44,7 +44,7 @@
 </script>
 
 <Button variant="ghost" size="icon" onclick={() => (dialogOpen = true)}>
-  <UserX class="h-4 w-4" />
+  <Trash2 class="h-4 w-4" />
 </Button>
 
 <Dialog.Root bind:open={dialogOpen}>
