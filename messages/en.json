@@ -814,8 +814,6 @@
   "group_collaborators_remove_cancel": "Cancel",
   "group_collaborators_remove_success": "Collaborator removed successfully!",
   "group_collaborators_remove_error": "Failed to remove collaborator",
-  "contest_groups_title": "Contest Groups",
-  "contest_groups_page_title": "Groups for Contest #{contestId}",
   "contest_groups_loading": "Loading groups...",
   "contest_groups_load_error": "Failed to load contest groups",
   "contest_groups_no_groups_title": "No groups",

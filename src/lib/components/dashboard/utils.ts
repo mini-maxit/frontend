@@ -41,11 +41,6 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     return m.groups_management_title();
   }
 
-  // Check for contest groups pages (e.g., /dashboard/teacher/contests/[contestId]/groups)
-  if (path.match(/^\/dashboard\/teacher\/contests\/\d+\/groups/)) {
-    return m.contest_groups_title();
-  }
-
   // Check for contest participants pages (e.g., /dashboard/teacher/contests/[contestId]/participants)
   if (path.match(/^\/dashboard\/teacher\/contests\/\d+\/participants/)) {
     return m.contest_participants_title();

@@ -814,8 +814,6 @@
   "group_collaborators_remove_cancel": "Anuluj",
   "group_collaborators_remove_success": "Współpracownik został usunięty pomyślnie!",
   "group_collaborators_remove_error": "Nie udało się usunąć współpracownika",
-  "contest_groups_title": "Grupy Konkursu",
-  "contest_groups_page_title": "Grupy dla Konkursu #{contestId}",
   "contest_groups_loading": "Ładowanie grup...",
   "contest_groups_load_error": "Nie udało się załadować grup konkursu",
   "contest_groups_no_groups_title": "Brak grup",
