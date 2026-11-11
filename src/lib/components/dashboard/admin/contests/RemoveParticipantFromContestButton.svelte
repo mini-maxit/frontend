@@ -2,7 +2,7 @@
   import { Button } from '#lib/components/ui/button/index.js';
   import { showApiError } from '#lib/errors/backend-error.js';
   import * as Dialog from '#lib/components/ui/dialog/index.js';
-  import UserX from '@lucide/svelte/icons/user-x';
+  import Trash2 from '@lucide/svelte/icons/trash-2';
   import { toast } from 'svelte-sonner';
   import * as m from '#lib/paraglide/messages.js';
   import { getContestsManagementInstance } from '#lib/services/index.js';
@@ -11,10 +11,11 @@
     contestId: number;
     userId: number;
     userName: string;
+    remainingGroupNames?: string[];
     onSuccess?: () => void;
   }
 
-  let { contestId, userId, userName, onSuccess }: Props = $props();
+  let { contestId, userId, userName, remainingGroupNames = [], onSuccess }: Props = $props();
 
   let dialogOpen = $state(false);
   let submitting = $state(false);
@@ -43,7 +44,7 @@
 </script>
 
 <Button variant="ghost" size="icon" onclick={() => (dialogOpen = true)}>
-  <UserX class="h-4 w-4" />
+  <Trash2 class="h-4 w-4" />
 </Button>
 
 <Dialog.Root bind:open={dialogOpen}>
@@ -51,7 +52,15 @@
     <Dialog.Header>
       <Dialog.Title>{m.contest_participants_remove_confirm_title()}</Dialog.Title>
       <Dialog.Description>
-        {m.contest_participants_remove_confirm_description({ userName })}
+        <span class="block">{m.contest_participants_remove_confirm_description({ userName })}</span>
+        {#if remainingGroupNames.length > 0}
+          <span class="mt-2 block text-amber-600 dark:text-amber-400">
+            {m.contest_participants_remove_keeps_access({
+              userName,
+              groupNames: remainingGroupNames.join(', ')
+            })}
+          </span>
+        {/if}
       </Dialog.Description>
     </Dialog.Header>
 

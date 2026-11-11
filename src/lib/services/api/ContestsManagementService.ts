@@ -11,7 +11,8 @@ import type {
   TaskUserStats
 } from '#lib/dto/contest.js';
 import type { Task, ContestTask } from '#lib/dto/task.js';
-import type { Group } from '#lib/dto/group.js';
+import type { Group, GroupWithMembers } from '#lib/dto/group.js';
+import type { ParticipantAccess } from '#lib/dto/participant.js';
 import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
 import type { Submission, GetContestSubmissionsParams } from '#lib/dto/submission.js';
 import type { User } from '#lib/dto/user.js';
@@ -277,9 +278,9 @@ export class ContestsManagementService {
     }
   }
 
-  async getContestGroups(contestId: number): Promise<Group[]> {
+  async getContestGroups(contestId: number): Promise<GroupWithMembers[]> {
     try {
-      const response = await this.apiClient.get<ApiResponse<Group[]>>({
+      const response = await this.apiClient.get<ApiResponse<GroupWithMembers[]>>({
         url: `/contests-management/contests/${contestId}/groups`
       });
       return response.data;
@@ -340,7 +341,7 @@ export class ContestsManagementService {
   async getContestParticipants(
     contestId: number,
     params?: { limit?: number; offset?: number; sort?: string }
-  ): Promise<PaginatedData<User>> {
+  ): Promise<PaginatedData<ParticipantAccess>> {
     try {
       const queryParams = new URLSearchParams();
       if (params?.limit) queryParams.append('limit', params.limit.toString());
@@ -351,7 +352,7 @@ export class ContestsManagementService {
         queryParams.toString() ? `?${queryParams.toString()}` : ''
       }`;
 
-      const response = await this.apiClient.get<ApiResponse<PaginatedData<User>>>({
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<ParticipantAccess>>>({
         url
       });
       return response.data;

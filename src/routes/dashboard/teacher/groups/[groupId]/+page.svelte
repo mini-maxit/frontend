@@ -67,31 +67,16 @@
   <!-- Quick Actions -->
   <div class="space-y-4">
     <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_quick_actions()}</h2>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="flex flex-wrap gap-2">
       <AddUsersToGroupButton {groupId} onSuccess={() => membersQuery.refresh()} />
-      <a
+      <Button
+        variant="gradient"
+        size="lg"
         href={localizeHref(`${AppRoutes.TeacherGroups}/${groupId}/collaborators`)}
-        class="group relative overflow-hidden rounded-2xl border border-border bg-linear-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
       >
-        <div
-          class="absolute inset-0 bg-linear-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        ></div>
-        <div class="relative flex flex-col items-center gap-4 text-center">
-          <div
-            class="flex h-16 w-16 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
-          >
-            <Users class="h-8 w-8 text-primary-foreground" />
-          </div>
-          <div>
-            <h3 class="text-lg font-bold text-primary-foreground">
-              {m.group_manage_collaborators_title()}
-            </h3>
-            <p class="mt-1 text-sm text-primary-foreground/80">
-              {m.group_manage_collaborators_description()}
-            </p>
-          </div>
-        </div>
-      </a>
+        <Users />
+        {m.group_manage_collaborators_title()}
+      </Button>
     </div>
   </div>
 

@@ -103,30 +103,10 @@
 </script>
 
 <Dialog.Root bind:open={dialogOpen} onOpenChange={(open) => !open && resetForm()}>
-  <button
-    onclick={() => (dialogOpen = true)}
-    class="group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary to-secondary p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-  >
-    <div
-      class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-    ></div>
-
-    <div class="relative flex flex-col items-center gap-4 text-center">
-      <div
-        class="flex h-16 w-16 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
-      >
-        <UserPlus class="h-8 w-8 text-primary-foreground" />
-      </div>
-      <div>
-        <h3 class="text-lg font-bold text-primary-foreground">
-          {m.task_collaborators_add_title()}
-        </h3>
-        <p class="mt-1 text-sm text-primary-foreground/80">
-          {m.task_collaborators_add_description()}
-        </p>
-      </div>
-    </div>
-  </button>
+  <Button variant="gradient" size="lg" onclick={() => (dialogOpen = true)}>
+    <UserPlus />
+    {m.task_collaborators_add_title()}
+  </Button>
 
   <Dialog.Content class="max-w-2xl">
     <Dialog.Header>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { User } from '#lib/dto/user.js';
+  import type { ParticipantAccess } from '#lib/dto/participant.js';
   import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
   import * as Table from '#lib/components/ui/table/index.js';
   import * as Pagination from '#lib/components/ui/pagination/index.js';
@@ -12,7 +12,7 @@
   import RemoveParticipantFromContestButton from './RemoveParticipantFromContestButton.svelte';
 
   interface ParticipantsListProps {
-    participants: User[];
+    participants: ParticipantAccess[];
     total: number;
     contestId: number;
     limit: number;
@@ -56,36 +56,13 @@
     offset = 0;
   }
 
-  function getRoleBadgeClass(role: string): string {
-    switch (role) {
-      case 'admin':
-        return 'bg-primary/10 text-primary border border-primary/20';
-      case 'teacher':
-        return 'bg-secondary/10 text-secondary border border-secondary/20';
-      case 'student':
-        return 'bg-muted text-muted-foreground border border-border';
-      default:
-        return 'bg-muted text-muted-foreground border border-border';
-    }
-  }
-
-  function getRoleBadgeLabel(role: string): string {
-    switch (role) {
-      case 'admin':
-        return m.admin_users_role_admin();
-      case 'teacher':
-        return m.admin_users_role_teacher();
-      case 'student':
-        return m.admin_users_role_student();
-      default:
-        return role;
-    }
-  }
-
   function getAriaSortValue(key: UserSortKey): 'ascending' | 'descending' | 'none' {
     if (sortKey !== key) return 'none';
     return sortDir === SortDirection.Asc ? 'ascending' : 'descending';
   }
+
+  const accessBadgeClass =
+    'inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold bg-primary/10 text-primary border border-primary/20';
 
   const perPageOptions = [10, 20, 50, 100];
 </script>
@@ -128,7 +105,7 @@
   <!-- Data table -->
   <Table.Root class="mt-1">
     <Table.Header>
-      <Table.Row>
+      <Table.Row class="hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent">
         <Table.Head class="w-14" aria-sort={getAriaSortValue(UserSortKey.Id)}>
           <button
             class="flex items-center gap-1"
@@ -177,62 +154,67 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head class="hidden xl:table-cell" aria-sort={getAriaSortValue(UserSortKey.Role)}>
-          <button
-            class="flex items-center gap-1"
-            type="button"
-            onclick={() => handleHeaderSort(UserSortKey.Role)}
-          >
-            {m.contest_participants_column_role()}
-            {#if sortKey === UserSortKey.Role}{#if sortDir === SortDirection.Asc}<ArrowUp
-                  class="h-3 w-3 text-muted-foreground"
-                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
-          </button>
-        </Table.Head>
+        <Table.Head>{m.contest_participants_access_column()}</Table.Head>
         <Table.Head class="text-right">{m.contest_participants_column_actions()}</Table.Head>
       </Table.Row>
     </Table.Header>
 
     <Table.Body>
-      {#each participants as user (user.id)}
-        <Table.Row>
-          <Table.Cell class="font-mono text-xs">{user.id}</Table.Cell>
+      {#each participants as participant (participant.id)}
+        <Table.Row class="hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent">
+          <Table.Cell class="font-mono text-xs">{participant.id}</Table.Cell>
           <Table.Cell>
             <div class="flex items-center gap-2">
               <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
                 <UserIcon class="h-4 w-4 text-primary" />
               </div>
               <div class="flex min-w-0 flex-col">
-                <span class="truncate font-medium text-foreground">{user.name} {user.surname}</span>
-                <span class="text-xs text-muted-foreground sm:hidden">@{user.username}</span>
+                <span class="truncate font-medium text-foreground"
+                  >{participant.name} {participant.surname}</span
+                >
+                <span class="text-xs text-muted-foreground sm:hidden">@{participant.username}</span>
               </div>
             </div>
           </Table.Cell>
           <Table.Cell class="hidden text-muted-foreground sm:table-cell"
-            >@{user.username}</Table.Cell
+            >@{participant.username}</Table.Cell
           >
           <Table.Cell class="hidden lg:table-cell">
             <div class="flex items-center gap-2">
               <Mail class="h-4 w-4 shrink-0 text-muted-foreground" />
-              <span class="max-w-[180px] truncate">{user.email}</span>
+              <span class="max-w-[180px] truncate">{participant.email}</span>
             </div>
           </Table.Cell>
-          <Table.Cell class="hidden xl:table-cell">
-            <span
-              class="{getRoleBadgeClass(
-                user.role
-              )} inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold"
-            >
-              {getRoleBadgeLabel(user.role)}
-            </span>
+          <Table.Cell>
+            <div class="flex flex-wrap items-center gap-1">
+              {#if participant.direct}
+                <span class={accessBadgeClass}>{m.contest_participants_access_direct()}</span>
+              {/if}
+              {#each participant.groups as group (group.id)}
+                <span class={accessBadgeClass}>
+                  {#if participant.direct}
+                    {m.contest_participants_access_direct_plus_group({ groupName: group.name })}
+                  {:else}
+                    {m.contest_participants_access_via_group({ groupName: group.name })}
+                  {/if}
+                </span>
+              {/each}
+            </div>
           </Table.Cell>
           <Table.Cell class="text-right">
-            <RemoveParticipantFromContestButton
-              {contestId}
-              userId={user.id}
-              userName={user.username}
-              {onSuccess}
-            />
+            {#if participant.direct}
+              <RemoveParticipantFromContestButton
+                {contestId}
+                userId={participant.id}
+                userName={participant.username}
+                remainingGroupNames={participant.groups.map((g) => g.name)}
+                {onSuccess}
+              />
+            {:else}
+              <span class="inline-flex size-9 items-center justify-center text-muted-foreground"
+                >—</span
+              >
+            {/if}
           </Table.Cell>
         </Table.Row>
       {/each}

@@ -6,6 +6,17 @@ export interface Group {
   updatedAt: string;
 }
 
+export interface GroupMember {
+  id: number;
+  name: string;
+  surname: string;
+  username: string;
+}
+
+export interface GroupWithMembers extends Group {
+  members: GroupMember[];
+}
+
 export interface CreateGroupDto {
   name: string;
 }

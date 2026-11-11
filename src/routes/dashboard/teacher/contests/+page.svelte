@@ -49,7 +49,7 @@
   <div class="space-y-4">
     <h2 class="text-2xl font-bold text-foreground">{m.admin_contests_quick_actions()}</h2>
 
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="flex flex-wrap gap-2">
       <CreateContestButton onSuccess={() => contestsQuery.refresh()} />
     </div>
   </div>
