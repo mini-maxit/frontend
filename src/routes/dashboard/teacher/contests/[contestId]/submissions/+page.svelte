@@ -79,7 +79,6 @@
     return submissionsQuery.current.items.filter((submission: Submission) => {
       const matchesUser =
         !userFilter ||
-        submission.user.username.toLowerCase().includes(userFilter.toLowerCase()) ||
         submission.user.name.toLowerCase().includes(userFilter.toLowerCase()) ||
         submission.user.surname.toLowerCase().includes(userFilter.toLowerCase());
 

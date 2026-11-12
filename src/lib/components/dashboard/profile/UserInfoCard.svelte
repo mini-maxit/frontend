@@ -2,7 +2,6 @@
   import * as Card from '#lib/components/ui/card/index.js';
   import UserCircle from '@lucide/svelte/icons/user-circle';
   import Mail from '@lucide/svelte/icons/mail';
-  import AtSign from '@lucide/svelte/icons/at-sign';
   import Calendar from '@lucide/svelte/icons/calendar';
   import * as m from '#lib/paraglide/messages.js';
   import type { User } from '#lib/dto/user.js';
@@ -57,14 +56,6 @@
         >
           <Mail class="h-5 w-5 text-primary" />
           <span class="text-sm text-muted-foreground">{user.email}</span>
-        </div>
-
-        <!-- Username -->
-        <div
-          class="flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent"
-        >
-          <AtSign class="h-5 w-5 text-primary" />
-          <span class="text-sm text-muted-foreground">@{user.username}</span>
         </div>
 
         <!-- Join Date -->

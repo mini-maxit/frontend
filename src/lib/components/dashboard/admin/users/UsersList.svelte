@@ -162,18 +162,6 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head class="hidden sm:table-cell" aria-sort={getAriaSortValue(UserSortKey.Username)}>
-          <button
-            class="flex items-center gap-1"
-            type="button"
-            onclick={() => handleHeaderSort(UserSortKey.Username)}
-          >
-            {m.admin_users_column_username()}
-            {#if sortKey === UserSortKey.Username}{#if sortDir === SortDirection.Asc}<ArrowUp
-                  class="h-3 w-3 text-muted-foreground"
-                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
-          </button>
-        </Table.Head>
         <Table.Head class="hidden lg:table-cell" aria-sort={getAriaSortValue(UserSortKey.Email)}>
           <button
             class="flex items-center gap-1"
@@ -228,13 +216,9 @@
               </div>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate font-medium text-foreground">{user.name} {user.surname}</span>
-                <span class="text-xs text-muted-foreground sm:hidden">@{user.username}</span>
               </div>
             </div>
           </Table.Cell>
-          <Table.Cell class="hidden text-muted-foreground sm:table-cell"
-            >@{user.username}</Table.Cell
-          >
           <Table.Cell class="hidden xl:table-cell">
             <div class="flex items-center gap-2">
               <Mail class="h-4 w-4 shrink-0 text-muted-foreground" />

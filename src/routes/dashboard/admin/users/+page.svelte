@@ -86,7 +86,6 @@
         (user: User) =>
           user.name.toLowerCase().includes(query) ||
           user.surname.toLowerCase().includes(query) ||
-          user.username.toLowerCase().includes(query) ||
           user.email.toLowerCase().includes(query)
       );
     }

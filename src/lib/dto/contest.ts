@@ -178,7 +178,6 @@ export interface UserTaskPerformance {
 
 export interface UserInfo {
   id: number;
-  username: string;
   name: string;
   surname: string;
 }

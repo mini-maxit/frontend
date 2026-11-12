@@ -227,9 +227,6 @@
                   <Table.Head class="w-12"></Table.Head>
                   <Table.Head class="w-16">{m.contest_user_stats_rank()}</Table.Head>
                   <Table.Head>{m.contest_user_stats_name()}</Table.Head>
-                  <Table.Head class="hidden md:table-cell"
-                    >{m.contest_user_stats_username()}</Table.Head
-                  >
                   <Table.Head class="text-right">{m.contest_user_stats_total_score()}</Table.Head>
                   <Table.Head class="text-right">{m.contest_user_stats_solved()}</Table.Head>
                   <Table.Head class="hidden text-right lg:table-cell"
@@ -285,9 +282,6 @@
                       {userStat.user.name}
                       {userStat.user.surname}
                     </Table.Cell>
-                    <Table.Cell class="hidden text-muted-foreground md:table-cell">
-                      @{userStat.user.username}
-                    </Table.Cell>
                     <Table.Cell class="text-right">
                       <span class="text-lg font-bold">{userStat.totalScore.toFixed(1)}%</span>
                     </Table.Cell>
@@ -306,7 +300,7 @@
                   <!-- Expanded task breakdown row -->
                   {#if isExpanded}
                     <Table.Row class="bg-card">
-                      <Table.Cell colspan={8} class="p-0">
+                      <Table.Cell colspan={7} class="p-0">
                         <div class="p-4 transition-colors">
                           <h4 class="mb-3 text-sm font-semibold text-foreground">
                             {m.contest_user_stats_task_breakdown()}

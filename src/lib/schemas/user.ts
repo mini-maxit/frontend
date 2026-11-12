@@ -47,17 +47,6 @@ export const UpdateUserSchema = v.object({
     v.minLength(3, 'Surname must be at least 3 characters'),
     v.maxLength(50, 'Surname cannot exceed 50 characters')
   ),
-  username: v.pipe(
-    v.string(),
-    v.nonEmpty('Username is required'),
-    v.minLength(3, 'Username must be at least 3 characters'),
-    v.maxLength(30, 'Username cannot exceed 30 characters'),
-    v.regex(/^[a-zA-Z]/, 'Username must start with a letter'),
-    v.regex(
-      /^[a-zA-Z][a-zA-Z0-9_]*$/,
-      'Username can only contain letters, numbers, and underscores'
-    )
-  ),
   email: v.pipe(v.string(), v.nonEmpty('Email is required'), v.email('Invalid email address')),
   role: v.picklist([UserRole.Student, UserRole.Teacher, UserRole.Admin], 'Invalid role')
 });

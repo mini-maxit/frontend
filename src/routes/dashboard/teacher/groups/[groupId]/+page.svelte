@@ -105,16 +105,12 @@
             <Card.Header>
               <div class="flex items-center justify-between">
                 <div class="min-w-0 flex-1">
-                  <Card.Title class="truncate">{member.username}</Card.Title>
-                  <p class="truncate text-sm text-muted-foreground">
-                    {member.name}
-                    {member.surname}
-                  </p>
+                  <Card.Title class="truncate">{member.name} {member.surname}</Card.Title>
                 </div>
                 <RemoveUserFromGroupButton
                   {groupId}
                   userId={member.id}
-                  userName={member.username}
+                  userName={`${member.name} ${member.surname}`}
                   onSuccess={() => membersQuery.refresh()}
                 />
               </div>
