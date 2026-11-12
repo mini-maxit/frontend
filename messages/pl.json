@@ -91,7 +91,7 @@
   "admin_contest_tasks_move_up": "Przenieś wyżej",
   "admin_contest_tasks_move_down": "Przenieś niżej",
   "admin_contest_tasks_reorder_error": "Nie udało się zmienić kolejności zadań",
-  "admin_contest_tasks_limits_hint": "Opcjonalnie: nadpisz limity zadania tylko dla tego konkursu. Dotyczy każdego testu; zostaw niezaznaczone, aby użyć limitów zadania.",
+  "admin_contest_tasks_limits_hint": "Nadpisz limity zadania tylko dla tego konkursu.",
   "admin_contest_tasks_time_limit": "Limit czasu (ms)",
   "admin_contest_tasks_memory_limit": "Limit pamięci (KB)",
   "admin_contest_tasks_column_id": "ID",

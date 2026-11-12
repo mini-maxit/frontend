@@ -91,7 +91,7 @@
   "admin_contest_tasks_move_up": "Move up",
   "admin_contest_tasks_move_down": "Move down",
   "admin_contest_tasks_reorder_error": "Failed to reorder tasks",
-  "admin_contest_tasks_limits_hint": "Optional: override the task's limits for this contest only. Applies to every test case; leave unchecked to use the task's own limits.",
+  "admin_contest_tasks_limits_hint": "Override the task's limits for this contest only.",
   "admin_contest_tasks_time_limit": "Time limit (ms)",
   "admin_contest_tasks_memory_limit": "Memory limit (KB)",
   "admin_contest_tasks_column_id": "ID",
