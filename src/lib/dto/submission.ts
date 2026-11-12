@@ -73,7 +73,6 @@ export interface SubmissionUser {
   name: string;
   role: UserRole;
   surname: string;
-  username: string;
 }
 
 export interface Submission {

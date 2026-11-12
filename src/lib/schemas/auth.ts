@@ -40,14 +40,6 @@ export const RegisterSchema = v.pipe(
       v.minLength(3, m.validation_surname_min()),
       v.maxLength(50, m.validation_surname_max())
     ),
-    username: v.pipe(
-      v.string(m.validation_username_required()),
-      v.nonEmpty(m.validation_username_required()),
-      v.minLength(3, m.validation_username_min()),
-      v.maxLength(30, m.validation_username_max()),
-      v.regex(/^[a-zA-Z]/, m.validation_username_start()),
-      v.regex(/^[a-zA-Z][a-zA-Z0-9_]*$/, m.validation_username_pattern())
-    ),
     password: v.pipe(
       v.string(m.validation_password_required()),
       v.nonEmpty(m.validation_password_required()),

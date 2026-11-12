@@ -44,7 +44,6 @@
     const query = searchQuery.toLowerCase();
     return availableUsers.filter(
       (user) =>
-        user.username.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query) ||
         user.name.toLowerCase().includes(query) ||
         user.surname.toLowerCase().includes(query)
@@ -172,7 +171,7 @@
                       {user.surname}
                     </p>
                     <p class="truncate text-sm text-muted-foreground">
-                      @{user.username} · {user.email}
+                      {user.email}
                     </p>
                   </div>
                   {#if selectedUserId === user.id}
@@ -187,7 +186,7 @@
             <div class="rounded-lg border border-primary/30 bg-primary/5 p-3">
               <p class="text-sm font-medium text-primary">
                 Selected: {selectedUser.name}
-                {selectedUser.surname} (@{selectedUser.username})
+                {selectedUser.surname}
               </p>
             </div>
           {/if}

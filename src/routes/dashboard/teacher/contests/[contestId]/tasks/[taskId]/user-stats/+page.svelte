@@ -173,9 +173,6 @@
                 <Table.Row>
                   <Table.Head class="w-16">{m.task_user_stats_rank()}</Table.Head>
                   <Table.Head>{m.task_user_stats_name()}</Table.Head>
-                  <Table.Head class="hidden md:table-cell"
-                    >{m.task_user_stats_username()}</Table.Head
-                  >
                   <Table.Head class="text-right">{m.task_user_stats_best_score()}</Table.Head>
                   <Table.Head class="text-right">{m.task_user_stats_submissions()}</Table.Head>
                 </Table.Row>
@@ -201,9 +198,6 @@
                     <Table.Cell class="font-medium">
                       {userStat.user.name}
                       {userStat.user.surname}
-                    </Table.Cell>
-                    <Table.Cell class="hidden text-muted-foreground md:table-cell">
-                      @{userStat.user.username}
                     </Table.Cell>
                     <Table.Cell class="text-right">
                       <span

@@ -10,7 +10,6 @@ export interface GroupMember {
   id: number;
   name: string;
   surname: string;
-  username: string;
 }
 
 export interface GroupWithMembers extends Group {

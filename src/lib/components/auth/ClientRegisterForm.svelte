@@ -39,7 +39,6 @@
           email: form.data.email.trim(),
           name: form.data.name.trim(),
           surname: form.data.surname.trim(),
-          username: form.data.username.trim(),
           password: form.data.password,
           confirmPassword: form.data.confirmPassword
         });
@@ -121,24 +120,6 @@
     />
     {#if $errors.surname}
       <p class="text-sm text-destructive">{$errors.surname}</p>
-    {/if}
-  </div>
-
-  <div class="space-y-2">
-    <Label for="username">{m.register_username_label()}</Label>
-    <Input
-      id="username"
-      name="username"
-      type="text"
-      bind:value={$form.username}
-      placeholder={m.register_username_placeholder()}
-      autocomplete="username"
-      disabled={$submitting}
-      aria-invalid={$errors.username ? 'true' : undefined}
-      class="transition-all duration-200 focus:ring-2 focus:ring-primary"
-    />
-    {#if $errors.username}
-      <p class="text-sm text-destructive">{$errors.username}</p>
     {/if}
   </div>
 

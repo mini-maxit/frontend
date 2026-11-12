@@ -32,7 +32,6 @@
             userId: user.id,
             name: user.name,
             surname: user.surname,
-            username: user.username,
             email: user.email,
             role: user.role
           }
@@ -52,7 +51,6 @@
           const result = await userManagementService.updateUser(form.data.userId, {
             name: form.data.name,
             surname: form.data.surname,
-            username: form.data.username,
             email: form.data.email,
             role: form.data.role as UserRole
           });
@@ -131,22 +129,6 @@
               <p class="text-sm text-destructive">{$errors.surname}</p>
             {/if}
           </div>
-        </div>
-
-        <div class="space-y-2">
-          <Label for="username">{m.register_username_label()}</Label>
-          <Input
-            id="username"
-            name="username"
-            type="text"
-            bind:value={$form.username}
-            disabled={$submitting}
-            aria-invalid={$errors.username ? 'true' : undefined}
-            placeholder={m.register_username_placeholder()}
-          />
-          {#if $errors.username}
-            <p class="text-sm text-destructive">{$errors.username}</p>
-          {/if}
         </div>
 
         <div class="space-y-2">

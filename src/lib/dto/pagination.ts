@@ -6,7 +6,6 @@ export enum SortDirection {
 export enum UserSortKey {
   Id = 'id',
   Name = 'name',
-  Username = 'username',
   Email = 'email',
   Role = 'role',
   CreatedAt = 'createdAt'

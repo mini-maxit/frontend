@@ -32,7 +32,6 @@
     const query = searchQuery.toLowerCase();
     return assignableUsers.filter(
       (user) =>
-        user.username.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query) ||
         `${user.name} ${user.surname}`.toLowerCase().includes(query)
     );
@@ -126,10 +125,9 @@
                 for={`participant-${user.id}`}
                 class="flex-1 cursor-pointer space-y-1 text-sm leading-none"
               >
-                <div class="font-medium">{user.username}</div>
+                <div class="font-medium">{user.name} {user.surname}</div>
                 <div class="text-muted-foreground">
-                  {user.name}
-                  {user.surname} · {user.email}
+                  {user.email}
                 </div>
               </label>
             </div>
