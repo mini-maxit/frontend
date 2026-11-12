@@ -179,12 +179,12 @@
   // unchecked toggle = use the task's own limit
   let overrideTime = $state(false);
   let overrideMemory = $state(false);
-  let timeLimitMs = $state('');
-  let memoryLimitKb = $state('');
+  // type=number inputs bind a number (null when empty), not a string
+  let timeLimitMs = $state<number | null>(null);
+  let memoryLimitKb = $state<number | null>(null);
 
-  function parseLimit(enabled: boolean, value: string): number | null {
-    const n = Number(value);
-    return enabled && value.trim() !== '' && Number.isInteger(n) && n > 0 ? n : null;
+  function parseLimit(enabled: boolean, value: number | null): number | null {
+    return enabled && value !== null && Number.isInteger(value) && value > 0 ? value : null;
   }
 
   function buildDateTime(date: DateValue | undefined, time: string | null): string {
@@ -210,8 +210,8 @@
     hasEndTime = false;
     overrideTime = false;
     overrideMemory = false;
-    timeLimitMs = '';
-    memoryLimitKb = '';
+    timeLimitMs = null;
+    memoryLimitKb = null;
     dialogOpen = true;
   }
 
@@ -220,8 +220,8 @@
     selectedTaskId = contestTask.task.id;
     overrideTime = contestTask.timeLimitMs != null;
     overrideMemory = contestTask.memoryLimitKb != null;
-    timeLimitMs = contestTask.timeLimitMs?.toString() ?? '';
-    memoryLimitKb = contestTask.memoryLimitKb?.toString() ?? '';
+    timeLimitMs = contestTask.timeLimitMs;
+    memoryLimitKb = contestTask.memoryLimitKb;
     const start = parseDateTime(contestTask.startAt);
     startDate = start.date;
     startTime = start.time;
