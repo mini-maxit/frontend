@@ -176,13 +176,15 @@
   let endDate = $state<DateValue | undefined>(getDefaultEndDateTime().date);
   let endTime = $state<string | null>(getDefaultEndDateTime().time);
   let hasEndTime = $state(false);
-  // empty = use the task's own limit
+  // unchecked toggle = use the task's own limit
+  let overrideTime = $state(false);
+  let overrideMemory = $state(false);
   let timeLimitMs = $state('');
   let memoryLimitKb = $state('');
 
-  function parseLimit(value: string): number | null {
+  function parseLimit(enabled: boolean, value: string): number | null {
     const n = Number(value);
-    return value.trim() !== '' && Number.isInteger(n) && n > 0 ? n : null;
+    return enabled && value.trim() !== '' && Number.isInteger(n) && n > 0 ? n : null;
   }
 
   function buildDateTime(date: DateValue | undefined, time: string | null): string {
@@ -206,6 +208,8 @@
     endDate = defaultEnd.date;
     endTime = defaultEnd.time;
     hasEndTime = false;
+    overrideTime = false;
+    overrideMemory = false;
     timeLimitMs = '';
     memoryLimitKb = '';
     dialogOpen = true;
@@ -214,6 +218,8 @@
   function openEditDialog(contestTask: ContestTask) {
     dialogMode = 'edit';
     selectedTaskId = contestTask.task.id;
+    overrideTime = contestTask.timeLimitMs != null;
+    overrideMemory = contestTask.memoryLimitKb != null;
     timeLimitMs = contestTask.timeLimitMs?.toString() ?? '';
     memoryLimitKb = contestTask.memoryLimitKb?.toString() ?? '';
     const start = parseDateTime(contestTask.startAt);
@@ -246,8 +252,8 @@
       const schedule = {
         startAt: startAtValue,
         endAt: hasEndTime ? endAtValue : null,
-        timeLimitMs: parseLimit(timeLimitMs),
-        memoryLimitKb: parseLimit(memoryLimitKb)
+        timeLimitMs: parseLimit(overrideTime, timeLimitMs),
+        memoryLimitKb: parseLimit(overrideMemory, memoryLimitKb)
       };
       if (dialogMode === 'edit') {
         await contestsService.updateTaskInContest(contestId, selectedTaskId, schedule);
@@ -494,26 +500,40 @@
         <p class="text-sm text-muted-foreground">{m.admin_contest_tasks_limits_hint()}</p>
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="space-y-2">
-            <Label for="timeLimitMs">{m.admin_contest_tasks_time_limit()}</Label>
-            <Input
-              type="number"
-              id="timeLimitMs"
-              min="1"
-              step="1"
-              placeholder={m.admin_contest_tasks_limit_default()}
-              bind:value={timeLimitMs}
-            />
+            <div class="flex h-8 items-center gap-2">
+              <Checkbox id="overrideTime" bind:checked={overrideTime} />
+              <Label for="overrideTime" class="cursor-pointer">
+                {m.admin_contest_tasks_time_limit()}
+              </Label>
+            </div>
+            {#if overrideTime}
+              <Input
+                type="number"
+                id="timeLimitMs"
+                min="1"
+                step="1"
+                required
+                bind:value={timeLimitMs}
+              />
+            {/if}
           </div>
           <div class="space-y-2">
-            <Label for="memoryLimitKb">{m.admin_contest_tasks_memory_limit()}</Label>
-            <Input
-              type="number"
-              id="memoryLimitKb"
-              min="1"
-              step="1"
-              placeholder={m.admin_contest_tasks_limit_default()}
-              bind:value={memoryLimitKb}
-            />
+            <div class="flex h-8 items-center gap-2">
+              <Checkbox id="overrideMemory" bind:checked={overrideMemory} />
+              <Label for="overrideMemory" class="cursor-pointer">
+                {m.admin_contest_tasks_memory_limit()}
+              </Label>
+            </div>
+            {#if overrideMemory}
+              <Input
+                type="number"
+                id="memoryLimitKb"
+                min="1"
+                step="1"
+                required
+                bind:value={memoryLimitKb}
+              />
+            {/if}
           </div>
         </div>
       </div>
