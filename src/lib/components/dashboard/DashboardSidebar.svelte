@@ -24,6 +24,7 @@
   import UserCircle from '@lucide/svelte/icons/user-circle';
   import Users from '@lucide/svelte/icons/users';
   import Languages from '@lucide/svelte/icons/languages';
+  import Code from '@lucide/svelte/icons/code';
   import LayoutDashboard from '@lucide/svelte/icons/layout-dashboard';
   import Activity from '@lucide/svelte/icons/activity';
   import LogOut from '@lucide/svelte/icons/log-out';
@@ -96,7 +97,7 @@
     {
       title: () => m.sidebar_admin_languages(),
       href: localizeHref(AppRoutes.AdminLanguages),
-      icon: Languages
+      icon: Code
     }
   ];
 

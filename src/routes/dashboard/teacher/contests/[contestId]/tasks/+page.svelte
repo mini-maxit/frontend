@@ -53,7 +53,7 @@
   let addedSortKey = $state<ContestTaskSortKey>(
     Object.values(ContestTaskSortKey).includes(initialAddedSortKey as ContestTaskSortKey)
       ? (initialAddedSortKey as ContestTaskSortKey)
-      : ContestTaskSortKey.StartAt
+      : ContestTaskSortKey.Position
   );
   let addedSortDir = $state<SortDirection>(
     Object.values(SortDirection).includes(initialAddedSortDir as SortDirection)
@@ -176,6 +176,16 @@
   let endDate = $state<DateValue | undefined>(getDefaultEndDateTime().date);
   let endTime = $state<string | null>(getDefaultEndDateTime().time);
   let hasEndTime = $state(false);
+  // unchecked toggle = use the task's own limit
+  let overrideTime = $state(false);
+  let overrideMemory = $state(false);
+  // type=number inputs bind a number (null when empty), not a string
+  let timeLimitMs = $state<number | null>(null);
+  let memoryLimitKb = $state<number | null>(null);
+
+  function parseLimit(enabled: boolean, value: number | null): number | null {
+    return enabled && value !== null && Number.isInteger(value) && value > 0 ? value : null;
+  }
 
   function buildDateTime(date: DateValue | undefined, time: string | null): string {
     if (!date || !time) return '';
@@ -198,12 +208,20 @@
     endDate = defaultEnd.date;
     endTime = defaultEnd.time;
     hasEndTime = false;
+    overrideTime = false;
+    overrideMemory = false;
+    timeLimitMs = null;
+    memoryLimitKb = null;
     dialogOpen = true;
   }
 
   function openEditDialog(contestTask: ContestTask) {
     dialogMode = 'edit';
     selectedTaskId = contestTask.task.id;
+    overrideTime = contestTask.timeLimitMs != null;
+    overrideMemory = contestTask.memoryLimitKb != null;
+    timeLimitMs = contestTask.timeLimitMs;
+    memoryLimitKb = contestTask.memoryLimitKb;
     const start = parseDateTime(contestTask.startAt);
     startDate = start.date;
     startTime = start.time;
@@ -233,7 +251,9 @@
     try {
       const schedule = {
         startAt: startAtValue,
-        endAt: hasEndTime ? endAtValue : null
+        endAt: hasEndTime ? endAtValue : null,
+        timeLimitMs: parseLimit(overrideTime, timeLimitMs),
+        memoryLimitKb: parseLimit(overrideMemory, memoryLimitKb)
       };
       if (dialogMode === 'edit') {
         await contestsService.updateTaskInContest(contestId, selectedTaskId, schedule);
@@ -256,6 +276,27 @@
       );
     } finally {
       submitting = false;
+    }
+  }
+
+  // shortcut: fetches at most 100 tasks (backend page cap); more than that makes the backend reject the reorder
+  async function handleMove(taskId: number, delta: -1 | 1) {
+    if (!contestsService) return;
+    try {
+      const all = await contestsService.getContestTasks(contestId, {
+        limit: 100,
+        sort: `${ContestTaskSortKey.Position}:${SortDirection.Asc}`
+      });
+      const ids = all.items.map((t) => t.task.id);
+      const from = ids.indexOf(taskId);
+      const to = from + delta;
+      if (from < 0 || to < 0 || to >= ids.length) return;
+      [ids[from], ids[to]] = [ids[to], ids[from]];
+      await contestsService.reorderContestTasks(contestId, ids);
+      await addedTasksQuery.refresh();
+    } catch (error) {
+      console.error('Reorder tasks error:', error);
+      showApiError(error, m.admin_contest_tasks_reorder_error());
     }
   }
 
@@ -305,6 +346,7 @@
           bind:sortDir={addedSortDir}
           bind:search={addedSearch}
           onEdit={openEditDialog}
+          onMove={handleMove}
           onSuccess={handleTasksChanged}
         />
       {/if}
@@ -451,6 +493,48 @@
               />
             </div>
           {/if}
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <p class="text-sm text-muted-foreground">{m.admin_contest_tasks_limits_hint()}</p>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="space-y-2">
+            <div class="flex h-8 items-center gap-2">
+              <Checkbox id="overrideTime" bind:checked={overrideTime} />
+              <Label for="overrideTime" class="cursor-pointer">
+                {m.admin_contest_tasks_time_limit()}
+              </Label>
+            </div>
+            {#if overrideTime}
+              <Input
+                type="number"
+                id="timeLimitMs"
+                min="1"
+                step="1"
+                required
+                bind:value={timeLimitMs}
+              />
+            {/if}
+          </div>
+          <div class="space-y-2">
+            <div class="flex h-8 items-center gap-2">
+              <Checkbox id="overrideMemory" bind:checked={overrideMemory} />
+              <Label for="overrideMemory" class="cursor-pointer">
+                {m.admin_contest_tasks_memory_limit()}
+              </Label>
+            </div>
+            {#if overrideMemory}
+              <Input
+                type="number"
+                id="memoryLimitKb"
+                min="1"
+                step="1"
+                required
+                bind:value={memoryLimitKb}
+              />
+            {/if}
+          </div>
         </div>
       </div>
 

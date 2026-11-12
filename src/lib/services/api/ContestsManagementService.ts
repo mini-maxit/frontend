@@ -125,7 +125,9 @@ export class ContestsManagementService {
       const requestData = {
         taskId: data.taskId,
         startAt: data.startAt,
-        endAt: data.endAt ? data.endAt : null
+        endAt: data.endAt ? data.endAt : null,
+        timeLimitMs: data.timeLimitMs ?? null,
+        memoryLimitKb: data.memoryLimitKb ?? null
       };
       const response = await this.apiClient.post<ApiResponse<ContestTaskRelation>>({
         url: `/contests-management/contests/${contestId}/tasks`,
@@ -144,12 +146,22 @@ export class ContestsManagementService {
   async updateTaskInContest(
     contestId: number,
     taskId: number,
-    data: { startAt: string; endAt: string | null }
+    data: {
+      startAt: string;
+      endAt: string | null;
+      timeLimitMs: number | null;
+      memoryLimitKb: number | null;
+    }
   ): Promise<void> {
     try {
       await this.apiClient.put<ApiResponse<{ message: string }>>({
         url: `/contests-management/contests/${contestId}/tasks/${taskId}`,
-        body: JSON.stringify({ startAt: data.startAt, endAt: data.endAt })
+        body: JSON.stringify({
+          startAt: data.startAt,
+          endAt: data.endAt,
+          timeLimitMs: data.timeLimitMs,
+          memoryLimitKb: data.memoryLimitKb
+        })
       });
     } catch (error) {
       if (error instanceof ApiError) {
@@ -158,6 +170,14 @@ export class ContestsManagementService {
       }
       throw error;
     }
+  }
+
+  /** Sets the display order of the contest's tasks; taskIds must list every task of the contest. */
+  async reorderContestTasks(contestId: number, taskIds: number[]): Promise<void> {
+    await this.apiClient.put<ApiResponse<{ message: string }>>({
+      url: `/contests-management/contests/${contestId}/tasks/order`,
+      body: JSON.stringify({ taskIds })
+    });
   }
 
   async deleteContest(contestId: number): Promise<void> {

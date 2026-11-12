@@ -33,6 +33,7 @@
     sortDir: SortDirection;
     search: string;
     onEdit: (contestTask: ContestTask) => void;
+    onMove?: (taskId: number, delta: -1 | 1) => void;
     onSuccess?: () => void;
   }
 
@@ -46,6 +47,7 @@
     sortDir = $bindable(),
     search = $bindable(),
     onEdit,
+    onMove,
     onSuccess
   }: AddedContestTasksListProps = $props();
 
@@ -76,6 +78,14 @@
     if (sortKey !== key) return 'none';
     return sortDir === SortDirection.Asc ? 'ascending' : 'descending';
   }
+
+  // moving only makes sense in the real order: sorted by position ascending, unfiltered
+  let canMove = $derived(
+    !!onMove &&
+      sortKey === ContestTaskSortKey.Position &&
+      sortDir === SortDirection.Asc &&
+      !search.trim()
+  );
 
   const perPageOptions = [5, 10, 20];
 </script>
@@ -128,6 +138,18 @@
   <Table.Root class="mt-1">
     <Table.Header>
       <Table.Row>
+        <Table.Head class="w-14" aria-sort={getAriaSortValue(ContestTaskSortKey.Position)}>
+          <button
+            class="flex items-center gap-1"
+            type="button"
+            onclick={() => handleHeaderSort(ContestTaskSortKey.Position)}
+          >
+            {m.admin_contest_tasks_column_order()}
+            {#if sortKey === ContestTaskSortKey.Position}{#if sortDir === SortDirection.Asc}<ArrowUp
+                  class="h-3 w-3 text-muted-foreground"
+                />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
+          </button>
+        </Table.Head>
         <Table.Head class="w-14" aria-sort={getAriaSortValue(ContestTaskSortKey.Id)}>
           <button
             class="flex items-center gap-1"
@@ -186,13 +208,14 @@
     <Table.Body>
       {#if contestTasks.length === 0}
         <Table.Row>
-          <Table.Cell colspan={6} class="py-10 text-center text-sm text-muted-foreground">
+          <Table.Cell colspan={7} class="py-10 text-center text-sm text-muted-foreground">
             {m.admin_contest_tasks_no_results_title()}
           </Table.Cell>
         </Table.Row>
       {:else}
         {#each contestTasks as contestTask (contestTask.task.id)}
           <Table.Row>
+            <Table.Cell class="font-mono text-xs">{contestTask.position}</Table.Cell>
             <Table.Cell class="font-mono text-xs">{contestTask.task.id}</Table.Cell>
             <Table.Cell>
               <div class="flex min-w-0 items-center gap-2">
@@ -231,6 +254,26 @@
             </Table.Cell>
             <Table.Cell class="text-right">
               <div class="flex items-center justify-end gap-1">
+                {#if canMove}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    class="h-8 w-8 text-muted-foreground"
+                    title={m.admin_contest_tasks_move_up()}
+                    onclick={() => onMove?.(contestTask.task.id, -1)}
+                  >
+                    <ArrowUp class="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    class="h-8 w-8 text-muted-foreground"
+                    title={m.admin_contest_tasks_move_down()}
+                    onclick={() => onMove?.(contestTask.task.id, 1)}
+                  >
+                    <ArrowDown class="h-4 w-4" />
+                  </Button>
+                {/if}
                 <Button
                   variant="ghost"
                   size="icon"
