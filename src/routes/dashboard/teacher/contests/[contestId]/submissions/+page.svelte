@@ -35,32 +35,47 @@
   let limit = $state(readIntParam(page.url, 'limit', 20));
   let offset = $state(readIntParam(page.url, 'offset', 0));
 
-  // Filters
+  // Filters (applied server-side, debounced while typing)
   let userFilter = $state(readParam(page.url, 'user'));
   let taskFilter = $state(readParam(page.url, 'task'));
+  let userFilterApplied = $state(readParam(page.url, 'user'));
+  let taskFilterApplied = $state(readParam(page.url, 'task'));
+
+  let filterTimer: ReturnType<typeof setTimeout> | undefined;
+  $effect(() => {
+    const user = userFilter.trim();
+    const task = taskFilter.trim();
+    clearTimeout(filterTimer);
+    filterTimer = setTimeout(() => {
+      if (user === userFilterApplied && task === taskFilterApplied) return;
+      userFilterApplied = user;
+      taskFilterApplied = task;
+      offset = 0;
+    }, 300);
+  });
 
   $effect(() => {
     writeSearchParams({
       limit,
       offset,
-      user: userFilter || null,
-      task: taskFilter || null
+      user: userFilterApplied || null,
+      task: taskFilterApplied || null
     });
   });
 
-  // Query submissions with pagination
+  // Query submissions with pagination and filters
   const getQueryParams = () => ({
     contestId,
     limit,
-    offset
+    offset,
+    userSearch: userFilterApplied,
+    taskSearch: taskFilterApplied
   });
 
   const submissionsQuery = createParameterizedQuery(getQueryParams, async (params) => {
     if (!contestsService) throw new Error('Service unavailable');
-    return await contestsService.getContestSubmissions(params.contestId, {
-      limit: params.limit,
-      offset: params.offset
-    });
+    const { contestId, ...query } = params;
+    return await contestsService.getContestSubmissions(contestId, query);
   });
 
   // Pagination calculations
@@ -72,24 +87,7 @@
   );
   let paginationPages = $derived(getPaginationPages(currentPage, totalPages));
 
-  // Filtered submissions
-  const filteredSubmissions = $derived.by(() => {
-    if (!submissionsQuery.current) return [];
-
-    return submissionsQuery.current.items.filter((submission: Submission) => {
-      const matchesUser =
-        !userFilter ||
-        submission.user.name.toLowerCase().includes(userFilter.toLowerCase()) ||
-        submission.user.surname.toLowerCase().includes(userFilter.toLowerCase());
-
-      const matchesTask =
-        !taskFilter ||
-        submission.task.title.toLowerCase().includes(taskFilter.toLowerCase()) ||
-        submission.task.id.toString().includes(taskFilter);
-
-      return matchesUser && matchesTask;
-    });
-  });
+  const submissions: Submission[] = $derived(submissionsQuery.current?.items ?? []);
 
   function clearFilters() {
     userFilter = '';
@@ -204,7 +202,7 @@
     />
   {:else if submissionsQuery.loading}
     <LoadingSpinner message={m.admin_contest_submissions_loading()} />
-  {:else if !filteredSubmissions.length}
+  {:else if !submissions.length}
     <EmptyState
       title={m.admin_contest_submissions_no_submissions_title()}
       description={m.admin_contest_submissions_no_submissions_description()}
@@ -212,13 +210,13 @@
     />
   {:else}
     <div class="space-y-4">
-      <SubmissionsList submissions={filteredSubmissions} />
+      <SubmissionsList {submissions} />
 
       <!-- Results count -->
       <div class="text-center text-sm text-muted-foreground">
-        {filteredSubmissions.length === 1
-          ? m.admin_contest_submissions_showing_count({ count: filteredSubmissions.length })
-          : m.admin_contest_submissions_showing_count_plural({ count: filteredSubmissions.length })}
+        {submissions.length === 1
+          ? m.admin_contest_submissions_showing_count({ count: submissions.length })
+          : m.admin_contest_submissions_showing_count_plural({ count: submissions.length })}
       </div>
 
       <!-- Pagination Controls -->

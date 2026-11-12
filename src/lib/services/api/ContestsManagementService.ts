@@ -221,6 +221,8 @@ export class ContestsManagementService {
       if (params?.limit) queryParams.append('limit', params.limit.toString());
       if (params?.offset) queryParams.append('offset', params.offset.toString());
       if (params?.sort) queryParams.append('sort', params.sort);
+      if (params?.userSearch) queryParams.append('userSearch', params.userSearch);
+      if (params?.taskSearch) queryParams.append('taskSearch', params.taskSearch);
 
       const url = `/contests-management/contests/${contestId}/submissions${
         queryParams.toString() ? `?${queryParams.toString()}` : ''
