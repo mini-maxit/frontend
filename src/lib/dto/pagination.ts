@@ -12,6 +12,7 @@ export enum UserSortKey {
 }
 
 export enum ContestTaskSortKey {
+  Position = 'position',
   Id = 'id',
   Title = 'title',
   StartAt = 'start_at',
