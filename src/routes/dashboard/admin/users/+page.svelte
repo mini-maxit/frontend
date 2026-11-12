@@ -35,12 +35,33 @@
       limit,
       offset,
       sort: `${sortKey}:${sortDir}`,
-      q: searchQuery || null,
+      q: searchApplied || null,
       role: roleFilterValue === 'all' ? null : roleFilterValue
     });
   });
 
-  const getQueryParams = () => ({ limit, offset, sort: `${sortKey}:${sortDir}` });
+  let searchQuery = $state(readParam(page.url, 'q'));
+  let searchApplied = $state(readParam(page.url, 'q'));
+  let roleFilterValue = $state(readParam(page.url, 'role') || 'all');
+
+  let searchTimer: ReturnType<typeof setTimeout> | undefined;
+  $effect(() => {
+    const value = searchQuery.trim();
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      if (value === searchApplied) return;
+      searchApplied = value;
+      offset = 0;
+    }, 300);
+  });
+
+  const getQueryParams = () => ({
+    limit,
+    offset,
+    sort: `${sortKey}:${sortDir}`,
+    search: searchApplied,
+    role: roleFilterValue === 'all' ? undefined : roleFilterValue
+  });
 
   const usersQuery = createParameterizedQuery(getQueryParams, async (params) => {
     if (!userService) throw new Error('Service unavailable');
@@ -51,8 +72,6 @@
 
   let editDialogOpen = $state(false);
   let selectedUser = $state<User | null>(null);
-  let searchQuery = $state(readParam(page.url, 'q'));
-  let roleFilterValue = $state(readParam(page.url, 'role') || 'all');
 
   const roleFilterOptions = [
     { value: 'all', label: m.admin_users_filter_all_roles() },
@@ -75,27 +94,8 @@
     usersQuery.refresh();
   }
 
-  let filteredUsers: User[] = $derived.by(() => {
-    if (!usersQuery.current) return [];
-
-    let filtered = usersQuery.current.items;
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (user: User) =>
-          user.name.toLowerCase().includes(query) ||
-          user.surname.toLowerCase().includes(query) ||
-          user.email.toLowerCase().includes(query)
-      );
-    }
-
-    if (roleFilterValue !== 'all') {
-      filtered = filtered.filter((user: User) => user.role === roleFilterValue);
-    }
-
-    return filtered;
-  });
+  const users: User[] = $derived(usersQuery.current?.items ?? []);
+  const hasFilters = $derived(searchApplied !== '' || roleFilterValue !== 'all');
 </script>
 
 <div class="space-y-6">
@@ -121,8 +121,9 @@
         type="single"
         value={roleFilterValue}
         onValueChange={(value) => {
-          if (value) {
+          if (value && value !== roleFilterValue) {
             roleFilterValue = value;
+            offset = 0;
           }
         }}
       >
@@ -146,8 +147,8 @@
       {#if usersQuery.current}
         <p class="text-sm text-muted-foreground">
           {m.admin_users_showing_count({
-            count: filteredUsers.length,
-            total: filteredUsers.length
+            count: users.length,
+            total: usersQuery.current.pagination.totalItems
           })}
         </p>
       {/if}
@@ -161,13 +162,13 @@
       />
     {:else if usersQuery.loading}
       <LoadingSpinner />
-    {:else if usersQuery.current && usersQuery.current.items.length === 0}
+    {:else if users.length === 0 && !hasFilters}
       <EmptyState
         title={m.admin_users_no_users_title()}
         description={m.admin_users_no_users_description()}
         icon={Users}
       />
-    {:else if filteredUsers.length === 0}
+    {:else if users.length === 0}
       <EmptyState
         title={m.admin_users_no_matching_title()}
         description={m.admin_users_no_matching_description()}
@@ -175,7 +176,7 @@
       />
     {:else}
       <UsersList
-        users={filteredUsers}
+        {users}
         total={usersQuery.current ? usersQuery.current.pagination.totalItems : 0}
         bind:limit
         bind:offset

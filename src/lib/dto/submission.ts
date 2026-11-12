@@ -97,4 +97,8 @@ export interface GetContestSubmissionsParams {
   limit?: number;
   offset?: number;
   sort?: string;
+  /** Matches submitter name or surname */
+  userSearch?: string;
+  /** Matches task title or ID */
+  taskSearch?: string;
 }

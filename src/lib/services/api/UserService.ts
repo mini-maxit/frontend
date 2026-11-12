@@ -78,9 +78,16 @@ export class UserService {
   }
 
   /**
-   * Get all users (admin only) with pagination
+   * Get all users (admin only) with pagination and optional server-side filtering
    */
-  async getUsers(params?: { limit?: number; offset?: number; sort?: string }): Promise<{
+  async getUsers(params?: {
+    limit?: number;
+    offset?: number;
+    sort?: string;
+    /** Matches name, surname or email */
+    search?: string;
+    role?: string;
+  }): Promise<{
     success: boolean;
     status: number;
     data?: PaginatedData<User>;
@@ -90,6 +97,8 @@ export class UserService {
     if (params?.limit) queryParams.set('limit', params.limit.toString());
     if (params?.offset) queryParams.set('offset', params.offset.toString());
     if (params?.sort) queryParams.set('sort', params.sort);
+    if (params?.search) queryParams.set('search', params.search);
+    if (params?.role) queryParams.set('role', params.role);
 
     const url = queryParams.toString() ? `/users?${queryParams.toString()}` : '/users';
 
