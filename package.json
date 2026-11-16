@@ -31,7 +31,7 @@
     "formsnap": "^2.1.0",
     "globals": "^17.14.0",
     "mode-watcher": "^1.1.0",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "prettier-plugin-svelte": "^4.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "rollup": "^4.68.0",
