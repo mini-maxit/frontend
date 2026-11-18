@@ -84,6 +84,39 @@
   function handleCancel() {
     open = false;
   }
+
+  // Generated password lives only in memory and is dropped when the dialog closes.
+  let newPassword = $state<string | null>(null);
+  let resetting = $state(false);
+
+  $effect(() => {
+    if (!open) newPassword = null;
+  });
+
+  async function handleResetPassword() {
+    if (!userManagementService || !user) return;
+    if (!confirm(m.admin_users_reset_password_confirm())) return;
+    resetting = true;
+    try {
+      const result = await userManagementService.resetPassword(user.id);
+      if (result.success && result.data) {
+        newPassword = result.data;
+        toast.success(m.admin_users_reset_password_success());
+      } else {
+        toast.error(result.error || m.admin_users_reset_password_error());
+      }
+    } catch (error) {
+      showApiError(error, m.admin_users_reset_password_error());
+    } finally {
+      resetting = false;
+    }
+  }
+
+  async function copyPassword() {
+    if (!newPassword) return;
+    await navigator.clipboard.writeText(newPassword);
+    toast.success(m.admin_users_reset_password_copied());
+  }
 </script>
 
 <Dialog.Root bind:open>
@@ -172,6 +205,36 @@
           </Select.Root>
           {#if $errors.role}
             <p class="text-sm text-destructive">{$errors.role}</p>
+          {/if}
+        </div>
+
+        <div class="space-y-2 border-t pt-4">
+          <Label>{m.admin_users_reset_password_title()}</Label>
+          {#if newPassword}
+            <p class="text-sm text-muted-foreground">{m.admin_users_reset_password_once()}</p>
+            <div class="flex gap-2">
+              <Input
+                readonly
+                value={newPassword}
+                class="font-mono"
+                onfocus={(e) => e.currentTarget.select()}
+              />
+              <Button type="button" variant="outline" onclick={copyPassword}>
+                {m.admin_users_reset_password_copy()}
+              </Button>
+            </div>
+          {:else}
+            <p class="text-sm text-muted-foreground">
+              {m.admin_users_reset_password_description()}
+            </p>
+            <Button
+              type="button"
+              variant="destructive"
+              onclick={handleResetPassword}
+              disabled={resetting || $submitting}
+            >
+              {m.admin_users_reset_password_button()}
+            </Button>
           {/if}
         </div>
 
