@@ -13,3 +13,4 @@ export { default as ParticipantsList } from './ParticipantsList.svelte';
 export { default as AssignedGroupsList } from './AssignedGroupsList.svelte';
 export { default as AddedContestTasksList } from './AddedContestTasksList.svelte';
 export { default as AssignableContestTasksList } from './AssignableContestTasksList.svelte';
+export { default as RegistrationRequestsList } from './RegistrationRequestsList.svelte';

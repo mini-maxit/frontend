@@ -8,7 +8,8 @@ import type {
   ContestTask as ContestTaskRelation,
   ManagedContest,
   UserContestStats,
-  TaskUserStats
+  TaskUserStats,
+  RegistrationRequest
 } from '#lib/dto/contest.js';
 import type { Task, ContestTask } from '#lib/dto/task.js';
 import type { Group, GroupWithMembers } from '#lib/dto/group.js';
@@ -422,5 +423,24 @@ export class ContestsManagementService {
       }
       throw error;
     }
+  }
+
+  async getRegistrationRequests(contestId: number): Promise<RegistrationRequest[]> {
+    const response = await this.apiClient.get<ApiResponse<RegistrationRequest[]>>({
+      url: `/contests-management/contests/${contestId}/registration-requests`
+    });
+    return response.data;
+  }
+
+  async approveRegistrationRequest(contestId: number, userId: number): Promise<void> {
+    await this.apiClient.post<ApiResponse<{ message: string }>>({
+      url: `/contests-management/contests/${contestId}/registration-requests/${userId}/approve`
+    });
+  }
+
+  async rejectRegistrationRequest(contestId: number, userId: number): Promise<void> {
+    await this.apiClient.post<ApiResponse<{ message: string }>>({
+      url: `/contests-management/contests/${contestId}/registration-requests/${userId}/reject`
+    });
   }
 }

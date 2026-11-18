@@ -10,6 +10,7 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.Dashboard]: () => m.header_dashboard(),
     [AppRoutes.UserSubmissions]: () => m.sidebar_your_submissions(),
     [AppRoutes.UserContests]: () => m.sidebar_your_contests(),
+    [AppRoutes.BrowseContests]: () => m.sidebar_browse_contests(),
     [AppRoutes.UserTasks]: () => m.sidebar_your_tasks(),
     [AppRoutes.UserProfile]: () => m.sidebar_profile(),
     [AppRoutes.Admin]: () => m.sidebar_admin(),

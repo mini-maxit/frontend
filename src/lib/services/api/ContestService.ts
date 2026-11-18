@@ -5,10 +5,12 @@ import type {
   ContestWithStats,
   PastContestWithStats,
   ContestResults,
-  ContestDetailed
+  ContestDetailed,
+  ContestStatus,
+  PublicContest
 } from '#lib/dto/contest.js';
 import type { ContestTaskWithStatistics, TaskDetail } from '#lib/dto/task.js';
-import type { ApiResponse } from '#lib/dto/response.js';
+import type { ApiResponse, PaginatedData } from '#lib/dto/response.js';
 
 /**
  * Client-side service for contest-related API calls
@@ -161,6 +163,39 @@ export class ContestService {
           error: resolveErrorMessage(error),
           status: error.getStatus()
         };
+      }
+      throw error;
+    }
+  }
+
+  async getPublicContests(params: {
+    status?: ContestStatus;
+    limit?: number;
+    offset?: number;
+  }): Promise<PaginatedData<PublicContest>> {
+    const queryParams = new URLSearchParams();
+    if (params.status) queryParams.append('status', params.status);
+    if (params.limit) queryParams.append('limit', params.limit.toString());
+    if (params.offset) queryParams.append('offset', params.offset.toString());
+    const response = await this.apiClient.get<ApiResponse<PaginatedData<PublicContest>>>({
+      url: `/contests/public?${queryParams.toString()}`
+    });
+    return response.data;
+  }
+
+  async registerForContest(contestId: number): Promise<{
+    success: boolean;
+    status: number;
+    error?: string;
+  }> {
+    try {
+      await this.apiClient.post<ApiResponse<{ message: string }>>({
+        url: `/contests/${contestId}/register`
+      });
+      return { success: true, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return { success: false, error: resolveErrorMessage(error), status: error.getStatus() };
       }
       throw error;
     }

@@ -74,11 +74,20 @@
         />
       </div>
     </div>
-    <span
-      class="mt-2 inline-flex w-fit items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
-    >
-      {contest.status}
-    </span>
+    <div class="mt-2 flex flex-wrap gap-2">
+      <span
+        class="inline-flex w-fit items-center rounded-full {statusColor} px-2.5 py-0.5 text-xs font-bold"
+      >
+        {contest.status}
+      </span>
+      {#if contest.isPublic}
+        <span
+          class="inline-flex w-fit items-center rounded-full bg-secondary/10 px-2.5 py-0.5 text-xs font-bold text-secondary-foreground"
+        >
+          {m.admin_contests_card_public()}
+        </span>
+      {/if}
+    </div>
     <p class="mt-2 line-clamp-2 text-sm text-muted-foreground">{contest.description}</p>
   </Card.Header>
 

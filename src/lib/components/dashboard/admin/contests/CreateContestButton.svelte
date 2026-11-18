@@ -37,7 +37,8 @@
         description: '',
         startAt: '',
         endAt: '',
-        isSubmissionOpen: false
+        isSubmissionOpen: false,
+        isPublic: false
       },
       valibot(CreateContestSchema)
     ),
@@ -56,7 +57,8 @@
             description: form.data.description,
             startAt: form.data.startAt,
             endAt: form.data.endAt || null,
-            isSubmissionOpen: form.data.isSubmissionOpen
+            isSubmissionOpen: form.data.isSubmissionOpen,
+            isPublic: form.data.isPublic
           });
           toast.success(m.admin_contests_create_success());
           dialogOpen = false;
@@ -286,6 +288,21 @@
           <Label for="isSubmissionOpen" class="cursor-pointer text-sm font-normal">
             {m.admin_contests_form_submission_open()}
           </Label>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <Checkbox
+            id="isPublic"
+            name="isPublic"
+            bind:checked={$form.isPublic}
+            disabled={$submitting}
+          />
+          <div class="space-y-1">
+            <Label for="isPublic" class="cursor-pointer text-sm font-normal">
+              {m.admin_contests_form_public()}
+            </Label>
+            <p class="text-xs text-muted-foreground">{m.admin_contests_form_public_hint()}</p>
+          </div>
         </div>
       </div>
 
