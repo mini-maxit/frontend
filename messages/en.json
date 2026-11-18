@@ -987,5 +987,14 @@
   "common_pagination_prev": "Previous",
   "common_pagination_next": "Next",
   "admin_contests_pagination_total": "{total} total contests",
-  "admin_tasks_pagination_total": "{total} total tasks"
+  "admin_tasks_pagination_total": "{total} total tasks",
+  "admin_users_reset_password_title": "Reset password",
+  "admin_users_reset_password_description": "Generate a new random password. The old password will stop working.",
+  "admin_users_reset_password_button": "Generate new password",
+  "admin_users_reset_password_confirm": "Reset this user's password? The current password will stop working immediately.",
+  "admin_users_reset_password_success": "Password reset",
+  "admin_users_reset_password_error": "Failed to reset password",
+  "admin_users_reset_password_once": "Copy this password now. It will not be shown again.",
+  "admin_users_reset_password_copy": "Copy",
+  "admin_users_reset_password_copied": "Password copied"
 }

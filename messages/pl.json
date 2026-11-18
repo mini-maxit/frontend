@@ -987,5 +987,14 @@
   "common_pagination_prev": "Poprzednia",
   "common_pagination_next": "Następna",
   "admin_contests_pagination_total": "{total} konkursów łącznie",
-  "admin_tasks_pagination_total": "{total} zadań łącznie"
+  "admin_tasks_pagination_total": "{total} zadań łącznie",
+  "admin_users_reset_password_title": "Resetuj hasło",
+  "admin_users_reset_password_description": "Wygeneruj nowe losowe hasło. Stare hasło przestanie działać.",
+  "admin_users_reset_password_button": "Wygeneruj nowe hasło",
+  "admin_users_reset_password_confirm": "Zresetować hasło tego użytkownika? Obecne hasło natychmiast przestanie działać.",
+  "admin_users_reset_password_success": "Hasło zostało zresetowane",
+  "admin_users_reset_password_error": "Nie udało się zresetować hasła",
+  "admin_users_reset_password_once": "Skopiuj to hasło teraz. Nie zostanie pokazane ponownie.",
+  "admin_users_reset_password_copy": "Kopiuj",
+  "admin_users_reset_password_copied": "Hasło skopiowane"
 }

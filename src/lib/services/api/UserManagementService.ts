@@ -59,4 +59,27 @@ export class UserManagementService {
       throw error;
     }
   }
+
+  /**
+   * Reset user password to a new random one (admin only). The password is returned only once.
+   */
+  async resetPassword(
+    userId: number
+  ): Promise<{ success: boolean; status: number; data?: string; error?: string }> {
+    try {
+      const response = await this.apiClient.post<ApiResponse<{ newPassword: string }>>({
+        url: `/users/${userId}/password/reset`
+      });
+      return { success: true, data: response.data.newPassword, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: resolveErrorMessage(error),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
 }
