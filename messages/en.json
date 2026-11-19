@@ -114,7 +114,6 @@
   "admin_tasks_card_id_prefix": "#",
   "admin_tasks_card_manage": "Configure Test Cases",
   "admin_tasks_card_updated": "Updated:",
-  "admin_tasks_card_user_prefix": "User #",
   "admin_tasks_card_view_details": "View Task",
   "admin_tasks_dialog_description": "Upload a task archive to the FileStorage service. The archive should contain all necessary files for the task.",
   "admin_tasks_dialog_title": "Upload Task",

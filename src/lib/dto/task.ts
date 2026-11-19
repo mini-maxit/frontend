@@ -7,6 +7,7 @@ export interface Task {
   updatedAt: string;
   createdBy: number;
   creatorName: string;
+  creatorSurname: string;
 }
 
 export interface ManagedTask extends Task {
@@ -19,6 +20,7 @@ export interface TaskDetail {
   createdAt: string;
   createdBy: number;
   createdByName: string;
+  createdBySurname: string;
   descriptionUrl: string;
 }
 
@@ -51,6 +53,7 @@ export interface UserContestTask {
   createdAt: string;
   createdBy: number;
   createdByName: string;
+  createdBySurname: string;
   descriptionUrl: string;
   attemptCount: number;
   bestScore: number;
@@ -74,6 +77,7 @@ export interface ContestTaskWithStatistics {
 export interface ContestTask {
   task: Task;
   creatorName: string;
+  creatorSurname: string;
   startAt: string;
   endAt: string | null;
   isSubmissionOpen: boolean;

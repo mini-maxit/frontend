@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import { page } from '$app/state';
   import { createParameterizedQuery, createQuery } from '#lib/utils/query.svelte.js';
   import { getTaskInstance, getSubmissionInstance } from '#lib/services/index.js';
@@ -60,7 +61,10 @@
     <TaskHeader
       id={taskQuery.current.id}
       title={taskQuery.current.title}
-      createdByName={taskQuery.current.createdByName}
+      createdByName={formatUserName(
+        taskQuery.current.createdByName,
+        taskQuery.current.createdBySurname
+      )}
       createdAt={taskQuery.current.createdAt}
     />
 

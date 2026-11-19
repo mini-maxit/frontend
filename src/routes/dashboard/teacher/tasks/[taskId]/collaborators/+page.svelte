@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import { page } from '$app/state';
   import { userStore } from '#lib/stores/user-store.svelte.js';
   import {
@@ -122,7 +123,9 @@
             <CardHeader>
               <div class="flex items-center justify-between">
                 <div class="min-w-0 flex-1">
-                  <CardTitle class="truncate">{collaborator.userName}</CardTitle>
+                  <CardTitle class="truncate"
+                    >{formatUserName(collaborator.firstName, collaborator.lastName)}</CardTitle
+                  >
                   <p class="truncate text-sm text-muted-foreground">
                     {collaborator.firstName}
                     {collaborator.lastName}
@@ -132,7 +135,7 @@
                   <CollaboratorPermissionEditor
                     {taskId}
                     userId={collaborator.userId}
-                    userName={collaborator.userName}
+                    userName={formatUserName(collaborator.firstName, collaborator.lastName)}
                     currentPermission={collaborator.permission}
                     canEdit={canEditCollaborators}
                     onSuccess={() => collaboratorsQuery.refresh()}
@@ -140,7 +143,7 @@
                   <RemoveCollaboratorButton
                     {taskId}
                     userId={collaborator.userId}
-                    userName={collaborator.userName}
+                    userName={formatUserName(collaborator.firstName, collaborator.lastName)}
                     targetPermission={collaborator.permission}
                     {currentUserPermission}
                     onSuccess={() => {

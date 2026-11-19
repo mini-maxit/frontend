@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import type { User } from '#lib/dto/user.js';
   import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
   import * as Table from '#lib/components/ui/table/index.js';
@@ -215,7 +216,9 @@
                 <UserIcon class="h-4 w-4 text-primary" />
               </div>
               <div class="flex min-w-0 flex-col">
-                <span class="truncate font-medium text-foreground">{user.name} {user.surname}</span>
+                <span class="truncate font-medium text-foreground"
+                  >{formatUserName(user.name, user.surname)}</span
+                >
               </div>
             </div>
           </Table.Cell>

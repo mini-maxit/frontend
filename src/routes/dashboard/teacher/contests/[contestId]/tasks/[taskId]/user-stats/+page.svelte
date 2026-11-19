@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import {
     LoadingSpinner,
     ErrorCard,
@@ -196,8 +197,7 @@
                       </div>
                     </Table.Cell>
                     <Table.Cell class="font-medium">
-                      {userStat.user.name}
-                      {userStat.user.surname}
+                      {formatUserName(userStat.user.name, userStat.user.surname)}
                     </Table.Cell>
                     <Table.Cell class="text-right">
                       <span

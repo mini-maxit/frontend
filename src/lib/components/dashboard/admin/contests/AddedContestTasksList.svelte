@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import type { ContestTask } from '#lib/dto/task.js';
   import { SortDirection, ContestTaskSortKey } from '#lib/dto/pagination.js';
   import * as Table from '#lib/components/ui/table/index.js';
@@ -233,7 +234,9 @@
             <Table.Cell class="hidden md:table-cell">
               <div class="flex items-center gap-1.5 text-muted-foreground">
                 <User class="h-3.5 w-3.5 shrink-0" />
-                <span class="max-w-[160px] truncate">{contestTask.creatorName}</span>
+                <span class="max-w-[160px] truncate"
+                  >{formatUserName(contestTask.creatorName, contestTask.creatorSurname)}</span
+                >
               </div>
             </Table.Cell>
             <Table.Cell>
