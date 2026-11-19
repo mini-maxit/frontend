@@ -197,7 +197,7 @@
   "features_heading": "Why Choose MaxIT?",
   "features_organize_description": "Host official competitions and monitor progress in real-time with built-in analytics.",
   "features_organize_title": "Organize Contests",
-  "footer_copyright": "© 2025 MaxIT. Built for academic excellence.",
+  "footer_copyright": "© {year} MaxIT. Built for academic excellence.",
   "header_dashboard": "Dashboard",
   "header_task_details": "Task Details",
   "hello_world": "Hello, {name} from en!",

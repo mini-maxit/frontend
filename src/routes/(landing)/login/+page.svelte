@@ -49,7 +49,7 @@
       </Card.Root>
 
       <p class="mt-8 text-center text-sm text-primary-foreground/70">
-        {m.footer_copyright()}
+        {m.footer_copyright({ year: new Date().getFullYear() })}
       </p>
     </div>
   </div>

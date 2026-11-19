@@ -197,7 +197,7 @@
   "features_heading": "Dlaczego MaxIT?",
   "features_organize_description": "Prowadź oficjalne konkursy i monitoruj postępy w czasie rzeczywistym dzięki wbudowanym analizom.",
   "features_organize_title": "Organizuj Konkursy",
-  "footer_copyright": "© 2025 MaxIT. Stworzone dla doskonałości akademickiej.",
+  "footer_copyright": "© {year} MaxIT. Stworzone dla doskonałości akademickiej.",
   "header_dashboard": "Panel",
   "header_task_details": "Szczegóły zadania",
   "hello_world": "Hello, {name} from pl!",
