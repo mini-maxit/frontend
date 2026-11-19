@@ -87,6 +87,8 @@ export class UserService {
     /** Matches name, surname or email */
     search?: string;
     role?: string;
+    /** List only soft-deleted users */
+    deleted?: boolean;
   }): Promise<{
     success: boolean;
     status: number;
@@ -99,6 +101,7 @@ export class UserService {
     if (params?.sort) queryParams.set('sort', params.sort);
     if (params?.search) queryParams.set('search', params.search);
     if (params?.role) queryParams.set('role', params.role);
+    if (params?.deleted) queryParams.set('deleted', 'true');
 
     const url = queryParams.toString() ? `/users?${queryParams.toString()}` : '/users';
 

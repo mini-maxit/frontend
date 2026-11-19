@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatUserName } from '#lib/utils/user.js';
   import type { User } from '#lib/dto/user.js';
+  import { UserRole } from '#lib/dto/jwt.js';
   import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
   import * as Table from '#lib/components/ui/table/index.js';
   import { Button } from '#lib/components/ui/button/index.js';
@@ -10,6 +11,8 @@
   import Mail from '@lucide/svelte/icons/mail';
   import Calendar from '@lucide/svelte/icons/calendar';
   import Edit from '@lucide/svelte/icons/edit';
+  import Trash2 from '@lucide/svelte/icons/trash-2';
+  import Undo2 from '@lucide/svelte/icons/undo-2';
   import ArrowUp from '@lucide/svelte/icons/arrow-up';
   import ArrowDown from '@lucide/svelte/icons/arrow-down';
   import { formatDistanceToNow, format, isSameDay } from 'date-fns';
@@ -23,7 +26,10 @@
     offset: number;
     sortKey: UserSortKey;
     sortDir: SortDirection;
+    deleted?: boolean;
     onEdit: (user: User) => void;
+    onDelete: (user: User) => void;
+    onRestore: (user: User) => void;
   }
 
   let {
@@ -33,7 +39,10 @@
     offset = $bindable(),
     sortKey = $bindable(),
     sortDir = $bindable(),
-    onEdit
+    deleted = false,
+    onEdit,
+    onDelete,
+    onRestore
   }: UsersListProps = $props();
 
   let currentPage = $derived(getCurrentPage(offset, limit));
@@ -244,19 +253,42 @@
             </div>
           </Table.Cell>
           <Table.Cell class="text-right">
-            <Tooltip.Root>
-              <Tooltip.Trigger>
+            {#if deleted}
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={m.admin_users_action_restore()}
+                title={m.admin_users_action_restore()}
+                onclick={() => onRestore(user)}
+              >
+                <Undo2 class="h-4 w-4" />
+              </Button>
+            {:else}
+              <Tooltip.Root>
+                <Tooltip.Trigger>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={m.admin_users_action_edit()}
+                    onclick={() => onEdit(user)}
+                  >
+                    <Edit class="h-4 w-4" />
+                  </Button>
+                </Tooltip.Trigger>
+                <Tooltip.Content side="top">{m.admin_users_action_edit()}</Tooltip.Content>
+              </Tooltip.Root>
+              {#if user.role !== UserRole.Admin}
                 <Button
                   variant="ghost"
                   size="icon"
-                  aria-label={m.admin_users_action_edit()}
-                  onclick={() => onEdit(user)}
+                  aria-label={m.admin_users_action_delete()}
+                  title={m.admin_users_action_delete()}
+                  onclick={() => onDelete(user)}
                 >
-                  <Edit class="h-4 w-4" />
+                  <Trash2 class="h-4 w-4 text-destructive" />
                 </Button>
-              </Tooltip.Trigger>
-              <Tooltip.Content side="top">{m.admin_users_action_edit()}</Tooltip.Content>
-            </Tooltip.Root>
+              {/if}
+            {/if}
           </Table.Cell>
         </Table.Row>
       {/each}
