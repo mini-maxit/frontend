@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatUserName } from '#lib/utils/user.js';
   import type { User } from '#lib/dto/user.js';
+  import { UserRole } from '#lib/dto/jwt.js';
   import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
   import * as Table from '#lib/components/ui/table/index.js';
   import { Button } from '#lib/components/ui/button/index.js';
@@ -276,15 +277,17 @@
                 </Tooltip.Trigger>
                 <Tooltip.Content side="top">{m.admin_users_action_edit()}</Tooltip.Content>
               </Tooltip.Root>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={m.admin_users_action_delete()}
-                title={m.admin_users_action_delete()}
-                onclick={() => onDelete(user)}
-              >
-                <Trash2 class="h-4 w-4 text-destructive" />
-              </Button>
+              {#if user.role !== UserRole.Admin}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={m.admin_users_action_delete()}
+                  title={m.admin_users_action_delete()}
+                  onclick={() => onDelete(user)}
+                >
+                  <Trash2 class="h-4 w-4 text-destructive" />
+                </Button>
+              {/if}
             {/if}
           </Table.Cell>
         </Table.Row>
