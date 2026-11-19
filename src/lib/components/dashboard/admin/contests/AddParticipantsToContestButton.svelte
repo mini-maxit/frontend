@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import { Button } from '#lib/components/ui/button/index.js';
   import { showApiError } from '#lib/errors/backend-error.js';
   import { Input } from '#lib/components/ui/input/index.js';
@@ -125,7 +126,7 @@
                 for={`participant-${user.id}`}
                 class="flex-1 cursor-pointer space-y-1 text-sm leading-none"
               >
-                <div class="font-medium">{user.name} {user.surname}</div>
+                <div class="font-medium">{formatUserName(user)}</div>
                 <div class="text-muted-foreground">
                   {user.email}
                 </div>

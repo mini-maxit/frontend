@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import type { RegistrationRequest } from '#lib/dto/contest.js';
   import * as Table from '#lib/components/ui/table/index.js';
   import { Button } from '#lib/components/ui/button/index.js';
@@ -55,7 +56,7 @@
   <Table.Body>
     {#each requests as request (request.user.id)}
       <Table.Row>
-        <Table.Cell class="font-medium">{request.user.name} {request.user.surname}</Table.Cell>
+        <Table.Cell class="font-medium">{formatUserName(request.user)}</Table.Cell>
         <Table.Cell class="hidden text-muted-foreground md:table-cell"
           >{request.user.email}</Table.Cell
         >

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import {
     LoadingSpinner,
     ErrorCard,
@@ -127,7 +128,12 @@
             <CardHeader>
               <div class="flex items-center justify-between">
                 <div class="min-w-0 flex-1">
-                  <CardTitle class="truncate">{collaborator.userName}</CardTitle>
+                  <CardTitle class="truncate"
+                    >{formatUserName({
+                      name: collaborator.firstName,
+                      surname: collaborator.lastName
+                    })}</CardTitle
+                  >
                   <p class="truncate text-sm text-muted-foreground">
                     {collaborator.firstName}
                     {collaborator.lastName}
@@ -137,7 +143,10 @@
                   <ContestCollaboratorPermissionEditor
                     {contestId}
                     userId={collaborator.userId}
-                    userName={collaborator.userName}
+                    userName={formatUserName({
+                      name: collaborator.firstName,
+                      surname: collaborator.lastName
+                    })}
                     currentPermission={collaborator.permission}
                     canEdit={canEditCollaborators}
                     onSuccess={() => collaboratorsQuery.refresh()}
@@ -145,7 +154,10 @@
                   <RemoveContestCollaboratorButton
                     {contestId}
                     userId={collaborator.userId}
-                    userName={collaborator.userName}
+                    userName={formatUserName({
+                      name: collaborator.firstName,
+                      surname: collaborator.lastName
+                    })}
                     targetPermission={collaborator.permission}
                     {currentUserPermission}
                     onSuccess={() => {

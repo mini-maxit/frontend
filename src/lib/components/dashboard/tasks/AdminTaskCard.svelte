@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import * as Card from '#lib/components/ui/card/index.js';
   import { Button } from '#lib/components/ui/button/index.js';
   import FileText from '@lucide/svelte/icons/file-text';
@@ -67,9 +68,7 @@
       <div class="flex items-center gap-2 text-sm">
         <User class="h-4 w-4 text-muted-foreground" />
         <span class="text-muted-foreground">{m.admin_tasks_card_created_by()}</span>
-        <span class="font-medium text-foreground"
-          >{m.admin_tasks_card_user_prefix()}{task.createdBy}</span
-        >
+        <span class="font-medium text-foreground">{formatUserName(task.creator)}</span>
       </div>
     </div>
 

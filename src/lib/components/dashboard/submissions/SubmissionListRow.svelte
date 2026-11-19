@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import * as Card from '#lib/components/ui/card/index.js';
   import CheckCircle from '@lucide/svelte/icons/check-circle';
   import XCircle from '@lucide/svelte/icons/x-circle';
@@ -120,8 +121,7 @@
             </div>
             <div class="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
               <UserIcon class="h-3.5 w-3.5" />
-              {submission.user.name}
-              {submission.user.surname}
+              {formatUserName(submission.user)}
             </div>
           </div>
         </div>

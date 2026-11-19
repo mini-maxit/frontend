@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import * as Card from '#lib/components/ui/card/index.js';
   import { Button } from '#lib/components/ui/button/index.js';
   import Trophy from '@lucide/svelte/icons/trophy';
@@ -67,9 +68,11 @@
     {#if contest.description}
       <Card.Description class="line-clamp-3">{contest.description}</Card.Description>
     {/if}
-    {#if contest.creatorName}
+    {#if contest.creator}
       <p class="text-xs text-muted-foreground">
-        {m.public_contest_created_by({ name: contest.creatorName })}
+        {m.public_contest_created_by({
+          name: formatUserName(contest.creator)
+        })}
       </p>
     {/if}
   </Card.Header>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import type { ParticipantAccess } from '#lib/dto/participant.js';
   import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
   import * as Table from '#lib/components/ui/table/index.js';
@@ -158,7 +159,7 @@
               </div>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate font-medium text-foreground"
-                  >{participant.name} {participant.surname}</span
+                  >{formatUserName(participant)}</span
                 >
               </div>
             </div>
@@ -190,7 +191,7 @@
               <RemoveParticipantFromContestButton
                 {contestId}
                 userId={participant.id}
-                userName={`${participant.name} ${participant.surname}`}
+                userName={formatUserName(participant)}
                 remainingGroupNames={participant.groups.map((g) => g.name)}
                 {onSuccess}
               />

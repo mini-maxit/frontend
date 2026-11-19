@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import { page } from '$app/state';
   import {
     LoadingSpinner,
@@ -105,12 +106,12 @@
             <Card.Header>
               <div class="flex items-center justify-between">
                 <div class="min-w-0 flex-1">
-                  <Card.Title class="truncate">{member.name} {member.surname}</Card.Title>
+                  <Card.Title class="truncate">{formatUserName(member)}</Card.Title>
                 </div>
                 <RemoveUserFromGroupButton
                   {groupId}
                   userId={member.id}
-                  userName={`${member.name} ${member.surname}`}
+                  userName={formatUserName(member)}
                   onSuccess={() => membersQuery.refresh()}
                 />
               </div>

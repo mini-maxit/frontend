@@ -25,6 +25,7 @@ export interface CreatedContest {
   createdAt: string;
   updatedAt: string;
   createdBy: number;
+  creator?: UserInfo;
   participantCount: number;
   taskCount: number;
   status: ContestStatus;
@@ -89,7 +90,7 @@ export interface ContestWithStats {
   startAt: string;
   endAt: string;
   createdBy: number;
-  creatorName: string;
+  creator?: UserInfo;
   participantCount: number;
   taskCount: number;
   solvedTaskCount: number;
@@ -104,7 +105,7 @@ export interface PastContestWithStats {
   startAt: string;
   endAt: string;
   createdBy: number;
-  creatorName: string;
+  creator?: UserInfo;
   participantCount: number;
   taskCount: number;
   status: ContestStatus;
@@ -230,7 +231,7 @@ export interface ContestDetailed {
   startAt: string;
   endAt: string;
   createdBy: number;
-  creatorName: string;
+  creator?: UserInfo;
   participantCount: number;
   taskCount: number;
   status: ContestStatus;

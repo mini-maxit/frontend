@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatUserName } from '#lib/utils/user.js';
   import { page } from '$app/state';
   import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
   import { getSubmissionInstance } from '#lib/services/index.js';
@@ -259,8 +260,7 @@
               <span class="text-sm text-muted-foreground">{m.submission_details_submitter()}</span>
             </div>
             <p class="mt-2 text-lg font-semibold text-foreground">
-              {submission.user.name}
-              {submission.user.surname}
+              {formatUserName(submission.user)}
             </p>
           </div>
 
