@@ -6,7 +6,8 @@
     LoadingSpinner,
     ErrorCard,
     EmptyState,
-    BackButton
+    BackButton,
+    PermissionLevelsInfo
   } from '#lib/components/common/index.js';
   import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
   import { getAccessControlInstance } from '#lib/services/index.js';
@@ -79,6 +80,8 @@
       {m.task_collaborators_page_title({ taskId: taskId.toString() })}
     </h1>
   </div>
+
+  <PermissionLevelsInfo resource="task" />
 
   <!-- Quick Actions Section -->
   <div class="space-y-4">

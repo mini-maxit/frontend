@@ -4,7 +4,8 @@
     LoadingSpinner,
     ErrorCard,
     EmptyState,
-    BackButton
+    BackButton,
+    PermissionLevelsInfo
   } from '#lib/components/common/index.js';
   import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
   import { getAccessControlInstance } from '#lib/services/index.js';
@@ -84,6 +85,8 @@
       {m.contest_collaborators_page_title({ contestId: data.contestId.toString() })}
     </h1>
   </div>
+
+  <PermissionLevelsInfo resource="contest" />
 
   <!-- Quick Actions Section -->
   <div class="space-y-4">
