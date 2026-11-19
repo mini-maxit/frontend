@@ -82,4 +82,26 @@ export class UserManagementService {
       throw error;
     }
   }
+
+  private async call(url: string, method: 'delete' | 'post') {
+    try {
+      await this.apiClient[method]<ApiResponse<unknown>>({ url });
+      return { success: true, status: 200 } as { success: boolean; status: number; error?: string };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return { success: false, error: resolveErrorMessage(error), status: error.getStatus() };
+      }
+      throw error;
+    }
+  }
+
+  /** Soft-delete a user (admin only). */
+  deleteUser(userId: number) {
+    return this.call(`/users/${userId}`, 'delete');
+  }
+
+  /** Restore a soft-deleted user (admin only). */
+  restoreUser(userId: number) {
+    return this.call(`/users/${userId}/restore`, 'post');
+  }
 }

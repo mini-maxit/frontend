@@ -70,6 +70,7 @@ const BACKEND_ERROR_MESSAGES: Record<string, () => string> = {
   ERR_TOKEN_EXPIRED: () => m.backend_error_token_expired(),
   ERR_TOKEN_USER_NOT_FOUND: () => m.backend_error_token_user_not_found(),
   ERR_USER_ALREADY_EXISTS: () => m.backend_error_user_already_exists(),
+  ERR_USER_DELETED: () => m.backend_error_user_deleted(),
   ERR_USER_NOT_FOUND: () => m.backend_error_user_not_found(),
   ERR_WRITE_OVERWRITE: () => m.backend_error_write_overwrite(),
   ERR_WRITE_TASK_ID: () => m.backend_error_write_task_id()

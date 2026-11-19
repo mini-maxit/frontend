@@ -1,8 +1,13 @@
 <script lang="ts">
   import { createParameterizedQuery } from '#lib/utils/query.svelte.js';
-  import { getUserInstance } from '#lib/services/index.js';
+  import { getUserInstance, getUserManagementInstance } from '#lib/services/index.js';
   import { UsersList, UserEditDialog } from '#lib/components/dashboard/admin/users/index.js';
-  import { LoadingSpinner, ErrorCard, EmptyState } from '#lib/components/common/index.js';
+  import {
+    LoadingSpinner,
+    ErrorCard,
+    EmptyState,
+    ConfirmDialog
+  } from '#lib/components/common/index.js';
   import { Input } from '#lib/components/ui/input/index.js';
   import * as Select from '#lib/components/ui/select/index.js';
   import type { User } from '#lib/dto/user.js';
@@ -10,11 +15,13 @@
   import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
   import { readIntParam, readParam, writeSearchParams } from '#lib/utils/url-state.js';
   import { page } from '$app/state';
+  import { toast } from 'svelte-sonner';
   import Users from '@lucide/svelte/icons/users';
   import Search from '@lucide/svelte/icons/search';
   import * as m from '#lib/paraglide/messages.js';
 
   const userService = getUserInstance();
+  const userManagementService = getUserManagementInstance();
 
   const initialSort = readParam(page.url, 'sort');
   const [initialSortKey, initialSortDir] = initialSort.split(':');
@@ -36,13 +43,15 @@
       offset,
       sort: `${sortKey}:${sortDir}`,
       q: searchApplied || null,
-      role: roleFilterValue === 'all' ? null : roleFilterValue
+      role: roleFilterValue === 'all' ? null : roleFilterValue,
+      deleted: showDeleted ? 'true' : null
     });
   });
 
   let searchQuery = $state(readParam(page.url, 'q'));
   let searchApplied = $state(readParam(page.url, 'q'));
   let roleFilterValue = $state(readParam(page.url, 'role') || 'all');
+  let showDeleted = $state(readParam(page.url, 'deleted') === 'true');
 
   let searchTimer: ReturnType<typeof setTimeout> | undefined;
   $effect(() => {
@@ -60,7 +69,8 @@
     offset,
     sort: `${sortKey}:${sortDir}`,
     search: searchApplied,
-    role: roleFilterValue === 'all' ? undefined : roleFilterValue
+    role: roleFilterValue === 'all' ? undefined : roleFilterValue,
+    deleted: showDeleted
   });
 
   const usersQuery = createParameterizedQuery(getQueryParams, async (params) => {
@@ -94,8 +104,32 @@
     usersQuery.refresh();
   }
 
+  let userToDelete = $state<User | null>(null);
+  let deleteDialogOpen = $state(false);
+
+  function handleDeleteUser(user: User) {
+    userToDelete = user;
+    deleteDialogOpen = true;
+  }
+
+  async function confirmDeleteUser() {
+    if (!userManagementService || !userToDelete) return;
+    const result = await userManagementService.deleteUser(userToDelete.id);
+    if (result.success) toast.success(m.admin_users_delete_success());
+    else toast.error(result.error || m.admin_users_delete_error());
+    usersQuery.refresh();
+  }
+
+  async function handleRestoreUser(user: User) {
+    if (!userManagementService) return;
+    const result = await userManagementService.restoreUser(user.id);
+    if (result.success) toast.success(m.admin_users_restore_success());
+    else toast.error(result.error || m.admin_users_restore_error());
+    usersQuery.refresh();
+  }
+
   const users: User[] = $derived(usersQuery.current?.items ?? []);
-  const hasFilters = $derived(searchApplied !== '' || roleFilterValue !== 'all');
+  const hasFilters = $derived(searchApplied !== '' || roleFilterValue !== 'all' || showDeleted);
 </script>
 
 <div class="space-y-6">
@@ -138,6 +172,18 @@
           {/each}
         </Select.Content>
       </Select.Root>
+
+      <label class="flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          checked={showDeleted}
+          onchange={(e) => {
+            showDeleted = (e.target as HTMLInputElement).checked;
+            offset = 0;
+          }}
+        />
+        {m.admin_users_show_deleted()}
+      </label>
     </div>
   </div>
 
@@ -182,10 +228,22 @@
         bind:offset
         bind:sortKey
         bind:sortDir
+        deleted={showDeleted}
         onEdit={handleEditUser}
+        onDelete={handleDeleteUser}
+        onRestore={handleRestoreUser}
       />
     {/if}
   </div>
 </div>
 
 <UserEditDialog bind:open={editDialogOpen} user={selectedUser} onSuccess={handleEditSuccess} />
+
+<ConfirmDialog
+  bind:open={deleteDialogOpen}
+  title={m.admin_users_delete_title()}
+  description={m.admin_users_delete_confirm()}
+  confirmLabel={m.admin_users_action_delete()}
+  destructive
+  onConfirm={confirmDeleteUser}
+/>
