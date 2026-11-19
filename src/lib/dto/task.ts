@@ -77,6 +77,9 @@ export interface ContestTask {
   startAt: string;
   endAt: string | null;
   isSubmissionOpen: boolean;
+  position: number;
+  timeLimitMs: number | null;
+  memoryLimitKb: number | null;
 }
 
 export interface MyTasksContest {

@@ -137,6 +137,9 @@ export interface AddContestTaskDto {
   taskId: number;
   startAt: string;
   endAt: string | null;
+  /** Contest override of the task's limits; null/undefined = task default. */
+  timeLimitMs?: number | null;
+  memoryLimitKb?: number | null;
 }
 
 export interface ContestTask {
