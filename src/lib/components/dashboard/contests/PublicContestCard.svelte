@@ -68,10 +68,10 @@
     {#if contest.description}
       <Card.Description class="line-clamp-3">{contest.description}</Card.Description>
     {/if}
-    {#if contest.creatorName}
+    {#if contest.creator}
       <p class="text-xs text-muted-foreground">
         {m.public_contest_created_by({
-          name: formatUserName(contest.creatorName, contest.creatorSurname)
+          name: formatUserName(contest.creator)
         })}
       </p>
     {/if}

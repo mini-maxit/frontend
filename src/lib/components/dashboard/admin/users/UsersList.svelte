@@ -216,9 +216,7 @@
                 <UserIcon class="h-4 w-4 text-primary" />
               </div>
               <div class="flex min-w-0 flex-col">
-                <span class="truncate font-medium text-foreground"
-                  >{formatUserName(user.name, user.surname)}</span
-                >
+                <span class="truncate font-medium text-foreground">{formatUserName(user)}</span>
               </div>
             </div>
           </Table.Cell>

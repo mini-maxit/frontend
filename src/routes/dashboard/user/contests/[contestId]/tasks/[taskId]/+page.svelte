@@ -61,10 +61,7 @@
     <TaskHeader
       id={taskQuery.current.id}
       title={taskQuery.current.title}
-      createdByName={formatUserName(
-        taskQuery.current.createdByName,
-        taskQuery.current.createdBySurname
-      )}
+      createdByName={formatUserName(taskQuery.current.creator)}
       createdAt={taskQuery.current.createdAt}
     />
 

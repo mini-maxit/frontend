@@ -68,9 +68,7 @@
       <div class="flex items-center gap-2 text-sm">
         <User class="h-4 w-4 text-muted-foreground" />
         <span class="text-muted-foreground">{m.admin_tasks_card_created_by()}</span>
-        <span class="font-medium text-foreground"
-          >{formatUserName(task.creatorName, task.creatorSurname)}</span
-        >
+        <span class="font-medium text-foreground">{formatUserName(task.creator)}</span>
       </div>
     </div>
 

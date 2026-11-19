@@ -280,7 +280,7 @@
                       </div>
                     </Table.Cell>
                     <Table.Cell class="font-medium">
-                      {formatUserName(userStat.user.name, userStat.user.surname)}
+                      {formatUserName(userStat.user)}
                     </Table.Cell>
                     <Table.Cell class="text-right">
                       <span class="text-lg font-bold">{userStat.totalScore.toFixed(1)}%</span>

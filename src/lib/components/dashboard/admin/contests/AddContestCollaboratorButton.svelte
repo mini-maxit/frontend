@@ -168,7 +168,7 @@
                   </div>
                   <div class="min-w-0 flex-1">
                     <p class="truncate font-medium">
-                      {formatUserName(user.name, user.surname)}
+                      {formatUserName(user)}
                     </p>
                     <p class="truncate text-sm text-muted-foreground">
                       {user.email}
@@ -185,7 +185,7 @@
           {#if selectedUser}
             <div class="rounded-lg border border-primary/30 bg-primary/5 p-3">
               <p class="text-sm font-medium text-primary">
-                Selected: {formatUserName(selectedUser.name, selectedUser.surname)}
+                Selected: {formatUserName(selectedUser)}
               </p>
             </div>
           {/if}

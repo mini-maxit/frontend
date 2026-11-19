@@ -1,3 +1,4 @@
+import type { UserInfo } from './contest';
 import type { Permission } from './accessControl';
 
 export interface Task {
@@ -6,8 +7,7 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   createdBy: number;
-  creatorName: string;
-  creatorSurname: string;
+  creator: UserInfo;
 }
 
 export interface ManagedTask extends Task {
@@ -19,8 +19,7 @@ export interface TaskDetail {
   title: string;
   createdAt: string;
   createdBy: number;
-  createdByName: string;
-  createdBySurname: string;
+  creator: UserInfo;
   descriptionUrl: string;
 }
 
@@ -52,8 +51,7 @@ export interface UserContestTask {
   title: string;
   createdAt: string;
   createdBy: number;
-  createdByName: string;
-  createdBySurname: string;
+  creator: UserInfo;
   descriptionUrl: string;
   attemptCount: number;
   bestScore: number;
@@ -76,8 +74,7 @@ export interface ContestTaskWithStatistics {
 
 export interface ContestTask {
   task: Task;
-  creatorName: string;
-  creatorSurname: string;
+  creator: UserInfo;
   startAt: string;
   endAt: string | null;
   isSubmissionOpen: boolean;

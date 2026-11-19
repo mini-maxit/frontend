@@ -121,7 +121,7 @@
             </div>
             <div class="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
               <UserIcon class="h-3.5 w-3.5" />
-              {formatUserName(submission.user.name, submission.user.surname)}
+              {formatUserName(submission.user)}
             </div>
           </div>
         </div>

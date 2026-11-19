@@ -260,7 +260,7 @@
               <span class="text-sm text-muted-foreground">{m.submission_details_submitter()}</span>
             </div>
             <p class="mt-2 text-lg font-semibold text-foreground">
-              {formatUserName(submission.user.name, submission.user.surname)}
+              {formatUserName(submission.user)}
             </p>
           </div>
 

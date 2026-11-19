@@ -129,7 +129,10 @@
               <div class="flex items-center justify-between">
                 <div class="min-w-0 flex-1">
                   <CardTitle class="truncate"
-                    >{formatUserName(collaborator.firstName, collaborator.lastName)}</CardTitle
+                    >{formatUserName({
+                      name: collaborator.firstName,
+                      surname: collaborator.lastName
+                    })}</CardTitle
                   >
                   <p class="truncate text-sm text-muted-foreground">
                     {collaborator.firstName}
@@ -140,7 +143,10 @@
                   <ContestCollaboratorPermissionEditor
                     {contestId}
                     userId={collaborator.userId}
-                    userName={formatUserName(collaborator.firstName, collaborator.lastName)}
+                    userName={formatUserName({
+                      name: collaborator.firstName,
+                      surname: collaborator.lastName
+                    })}
                     currentPermission={collaborator.permission}
                     canEdit={canEditCollaborators}
                     onSuccess={() => collaboratorsQuery.refresh()}
@@ -148,7 +154,10 @@
                   <RemoveContestCollaboratorButton
                     {contestId}
                     userId={collaborator.userId}
-                    userName={formatUserName(collaborator.firstName, collaborator.lastName)}
+                    userName={formatUserName({
+                      name: collaborator.firstName,
+                      surname: collaborator.lastName
+                    })}
                     targetPermission={collaborator.permission}
                     {currentUserPermission}
                     onSuccess={() => {

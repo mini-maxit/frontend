@@ -56,9 +56,7 @@
   <Table.Body>
     {#each requests as request (request.user.id)}
       <Table.Row>
-        <Table.Cell class="font-medium"
-          >{formatUserName(request.user.name, request.user.surname)}</Table.Cell
-        >
+        <Table.Cell class="font-medium">{formatUserName(request.user)}</Table.Cell>
         <Table.Cell class="hidden text-muted-foreground md:table-cell"
           >{request.user.email}</Table.Cell
         >

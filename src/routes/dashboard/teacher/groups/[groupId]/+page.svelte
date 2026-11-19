@@ -106,14 +106,12 @@
             <Card.Header>
               <div class="flex items-center justify-between">
                 <div class="min-w-0 flex-1">
-                  <Card.Title class="truncate"
-                    >{formatUserName(member.name, member.surname)}</Card.Title
-                  >
+                  <Card.Title class="truncate">{formatUserName(member)}</Card.Title>
                 </div>
                 <RemoveUserFromGroupButton
                   {groupId}
                   userId={member.id}
-                  userName={formatUserName(member.name, member.surname)}
+                  userName={formatUserName(member)}
                   onSuccess={() => membersQuery.refresh()}
                 />
               </div>

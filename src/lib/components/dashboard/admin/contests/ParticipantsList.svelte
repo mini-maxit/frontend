@@ -159,7 +159,7 @@
               </div>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate font-medium text-foreground"
-                  >{formatUserName(participant.name, participant.surname)}</span
+                  >{formatUserName(participant)}</span
                 >
               </div>
             </div>
@@ -191,7 +191,7 @@
               <RemoveParticipantFromContestButton
                 {contestId}
                 userId={participant.id}
-                userName={formatUserName(participant.name, participant.surname)}
+                userName={formatUserName(participant)}
                 remainingGroupNames={participant.groups.map((g) => g.name)}
                 {onSuccess}
               />
