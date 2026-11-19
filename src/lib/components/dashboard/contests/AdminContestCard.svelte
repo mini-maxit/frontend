@@ -13,6 +13,7 @@
   import * as m from '#lib/paraglide/messages.js';
   import { localizeHref } from '#lib/paraglide/runtime.js';
   import { formatDate } from '#lib/utils.js';
+  import { formatUserName } from '#lib/utils/user.js';
   import { AppRoutes } from '#lib/routes.js';
   import RemoveContestButton from '#lib/components/dashboard/admin/contests/RemoveContestButton.svelte';
   import EditContestDialog from '#lib/components/dashboard/admin/contests/EditContestDialog.svelte';
@@ -115,9 +116,7 @@
       <div class="flex items-center gap-2 text-sm">
         <User class="h-4 w-4 text-muted-foreground" />
         <span class="text-muted-foreground">{m.admin_contests_card_created_by()}</span>
-        <span class="font-medium text-foreground"
-          >{m.admin_contests_card_user_prefix()}{contest.createdBy}</span
-        >
+        <span class="font-medium text-foreground">{formatUserName(contest.creator)}</span>
       </div>
     </div>
 

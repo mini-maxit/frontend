@@ -25,6 +25,7 @@ export interface CreatedContest {
   createdAt: string;
   updatedAt: string;
   createdBy: number;
+  creator?: UserInfo;
   participantCount: number;
   taskCount: number;
   status: ContestStatus;

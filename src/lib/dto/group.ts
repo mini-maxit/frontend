@@ -1,7 +1,9 @@
+import type { UserInfo } from './contest';
 export interface Group {
   id: number;
   name: string;
   createdBy: number;
+  creator?: UserInfo;
   createdAt: string;
   updatedAt: string;
 }
