@@ -5,7 +5,7 @@ import { formatDate } from '#lib/utils.js';
 /**
  * Formats a contest's start date for display
  */
-export function getFormattedStartDate(contest: Contest): string {
+export function getFormattedStartDate(contest: Pick<Contest, 'startAt' | 'status'>): string {
   if (contest.startAt === null) {
     return contest.status === ContestStatus.Ongoing ? m.contest_already_started() : m.contest_tbd();
   }
@@ -15,7 +15,7 @@ export function getFormattedStartDate(contest: Contest): string {
 /**
  * Formats a contest's end date for display
  */
-export function getFormattedEndDate(contest: Contest): string {
+export function getFormattedEndDate(contest: Pick<Contest, 'endAt' | 'status'>): string {
   if (contest.endAt === null) {
     return contest.status === ContestStatus.Ongoing
       ? m.contest_ongoing()

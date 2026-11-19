@@ -20,6 +20,7 @@
   // Lucide icons
   import FileText from '@lucide/svelte/icons/file-text';
   import Trophy from '@lucide/svelte/icons/trophy';
+  import Compass from '@lucide/svelte/icons/compass';
   import ListTodo from '@lucide/svelte/icons/list-todo';
   import UserCircle from '@lucide/svelte/icons/user-circle';
   import Users from '@lucide/svelte/icons/users';
@@ -46,6 +47,11 @@
       title: () => m.sidebar_your_contests(),
       href: localizeHref(AppRoutes.UserContests),
       icon: Trophy
+    },
+    {
+      title: () => m.sidebar_browse_contests(),
+      href: localizeHref(AppRoutes.BrowseContests),
+      icon: Compass
     },
     {
       title: () => m.sidebar_your_tasks(),

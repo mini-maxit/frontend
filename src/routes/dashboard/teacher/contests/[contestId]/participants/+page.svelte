@@ -11,7 +11,8 @@
     AddParticipantsToContestButton,
     AddGroupToContestButton,
     AssignedGroupsList,
-    ParticipantsList
+    ParticipantsList,
+    RegistrationRequestsList
   } from '#lib/components/dashboard/admin/contests/index.js';
   import { SortDirection, UserSortKey } from '#lib/dto/pagination.js';
   import { readIntParam, readParam, writeSearchParams } from '#lib/utils/url-state.js';
@@ -81,6 +82,14 @@
     }
   );
 
+  const requestsQuery = createParameterizedQuery(
+    () => contestId,
+    async (id) => {
+      if (!contestsService) throw new Error('Service unavailable');
+      return await contestsService.getRegistrationRequests(id);
+    }
+  );
+
   function refreshParticipants() {
     participantsQuery.refresh();
     assignableParticipantsQuery.refresh();
@@ -137,6 +146,29 @@
       {/if}
     </div>
   </div>
+
+  <!-- Pending join requests (public contests); hidden when there are none -->
+  {#if requestsQuery.error}
+    <ErrorCard
+      title={m.admin_registration_requests_load_error()}
+      error={requestsQuery.error}
+      onRetry={() => requestsQuery.refresh()}
+    />
+  {:else if requestsQuery.current && requestsQuery.current.length > 0}
+    <div class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">
+        {m.registration_requests_section_title({ count: requestsQuery.current.length })}
+      </h2>
+      <RegistrationRequestsList
+        {contestId}
+        requests={requestsQuery.current}
+        onResolved={(approved) => {
+          requestsQuery.refresh();
+          if (approved) refreshParticipants();
+        }}
+      />
+    </div>
+  {/if}
 
   <!-- Assigned Groups -->
   <div class="space-y-4">

@@ -1,3 +1,4 @@
+import type { User } from './user';
 import { Permission } from './accessControl';
 
 export interface Contest {
@@ -28,6 +29,7 @@ export interface CreatedContest {
   taskCount: number;
   status: ContestStatus;
   isSubmissionOpen: boolean;
+  isPublic: boolean;
 }
 
 export interface ManagedContest extends CreatedContest {
@@ -38,6 +40,25 @@ export enum ContestStatus {
   Ongoing = 'ongoing',
   Upcoming = 'upcoming',
   Past = 'past'
+}
+
+export enum ContestRegistrationStatus {
+  Registered = 'registered',
+  CanRegister = 'canRegister',
+  AwaitingApproval = 'awaitingApproval',
+  Rejected = 'rejected',
+  RegistrationClosed = 'registrationClosed'
+}
+
+// Public contest as listed for every user, with the current user's registration state
+export interface PublicContest extends ContestDetailed {
+  registrationStatus: ContestRegistrationStatus;
+}
+
+export interface RegistrationRequest {
+  contestId: number;
+  user: User;
+  createdAt: string;
 }
 
 export interface UserContest {
@@ -100,6 +121,7 @@ export interface CreateContestDto {
   startAt: string;
   endAt: string | null;
   isSubmissionOpen: boolean;
+  isPublic: boolean;
 }
 
 export interface EditContestDto {
@@ -108,6 +130,7 @@ export interface EditContestDto {
   startAt: string;
   endAt: string | null;
   isSubmissionOpen: boolean;
+  isPublic: boolean;
 }
 
 export interface AddContestTaskDto {

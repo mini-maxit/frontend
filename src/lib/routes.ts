@@ -12,6 +12,7 @@ export enum AppRoutes {
   CTA = '/#cta',
 
   Dashboard = '/dashboard',
+  BrowseContests = `${AppRoutes.Dashboard}/contests`,
   UserSubmissions = `${AppRoutes.Dashboard}/user/submissions`,
   UserContests = `${AppRoutes.Dashboard}/user/contests`,
   UserContestTask = `${AppRoutes.Dashboard}/user/contests/`,
