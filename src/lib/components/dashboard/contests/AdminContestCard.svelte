@@ -45,7 +45,8 @@
   ></div>
 
   <Card.Header class="relative">
-    <div class="flex items-center gap-2">
+    <!-- min-w-0: grid items default to min-content width, which blocks the title's truncate -->
+    <div class="flex min-w-0 items-center gap-2">
       <span
         class="inline-flex shrink-0 items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary"
       >
