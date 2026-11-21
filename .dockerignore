@@ -75,3 +75,6 @@ temp/
 
 # Optional eslint cache
 .eslintcache
+
+# Local secrets (only .env.example is allowed above)
+.env
