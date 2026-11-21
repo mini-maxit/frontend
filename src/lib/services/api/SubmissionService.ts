@@ -100,6 +100,36 @@ export class SubmissionService {
     }
   }
 
+  async getUserSubmissions(
+    userId: number,
+    params: { limit: number; offset: number }
+  ): Promise<{
+    success: boolean;
+    status: number;
+    data?: PaginatedData<Submission>;
+    error?: string;
+  }> {
+    try {
+      const query = new URLSearchParams({
+        limit: params.limit.toString(),
+        offset: params.offset.toString()
+      });
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
+        url: `/submissions/users/${userId}?${query}`
+      });
+      return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: resolveErrorMessage(error),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
   async getSubmissionById(submissionId: number): Promise<{
     success: boolean;
     status: number;

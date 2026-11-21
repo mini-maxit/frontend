@@ -13,6 +13,8 @@
   import Edit from '@lucide/svelte/icons/edit';
   import Trash2 from '@lucide/svelte/icons/trash-2';
   import Undo2 from '@lucide/svelte/icons/undo-2';
+  import History from '@lucide/svelte/icons/history';
+  import { localizeHref } from '#lib/paraglide/runtime.js';
   import ArrowUp from '@lucide/svelte/icons/arrow-up';
   import ArrowDown from '@lucide/svelte/icons/arrow-down';
   import { formatDistanceToNow, format, isSameDay } from 'date-fns';
@@ -184,7 +186,7 @@
                 />{:else}<ArrowDown class="h-3 w-3 text-muted-foreground" />{/if}{/if}
           </button>
         </Table.Head>
-        <Table.Head class="hidden xl:table-cell" aria-sort={getAriaSortValue(UserSortKey.Role)}>
+        <Table.Head class="hidden md:table-cell" aria-sort={getAriaSortValue(UserSortKey.Role)}>
           <button
             class="flex items-center gap-1"
             type="button"
@@ -197,7 +199,7 @@
           </button>
         </Table.Head>
         <Table.Head
-          class="hidden 2xl:table-cell"
+          class="hidden md:table-cell"
           aria-sort={getAriaSortValue(UserSortKey.CreatedAt)}
         >
           <button
@@ -229,13 +231,13 @@
               </div>
             </div>
           </Table.Cell>
-          <Table.Cell class="hidden xl:table-cell">
+          <Table.Cell class="hidden lg:table-cell">
             <div class="flex items-center gap-2">
               <Mail class="h-4 w-4 shrink-0 text-muted-foreground" />
               <span class="max-w-[180px] truncate">{user.email}</span>
             </div>
           </Table.Cell>
-          <Table.Cell class="hidden lg:table-cell">
+          <Table.Cell class="hidden md:table-cell">
             <span
               class="{getRoleBadgeClass(
                 user.role
@@ -244,7 +246,7 @@
               {getRoleBadgeLabel(user.role)}
             </span>
           </Table.Cell>
-          <Table.Cell class="hidden 2xl:table-cell">
+          <Table.Cell class="hidden md:table-cell">
             <div class="flex items-center gap-2 text-muted-foreground">
               <Calendar class="h-4 w-4" />
               <span class="whitespace-nowrap">
@@ -253,6 +255,15 @@
             </div>
           </Table.Cell>
           <Table.Cell class="text-right">
+            <Button
+              variant="ghost"
+              size="icon"
+              href={localizeHref(`/dashboard/admin/users/${user.id}`)}
+              aria-label={m.admin_users_action_activity()}
+              title={m.admin_users_action_activity()}
+            >
+              <History class="h-4 w-4" />
+            </Button>
             {#if deleted}
               <Button
                 variant="ghost"
