@@ -22,6 +22,10 @@ export function getDashboardTitleTranslationFromPathname(pathname: string): stri
     [AppRoutes.AdminWorkerMonitoring]: () => m.sidebar_admin_monitoring()
   };
 
+  if (path.match(/^\/dashboard\/admin\/users\/\d+$/)) {
+    return m.admin_user_activity_title();
+  }
+
   // Check for dynamic routes (e.g., /dashboard/teacher/tasks/[taskId])
   if (path.match(/^\/dashboard\/teacher\/tasks\/\d+$/)) {
     return m.header_task_details();

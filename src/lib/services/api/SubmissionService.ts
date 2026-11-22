@@ -6,7 +6,9 @@ import type {
   Language,
   SubmitSolutionDto,
   Submission,
-  SubmissionDetailed
+  SubmissionDetailed,
+  SubmissionGroup,
+  SubmissionGroupBy
 } from '#lib/dto/submission.js';
 
 /**
@@ -88,6 +90,71 @@ export class SubmissionService {
         url
       });
       return { success: true, data: response.data.items, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: resolveErrorMessage(error),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async getUserSubmissions(
+    userId: number,
+    params: { limit: number; offset: number; taskId?: number }
+  ): Promise<{
+    success: boolean;
+    status: number;
+    data?: PaginatedData<Submission>;
+    error?: string;
+  }> {
+    try {
+      const query = new URLSearchParams({
+        userId: userId.toString(),
+        limit: params.limit.toString(),
+        offset: params.offset.toString()
+      });
+      if (params.taskId !== undefined) query.set('taskId', params.taskId.toString());
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
+        url: `/submissions?${query}`
+      });
+      return { success: true, data: response.data, status: 200 };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return {
+          success: false,
+          error: resolveErrorMessage(error),
+          status: error.getStatus()
+        };
+      }
+      throw error;
+    }
+  }
+
+  async getUserSubmissionGroups(
+    userId: number,
+    params: { groupBy: SubmissionGroupBy; limit: number; offset: number; taskId?: number }
+  ): Promise<{
+    success: boolean;
+    status: number;
+    data?: PaginatedData<SubmissionGroup>;
+    error?: string;
+  }> {
+    try {
+      const query = new URLSearchParams({
+        userId: userId.toString(),
+        groupBy: params.groupBy,
+        limit: params.limit.toString(),
+        offset: params.offset.toString()
+      });
+      if (params.taskId !== undefined) query.set('taskId', params.taskId.toString());
+      const response = await this.apiClient.get<ApiResponse<PaginatedData<SubmissionGroup>>>({
+        url: `/submissions?${query}`
+      });
+      return { success: true, data: response.data, status: 200 };
     } catch (error) {
       if (error instanceof ApiError) {
         return {
