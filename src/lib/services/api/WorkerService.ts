@@ -2,7 +2,7 @@ import type { ApiService } from './ApiService';
 import { resolveErrorMessage } from '#lib/errors/backend-error.js';
 import { ApiError } from './ApiService';
 import type { ApiResponse } from '#lib/dto/response.js';
-import type { WorkerStatus } from '#lib/dto/worker.js';
+import type { QueueStatus, WorkerStatus } from '#lib/dto/worker.js';
 
 /**
  * Client-side service for worker status API calls
@@ -32,5 +32,12 @@ export class WorkerService {
       }
       throw error;
     }
+  }
+
+  async getQueueStatus(): Promise<QueueStatus> {
+    const response = await this.apiClient.get<ApiResponse<QueueStatus>>({
+      url: '/workers/queue/status'
+    });
+    return response.data;
   }
 }

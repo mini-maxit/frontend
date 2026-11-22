@@ -15,3 +15,9 @@ export interface WorkerStatus {
   totalWorkers: number;
   workerStatus: WorkerStatusItem[];
 }
+
+export interface QueueStatus {
+  connected: boolean;
+  pendingSubmissions: number;
+  lastChecked: string;
+}

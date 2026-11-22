@@ -102,6 +102,14 @@ export class SubmissionService {
     }
   }
 
+  /** Latest submissions visible to the caller: all (admin), managed contests/tasks (teacher), own (student). */
+  async getRecentSubmissions(limit: number): Promise<PaginatedData<Submission>> {
+    const response = await this.apiClient.get<ApiResponse<PaginatedData<Submission>>>({
+      url: `/submissions?limit=${limit}&offset=0`
+    });
+    return response.data;
+  }
+
   async getUserSubmissions(
     userId: number,
     params: { limit: number; offset: number; taskId?: number }
