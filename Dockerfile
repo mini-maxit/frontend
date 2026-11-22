@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:26.13.0-alpine3.24 AS base
+FROM node:26.13.1-alpine3.24 AS base
 WORKDIR /app
 ENV npm_config_store_dir=/pnpm/store
 RUN npm install -g pnpm@12.18.0
@@ -16,7 +16,7 @@ RUN --mount=type=cache,target=/pnpm/store \
 COPY . .
 RUN pnpm run build
 
-FROM node:26.13.0-alpine3.24 AS runner
+FROM node:26.13.1-alpine3.24 AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
