@@ -12,6 +12,7 @@ import { GroupsManagementService } from '../services/api/GroupsManagementService
 import { AccessControlService } from '../services/api/AccessControlService';
 import { WorkerService } from '../services/api/WorkerService';
 import { LanguagesManagementService } from '../services/api/LanguagesManagementService';
+import { DashboardService } from '../services/api/DashboardService';
 import { PUBLIC_BACKEND_API_URL } from '$app/env/public';
 
 /**
@@ -333,4 +334,25 @@ export function getLanguagesManagementInstance(): LanguagesManagementService | n
   }
 
   return languagesManagementInstance;
+}
+
+let dashboardInstance: DashboardService | null = $state(null);
+
+/**
+ * Get or create the global DashboardService instance
+ */
+export function getDashboardInstance(): DashboardService | null {
+  if (!browser) {
+    return null;
+  }
+
+  if (!dashboardInstance) {
+    const apiClient = getApiInstance();
+    if (!apiClient) {
+      return null;
+    }
+    dashboardInstance = new DashboardService(apiClient);
+  }
+
+  return dashboardInstance;
 }

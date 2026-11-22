@@ -44,7 +44,12 @@ export class TasksManagementService {
   }
 
   /** `all` (admin only) lists every task in the system instead of only the ones the user manages */
-  async getManagedTasks(params: { all?: boolean; limit: number; offset: number }): Promise<{
+  async getManagedTasks(params: {
+    all?: boolean;
+    limit: number;
+    offset: number;
+    sort?: string;
+  }): Promise<{
     success: boolean;
     status: number;
     data?: PaginatedData<ManagedTask>;
@@ -54,7 +59,7 @@ export class TasksManagementService {
       const query = new URLSearchParams({
         limit: String(params.limit),
         offset: String(params.offset),
-        sort: 'title:asc'
+        sort: params.sort ?? 'title:asc'
       });
       if (params.all) query.set('scope', 'all');
       const response = await this.apiClient.get<ApiResponse<PaginatedData<ManagedTask>>>({

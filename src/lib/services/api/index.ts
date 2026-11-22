@@ -16,6 +16,7 @@ export { GroupsManagementService } from './GroupsManagementService';
 export { AccessControlService } from './AccessControlService';
 export { WorkerService } from './WorkerService';
 export { LanguagesManagementService } from './LanguagesManagementService';
+export { DashboardService } from './DashboardService';
 
 // Re-export service instance getters for convenience
 export {
@@ -31,5 +32,6 @@ export {
   getGroupsManagementInstance,
   getAccessControlInstance,
   getWorkerInstance,
-  getLanguagesManagementInstance
+  getLanguagesManagementInstance,
+  getDashboardInstance
 } from '#lib/stores/service-instances.svelte.js';

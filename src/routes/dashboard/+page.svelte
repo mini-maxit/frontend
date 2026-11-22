@@ -1,32 +1,37 @@
 <script lang="ts">
-  import QuickActions from '#lib/components/dashboard/home/QuickActions.svelte';
+  import StudentHome from '#lib/components/dashboard/home/StudentHome.svelte';
+  import TeacherHome from '#lib/components/dashboard/home/TeacherHome.svelte';
+  import AdminHome from '#lib/components/dashboard/home/AdminHome.svelte';
   import { userStore } from '#lib/stores/user-store.svelte.js';
+  import { UserRole } from '#lib/dto/jwt.js';
   import * as m from '#lib/paraglide/messages.js';
   import { getLocale } from '#lib/paraglide/runtime.js';
 
   // User is already fetched by dashboard layout, just read from store
   const user = $derived(userStore.getUserUnsafe());
 
-  const today = new Date();
-  const dateString = today.toLocaleDateString(getLocale(), {
+  const dateString = new Date().toLocaleDateString(getLocale(), {
     weekday: 'long',
-    year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
 </script>
 
-<div class="space-y-8">
-  <!-- Welcome Header -->
-  <div class="space-y-2">
-    <h1 class="text-4xl font-bold tracking-tight">
-      👋 {m.dashboard_welcome()}, {user.name}!
+<div class="mx-auto w-full max-w-7xl px-0 py-4 sm:px-2 lg:py-8">
+  <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+    <h1 class="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+      {m.home_greeting({ name: user.name })}
     </h1>
-    <p class="text-lg text-muted-foreground">{dateString}</p>
+    <p class="text-sm text-muted-foreground first-letter:uppercase">{dateString}</p>
   </div>
 
-  <div class="space-y-4">
-    <h2 class="text-2xl font-bold">{m.dashboard_quick_actions()}</h2>
-    <QuickActions />
+  <div class="mt-2">
+    {#if user.role === UserRole.Admin}
+      <AdminHome />
+    {:else if user.role === UserRole.Teacher}
+      <TeacherHome />
+    {:else}
+      <StudentHome />
+    {/if}
   </div>
 </div>
