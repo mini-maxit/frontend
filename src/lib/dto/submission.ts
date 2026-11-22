@@ -89,6 +89,16 @@ export interface Submission {
   contest?: Contest;
 }
 
+/** One row of GET /submissions?groupBy=...; for groupBy=task, key is the task ID and label its title. */
+export interface SubmissionGroup {
+  key: string;
+  label: string;
+  count: number;
+  lastSubmittedAt: string;
+}
+
+export type SubmissionGroupBy = 'task';
+
 export interface SubmissionDetailed extends Submission {
   fileUrl: string;
 }
